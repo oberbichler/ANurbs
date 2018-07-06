@@ -1,0 +1,12 @@
+version: 0.1.{build}
+image: Visual Studio 2017
+configuration: release
+platform: x86
+clone_folder: c:\ANurbs
+build_script:
+  - md build
+  - cd build
+  - cmake ..
+  - cmake --build .
+test_script:
+  - .\test\run_tests
