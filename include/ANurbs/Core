@@ -1,0 +1,9 @@
+#pragma once
+
+#include <src/Point.h>
+
+#include <src/CurveShapeEvaluator.h>
+#include <src/CurveGeometryBase.h>
+#include <src/CurveGeometry.h>
+#include <src/CurveBase.h>
+#include <src/Curve.h>
