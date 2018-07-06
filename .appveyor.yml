@@ -9,4 +9,4 @@ build_script:
   - cmake ..
   - cmake --build .
 test_script:
-  - .\test\Release\run_tests
+  - c:\ANurbs\build\test\Release\run_tests
