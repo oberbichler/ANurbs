@@ -7,6 +7,6 @@ build_script:
   - md build
   - cd build
   - cmake ..
-  - cmake --build .
+  - cmake --config Release --build .
 test_script:
   - c:\ANurbs\build\test\Release\run_tests.exe
