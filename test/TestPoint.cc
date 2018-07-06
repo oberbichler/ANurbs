@@ -104,31 +104,3 @@ TEST_CASE( "Assign Point3D by XYZ", "[Point]" ) {
         CHECK( point.Z() == 5.6 );
     }
 }
-
-// TEST_CASE( "Accessing a invalid coordinate produces an error", "[Point]" ) {
-//     Point<double, 2> point;
-    
-//     SECTION( "Assign negative index" ) {
-//         CHECK_THROWS( point[-1] =  0.0 );
-//     }
-    
-//     SECTION( "Get negative index" ) {
-//         CHECK_THROWS( point[-1] == 0.0 );
-//     }
-    
-//     SECTION( "Assign index out of range" ) {
-//         CHECK_THROWS( point[2] =  0.0 );
-//     }
-    
-//     SECTION( "Assign index out of range" ) {
-//         CHECK_THROWS( point[2] == 0.0 );
-//     }
-    
-//     SECTION( "Assign X" ) {
-//         CHECK_THROWS( point.Z() =  0.0 );
-//     }
-    
-//     SECTION( "Get Z" ) {
-//         CHECK_THROWS( point.Z() == 0.0 );
-//     }
-// }
