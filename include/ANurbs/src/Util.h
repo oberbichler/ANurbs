@@ -29,7 +29,7 @@ struct Weights<std::vector<TWeight>>
 template <typename TContainer>
 struct Weights
 {
-    using Type = typename std::result_of_t<TContainer(std::size_t)>;
+    using Type = std::result_of_t<TContainer(std::size_t)>;
     using ContainerType = TContainer;
 
     static Type
