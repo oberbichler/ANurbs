@@ -1,6 +1,6 @@
 version: 0.1.{build}
 image: Visual Studio 2017
-configuration: release
+configuration: Release
 platform: x64
 clone_folder: c:\ANurbs
 build_script:
@@ -9,4 +9,4 @@ build_script:
   - cmake ..
   - cmake --build .
 test_script:
-  - .\test\Debug\run_tests
+  - .\test\Release\run_tests
