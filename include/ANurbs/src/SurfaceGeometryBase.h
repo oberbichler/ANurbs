@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Interval.h"
 #include "Knots.h"
 #include "SurfaceShapeEvaluator.h"
 #include "VectorMath.h"
@@ -15,6 +16,7 @@ public:
     using ScalarType = TScalar;
     using VectorType = TVector;
     using KnotsType = std::vector<ScalarType>;
+    using IntervalType = Interval<ScalarType>;
 
 protected:
     int m_degreeU;
@@ -55,6 +57,24 @@ public:
     ) const
     {
         return m_degreeV;
+    }
+
+    IntervalType
+    DomainU()
+    {
+        ScalarType u0 = KnotU(DegreeU() - 1);
+        ScalarType u1 = KnotU(NbKnotsU() - DegreeU());
+
+        return IntervalType(u0, u1);
+    }
+
+    IntervalType
+    DomainV()
+    {
+        ScalarType v0 = KnotV(DegreeV() - 1);
+        ScalarType v1 = KnotV(NbKnotsV() - DegreeV());
+
+        return IntervalType(v0, v1);
     }
 
     template <int Axis>
