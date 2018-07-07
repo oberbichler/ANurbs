@@ -271,7 +271,7 @@ public:
         ScalarType weightedSum{0};
 
         for (int i = 0; i < NbNonzeroPoles(); i++) {
-            m_values[i] *= Util::Weights<TWeights>::Get(weights, i);
+            m_values[i] *= Util::CurveWeights<TWeights>::Get(weights, i);
             weightedSum += m_values[i];
         }
 
