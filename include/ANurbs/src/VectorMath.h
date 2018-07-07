@@ -8,13 +8,13 @@ namespace ANurbs {
 template <typename Point>
 struct VectorMath;
 
-template <typename TScalar, std::size_t TDimension>
+template <typename TScalar, int TDimension>
 struct VectorMath<Point<TScalar, TDimension>>
 {
     using VectorType = Point<TScalar, TDimension>;
     using ScalarType = TScalar;
 
-    static constexpr std::size_t
+    static constexpr int
     Dimension(
     )
     {
@@ -36,7 +36,7 @@ struct VectorMath<Point<TScalar, TDimension>>
     {
         ScalarType result {0};
 
-        for (std::size_t i = 0; i < Dimension(); i++) {
+        for (int i = 0; i < Dimension(); i++) {
             result += u[i] * v[i];
         }
 
@@ -50,7 +50,7 @@ struct VectorMath<Point<TScalar, TDimension>>
     {
         ScalarType sqSum {0};
 
-        for (std::size_t i = 0; i < Dimension(); i++) {
+        for (int i = 0; i < Dimension(); i++) {
 		    sqSum += vector[i] * vector[i];
         }
 

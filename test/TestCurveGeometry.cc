@@ -6,8 +6,8 @@ using namespace ANurbs;
 
 
 TEST_CASE( "Geometry of a spatial B-Spline curve", "[CurveGeometry]" ) {
-    std::size_t degree = 4;
-    std::size_t nbPoles = 8;
+    int degree = 4;
+    int nbPoles = 8;
     bool I = false;
 
     CurveGeometry3D geometry(degree, nbPoles, I);
@@ -129,8 +129,8 @@ TEST_CASE( "Geometry of a spatial B-Spline curve", "[CurveGeometry]" ) {
 }
 
 TEST_CASE( "Geometry of a spatial Nurbs curve", "[CurveGeometry]" ) {
-    std::size_t degree = 4;
-    std::size_t nbPoles = 8;
+    int degree = 4;
+    int nbPoles = 8;
     bool isRational = true;
 
     CurveGeometry3D geometry(degree, nbPoles, isRational);

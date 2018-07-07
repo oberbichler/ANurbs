@@ -6,8 +6,8 @@ using namespace ANurbs;
 
 
 TEST_CASE( "Spatial B-Spline curve", "[Curve]" ) {
-    std::size_t degree = 4;
-    std::size_t nbPoles = 8;
+    int degree = 4;
+    int nbPoles = 8;
     bool isRational = false;
 
     auto geometry = Create<CurveGeometry3D>(degree, nbPoles, isRational);

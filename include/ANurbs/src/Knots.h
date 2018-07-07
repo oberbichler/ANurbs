@@ -9,9 +9,9 @@ class Knots
 {
 public:
     template <typename TScalar, typename TKnots>
-    static std::size_t
+    static int
     UpperSpan(
-        const std::size_t& degree,
+        const int& degree,
         const TKnots& knots,
         const TScalar& t
     )
@@ -22,9 +22,9 @@ public:
     }
 
     template <typename TScalar, typename TKnots>
-    static std::size_t
+    static int
     LowerSpan(
-        const std::size_t& degree,
+        const int& degree,
         const TKnots& knots,
         const TScalar& t
     )

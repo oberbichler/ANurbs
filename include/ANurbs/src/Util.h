@@ -19,7 +19,7 @@ struct Weights<std::vector<TWeight>>
     static Type
     Get(
         const ContainerType& container,
-        const std::size_t& index
+        const int& index
     )
     {
         return container[index];
@@ -29,13 +29,13 @@ struct Weights<std::vector<TWeight>>
 template <typename TContainer>
 struct Weights
 {
-    using Type = typename std::result_of<TContainer(std::size_t)>::type;
+    using Type = typename std::result_of<TContainer(int)>::type;
     using ContainerType = TContainer;
 
     static Type
     Get(
         const ContainerType& container,
-        const std::size_t& index
+        const int& index
     )
     {
         return container(index);

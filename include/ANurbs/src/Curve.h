@@ -63,7 +63,7 @@ public:
         return m_curveGeometry;
     }
 
-    std::size_t
+    int
     Degree(
     ) const
     {
@@ -88,7 +88,7 @@ public:
     std::vector<VectorType>
     DerivativesAt(
         const ScalarType& t,
-        const std::size_t& order
+        const int& order
     ) const
     {
         return m_curveGeometry->DerivativesAt(t, order);
@@ -100,14 +100,14 @@ public:
     {
         auto knots = CurveGeometry()->Knots();
 
-        std::size_t firstSpan = Knots::UpperSpan(Degree(), knots, Domain().T0());
-        std::size_t lastSpan = Knots::LowerSpan(Degree(), knots, Domain().T1());
+        int firstSpan = Knots::UpperSpan(Degree(), knots, Domain().T0());
+        int lastSpan = Knots::LowerSpan(Degree(), knots, Domain().T1());
 
-        std::size_t nbSpans = lastSpan - firstSpan + 1;
+        int nbSpans = lastSpan - firstSpan + 1;
 
         std::vector<IntervalType> result(nbSpans);
 
-        for (std::size_t i = 0; i < nbSpans; i++) {
+        for (int i = 0; i < nbSpans; i++) {
             ScalarType t0 = CurveGeometry()->Knot(firstSpan + i);
             ScalarType t1 = CurveGeometry()->Knot(firstSpan + i + 1);
 

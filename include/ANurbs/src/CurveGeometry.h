@@ -8,7 +8,7 @@
 
 namespace ANurbs {
 
-template <typename TScalar, std::size_t TDimension>
+template <typename TScalar, int TDimension>
 class CurveGeometry
 : public CurveGeometryBase<TScalar, Point<TScalar, TDimension>>
 {
@@ -25,8 +25,8 @@ protected:
 
 public:
     CurveGeometry(
-        const std::size_t& degree,
-        const std::size_t& nbPoles,
+        const int& degree,
+        const int& nbPoles,
         const bool& isRational
     )
     : CurveGeometryBaseType(degree, nbPoles)
@@ -37,7 +37,7 @@ public:
 
     VectorType
     Pole(
-        const std::size_t& index
+        const int& index
     ) const override
     {
         return m_poles[index];
@@ -45,7 +45,7 @@ public:
 
     void
     SetPole(
-        const std::size_t& index,
+        const int& index,
         const VectorType& value
     ) override
     {
@@ -61,7 +61,7 @@ public:
 
     ScalarType
     Weight(
-        const std::size_t& index
+        const int& index
     ) const override
     {
         if (IsRational()) {
@@ -73,7 +73,7 @@ public:
 
     void
     SetWeight(
-        const std::size_t& index,
+        const int& index,
         const ScalarType& value
     ) override
     {

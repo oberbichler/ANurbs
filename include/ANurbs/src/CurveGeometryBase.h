@@ -20,43 +20,43 @@ public:
     using IntervalType = Interval<ScalarType>;
 
 protected:
-    std::size_t m_degree;
+    int m_degree;
     KnotsType m_knots;
 
 public:
     CurveGeometryBase(
-        const std::size_t& degree,
-        const std::size_t& nbPoles
+        const int& degree,
+        const int& nbPoles
     )
     : m_degree(degree)
     , m_knots(nbPoles + degree - 1)
     {
     }
 
-    static constexpr std::size_t
+    static constexpr int
     Dimension(
     )
     {
         return VectorMath<VectorType>::Dimension();
     }
 
-    std::size_t
+    int
     Degree(
     ) const
     {
         return m_degree;
     }
 
-    std::size_t
+    int
     NbKnots(
     ) const
     {
-        return std::size_t(m_knots.size());
+        return static_cast<int>(m_knots.size());
     }
 
     ScalarType
     Knot(
-        const std::size_t& index
+        const int& index
     ) const
     {
         return m_knots[index];
@@ -64,7 +64,7 @@ public:
 
     void
     SetKnot(
-        const std::size_t& index,
+        const int& index,
         const ScalarType& value
     )
     {
@@ -78,7 +78,7 @@ public:
         return m_knots;
     }
 
-    std::size_t
+    int
     NbPoles(
     ) const
     {
@@ -87,12 +87,12 @@ public:
 
     virtual VectorType
     Pole(
-        const std::size_t& index
+        const int& index
     ) const = 0;
 
     virtual void
     SetPole(
-        const std::size_t& index,
+        const int& index,
         const VectorType& value
     ) = 0;
 
@@ -102,12 +102,12 @@ public:
 
     virtual ScalarType
     Weight(
-        const std::size_t& index
+        const int& index
     ) const = 0;
 
     virtual void
     SetWeight(
-        const std::size_t& index,
+        const int& index,
         const ScalarType& value
     ) = 0;
 
@@ -120,7 +120,7 @@ public:
         return IntervalType(t0, t1);
     }
 
-    std::size_t
+    int
     SpanAt(
         const ScalarType& t
     ) const
@@ -140,7 +140,7 @@ public:
         CurveShapeEvaluator<ScalarType> shape(Degree(), 0);
 
         if (IsRational()) {
-            shape.Compute(Knots(), [&](std::size_t i) -> ScalarType {
+            shape.Compute(Knots(), [&](int i) -> ScalarType {
                 return Weight(i);
             }, t);
         } else {
@@ -151,8 +151,8 @@ public:
 
         TValue value = values(0) * shape(0, 0);
 
-        for (std::size_t i = 1; i < shape.NbNonzeroPoles(); i++) {
-            std::size_t index = shape.FirstNonzeroPole() + i;
+        for (int i = 1; i < shape.NbNonzeroPoles(); i++) {
+            int index = shape.FirstNonzeroPole() + i;
 
             value += values(index) * shape(0, i);
         }
@@ -165,7 +165,7 @@ public:
     EvaluateAt(
         TValues values,
         const ScalarType& t,
-        const std::size_t& order
+        const int& order
     ) const
     {
         // evaluate shape functions
@@ -173,7 +173,7 @@ public:
         CurveShapeEvaluator<ScalarType> shape(Degree(), order);
 
         if (IsRational()) {
-            shape.Compute(Knots(), [&](std::size_t i) -> ScalarType {
+            shape.Compute(Knots(), [&](int i) -> ScalarType {
                 return Weight(i);
             }, t);
         } else {
@@ -184,9 +184,9 @@ public:
 
         std::vector<TValue> derivatives(shape.NbShapes());
 
-        for (std::size_t order = 0; order < shape.NbShapes(); order++) {
-            for (std::size_t i = 0; i < shape.NbNonzeroPoles(); i++) {
-                std::size_t index = shape.FirstNonzeroPole() + i;
+        for (int order = 0; order < shape.NbShapes(); order++) {
+            for (int i = 0; i < shape.NbNonzeroPoles(); i++) {
+                int index = shape.FirstNonzeroPole() + i;
 
                 if (i == 0) {
                     derivatives[order] = values(index) * shape(order, i);
@@ -204,7 +204,7 @@ public:
         const ScalarType& t
     )
     {
-        return EvaluateAt<VectorType>([&](std::size_t i) -> VectorType {
+        return EvaluateAt<VectorType>([&](int i) -> VectorType {
             return Pole(i);
         }, t);
     }
@@ -212,10 +212,10 @@ public:
     std::vector<VectorType>
     DerivativesAt(
         const ScalarType& t,
-        const std::size_t& order
+        const int& order
     ) const
     {
-        return EvaluateAt<VectorType>([&](std::size_t i) -> VectorType {
+        return EvaluateAt<VectorType>([&](int i) -> VectorType {
             return Pole(i);
         }, t, order);
     }
@@ -224,14 +224,14 @@ public:
     Spans(
     )
     {
-        std::size_t firstSpan = Degree() - 1;
-        std::size_t lastSpan = NbKnots() - Degree() - 1;
+        int firstSpan = Degree() - 1;
+        int lastSpan = NbKnots() - Degree() - 1;
 
-        std::size_t nbSpans = lastSpan - firstSpan + 1;
+        int nbSpans = lastSpan - firstSpan + 1;
 
         std::vector<IntervalType> result(nbSpans);
 
-        for (std::size_t i = 0; i < nbSpans; i++) {
+        for (int i = 0; i < nbSpans; i++) {
             ScalarType t0 = Knot(firstSpan + i);
             ScalarType t1 = Knot(firstSpan + i + 1);
 
