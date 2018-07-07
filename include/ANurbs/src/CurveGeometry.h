@@ -56,7 +56,7 @@ public:
     IsRational(
     ) const override
     {
-        return m_weights.size() > 0;
+        return m_weights.size() != 0;
     }
 
     ScalarType
@@ -80,7 +80,7 @@ public:
         if (IsRational()) {
             m_weights[index] = value;
         } else {
-            throw std::invalid_argument("Geometry is not rational"); 
+            throw std::invalid_argument("Geometry is not rational");
         }
     }
 };

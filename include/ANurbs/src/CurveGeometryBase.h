@@ -5,7 +5,6 @@
 #include "Knots.h"
 
 #include <vector>
-#include <stdexcept>
 
 
 namespace ANurbs {
