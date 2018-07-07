@@ -63,6 +63,11 @@ private:
 
 public:
     CurveShapeEvaluator(
+    )
+    {
+    }
+
+    CurveShapeEvaluator(
         const std::size_t& degree,
         const std::size_t& order
     )
