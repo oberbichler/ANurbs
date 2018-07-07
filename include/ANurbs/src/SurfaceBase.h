@@ -45,6 +45,14 @@ public:
         const ScalarType& v,
         const int& order
     ) const = 0;
+
+    virtual std::vector<IntervalType>
+    SpansU(
+    ) = 0;
+
+    virtual std::vector<IntervalType>
+    SpansV(
+    ) = 0;
 };
 
 } // namespace ANurbs
