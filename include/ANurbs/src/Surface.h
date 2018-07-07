@@ -101,6 +101,52 @@ public:
     {
         return m_surfaceGeometry->DerivativesAt(u, v, order);
     }
+
+    std::vector<IntervalType>
+    SpansU(
+    ) override
+    {
+        auto knots = m_surfaceGeometry->KnotsU();
+
+        int firstSpan = Knots::UpperSpan(DegreeU(), knots, DomainU().T0());
+        int lastSpan = Knots::LowerSpan(DegreeU(), knots, DomainU().T1());
+
+        int nbSpans = lastSpan - firstSpan + 1;
+
+        std::vector<IntervalType> result(nbSpans);
+
+        for (int i = 0; i < nbSpans; i++) {
+            ScalarType u0 = SurfaceGeometry()->KnotU(firstSpan + i);
+            ScalarType u1 = SurfaceGeometry()->KnotU(firstSpan + i + 1);
+
+            result[i] = IntervalType(u0, u1);
+        }
+
+        return result;
+    }
+
+    std::vector<IntervalType>
+    SpansV(
+    ) override
+    {
+        auto knots = m_surfaceGeometry->KnotsV();
+
+        int firstSpan = Knots::UpperSpan(DegreeV(), knots, DomainV().T0());
+        int lastSpan = Knots::LowerSpan(DegreeV(), knots, DomainV().T1());
+
+        int nbSpans = lastSpan - firstSpan + 1;
+
+        std::vector<IntervalType> result(nbSpans);
+
+        for (int i = 0; i < nbSpans; i++) {
+            ScalarType v0 = SurfaceGeometry()->KnotV(firstSpan + i);
+            ScalarType v1 = SurfaceGeometry()->KnotV(firstSpan + i + 1);
+
+            result[i] = IntervalType(v0, v1);
+        }
+
+        return result;
+    }
 };
 
 using Surface1D = Surface<SurfaceGeometry1D>;
