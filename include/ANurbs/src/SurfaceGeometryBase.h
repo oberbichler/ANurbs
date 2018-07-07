@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Knots.h"
+#include "SurfaceShapeEvaluator.h"
+#include "VectorMath.h"
 
 #include <vector>
-#include <stdexcept>
 
 namespace ANurbs {
 
@@ -56,14 +57,14 @@ public:
         return m_degreeV;
     }
 
-    template <int Index>
+    template <int Axis>
     int
     NbKnots(
     ) const
     {
         static_assert(Axis == 0 || Axis == 1, "Invalid index");
 
-        switch (Index)
+        switch (Axis)
         {
             case 0:
                 return m_knotsU.size();
@@ -196,57 +197,57 @@ public:
         const int& indexU,
         const int& indexV,
         const ScalarType& value
-    ) = 0
+    ) = 0;
 
     virtual bool
     IsRational(
     ) const = 0;
 
-    template <typename TValue>
+    template <typename TValue, typename TValues>
     TValue
     EvaluateAt(
-        std::function<TValue(int, int)> getValue,
+        TValues values,
         const ScalarType& u,
         const ScalarType& v
     ) const
     {
         // compute shape functions
 
-        SurfaceShapeEval<ScalarType> shape(DegreeU(), DegreeV(), 0);
+        SurfaceShapeEvaluator<ScalarType> shape(DegreeU(), DegreeV(), 0);
 
         if (IsRational()) {
-            shape.compute(KnotsU(), KnotsV(), [&](int i, int j) -> ScalarType {
+            shape.Compute(KnotsU(), KnotsV(), [&](int i, int j) -> ScalarType {
                 return Weight(i, j);}, u, v);
         } else {
-            shape.compute(KnotsU(), KnotsV(), u, v);
+            shape.Compute(KnotsU(), KnotsV(), u, v);
         }
 
         // compute value
 
-        TValue value;
+        TValue result;
 
-        for (int i = 0; i <= degreeU(); i++) {
-            for (int j = 0; j <= degreeV(); j++) {
-                int poleU = firstNonzeroPoleU() + i;
-                int poleV = firstNonzeroPoleV() + j;
+        for (int i = 0; i <= DegreeU(); i++) {
+            for (int j = 0; j <= DegreeV(); j++) {
+                int poleU = shape.FirstNonzeroPoleU() + i;
+                int poleV = shape.FirstNonzeroPoleV() + j;
 
-                TValue v = getValue(poleU, poleV) * value(derivative, i, j);
+                TValue value = values(poleU, poleV) * shape(0, i, j);
 
-                if (value == 0) {
-                    value = v;
+                if (i == 0 && j == 0) {
+                    result = value;
                 } else {
-                    value += v;
+                    result += value;
                 }
             }
         }
 
-        return value;
+        return result;
     }
 
-    template <typename TValue>
+    template <typename TValue, typename TValues>
     std::vector<TValue>
     EvaluateAt(
-        std::function<TValue(int, int)> getValue,
+        TValues values,
         const ScalarType& u,
         const ScalarType& v,
         const int& order
@@ -254,39 +255,39 @@ public:
     {
         // compute shape functions
 
-        SurfaceShapeEval<ScalarType> shape(DegreeU(), DegreeV(), order);
+        SurfaceShapeEvaluator<ScalarType> shape(DegreeU(), DegreeV(), order);
         
         if (IsRational()) {
-            shape.compute(KnotsU(), KnotsV(), [&](int i, int j) -> ScalarType {
+            shape.Compute(KnotsU(), KnotsV(), [&](int i, int j) -> ScalarType {
                 return Weight(i, j);}, u, v);
         } else {
-            shape.compute(KnotsU(), KnotsV(), u, v);
+            shape.Compute(KnotsU(), KnotsV(), u, v);
         }
 
         // compute derivatives
 
-        int nbShapes = NbShapes(order);
+        int nbShapes = shape.NbShapes(order);
 
-        std::vector<TVector> values(nbShapes);
+        std::vector<TVector> result(nbShapes);
 
         for (int k = 0; k < nbShapes; k++) {
-            for (int i = 0; i <= degreeU(); i++) {
-                for (int j = 0; j <= degreeV(); j++) {
-                    int poleU = firstNonzeroPoleU() + i;
-                    int poleV = firstNonzeroPoleV() + j;
+            for (int i = 0; i <= DegreeU(); i++) {
+                for (int j = 0; j <= DegreeV(); j++) {
+                    int poleU = shape.FirstNonzeroPoleU() + i;
+                    int poleV = shape.FirstNonzeroPoleV() + j;
 
-                    TValue v = getValue(poleU, poleV) * value(derivative, i, j);
+                    TValue value = values(poleU, poleV) * shape(k, i, j);
 
-                    if (value == 0) {
-                        values[k] = v;
+                    if (i == 0 && j == 0) {
+                        result[k] = value;
                     } else {
-                        values[k] += v;
+                        result[k] += value;
                     }
                 }
             }
         }
 
-        return values;
+        return result;
     }
 
     VectorType
