@@ -7,3 +7,9 @@
 #include <src/CurveGeometry.h>
 #include <src/CurveBase.h>
 #include <src/Curve.h>
+
+#include <src/SurfaceShapeEvaluator.h>
+#include <src/SurfaceGeometryBase.h>
+#include <src/SurfaceGeometry.h>
+#include <src/SurfaceBase.h>
+#include <src/Surface.h>
