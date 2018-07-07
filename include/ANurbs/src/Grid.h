@@ -2,6 +2,7 @@
 
 #include "Math.h"
 
+#include <assert.h>
 #include <vector>
 
 
@@ -74,6 +75,8 @@ public:
         const int& index
     )
     {
+        assert(index < m_values.size() && "Index out of range");
+
         return m_values[index];
     }
 
@@ -84,6 +87,8 @@ public:
     ) const
     {
         int index = Math::MatrixIndex(NbRows(), NbCols(), row, col);
+
+        assert(index < m_values.size() && "Index out of range");
 
         return m_values[index];
     }
@@ -96,6 +101,8 @@ public:
     )
     {
         int index = Math::MatrixIndex(NbRows(), NbCols(), row, col);
+
+        assert(index < m_values.size() && "Index out of range");
 
         m_values[index] = value;
     }
