@@ -4,6 +4,8 @@ add_executable(run_tests
     TestCurveShapeEvaluator.cc
     TestCurveGeometry.cc
     TestCurve.cc
+    TestSurfaceShapeEvaluator.cc
+    TestSurfaceGeometry.cc
 )
 
 install(TARGETS run_tests DESTINATION bin)
