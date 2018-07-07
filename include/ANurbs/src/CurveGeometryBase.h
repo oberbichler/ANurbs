@@ -21,7 +21,6 @@ public:
 
 protected:
     std::size_t m_degree;
-    std::size_t m_nbPoles;
     KnotsType m_knots;
 
 public:
@@ -30,7 +29,6 @@ public:
         const std::size_t& nbPoles
     )
     : m_degree(degree)
-    , m_nbPoles(nbPoles)
     , m_knots(nbPoles + degree - 1)
     {
     }
@@ -84,7 +82,7 @@ public:
     NbPoles(
     ) const
     {
-        return m_nbPoles;
+        return NbKnots() - Degree() + 1;;
     }
 
     virtual VectorType
