@@ -1,5 +1,7 @@
 #pragma once
 
+#include <src/Pointer.h>
+
 #include <src/Point.h>
 
 #include <src/CurveShapeEvaluator.h>
