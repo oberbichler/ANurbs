@@ -25,7 +25,7 @@ public:
     using typename SurfaceBaseType::IntervalType;
 
 private:
-    Pointer<SurfaceGeometryType> m_curveGeometry;
+    Pointer<SurfaceGeometryType> m_surfaceGeometry;
     IntervalType m_domainU;
     IntervalType m_domainV;
 
@@ -42,7 +42,7 @@ public:
         const IntervalType& domainU,
         const IntervalType& domainV
     )
-    : m_curveGeometry(geometry)
+    : m_surfaceGeometry(geometry)
     , m_domainU(domainU)
     , m_domainV(domainV)
     {
@@ -52,21 +52,21 @@ public:
     SurfaceGeometry(
     ) const
     {
-        return m_curveGeometry;
+        return m_surfaceGeometry;
     }
 
     int
     DegreeU(
     ) const
     {
-        return m_curveGeometry->DegreeU();
+        return m_surfaceGeometry->DegreeU();
     }
 
     int
     DegreeV(
     ) const
     {
-        return m_curveGeometry->DegreeV();
+        return m_surfaceGeometry->DegreeV();
     }
 
     IntervalType
@@ -89,7 +89,7 @@ public:
         const ScalarType& v
     ) const override
     {
-        return m_curveGeometry->PointAt(u, v);
+        return m_surfaceGeometry->PointAt(u, v);
     }
 
     std::vector<VectorType>
@@ -99,7 +99,7 @@ public:
         const int& order
     ) const override
     {
-        return m_curveGeometry->DerivativesAt(u, v, order);
+        return m_surfaceGeometry->DerivativesAt(u, v, order);
     }
 };
 
