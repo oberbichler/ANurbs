@@ -1,0 +1,110 @@
+#pragma once
+
+#include "Pointer.h"
+#include "SurfaceBase.h"
+#include "SurfaceGeometry.h"
+
+namespace ANurbs {
+
+template <typename TSurfaceGeometry>
+class Surface
+: public SurfaceBase<typename TSurfaceGeometry::ScalarType,
+    typename TSurfaceGeometry::VectorType>
+{
+private:
+    using SurfaceGeometryType = TSurfaceGeometry;
+
+public:
+    using SurfaceBaseType = SurfaceBase<typename TSurfaceGeometry::ScalarType,
+        typename TSurfaceGeometry::VectorType>;
+
+    using SurfaceType = Surface<TSurfaceGeometry>;
+
+    using typename SurfaceBaseType::ScalarType;
+    using typename SurfaceBaseType::VectorType;
+    using typename SurfaceBaseType::IntervalType;
+
+private:
+    Pointer<SurfaceGeometryType> m_curveGeometry;
+    IntervalType m_domainU;
+    IntervalType m_domainV;
+
+public:
+    Surface(
+        Pointer<SurfaceGeometryType> geometry
+    )
+    : Surface(geometry, geometry->DomainU(), geometry->DomainV())
+    {
+    }
+    
+    Surface(
+        Pointer<SurfaceGeometryType> geometry,
+        const IntervalType& domainU,
+        const IntervalType& domainV
+    )
+    : m_curveGeometry(geometry)
+    , m_domainU(domainU)
+    , m_domainV(domainV)
+    {
+    }
+
+    Pointer<SurfaceGeometryType>
+    SurfaceGeometry(
+    ) const
+    {
+        return m_curveGeometry;
+    }
+
+    int
+    DegreeU(
+    ) const
+    {
+        return m_curveGeometry->DegreeU();
+    }
+
+    int
+    DegreeV(
+    ) const
+    {
+        return m_curveGeometry->DegreeV();
+    }
+
+    IntervalType
+    DomainU(
+    ) const override
+    {
+        return m_domainU;
+    }
+
+    IntervalType
+    DomainV(
+    ) const override
+    {
+        return m_domainV;
+    }
+
+    VectorType
+    PointAt(
+        const ScalarType& u,
+        const ScalarType& v
+    ) const override
+    {
+        return m_curveGeometry->PointAt(u, v);
+    }
+
+    std::vector<VectorType>
+    DerivativesAt(
+        const ScalarType& u,
+        const ScalarType& v,
+        const int& order
+    ) const override
+    {
+        return m_curveGeometry->DerivativesAt(u, v, order);
+    }
+};
+
+using Surface1D = Surface<SurfaceGeometry1D>;
+using Surface2D = Surface<SurfaceGeometry2D>;
+using Surface3D = Surface<SurfaceGeometry3D>;
+
+} // namespace ANurbs
