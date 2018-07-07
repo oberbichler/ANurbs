@@ -128,10 +128,10 @@ public:
         return Knots::LowerSpan(Degree(), Knots(), t);
     }
 
-    template <typename TValue>
+    template <typename TValue, typename TValues>
     TValue
     EvaluateAt(
-        std::function<TValue(std::size_t)> getValue,
+        TValues values,
         const ScalarType& t
     )
     {
@@ -149,21 +149,21 @@ public:
 
         // compute point
 
-        TValue value = getValue(0) * shape(0, 0);
+        TValue value = values(0) * shape(0, 0);
 
         for (std::size_t i = 1; i < shape.NbNonzeroPoles(); i++) {
             std::size_t index = shape.FirstNonzeroPole() + i;
 
-            value += getValue(index) * shape(0, i);
+            value += values(index) * shape(0, i);
         }
 
         return value;
     }
 
-    template <typename TValue>
+    template <typename TValue, typename TValues>
     std::vector<TValue>
     EvaluateAt(
-        std::function<TValue(std::size_t)> getValue,
+        TValues values,
         const ScalarType& t,
         const std::size_t& order
     ) const
@@ -189,9 +189,9 @@ public:
                 std::size_t index = shape.FirstNonzeroPole() + i;
 
                 if (i == 0) {
-                    derivatives[order] = getValue(index) * shape(order, i);
+                    derivatives[order] = values(index) * shape(order, i);
                 } else {
-                    derivatives[order] += getValue(index) * shape(order, i);
+                    derivatives[order] += values(index) * shape(order, i);
                 }
             }
         }
