@@ -9,13 +9,13 @@
 
 namespace ANurbs {
 
-template <typename TScalar, int TDimension>
+template <typename TScalar, int TDimension, typename TVector = Point<TScalar,
+    TDimension>>
 class SurfaceGeometry
-: public SurfaceGeometryBase<TScalar, Point<TScalar, TDimension>>
+: public SurfaceGeometryBase<TScalar, TVector>
 {
 public:
-    using SurfaceGeometryBaseType = SurfaceGeometryBase<TScalar, Point<TScalar,
-        TDimension>>;
+    using SurfaceGeometryBaseType = SurfaceGeometryBase<TScalar, TVector>;
     using typename SurfaceGeometryBaseType::ScalarType;
     using typename SurfaceGeometryBaseType::VectorType;
     using typename SurfaceGeometryBaseType::KnotsType;

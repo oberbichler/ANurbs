@@ -8,13 +8,13 @@
 
 namespace ANurbs {
 
-template <typename TScalar, int TDimension>
+template <typename TScalar, int TDimension, typename TVector = Point<TScalar,
+    TDimension>>
 class CurveGeometry
-: public CurveGeometryBase<TScalar, Point<TScalar, TDimension>>
+: public CurveGeometryBase<TScalar, TVector>
 {
 public:
-    using CurveGeometryBaseType = CurveGeometryBase<TScalar, Point<TScalar,
-        TDimension>>;
+    using CurveGeometryBaseType = CurveGeometryBase<TScalar, TVector>;
     using typename CurveGeometryBaseType::ScalarType;
     using typename CurveGeometryBaseType::VectorType;
     using typename CurveGeometryBaseType::KnotsType;
