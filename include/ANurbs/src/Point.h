@@ -6,7 +6,7 @@
 
 namespace ANurbs {
 
-template <typename TScalar, std::size_t TDimension>
+template <typename TScalar, int TDimension>
 class Point
 {
 public:
@@ -36,12 +36,12 @@ public:
         assert(coordinates.size() == TDimension && "Wrong dimension");
         
         auto it = coordinates.begin();
-        for (std::size_t i = 0; i < Dimension(); i++) {
+        for (int i = 0; i < Dimension(); i++) {
             m_coordinates[i] = *it++;
         }
     }
 
-    static constexpr std::size_t
+    static constexpr int
     Dimension()
     {
         return TDimension;
@@ -49,7 +49,7 @@ public:
 
     const ScalarType&
     operator[](
-        const std::size_t& index
+        const int& index
     ) const
     {
         return m_coordinates[index];
@@ -57,7 +57,7 @@ public:
 
     ScalarType&
     operator[](
-        const std::size_t& index
+        const int& index
     )
     {
         assert(index < Dimension() && "Index out of range");
@@ -65,7 +65,7 @@ public:
         return m_coordinates[index];
     }
 
-    ScalarType
+    const ScalarType&
     X(
     ) const
     {
@@ -81,7 +81,7 @@ public:
         return m_coordinates[0];
     }
 
-    ScalarType
+    const ScalarType&
     Y(
     ) const
     {
@@ -97,7 +97,7 @@ public:
         return m_coordinates[1];
     }
 
-    ScalarType
+    const ScalarType&
     Z(
     ) const
     {
@@ -119,7 +119,7 @@ public:
         const PointType& rhs
     )
     {
-        for (std::size_t i = 0; i < Dimension(); i++) {
+        for (int i = 0; i < Dimension(); i++) {
             lhs[i] += rhs[i];
         }
 
@@ -132,7 +132,7 @@ public:
         const PointType& rhs
     )
     {
-        for (std::size_t i = 0; i < Dimension(); i++) {
+        for (int i = 0; i < Dimension(); i++) {
             lhs[i] += rhs[i];
         }
 
@@ -145,7 +145,7 @@ public:
         const PointType& rhs
     )
     {
-        for (std::size_t i = 0; i < Dimension(); i++) {
+        for (int i = 0; i < Dimension(); i++) {
             lhs[i] -= rhs[i];
         }
 
@@ -158,7 +158,7 @@ public:
         const ScalarType& rhs
     )
     {
-        for (std::size_t i = 0; i < Dimension(); i++) {
+        for (int i = 0; i < Dimension(); i++) {
             lhs[i] *= rhs;
         }
 
