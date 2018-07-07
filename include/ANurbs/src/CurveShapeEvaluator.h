@@ -17,24 +17,24 @@ public:
     using ScalarType = TScalar;
 
 private:
-    std::size_t m_degree;
-    std::size_t m_order;
+    int m_degree;
+    int m_order;
     std::vector<ScalarType> m_values;
     std::vector<ScalarType> m_left;
     std::vector<ScalarType> m_right;
     std::vector<ScalarType> m_ndu;
     std::vector<ScalarType> m_a;
     std::vector<ScalarType> m_b;
-    std::size_t m_firstNonzeroPole;
+    int m_firstNonzeroPole;
 
 private:
     ScalarType&
     Values(
-        const std::size_t& order,
-        const std::size_t& pole
+        const int& order,
+        const int& pole
     )
     {
-        std::size_t index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
+        int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             order, pole);
 
         return m_values[index];
@@ -42,11 +42,11 @@ private:
 
     ScalarType&
     Ndu(
-        const std::size_t& i,
-        const std::size_t& j
+        const int& i,
+        const int& j
     )
     {
-        std::size_t index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
+        int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             i, j);
 
         return m_ndu[index];
@@ -56,15 +56,20 @@ private:
     ClearValues(
     )
     {
-        std::size_t nbValues = NbNonzeroPoles() * NbShapes();
+        int nbValues = NbNonzeroPoles() * NbShapes();
 
         std::fill(m_values.begin(), m_values.begin() + nbValues, 0);
     }
 
 public:
     CurveShapeEvaluator(
-        const std::size_t& degree,
-        const std::size_t& order
+    )
+    {
+    }
+
+    CurveShapeEvaluator(
+        const int& degree,
+        const int& order
     )
     {
         Resize(degree, order);
@@ -72,8 +77,8 @@ public:
 
     void
     Resize(
-        const std::size_t& degree,
-        const std::size_t& order
+        const int& degree,
+        const int& order
     )
     {
         m_values.resize((order + 1) * (degree + 1));
@@ -87,28 +92,28 @@ public:
         m_order = order;
     }
 
-    std::size_t
+    int
     Degree(
     ) const
     {
         return m_degree;
     }
 
-    std::size_t
+    int
     Order(
     ) const
     {
         return m_order;
     }
 
-    std::size_t
+    int
     NbNonzeroPoles(
     ) const
     {
         return Degree() + 1;
     }
 
-    std::size_t
+    int
     NbShapes(
     ) const
     {
@@ -117,8 +122,8 @@ public:
 
     ScalarType
     operator()(
-        const std::size_t& order,
-        const std::size_t& pole
+        const int& order,
+        const int& pole
     ) const
     {
         return Value(order, pole);
@@ -126,37 +131,37 @@ public:
 
     ScalarType
     Value(
-        const std::size_t& order,
-        const std::size_t& pole
+        const int& order,
+        const int& pole
     ) const
     {
-        std::size_t index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
+        int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             order, pole);
 
         return m_values[index];
     }
 
-    std::size_t
+    int
     FirstNonzeroPole(
     ) const
     {
         return m_firstNonzeroPole;
     }
 
-    std::size_t
+    int
     LastNonzeroPole(
     ) const
     {
         return FirstNonzeroPole() + Degree();
     }
     
-    std::vector<std::size_t>
+    std::vector<int>
     NonZeroPoleIndices(
     ) const
     {
-        std::vector<std::size_t> indices(NbNonzeroPoles());
+        std::vector<int> indices(NbNonzeroPoles());
 
-        for (std::size_t i = 0; i < NbNonzeroPoles(); i++) {
+        for (int i = 0; i < NbNonzeroPoles(); i++) {
             indices[i] = FirstNonzeroPole() + i;
         }
 
@@ -167,7 +172,7 @@ public:
     void
     ComputeAtSpan(
         const Knots& knots,
-        const std::size_t& span,
+        const int& span,
         const ScalarType& t
     )
     {
@@ -179,14 +184,14 @@ public:
 
         Ndu(0, 0) = 1.0;
 
-        for (std::size_t j = 0; j < Degree(); j++)
+        for (int j = 0; j < Degree(); j++)
         {
             m_left[j] = t - knots[span - j];
             m_right[j] = knots[span + j + 1] - t;
 
             ScalarType saved = 0.0;
 
-            for (std::size_t r = 0; r <= j; r++)
+            for (int r = 0; r <= j; r++)
             {
                 Ndu(j + 1, r) = m_right[r] + m_left[j - r];
 
@@ -200,31 +205,31 @@ public:
             Ndu(j + 1, j + 1) = saved;
         }
 
-        for (std::size_t j = 0; j < NbNonzeroPoles(); j++) {
+        for (int j = 0; j < NbNonzeroPoles(); j++) {
             Values(0, j) = Ndu(j, Degree());
         }
 
         auto& a = m_a;
         auto& b = m_b;
 
-        for (std::size_t r = 0; r < NbNonzeroPoles(); r++) {
+        for (int r = 0; r < NbNonzeroPoles(); r++) {
             a[0] = 1.0;
 
-            for (std::size_t k = 1; k < NbShapes(); k++) {
+            for (int k = 1; k < NbShapes(); k++) {
                 ScalarType& value = Values(k, r);
 
-                std::size_t rk = r - k;
-                std::size_t pk = Degree() - k;
+                int rk = r - k;
+                int pk = Degree() - k;
 
                 if (r >= k) {
                     b[0] = a[0] / Ndu(pk + 1, rk);
                     value = b[0] * Ndu(rk, pk);
                 }
 
-                std::size_t j1 = r >= k - 1 ? 1 : k - r;
-                std::size_t j2 = r <= pk + 1 ? k - 1 : Degree() - r;
+                int j1 = r >= k - 1 ? 1 : k - r;
+                int j2 = r <= pk + 1 ? k : NbNonzeroPoles() - r;
 
-                for (std::size_t j = j1; j <= j2; j++) {
+                for (int j = j1; j < j2; j++) {
                     b[j] = (a[j] - a[j - 1]) / Ndu(pk + 1, rk + j);
                     value += b[j] * Ndu(rk + j, pk);
                 }
@@ -238,10 +243,10 @@ public:
             }
         }
 
-        std::size_t s = Degree();
+        int s = Degree();
 
-        for (std::size_t k = 1; k < NbShapes(); k++) {
-            for (std::size_t j = 0; j < NbNonzeroPoles(); j++) {
+        for (int k = 1; k < NbShapes(); k++) {
+            for (int j = 0; j < NbNonzeroPoles(); j++) {
                 Values(k, j) *= s;
             }
             s *= Degree() - k;
@@ -252,7 +257,7 @@ public:
     void
     ComputeAtSpan(
         const TKnots& knots,
-        const std::size_t& span,
+        const int& span,
         const TWeights& weights,
         const ScalarType& t
     )
@@ -265,14 +270,14 @@ public:
 
         ScalarType weightedSum{0};
 
-        for (std::size_t i = 0; i < NbNonzeroPoles(); i++) {
-            m_values[i] *= Util::Weights<TWeights>::Get(weights, i);
+        for (int i = 0; i < NbNonzeroPoles(); i++) {
+            m_values[i] *= Util::CurveWeights<TWeights>::Get(weights, i);
             weightedSum += m_values[i];
         }
 
         // apply weights
 
-        for (std::size_t i = 0; i < NbNonzeroPoles(); i++) {
+        for (int i = 0; i < NbNonzeroPoles(); i++) {
             m_values[i] /= weightedSum;
         }
     }
@@ -284,7 +289,7 @@ public:
         const ScalarType& t
     )
     {
-        std::size_t span = Knots::LowerSpan(Degree(), knots, t);
+        int span = Knots::LowerSpan(Degree(), knots, t);
 
         ComputeAtSpan(knots, span, t);
     }
@@ -297,7 +302,7 @@ public:
         const ScalarType& t
     )
     {
-        std::size_t span = Knots::LowerSpan(Degree(), knots, t);
+        int span = Knots::LowerSpan(Degree(), knots, t);
 
         ComputeAtSpan(knots, span, weights, t);
     }

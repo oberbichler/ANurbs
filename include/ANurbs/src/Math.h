@@ -6,10 +6,10 @@
 namespace ANurbs {
 namespace Math {
 
-static constexpr inline std::size_t
+static constexpr inline int
 Binom(
-    const std::size_t& n,
-    const std::size_t& k
+    const int& n,
+    const int& k
 ) noexcept
 {
     return
@@ -22,12 +22,12 @@ Binom(
 }
 
 
-static constexpr inline std::size_t
+static constexpr inline int
 MatrixIndex(
-    const std::size_t& rows,
-    const std::size_t& cols,
-    const std::size_t& row,
-    const std::size_t& col
+    const int& rows,
+    const int& cols,
+    const int& row,
+    const int& col
 ) noexcept
 {
     return row * cols + col;
@@ -39,7 +39,7 @@ Romberg(
     TFunction f,
     TScalar a,
     TScalar b,
-    std::size_t maxSteps,
+    int maxSteps,
     TScalar tolerance
 )
 {
@@ -53,20 +53,20 @@ Romberg(
     
     Rp[0] = (f(a) + f(b)) * h * 0.5; // first trapezoidal step
 
-    for (std::size_t i = 1; i < maxSteps; ++i) {
+    for (int i = 1; i < maxSteps; ++i) {
         h /= 2.0;
         
         TScalar c = 0;
 
-        std::size_t ep = 1 << (i-1); // 2^(n-1)
+        int ep = 1 << (i-1); // 2^(n-1)
         
-        for (std::size_t j = 1; j <= ep; ++j) {
+        for (int j = 1; j <= ep; ++j) {
             c += f(a + (2 * j - 1) * h);
         }
         
         Rc[0] = h * c + 0.5 * Rp[0]; // R(i,0)
 
-        for (std::size_t j = 1; j <= i; ++j) {
+        for (int j = 1; j <= i; ++j) {
             TScalar n_k = pow(4, j);
             Rc[j] = (n_k * Rc[j - 1] - Rp[j - 1]) / (n_k - 1); // compute R(i,j)
         }

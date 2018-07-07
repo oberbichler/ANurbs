@@ -19,7 +19,7 @@ public:
     using IntervalType = Interval<ScalarType>;
 
 public:
-    static constexpr std::size_t
+    static constexpr int
     Dimension(
     )
     {
@@ -38,7 +38,7 @@ public:
     virtual std::vector<VectorType>
     DerivativesAt(
         const ScalarType& t,
-        const std::size_t& order
+        const int& order
     ) const = 0;
     
     ScalarType

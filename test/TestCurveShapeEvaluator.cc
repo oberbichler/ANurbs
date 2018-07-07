@@ -8,8 +8,8 @@ using namespace ANurbs;
 
 
 TEST_CASE( "Shape functions of a curve", "[CurveShapeEvaluator]" ) {
-    std::size_t degree = 2;
-    std::size_t order = 2;
+    int degree = 2;
+    int order = 2;
 
     CurveShapeEvaluator<double> shape(degree, order);
 
@@ -77,8 +77,8 @@ TEST_CASE( "Shape functions of a curve", "[CurveShapeEvaluator]" ) {
 }
 
 TEST_CASE( "Shape functions of a curve 2", "[CurveShapeEvaluator]" ) {
-    std::size_t degree = 1;
-    std::size_t order = 1;
+    int degree = 1;
+    int order = 1;
 
     CurveShapeEvaluator<double> shape(degree, order);
 

@@ -8,10 +8,10 @@ namespace ANurbs {
 namespace Util {
 
 template <typename TContainer>
-struct Weights;
+struct CurveWeights;
 
 template <typename TWeight>
-struct Weights<std::vector<TWeight>>
+struct CurveWeights<std::vector<TWeight>>
 {
     using Type = TWeight;
     using ContainerType = std::vector<TWeight>;
@@ -19,7 +19,7 @@ struct Weights<std::vector<TWeight>>
     static Type
     Get(
         const ContainerType& container,
-        const std::size_t& index
+        const int& index
     )
     {
         return container[index];
@@ -27,15 +27,15 @@ struct Weights<std::vector<TWeight>>
 };
 
 template <typename TContainer>
-struct Weights
+struct CurveWeights
 {
-    using Type = typename std::result_of<TContainer(std::size_t)>::type;
+    using Type = typename std::result_of<TContainer(int)>::type;
     using ContainerType = TContainer;
 
     static Type
     Get(
         const ContainerType& container,
-        const std::size_t& index
+        const int& index
     )
     {
         return container(index);
