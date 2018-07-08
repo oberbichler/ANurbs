@@ -186,27 +186,6 @@ public:
         return derivatives;
     }
 
-    VectorType
-    PointAt(
-        const ScalarType& t)
-    {
-        return EvaluateAt<VectorType>([&](int i) -> VectorType {
-            return Pole(i);
-        },
-            t);
-    }
-
-    std::vector<VectorType>
-    DerivativesAt(
-        const ScalarType& t,
-        const int& order) const
-    {
-        return EvaluateAt<VectorType>([&](int i) -> VectorType {
-            return Pole(i);
-        },
-            t, order);
-    }
-
     std::vector<IntervalType>
     Spans()
     {
@@ -225,6 +204,25 @@ public:
         }
 
         return result;
+    }
+
+    VectorType
+    PointAt(
+        const ScalarType& t)
+    {
+        auto poles = [&](int i) -> VectorType { return Pole(i); };
+
+        return EvaluateAt<VectorType>(poles, t);
+    }
+
+    std::vector<VectorType>
+    DerivativesAt(
+        const ScalarType& t,
+        const int& order) const
+    {
+        auto poles = [&](int i) -> VectorType { return Pole(i); };
+
+        return EvaluateAt<VectorType>(poles, t, order);
     }
 };
 

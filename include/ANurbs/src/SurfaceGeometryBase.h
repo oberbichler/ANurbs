@@ -289,7 +289,9 @@ public:
         const ScalarType& u,
         const ScalarType& v)
     {
-        return EvaluateAt<VectorType>([&](int i, int j) -> VectorType { return Pole(i, j); }, u, v);
+        auto poles = [&](int i, int j) -> VectorType { return Pole(i, j); };
+
+        return EvaluateAt<VectorType>(poles, u, v);
     }
 
     std::vector<VectorType>
@@ -298,7 +300,9 @@ public:
         const ScalarType& v,
         const int& order) const
     {
-        return EvaluateAt<VectorType>([&](int i, int j) -> VectorType { return Pole(i, j); }, u, v, order);
+        auto poles = [&](int i, int j) -> VectorType { return Pole(i, j); };
+
+        return EvaluateAt<VectorType>(poles, u, v, order);
     }
 };
 
