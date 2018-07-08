@@ -24,10 +24,8 @@ private:
     int m_firstNonzeroPoleV;
 
 public:
-    constexpr int
-    static NbShapes(
-        const int& order
-    ) noexcept
+    constexpr int static NbShapes(
+        const int& order) noexcept
     {
         return (1 + order) * (2 + order) / 2;
     }
@@ -35,18 +33,15 @@ public:
     static constexpr inline int
     ShapeIndex(
         const int& derivativeU,
-        const int& derivativeV
-    ) noexcept
+        const int& derivativeV) noexcept
     {
-        return derivativeV + (derivativeU + derivativeV) * (1 + derivativeU +
-            derivativeV) / 2;
+        return derivativeV + (derivativeU + derivativeV) * (1 + derivativeU + derivativeV) / 2;
     }
 
 private:
     ScalarType&
     WeightedSum(
-        const int& index
-    )
+        const int& index)
     {
         return m_weightedSums[index];
     }
@@ -54,8 +49,7 @@ private:
     ScalarType&
     WeightedSum(
         const int& derivativeU,
-        const int& derivativeV
-    )
+        const int& derivativeV)
     {
         int index = ShapeIndex(derivativeU, derivativeV);
 
@@ -66,22 +60,20 @@ private:
     Index(
         const int& derivative,
         const int& poleU,
-        const int& poleV
-    ) const
+        const int& poleV) const
     {
         int pole = Math::MatrixIndex(NbNonzeroPolesU(),
             NbNonzeroPolesV(), poleU, poleV);
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             derivative, pole);
-        
+
         return index;
     }
 
     ScalarType&
     Value(
         const int& derivative,
-        const int& pole
-    )
+        const int& pole)
     {
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             derivative, pole);
@@ -93,8 +85,7 @@ private:
     Value(
         const int& derivative,
         const int& poleU,
-        const int& poleV
-    )
+        const int& poleV)
     {
         int index = Index(derivative, poleU, poleV);
 
@@ -102,16 +93,14 @@ private:
     }
 
 public:
-    SurfaceShapeEvaluator(
-    )
+    SurfaceShapeEvaluator()
     {
     }
 
     SurfaceShapeEvaluator(
         const int& degreeU,
         const int& degreeV,
-        const int& order
-    )
+        const int& order)
     {
         Resize(degreeU, degreeV, order);
     }
@@ -120,8 +109,7 @@ public:
     Resize(
         const int& degreeU,
         const int& degreeV,
-        const int& order
-    )
+        const int& order)
     {
         int nbShapes = NbShapes(order);
 
@@ -134,50 +122,43 @@ public:
     }
 
     int
-    DegreeU(
-    ) const
+    DegreeU() const
     {
         return m_shapeU.Degree();
     }
 
     int
-    DegreeV(
-    ) const
+    DegreeV() const
     {
         return m_shapeV.Degree();
     }
 
     int
-    Order(
-    ) const
+    Order() const
     {
         return m_order;
     }
 
     int
-    NbShapes(
-    ) const
+    NbShapes() const
     {
         return NbShapes(Order());
     }
 
     int
-    NbNonzeroPolesU(
-    ) const
+    NbNonzeroPolesU() const
     {
         return m_shapeU.NbNonzeroPoles();
     }
 
     int
-    NbNonzeroPolesV(
-    ) const
+    NbNonzeroPolesV() const
     {
         return m_shapeV.NbNonzeroPoles();
     }
 
     int
-    NbNonzeroPoles(
-    ) const
+    NbNonzeroPoles() const
     {
         return NbNonzeroPolesU() * NbNonzeroPolesV();
     }
@@ -186,8 +167,7 @@ public:
     Value(
         const int& derivative,
         const int& poleU,
-        const int& poleV
-    ) const
+        const int& poleV) const
     {
         int index = Index(derivative, poleU, poleV);
 
@@ -198,8 +178,7 @@ public:
     GetValue(
         const int& derivative,
         const int& poleU,
-        const int& poleV
-    ) const
+        const int& poleV) const
     {
         int index = Index(derivative, poleU, poleV);
 
@@ -209,8 +188,7 @@ public:
     ScalarType
     operator()(
         const int& derivative,
-        const int& pole
-    ) const
+        const int& pole) const
     {
         return Value(derivative, pole);
     }
@@ -219,36 +197,31 @@ public:
     operator()(
         const int& derivative,
         const int& poleU,
-        const int& poleV
-    ) const
+        const int& poleV) const
     {
         return Value(derivative, poleU, poleV);
     }
 
     int
-    FirstNonzeroPoleU(
-    ) const
+    FirstNonzeroPoleU() const
     {
         return m_firstNonzeroPoleU;
     }
 
     int
-    LastNonzeroPoleU(
-    ) const
+    LastNonzeroPoleU() const
     {
         return FirstNonzeroPoleU() + DegreeU();
     }
 
     int
-    FirstNonzeroPoleV(
-    ) const
+    FirstNonzeroPoleV() const
     {
         return m_firstNonzeroPoleV;
     }
 
     int
-    LastNonzeroPoleV(
-    ) const
+    LastNonzeroPoleV() const
     {
         return FirstNonzeroPoleV() + DegreeV();
     }
@@ -261,8 +234,7 @@ public:
         const int& spanU,
         const int& spanV,
         const ScalarType& u,
-        const ScalarType& v
-    )
+        const ScalarType& v)
     {
         int nbValues = NbShapes() * NbNonzeroPoles();
 
@@ -297,8 +269,7 @@ public:
         const TKnots& knotsU,
         const TKnots& knotsV,
         const ScalarType& u,
-        const ScalarType& v
-    )
+        const ScalarType& v)
     {
         int spanU = Knots::LowerSpan(DegreeU(), knotsU, u);
         int spanV = Knots::LowerSpan(DegreeV(), knotsV, v);
@@ -315,8 +286,7 @@ public:
         const int& spanV,
         const TWeights& weights,
         const ScalarType& u,
-        const ScalarType& v
-    )
+        const ScalarType& v)
     {
         using Math::Binom;
 
@@ -392,8 +362,7 @@ public:
         const TKnots& knotsV,
         const TWeights& weights,
         const ScalarType& u,
-        const ScalarType& v
-    )
+        const ScalarType& v)
     {
         int spanU = Knots::LowerSpan(DegreeU(), knotsU, u);
         int spanV = Knots::LowerSpan(DegreeV(), knotsV, v);

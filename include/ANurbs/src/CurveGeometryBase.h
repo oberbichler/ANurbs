@@ -6,7 +6,6 @@
 
 #include <vector>
 
-
 namespace ANurbs {
 
 template <typename TScalar, typename TVector>
@@ -25,38 +24,33 @@ protected:
 public:
     CurveGeometryBase(
         const int& degree,
-        const int& nbPoles
-    )
-    : m_degree(degree)
-    , m_knots(nbPoles + degree - 1)
+        const int& nbPoles)
+        : m_degree(degree)
+        , m_knots(nbPoles + degree - 1)
     {
     }
 
     static constexpr int
-    Dimension(
-    )
+    Dimension()
     {
         return VectorMath<VectorType>::Dimension();
     }
 
     int
-    Degree(
-    ) const
+    Degree() const
     {
         return m_degree;
     }
 
     int
-    NbKnots(
-    ) const
+    NbKnots() const
     {
         return static_cast<int>(m_knots.size());
     }
 
     ScalarType
     Knot(
-        const int& index
-    ) const
+        const int& index) const
     {
         return m_knots[index];
     }
@@ -64,51 +58,46 @@ public:
     void
     SetKnot(
         const int& index,
-        const ScalarType& value
-    )
+        const ScalarType& value)
     {
         m_knots[index] = value;
     }
 
     const KnotsType&
-    Knots(
-    ) const
+    Knots() const
     {
         return m_knots;
     }
 
     int
-    NbPoles(
-    ) const
+    NbPoles() const
     {
-        return NbKnots() - Degree() + 1;;
+        return NbKnots() - Degree() + 1;
+        ;
     }
 
     virtual VectorType
     Pole(
-        const int& index
-    ) const = 0;
+        const int& index) const = 0;
 
     virtual void
     SetPole(
         const int& index,
-        const VectorType& value
-    ) = 0;
+        const VectorType& value)
+        = 0;
 
     virtual bool
-    IsRational(
-    ) const = 0;
+    IsRational() const = 0;
 
     virtual ScalarType
     Weight(
-        const int& index
-    ) const = 0;
+        const int& index) const = 0;
 
     virtual void
     SetWeight(
         const int& index,
-        const ScalarType& value
-    ) = 0;
+        const ScalarType& value)
+        = 0;
 
     IntervalType
     Domain()
@@ -121,8 +110,7 @@ public:
 
     int
     SpanAt(
-        const ScalarType& t
-    ) const
+        const ScalarType& t) const
     {
         return Knots::LowerSpan(Degree(), Knots(), t);
     }
@@ -131,8 +119,7 @@ public:
     TValue
     EvaluateAt(
         TValues values,
-        const ScalarType& t
-    )
+        const ScalarType& t)
     {
         // compute shape functions
 
@@ -141,7 +128,8 @@ public:
         if (IsRational()) {
             shape.Compute(Knots(), [&](int i) -> ScalarType {
                 return Weight(i);
-            }, t);
+            },
+                t);
         } else {
             shape.Compute(Knots(), t);
         }
@@ -164,8 +152,7 @@ public:
     EvaluateAt(
         TValues values,
         const ScalarType& t,
-        const int& order
-    ) const
+        const int& order) const
     {
         // evaluate shape functions
 
@@ -174,7 +161,8 @@ public:
         if (IsRational()) {
             shape.Compute(Knots(), [&](int i) -> ScalarType {
                 return Weight(i);
-            }, t);
+            },
+                t);
         } else {
             shape.Compute(Knots(), t);
         }
@@ -200,28 +188,27 @@ public:
 
     VectorType
     PointAt(
-        const ScalarType& t
-    )
+        const ScalarType& t)
     {
         return EvaluateAt<VectorType>([&](int i) -> VectorType {
             return Pole(i);
-        }, t);
+        },
+            t);
     }
 
     std::vector<VectorType>
     DerivativesAt(
         const ScalarType& t,
-        const int& order
-    ) const
+        const int& order) const
     {
         return EvaluateAt<VectorType>([&](int i) -> VectorType {
             return Pole(i);
-        }, t, order);
+        },
+            t, order);
     }
 
     std::vector<IntervalType>
-    Spans(
-    )
+    Spans()
     {
         int firstSpan = Degree() - 1;
         int lastSpan = NbKnots() - Degree() - 1;

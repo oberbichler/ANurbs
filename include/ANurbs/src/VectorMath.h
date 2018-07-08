@@ -2,7 +2,6 @@
 
 #include "Point.h"
 
-
 namespace ANurbs {
 
 template <typename Point>
@@ -15,15 +14,13 @@ struct VectorMath<Point<TScalar, TDimension>>
     using ScalarType = TScalar;
 
     static constexpr int
-    Dimension(
-    )
+    Dimension()
     {
         return TDimension;
     }
 
     static VectorType
-    Zero(
-    )
+    Zero()
     {
         return VectorType();
     }
@@ -31,10 +28,9 @@ struct VectorMath<Point<TScalar, TDimension>>
     static ScalarType
     Dot(
         const VectorType& u,
-        const VectorType& v
-    )
+        const VectorType& v)
     {
-        ScalarType result {0};
+        ScalarType result{ 0 };
 
         for (int i = 0; i < Dimension(); i++) {
             result += u[i] * v[i];
@@ -42,16 +38,15 @@ struct VectorMath<Point<TScalar, TDimension>>
 
         return result;
     }
-    
+
     static ScalarType
     SquaredNorm(
-        const VectorType& vector
-    )
+        const VectorType& vector)
     {
-        ScalarType sqSum {0};
+        ScalarType sqSum{ 0 };
 
         for (int i = 0; i < Dimension(); i++) {
-		    sqSum += vector[i] * vector[i];
+            sqSum += vector[i] * vector[i];
         }
 
         return sqSum;
@@ -59,8 +54,7 @@ struct VectorMath<Point<TScalar, TDimension>>
 
     static ScalarType
     Norm(
-        const VectorType& vector
-    )
+        const VectorType& vector)
     {
         ScalarType sqSum = SquaredNorm(vector);
 

@@ -4,21 +4,20 @@
 #include "Point.h"
 #include "SurfaceGeometryBase.h"
 
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 namespace ANurbs {
 
-template <typename TScalar, int TDimension, typename TVector = Point<TScalar,
-    TDimension>>
+template <typename TScalar, int TDimension, typename TVector = Point<TScalar, TDimension>>
 class SurfaceGeometry
-: public SurfaceGeometryBase<TScalar, TVector>
+    : public SurfaceGeometryBase<TScalar, TVector>
 {
 public:
     using SurfaceGeometryBaseType = SurfaceGeometryBase<TScalar, TVector>;
+    using typename SurfaceGeometryBaseType::KnotsType;
     using typename SurfaceGeometryBaseType::ScalarType;
     using typename SurfaceGeometryBaseType::VectorType;
-    using typename SurfaceGeometryBaseType::KnotsType;
 
 protected:
     Grid<VectorType> m_poles;
@@ -30,19 +29,17 @@ public:
         const int& degreeV,
         const int& nbPolesU,
         const int& nbPolesV,
-        const bool& isRational
-    )
-    : SurfaceGeometryBaseType(degreeU, degreeV, nbPolesU, nbPolesV)
-    , m_poles(nbPolesU, nbPolesV)
-    , m_weights(isRational ? nbPolesU : 0, isRational ? nbPolesV : 0)
+        const bool& isRational)
+        : SurfaceGeometryBaseType(degreeU, degreeV, nbPolesU, nbPolesV)
+        , m_poles(nbPolesU, nbPolesV)
+        , m_weights(isRational ? nbPolesU : 0, isRational ? nbPolesV : 0)
     {
     }
 
     VectorType
     Pole(
         const int& indexU,
-        const int& indexV
-    ) const override
+        const int& indexV) const override
     {
         return m_poles(indexU, indexV);
     }
@@ -51,8 +48,7 @@ public:
     SetPole(
         const int& indexU,
         const int& indexV,
-        const VectorType& value
-    ) override
+        const VectorType& value) override
     {
         return m_poles.SetValue(indexU, indexV, value);
     }
@@ -60,8 +56,7 @@ public:
     ScalarType
     Weight(
         const int& indexU,
-        const int& indexV
-    ) const override
+        const int& indexV) const override
     {
         if (IsRational()) {
             return m_weights(indexU, indexV);
@@ -74,8 +69,7 @@ public:
     SetWeight(
         const int& indexU,
         const int& indexV,
-        const ScalarType& value
-    ) override
+        const ScalarType& value) override
     {
         if (IsRational()) {
             return m_weights.SetValue(indexU, indexV, value);
@@ -85,8 +79,7 @@ public:
     }
 
     bool
-    IsRational(
-    ) const override
+    IsRational() const override
     {
         return m_weights.NbValues() != 0;
     }

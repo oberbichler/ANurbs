@@ -3,7 +3,6 @@
 #include <array>
 #include <assert.h>
 
-
 namespace ANurbs {
 
 template <typename TScalar, int TDimension>
@@ -17,24 +16,22 @@ private:
     std::array<double, 3> m_coordinates;
 
 public:
-    Point(
-    )
-    : m_coordinates({})
+    Point()
+        : m_coordinates({})
     {
     }
 
     Point(
-        const Point& other
-    ) : m_coordinates(other.m_coordinates)
+        const Point& other)
+        : m_coordinates(other.m_coordinates)
     {
     }
 
     Point(
-        std::initializer_list<ScalarType> coordinates
-    )
+        std::initializer_list<ScalarType> coordinates)
     {
         assert(coordinates.size() == TDimension && "Wrong dimension");
-        
+
         auto it = coordinates.begin();
         for (int i = 0; i < Dimension(); i++) {
             m_coordinates[i] = *it++;
@@ -49,16 +46,14 @@ public:
 
     const ScalarType&
     operator[](
-        const int& index
-    ) const
+        const int& index) const
     {
         return m_coordinates[index];
     }
 
     ScalarType&
     operator[](
-        const int& index
-    )
+        const int& index)
     {
         assert(index < Dimension() && "Index out of range");
 
@@ -66,48 +61,42 @@ public:
     }
 
     const ScalarType&
-    X(
-    ) const
+    X() const
     {
         static_assert(Dimension() >= 1, "Index out of range");
         return m_coordinates[0];
     }
 
     ScalarType&
-    X(
-    )
+    X()
     {
         static_assert(Dimension() >= 1, "Index out of range");
         return m_coordinates[0];
     }
 
     const ScalarType&
-    Y(
-    ) const
+    Y() const
     {
         static_assert(Dimension() >= 2, "Index out of range");
         return m_coordinates[1];
     }
 
     ScalarType&
-    Y(
-    )
+    Y()
     {
         static_assert(Dimension() >= 2, "Index out of range");
         return m_coordinates[1];
     }
 
     const ScalarType&
-    Z(
-    ) const
+    Z() const
     {
         static_assert(Dimension() >= 3, "Index out of range");
         return m_coordinates[2];
     }
 
     ScalarType&
-    Z(
-    )
+    Z()
     {
         static_assert(Dimension() >= 3, "Index out of range");
         return m_coordinates[2];
@@ -116,8 +105,7 @@ public:
     friend PointType
     operator+(
         PointType lhs,
-        const PointType& rhs
-    )
+        const PointType& rhs)
     {
         for (int i = 0; i < Dimension(); i++) {
             lhs[i] += rhs[i];
@@ -129,8 +117,7 @@ public:
     friend PointType
     operator+=(
         PointType& lhs,
-        const PointType& rhs
-    )
+        const PointType& rhs)
     {
         for (int i = 0; i < Dimension(); i++) {
             lhs[i] += rhs[i];
@@ -142,8 +129,7 @@ public:
     friend PointType
     operator-(
         PointType lhs,
-        const PointType& rhs
-    )
+        const PointType& rhs)
     {
         for (int i = 0; i < Dimension(); i++) {
             lhs[i] -= rhs[i];
@@ -155,8 +141,7 @@ public:
     friend PointType
     operator*(
         PointType lhs,
-        const ScalarType& rhs
-    )
+        const ScalarType& rhs)
     {
         for (int i = 0; i < Dimension(); i++) {
             lhs[i] *= rhs;

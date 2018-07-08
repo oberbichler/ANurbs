@@ -8,8 +8,9 @@ namespace ANurbs {
 
 template <typename TCurveGeometry>
 class Curve
-: public CurveBase<typename TCurveGeometry::ScalarType,
-    typename TCurveGeometry::VectorType>
+    : public CurveBase<
+          typename TCurveGeometry::ScalarType,
+          typename TCurveGeometry::VectorType>
 {
 private:
     using CurveGeometryType = TCurveGeometry;
@@ -20,67 +21,59 @@ public:
 
     using CurveType = Curve<TCurveGeometry>;
 
+    using typename CurveBaseType::IntervalType;
     using typename CurveBaseType::ScalarType;
     using typename CurveBaseType::VectorType;
-    using typename CurveBaseType::IntervalType;
 
 private:
     Pointer<CurveGeometryType> m_curveGeometry;
     IntervalType m_domain;
 
 public:
-
     Curve(
-        Pointer<CurveGeometryType> geometry
-    )
-    : Curve(geometry, geometry->Domain())
+        Pointer<CurveGeometryType> geometry)
+        : Curve(geometry, geometry->Domain())
     {
     }
 
     Curve(
         Pointer<CurveGeometryType> geometry,
         const ScalarType& t0,
-        const ScalarType& t1
-    )
-    : m_curveGeometry(geometry)
-    , m_domain(t0, t1)
+        const ScalarType& t1)
+        : m_curveGeometry(geometry)
+        , m_domain(t0, t1)
     {
     }
-    
+
     Curve(
         Pointer<CurveGeometryType> geometry,
-        const IntervalType& domain
-    )
-    : m_curveGeometry(geometry)
-    , m_domain(domain)
+        const IntervalType& domain)
+        : m_curveGeometry(geometry)
+        , m_domain(domain)
     {
     }
 
     Pointer<CurveGeometryType>
-    CurveGeometry(
-    ) const
+    CurveGeometry() const
     {
         return m_curveGeometry;
     }
 
     int
-    Degree(
-    ) const
+    Degree() const
     {
         return m_curveGeometry->Degree();
     }
 
     IntervalType
-    Domain(
-    ) const override
+    Domain() const override
     {
         return m_domain;
     }
 
     VectorType
     PointAt(
-        const ScalarType& t
-    ) const
+        const ScalarType& t) const
     {
         return m_curveGeometry->PointAt(t);
     }
@@ -88,15 +81,13 @@ public:
     std::vector<VectorType>
     DerivativesAt(
         const ScalarType& t,
-        const int& order
-    ) const
+        const int& order) const
     {
         return m_curveGeometry->DerivativesAt(t, order);
     }
 
     std::vector<IntervalType>
-    Spans(
-    ) override
+    Spans() override
     {
         auto knots = CurveGeometry()->Knots();
 

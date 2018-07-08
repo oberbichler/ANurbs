@@ -19,40 +19,33 @@ public:
 
 public:
     static constexpr int
-    Dimension(
-    )
+    Dimension()
     {
         return VectorMath<VectorType>::Dimension();
     }
 
     virtual IntervalType
-    DomainU(
-    ) const = 0;
-    
+    DomainU() const = 0;
+
     virtual IntervalType
-    DomainV(
-    ) const = 0;
+    DomainV() const = 0;
 
     virtual VectorType
     PointAt(
         const ScalarType& u,
-        const ScalarType& v
-    ) const = 0;
-    
+        const ScalarType& v) const = 0;
+
     virtual std::vector<VectorType>
     DerivativesAt(
         const ScalarType& u,
         const ScalarType& v,
-        const int& order
-    ) const = 0;
+        const int& order) const = 0;
 
     virtual std::vector<IntervalType>
-    SpansU(
-    ) = 0;
+    SpansU() = 0;
 
     virtual std::vector<IntervalType>
-    SpansV(
-    ) = 0;
+    SpansV() = 0;
 };
 
 } // namespace ANurbs

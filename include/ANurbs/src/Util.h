@@ -3,7 +3,6 @@
 #include <functional>
 #include <type_traits>
 
-
 namespace ANurbs {
 namespace Util {
 
@@ -19,8 +18,7 @@ struct CurveWeights<std::vector<TWeight>>
     static Type
     Get(
         const ContainerType& container,
-        const int& index
-    )
+        const int& index)
     {
         return container[index];
     }
@@ -35,13 +33,11 @@ struct CurveWeights
     static Type
     Get(
         const ContainerType& container,
-        const int& index
-    )
+        const int& index)
     {
         return container(index);
     }
 };
-
 
 template <typename TContainer>
 struct SurfaceWeights;
@@ -57,8 +53,7 @@ struct SurfaceWeights
     Get(
         const ContainerType& container,
         const int& indexU,
-        const int& indexV
-    )
+        const int& indexV)
     {
         return container(indexU, indexV);
     }
