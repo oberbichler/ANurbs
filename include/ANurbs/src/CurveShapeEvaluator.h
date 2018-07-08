@@ -31,8 +31,7 @@ private:
     ScalarType&
     Values(
         const int& order,
-        const int& pole
-    )
+        const int& pole)
     {
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             order, pole);
@@ -43,8 +42,7 @@ private:
     ScalarType&
     Ndu(
         const int& i,
-        const int& j
-    )
+        const int& j)
     {
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             i, j);
@@ -53,8 +51,7 @@ private:
     }
 
     void
-    ClearValues(
-    )
+    ClearValues()
     {
         int nbValues = NbNonzeroPoles() * NbShapes();
 
@@ -62,15 +59,13 @@ private:
     }
 
 public:
-    CurveShapeEvaluator(
-    )
+    CurveShapeEvaluator()
     {
     }
 
     CurveShapeEvaluator(
         const int& degree,
-        const int& order
-    )
+        const int& order)
     {
         Resize(degree, order);
     }
@@ -78,8 +73,7 @@ public:
     void
     Resize(
         const int& degree,
-        const int& order
-    )
+        const int& order)
     {
         m_values.resize((order + 1) * (degree + 1));
         m_left.resize(degree);
@@ -93,29 +87,25 @@ public:
     }
 
     int
-    Degree(
-    ) const
+    Degree() const
     {
         return m_degree;
     }
 
     int
-    Order(
-    ) const
+    Order() const
     {
         return m_order;
     }
 
     int
-    NbNonzeroPoles(
-    ) const
+    NbNonzeroPoles() const
     {
         return Degree() + 1;
     }
 
     int
-    NbShapes(
-    ) const
+    NbShapes() const
     {
         return Order() + 1;
     }
@@ -123,8 +113,7 @@ public:
     ScalarType
     operator()(
         const int& order,
-        const int& pole
-    ) const
+        const int& pole) const
     {
         return Value(order, pole);
     }
@@ -132,8 +121,7 @@ public:
     ScalarType
     Value(
         const int& order,
-        const int& pole
-    ) const
+        const int& pole) const
     {
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             order, pole);
@@ -142,22 +130,19 @@ public:
     }
 
     int
-    FirstNonzeroPole(
-    ) const
+    FirstNonzeroPole() const
     {
         return m_firstNonzeroPole;
     }
 
     int
-    LastNonzeroPole(
-    ) const
+    LastNonzeroPole() const
     {
         return FirstNonzeroPole() + Degree();
     }
-    
+
     std::vector<int>
-    NonZeroPoleIndices(
-    ) const
+    NonZeroPoleIndices() const
     {
         std::vector<int> indices(NbNonzeroPoles());
 
@@ -173,8 +158,7 @@ public:
     ComputeAtSpan(
         const Knots& knots,
         const int& span,
-        const ScalarType& t
-    )
+        const ScalarType& t)
     {
         ClearValues();
 
@@ -184,15 +168,13 @@ public:
 
         Ndu(0, 0) = 1.0;
 
-        for (int j = 0; j < Degree(); j++)
-        {
+        for (int j = 0; j < Degree(); j++) {
             m_left[j] = t - knots[span - j];
             m_right[j] = knots[span + j + 1] - t;
 
             ScalarType saved = 0.0;
 
-            for (int r = 0; r <= j; r++)
-            {
+            for (int r = 0; r <= j; r++) {
                 Ndu(j + 1, r) = m_right[r] + m_left[j - r];
 
                 ScalarType temp = Ndu(r, j) / Ndu(j + 1, r);
@@ -259,8 +241,7 @@ public:
         const TKnots& knots,
         const int& span,
         const TWeights& weights,
-        const ScalarType& t
-    )
+        const ScalarType& t)
     {
         // compute B-Spline shape
 
@@ -268,7 +249,7 @@ public:
 
         // compute weighted sum
 
-        ScalarType weightedSum{0};
+        ScalarType weightedSum{ 0 };
 
         for (int i = 0; i < NbNonzeroPoles(); i++) {
             m_values[i] *= Util::CurveWeights<TWeights>::Get(weights, i);
@@ -281,26 +262,24 @@ public:
             m_values[i] /= weightedSum;
         }
     }
-    
+
     template <typename TKnots>
     void
     Compute(
         const TKnots& knots,
-        const ScalarType& t
-    )
+        const ScalarType& t)
     {
         int span = Knots::LowerSpan(Degree(), knots, t);
 
         ComputeAtSpan(knots, span, t);
     }
-    
+
     template <typename TKnots, typename TWeights>
     void
     Compute(
         const TKnots& knots,
         const TWeights& weights,
-        const ScalarType& t
-    )
+        const ScalarType& t)
     {
         int span = Knots::LowerSpan(Degree(), knots, t);
 

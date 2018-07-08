@@ -2,22 +2,21 @@
 
 #include "CurveGeometryBase.h"
 
-#include <vector>
 #include <stdexcept>
-
+#include <vector>
 
 namespace ANurbs {
 
-template <typename TScalar, int TDimension, typename TVector = Point<TScalar,
-    TDimension>>
+template <typename TScalar, int TDimension,
+    typename TVector = Point<TScalar, TDimension>>
 class CurveGeometry
-: public CurveGeometryBase<TScalar, TVector>
+    : public CurveGeometryBase<TScalar, TVector>
 {
 public:
     using CurveGeometryBaseType = CurveGeometryBase<TScalar, TVector>;
+    using typename CurveGeometryBaseType::KnotsType;
     using typename CurveGeometryBaseType::ScalarType;
     using typename CurveGeometryBaseType::VectorType;
-    using typename CurveGeometryBaseType::KnotsType;
 
 protected:
     std::vector<VectorType> m_poles;
@@ -27,18 +26,16 @@ public:
     CurveGeometry(
         const int& degree,
         const int& nbPoles,
-        const bool& isRational
-    )
-    : CurveGeometryBaseType(degree, nbPoles)
-    , m_poles(nbPoles)
-    , m_weights(isRational ? nbPoles : 0)
+        const bool& isRational)
+        : CurveGeometryBaseType(degree, nbPoles)
+        , m_poles(nbPoles)
+        , m_weights(isRational ? nbPoles : 0)
     {
     }
 
     VectorType
     Pole(
-        const int& index
-    ) const override
+        const int& index) const override
     {
         return m_poles[index];
     }
@@ -46,23 +43,20 @@ public:
     void
     SetPole(
         const int& index,
-        const VectorType& value
-    ) override
+        const VectorType& value) override
     {
         m_poles[index] = value;
     }
 
     bool
-    IsRational(
-    ) const override
+    IsRational() const override
     {
         return m_weights.size() != 0;
     }
 
     ScalarType
     Weight(
-        const int& index
-    ) const override
+        const int& index) const override
     {
         if (IsRational()) {
             return m_weights[index];
@@ -74,8 +68,7 @@ public:
     void
     SetWeight(
         const int& index,
-        const ScalarType& value
-    ) override
+        const ScalarType& value) override
     {
         if (IsRational()) {
             m_weights[index] = value;

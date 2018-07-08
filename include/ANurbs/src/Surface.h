@@ -8,8 +8,8 @@ namespace ANurbs {
 
 template <typename TSurfaceGeometry>
 class Surface
-: public SurfaceBase<typename TSurfaceGeometry::ScalarType,
-    typename TSurfaceGeometry::VectorType>
+    : public SurfaceBase<typename TSurfaceGeometry::ScalarType,
+          typename TSurfaceGeometry::VectorType>
 {
 private:
     using SurfaceGeometryType = TSurfaceGeometry;
@@ -20,9 +20,9 @@ public:
 
     using SurfaceType = Surface<TSurfaceGeometry>;
 
+    using typename SurfaceBaseType::IntervalType;
     using typename SurfaceBaseType::ScalarType;
     using typename SurfaceBaseType::VectorType;
-    using typename SurfaceBaseType::IntervalType;
 
 private:
     Pointer<SurfaceGeometryType> m_surfaceGeometry;
@@ -31,54 +31,47 @@ private:
 
 public:
     Surface(
-        Pointer<SurfaceGeometryType> geometry
-    )
-    : Surface(geometry, geometry->DomainU(), geometry->DomainV())
+        Pointer<SurfaceGeometryType> geometry)
+        : Surface(geometry, geometry->DomainU(), geometry->DomainV())
     {
     }
-    
+
     Surface(
         Pointer<SurfaceGeometryType> geometry,
         const IntervalType& domainU,
-        const IntervalType& domainV
-    )
-    : m_surfaceGeometry(geometry)
-    , m_domainU(domainU)
-    , m_domainV(domainV)
+        const IntervalType& domainV)
+        : m_surfaceGeometry(geometry)
+        , m_domainU(domainU)
+        , m_domainV(domainV)
     {
     }
 
     Pointer<SurfaceGeometryType>
-    SurfaceGeometry(
-    ) const
+    SurfaceGeometry() const
     {
         return m_surfaceGeometry;
     }
 
     int
-    DegreeU(
-    ) const
+    DegreeU() const
     {
         return m_surfaceGeometry->DegreeU();
     }
 
     int
-    DegreeV(
-    ) const
+    DegreeV() const
     {
         return m_surfaceGeometry->DegreeV();
     }
 
     IntervalType
-    DomainU(
-    ) const override
+    DomainU() const override
     {
         return m_domainU;
     }
 
     IntervalType
-    DomainV(
-    ) const override
+    DomainV() const override
     {
         return m_domainV;
     }
@@ -86,8 +79,7 @@ public:
     VectorType
     PointAt(
         const ScalarType& u,
-        const ScalarType& v
-    ) const override
+        const ScalarType& v) const override
     {
         return m_surfaceGeometry->PointAt(u, v);
     }
@@ -96,15 +88,13 @@ public:
     DerivativesAt(
         const ScalarType& u,
         const ScalarType& v,
-        const int& order
-    ) const override
+        const int& order) const override
     {
         return m_surfaceGeometry->DerivativesAt(u, v, order);
     }
 
     std::vector<IntervalType>
-    SpansU(
-    ) override
+    SpansU() override
     {
         auto knots = m_surfaceGeometry->KnotsU();
 
@@ -126,8 +116,7 @@ public:
     }
 
     std::vector<IntervalType>
-    SpansV(
-    ) override
+    SpansV() override
     {
         auto knots = m_surfaceGeometry->KnotsV();
 
