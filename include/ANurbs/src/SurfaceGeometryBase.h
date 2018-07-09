@@ -262,7 +262,7 @@ public:
 
         int nbShapes = shape.NbShapes(order);
 
-        std::vector<TVector> result(nbShapes);
+        std::vector<TValue> result(nbShapes);
 
         for (int k = 0; k < nbShapes; k++) {
             for (int i = 0; i <= DegreeU(); i++) {
