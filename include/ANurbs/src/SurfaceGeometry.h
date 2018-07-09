@@ -25,11 +25,11 @@ protected:
 
 public:
     SurfaceGeometry(
-        const int& degreeU,
-        const int& degreeV,
-        const int& nbPolesU,
-        const int& nbPolesV,
-        const bool& isRational)
+        const int degreeU,
+        const int degreeV,
+        const int nbPolesU,
+        const int nbPolesV,
+        const bool isRational)
         : SurfaceGeometryBaseType(degreeU, degreeV, nbPolesU, nbPolesV)
         , m_poles(nbPolesU, nbPolesV)
         , m_weights(isRational ? nbPolesU : 0, isRational ? nbPolesV : 0)
@@ -38,16 +38,16 @@ public:
 
     VectorType
     Pole(
-        const int& indexU,
-        const int& indexV) const override
+        const int indexU,
+        const int indexV) const override
     {
         return m_poles(indexU, indexV);
     }
 
     void
     SetPole(
-        const int& indexU,
-        const int& indexV,
+        const int indexU,
+        const int indexV,
         const VectorType& value) override
     {
         return m_poles.SetValue(indexU, indexV, value);
@@ -55,8 +55,8 @@ public:
 
     ScalarType
     Weight(
-        const int& indexU,
-        const int& indexV) const override
+        const int indexU,
+        const int indexV) const override
     {
         if (IsRational()) {
             return m_weights(indexU, indexV);
@@ -67,9 +67,9 @@ public:
 
     void
     SetWeight(
-        const int& indexU,
-        const int& indexV,
-        const ScalarType& value) override
+        const int indexU,
+        const int indexV,
+        const ScalarType value) override
     {
         if (IsRational()) {
             return m_weights.SetValue(indexU, indexV, value);

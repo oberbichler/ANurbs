@@ -24,9 +24,9 @@ protected:
 
 public:
     CurveGeometry(
-        const int& degree,
-        const int& nbPoles,
-        const bool& isRational)
+        const int degree,
+        const int nbPoles,
+        const bool isRational)
         : CurveGeometryBaseType(degree, nbPoles)
         , m_poles(nbPoles)
         , m_weights(isRational ? nbPoles : 0)
@@ -35,14 +35,14 @@ public:
 
     VectorType
     Pole(
-        const int& index) const override
+        const int index) const override
     {
         return m_poles[index];
     }
 
     void
     SetPole(
-        const int& index,
+        const int index,
         const VectorType& value) override
     {
         m_poles[index] = value;
@@ -56,7 +56,7 @@ public:
 
     ScalarType
     Weight(
-        const int& index) const override
+        const int index) const override
     {
         if (IsRational()) {
             return m_weights[index];
@@ -67,8 +67,8 @@ public:
 
     void
     SetWeight(
-        const int& index,
-        const ScalarType& value) override
+        const int index,
+        const ScalarType value) override
     {
         if (IsRational()) {
             m_weights[index] = value;

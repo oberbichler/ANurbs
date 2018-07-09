@@ -38,8 +38,8 @@ public:
 
     Curve(
         Pointer<CurveGeometryType> geometry,
-        const ScalarType& t0,
-        const ScalarType& t1)
+        const ScalarType t0,
+        const ScalarType t1)
         : m_curveGeometry(geometry)
         , m_domain(t0, t1)
     {
@@ -73,15 +73,15 @@ public:
 
     VectorType
     PointAt(
-        const ScalarType& t) const
+        const ScalarType t) const
     {
         return m_curveGeometry->PointAt(t);
     }
 
     std::vector<VectorType>
     DerivativesAt(
-        const ScalarType& t,
-        const int& order) const
+        const ScalarType t,
+        const int order) const
     {
         return m_curveGeometry->DerivativesAt(t, order);
     }

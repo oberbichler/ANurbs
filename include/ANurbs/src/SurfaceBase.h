@@ -32,14 +32,14 @@ public:
 
     virtual VectorType
     PointAt(
-        const ScalarType& u,
-        const ScalarType& v) const = 0;
+        const ScalarType u,
+        const ScalarType v) const = 0;
 
     virtual std::vector<VectorType>
     DerivativesAt(
-        const ScalarType& u,
-        const ScalarType& v,
-        const int& order) const = 0;
+        const ScalarType u,
+        const ScalarType v,
+        const int order) const = 0;
 
     virtual std::vector<IntervalType>
     SpansU() = 0;

@@ -23,8 +23,8 @@ protected:
 
 public:
     CurveGeometryBase(
-        const int& degree,
-        const int& nbPoles)
+        const int degree,
+        const int nbPoles)
         : m_degree(degree)
         , m_knots(nbPoles + degree - 1)
     {
@@ -50,15 +50,15 @@ public:
 
     ScalarType
     Knot(
-        const int& index) const
+        const int index) const
     {
         return m_knots[index];
     }
 
     void
     SetKnot(
-        const int& index,
-        const ScalarType& value)
+        const int index,
+        const ScalarType value)
     {
         m_knots[index] = value;
     }
@@ -78,11 +78,11 @@ public:
 
     virtual VectorType
     Pole(
-        const int& index) const = 0;
+        const int index) const = 0;
 
     virtual void
     SetPole(
-        const int& index,
+        const int index,
         const VectorType& value)
         = 0;
 
@@ -91,12 +91,12 @@ public:
 
     virtual ScalarType
     Weight(
-        const int& index) const = 0;
+        const int index) const = 0;
 
     virtual void
     SetWeight(
-        const int& index,
-        const ScalarType& value)
+        const int index,
+        const ScalarType value)
         = 0;
 
     IntervalType
@@ -110,7 +110,7 @@ public:
 
     int
     SpanAt(
-        const ScalarType& t) const
+        const ScalarType t) const
     {
         return Knots::LowerSpan(Degree(), Knots(), t);
     }
@@ -119,7 +119,7 @@ public:
     TValue
     EvaluateAt(
         TValues values,
-        const ScalarType& t)
+        const ScalarType t)
     {
         // compute shape functions
 
@@ -151,8 +151,8 @@ public:
     std::vector<TValue>
     EvaluateAt(
         TValues values,
-        const ScalarType& t,
-        const int& order) const
+        const ScalarType t,
+        const int order) const
     {
         // evaluate shape functions
 
@@ -208,7 +208,7 @@ public:
 
     VectorType
     PointAt(
-        const ScalarType& t)
+        const ScalarType t)
     {
         auto poles = [&](int i) -> VectorType { return Pole(i); };
 
@@ -217,8 +217,8 @@ public:
 
     std::vector<VectorType>
     DerivativesAt(
-        const ScalarType& t,
-        const int& order) const
+        const ScalarType t,
+        const int order) const
     {
         auto poles = [&](int i) -> VectorType { return Pole(i); };
 

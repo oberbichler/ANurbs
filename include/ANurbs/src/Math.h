@@ -7,8 +7,8 @@ namespace Math {
 
 static constexpr inline int
 Binom(
-    const int& n,
-    const int& k) noexcept
+    const int n,
+    const int k) noexcept
 {
     // clang-format off
     return (k > n               ) ? 0           :  // out of range
@@ -22,10 +22,10 @@ Binom(
 
 static constexpr inline int
 MatrixIndex(
-    const int& rows,
-    const int& cols,
-    const int& row,
-    const int& col) noexcept
+    const int rows,
+    const int cols,
+    const int row,
+    const int col) noexcept
 {
     return row * cols + col;
 }

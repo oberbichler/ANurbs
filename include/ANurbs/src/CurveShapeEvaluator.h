@@ -30,8 +30,8 @@ private:
 private:
     ScalarType&
     Values(
-        const int& order,
-        const int& pole)
+        const int order,
+        const int pole)
     {
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             order, pole);
@@ -41,8 +41,8 @@ private:
 
     ScalarType&
     Ndu(
-        const int& i,
-        const int& j)
+        const int i,
+        const int j)
     {
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             i, j);
@@ -64,16 +64,16 @@ public:
     }
 
     CurveShapeEvaluator(
-        const int& degree,
-        const int& order)
+        const int degree,
+        const int order)
     {
         Resize(degree, order);
     }
 
     void
     Resize(
-        const int& degree,
-        const int& order)
+        const int degree,
+        const int order)
     {
         m_values.resize((order + 1) * (degree + 1));
         m_left.resize(degree);
@@ -112,16 +112,16 @@ public:
 
     ScalarType
     operator()(
-        const int& order,
-        const int& pole) const
+        const int order,
+        const int pole) const
     {
         return Value(order, pole);
     }
 
     ScalarType
     Value(
-        const int& order,
-        const int& pole) const
+        const int order,
+        const int pole) const
     {
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             order, pole);
@@ -157,8 +157,8 @@ public:
     void
     ComputeAtSpan(
         const Knots& knots,
-        const int& span,
-        const ScalarType& t)
+        const int span,
+        const ScalarType t)
     {
         ClearValues();
 
@@ -239,9 +239,9 @@ public:
     void
     ComputeAtSpan(
         const TKnots& knots,
-        const int& span,
+        const int span,
         const TWeights& weights,
-        const ScalarType& t)
+        const ScalarType t)
     {
         // compute B-Spline shape
 
@@ -267,7 +267,7 @@ public:
     void
     Compute(
         const TKnots& knots,
-        const ScalarType& t)
+        const ScalarType t)
     {
         int span = Knots::LowerSpan(Degree(), knots, t);
 
@@ -279,7 +279,7 @@ public:
     Compute(
         const TKnots& knots,
         const TWeights& weights,
-        const ScalarType& t)
+        const ScalarType t)
     {
         int span = Knots::LowerSpan(Degree(), knots, t);
 

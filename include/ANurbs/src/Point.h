@@ -44,23 +44,23 @@ public:
         return TDimension;
     }
 
-    const ScalarType&
+    const ScalarType
     operator[](
-        const int& index) const
+        const int index) const
     {
         return m_coordinates[index];
     }
 
     ScalarType&
     operator[](
-        const int& index)
+        const int index)
     {
         assert(index < Dimension() && "Index out of range");
 
         return m_coordinates[index];
     }
 
-    const ScalarType&
+    const ScalarType
     X() const
     {
         static_assert(Dimension() >= 1, "Index out of range");
@@ -69,13 +69,13 @@ public:
 
     void
     SetX(
-        const ScalarType& value)
+        const ScalarType value)
     {
         static_assert(Dimension() >= 1, "Index out of range");
         m_coordinates[0] = value;
     }
 
-    const ScalarType&
+    const ScalarType
     Y() const
     {
         static_assert(Dimension() >= 2, "Index out of range");
@@ -84,13 +84,13 @@ public:
 
     void
     SetY(
-        const ScalarType& value)
+        const ScalarType value)
     {
         static_assert(Dimension() >= 2, "Index out of range");
         m_coordinates[1] = value;
     }
 
-    const ScalarType&
+    const ScalarType
     Z() const
     {
         static_assert(Dimension() >= 3, "Index out of range");
@@ -99,7 +99,7 @@ public:
 
     void
     SetZ(
-        const ScalarType& value)
+        const ScalarType value)
     {
         static_assert(Dimension() >= 3, "Index out of range");
         m_coordinates[2] = value;
@@ -144,7 +144,7 @@ public:
     friend PointType
     operator*(
         PointType lhs,
-        const ScalarType& rhs)
+        const ScalarType rhs)
     {
         for (int i = 0; i < Dimension(); i++) {
             lhs[i] *= rhs;

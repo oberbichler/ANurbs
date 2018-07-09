@@ -78,17 +78,17 @@ public:
 
     VectorType
     PointAt(
-        const ScalarType& u,
-        const ScalarType& v) const override
+        const ScalarType u,
+        const ScalarType v) const override
     {
         return m_surfaceGeometry->PointAt(u, v);
     }
 
     std::vector<VectorType>
     DerivativesAt(
-        const ScalarType& u,
-        const ScalarType& v,
-        const int& order) const override
+        const ScalarType u,
+        const ScalarType v,
+        const int order) const override
     {
         return m_surfaceGeometry->DerivativesAt(u, v, order);
     }
