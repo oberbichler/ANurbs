@@ -81,9 +81,9 @@ public:
 
         switch (Axis) {
         case 0:
-            return m_knotsU.size();
+            return NbKnotsU();
         case 1:
-            return m_knotsV.size();
+            return NbKnotsV();
         }
     }
 
@@ -96,16 +96,16 @@ public:
 
         switch (Axis) {
         case 0:
-            return m_knotsU[index];
+            return KnotU(index);
         case 1:
-            return m_knotsV[index];
+            return KnotV(index);
         }
     }
 
     int
     NbKnotsU() const
     {
-        return m_knotsU.size();
+        return static_cast<int>(m_knotsU.size());
     }
 
     ScalarType&
@@ -132,7 +132,7 @@ public:
     int
     NbKnotsV() const
     {
-        return m_knotsV.size();
+        return static_cast<int>(m_knotsV.size());
     }
 
     ScalarType&
@@ -262,7 +262,7 @@ public:
 
         int nbShapes = shape.NbShapes(order);
 
-        std::vector<TVector> result(nbShapes);
+        std::vector<TValue> result(nbShapes);
 
         for (int k = 0; k < nbShapes; k++) {
             for (int i = 0; i <= DegreeU(); i++) {
