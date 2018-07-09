@@ -96,9 +96,9 @@ public:
 
         switch (Axis) {
         case 0:
-            return KnotU[index];
+            return KnotU(index);
         case 1:
-            return KnotV[index];
+            return KnotV(index);
         }
     }
 
