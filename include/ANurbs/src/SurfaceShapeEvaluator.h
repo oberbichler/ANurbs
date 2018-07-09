@@ -25,15 +25,15 @@ private:
 
 public:
     constexpr int static NbShapes(
-        const int& order) noexcept
+        const int order) noexcept
     {
         return (1 + order) * (2 + order) / 2;
     }
 
     static constexpr inline int
     ShapeIndex(
-        const int& derivativeU,
-        const int& derivativeV) noexcept
+        const int derivativeU,
+        const int derivativeV) noexcept
     {
         return derivativeV + (derivativeU + derivativeV) * (1 + derivativeU + derivativeV) / 2;
     }
@@ -41,15 +41,15 @@ public:
 private:
     ScalarType&
     WeightedSum(
-        const int& index)
+        const int index)
     {
         return m_weightedSums[index];
     }
 
     ScalarType&
     WeightedSum(
-        const int& derivativeU,
-        const int& derivativeV)
+        const int derivativeU,
+        const int derivativeV)
     {
         int index = ShapeIndex(derivativeU, derivativeV);
 
@@ -58,9 +58,9 @@ private:
 
     inline int
     Index(
-        const int& derivative,
-        const int& poleU,
-        const int& poleV) const
+        const int derivative,
+        const int poleU,
+        const int poleV) const
     {
         int pole = Math::MatrixIndex(NbNonzeroPolesU(),
             NbNonzeroPolesV(), poleU, poleV);
@@ -72,8 +72,8 @@ private:
 
     ScalarType&
     Value(
-        const int& derivative,
-        const int& pole)
+        const int derivative,
+        const int pole)
     {
         int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
             derivative, pole);
@@ -83,9 +83,9 @@ private:
 
     ScalarType&
     Value(
-        const int& derivative,
-        const int& poleU,
-        const int& poleV)
+        const int derivative,
+        const int poleU,
+        const int poleV)
     {
         int index = Index(derivative, poleU, poleV);
 
@@ -98,18 +98,18 @@ public:
     }
 
     SurfaceShapeEvaluator(
-        const int& degreeU,
-        const int& degreeV,
-        const int& order)
+        const int degreeU,
+        const int degreeV,
+        const int order)
     {
         Resize(degreeU, degreeV, order);
     }
 
     void
     Resize(
-        const int& degreeU,
-        const int& degreeV,
-        const int& order)
+        const int degreeU,
+        const int degreeV,
+        const int order)
     {
         int nbShapes = NbShapes(order);
 
@@ -163,22 +163,22 @@ public:
         return NbNonzeroPolesU() * NbNonzeroPolesV();
     }
 
-    const ScalarType&
+    const ScalarType
     Value(
-        const int& derivative,
-        const int& poleU,
-        const int& poleV) const
+        const int derivative,
+        const int poleU,
+        const int poleV) const
     {
         int index = Index(derivative, poleU, poleV);
 
         return m_values[index];
     }
 
-    const ScalarType&
+    const ScalarType
     GetValue(
-        const int& derivative,
-        const int& poleU,
-        const int& poleV) const
+        const int derivative,
+        const int poleU,
+        const int poleV) const
     {
         int index = Index(derivative, poleU, poleV);
 
@@ -187,17 +187,17 @@ public:
 
     ScalarType
     operator()(
-        const int& derivative,
-        const int& pole) const
+        const int derivative,
+        const int pole) const
     {
         return Value(derivative, pole);
     }
 
     ScalarType
     operator()(
-        const int& derivative,
-        const int& poleU,
-        const int& poleV) const
+        const int derivative,
+        const int poleU,
+        const int poleV) const
     {
         return Value(derivative, poleU, poleV);
     }
@@ -231,10 +231,10 @@ public:
     ComputeAtSpan(
         const TKnots& knotsU,
         const TKnots& knotsV,
-        const int& spanU,
-        const int& spanV,
-        const ScalarType& u,
-        const ScalarType& v)
+        const int spanU,
+        const int spanV,
+        const ScalarType u,
+        const ScalarType v)
     {
         int nbValues = NbShapes() * NbNonzeroPoles();
 
@@ -268,8 +268,8 @@ public:
     Compute(
         const TKnots& knotsU,
         const TKnots& knotsV,
-        const ScalarType& u,
-        const ScalarType& v)
+        const ScalarType u,
+        const ScalarType v)
     {
         int spanU = Knots::LowerSpan(DegreeU(), knotsU, u);
         int spanV = Knots::LowerSpan(DegreeV(), knotsV, v);
@@ -282,11 +282,11 @@ public:
     ComputeAtSpan(
         const TKnots& knotsU,
         const TKnots& knotsV,
-        const int& spanU,
-        const int& spanV,
+        const int spanU,
+        const int spanV,
         const TWeights& weights,
-        const ScalarType& u,
-        const ScalarType& v)
+        const ScalarType u,
+        const ScalarType v)
     {
         using Math::Binom;
 
@@ -361,8 +361,8 @@ public:
         const TKnots& knotsU,
         const TKnots& knotsV,
         const TWeights& weights,
-        const ScalarType& u,
-        const ScalarType& v)
+        const ScalarType u,
+        const ScalarType v)
     {
         int spanU = Knots::LowerSpan(DegreeU(), knotsU, u);
         int spanV = Knots::LowerSpan(DegreeV(), knotsV, v);

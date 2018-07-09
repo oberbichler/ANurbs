@@ -10,7 +10,7 @@ public:
     template <typename TScalar, typename TKnots>
     static int
     UpperSpan(
-        const int& degree,
+        const int degree,
         const TKnots& knots,
         const TScalar& t)
     {
@@ -22,7 +22,7 @@ public:
     template <typename TScalar, typename TKnots>
     static int
     LowerSpan(
-        const int& degree,
+        const int degree,
         const TKnots& knots,
         const TScalar& t)
     {

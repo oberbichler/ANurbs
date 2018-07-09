@@ -19,8 +19,8 @@ private:
 
 public:
     Grid(
-        const int& nbRows,
-        const int& nbCols)
+        const int nbRows,
+        const int nbCols)
         : m_nbRows(nbRows)
         , m_nbCols(nbCols)
         , m_values(nbRows * nbCols)
@@ -28,8 +28,8 @@ public:
     }
 
     Grid(
-        const int& nbRows,
-        const int& nbCols,
+        const int nbRows,
+        const int nbCols,
         const std::vector<DataType> values)
         : m_nbRows(nbRows)
         , m_nbCols(nbCols)
@@ -57,22 +57,22 @@ public:
 
     const DataType&
     operator[](
-        const int& index) const
+        const int index) const
     {
         return m_values[index];
     }
 
     DataType&
     operator[](
-        const int& index)
+        const int index)
     {
         return m_values[index];
     }
 
     DataType
     operator()(
-        const int& row,
-        const int& col) const
+        const int row,
+        const int col) const
     {
         int index = Math::MatrixIndex(NbRows(), NbCols(), row, col);
 
@@ -81,8 +81,8 @@ public:
 
     void
     SetValue(
-        const int& row,
-        const int& col,
+        const int row,
+        const int col,
         const DataType& value)
     {
         int index = Math::MatrixIndex(NbRows(), NbCols(), row, col);

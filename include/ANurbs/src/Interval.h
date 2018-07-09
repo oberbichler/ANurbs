@@ -20,8 +20,8 @@ public:
     }
 
     Interval(
-        const ScalarType& t0,
-        const ScalarType& t1)
+        const ScalarType t0,
+        const ScalarType t1)
         : m_t0(t0)
         , m_t1(t1)
     {
@@ -65,23 +65,23 @@ public:
 
     ScalarType
     NormalizedAt(
-        const ScalarType& t) const
+        const ScalarType t) const
     {
         return (t - T0()) / Length();
     }
 
     ScalarType
     ParameterAtNormalized(
-        const ScalarType& t) const
+        const ScalarType t) const
     {
         return T0() + Delta() * t;
     }
 
     static ScalarType
     Clamp(
-        const ScalarType& value,
-        const ScalarType& min,
-        const ScalarType& max)
+        const ScalarType value,
+        const ScalarType min,
+        const ScalarType max)
     {
         if (value < min) {
             return min;
@@ -96,14 +96,14 @@ public:
 
     static ScalarType
     Clamp01(
-        const ScalarType& value)
+        const ScalarType value)
     {
         return Clamp(value, 0, 1);
     }
 
     ScalarType
     Clamp(
-        const ScalarType& value) const
+        const ScalarType value) const
     {
         return Clamp(value, Min(), Max());
     }

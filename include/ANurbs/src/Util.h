@@ -18,7 +18,7 @@ struct CurveWeights<std::vector<TWeight>>
     static Type
     Get(
         const ContainerType& container,
-        const int& index)
+        const int index)
     {
         return container[index];
     }
@@ -33,7 +33,7 @@ struct CurveWeights
     static Type
     Get(
         const ContainerType& container,
-        const int& index)
+        const int index)
     {
         return container(index);
     }
@@ -52,8 +52,8 @@ struct SurfaceWeights
     static Type
     Get(
         const ContainerType& container,
-        const int& indexU,
-        const int& indexV)
+        const int indexU,
+        const int indexV)
     {
         return container(indexU, indexV);
     }

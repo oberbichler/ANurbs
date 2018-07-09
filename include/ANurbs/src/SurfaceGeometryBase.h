@@ -26,10 +26,10 @@ protected:
 
 public:
     SurfaceGeometryBase(
-        const int& degreeU,
-        const int& degreeV,
-        const int& nbPolesU,
-        const int& nbPolesV)
+        const int degreeU,
+        const int degreeV,
+        const int nbPolesU,
+        const int nbPolesV)
         : m_degreeU(degreeU)
         , m_degreeV(degreeV)
         , m_knotsU(nbPolesU + degreeU - 1)
@@ -90,7 +90,7 @@ public:
     template <int Axis>
     ScalarType
     Knot(
-        const int& index) const
+        const int index) const
     {
         static_assert(Axis == 0 || Axis == 1, "Invalid index");
 
@@ -110,15 +110,15 @@ public:
 
     ScalarType&
     KnotU(
-        const int& index)
+        const int index)
     {
         return m_knotsU[index];
     }
 
     void
     SetKnotU(
-        const int& index,
-        const ScalarType& value)
+        const int index,
+        const ScalarType value)
     {
         m_knotsU[index] = value;
     }
@@ -137,15 +137,15 @@ public:
 
     ScalarType&
     KnotV(
-        const int& index)
+        const int index)
     {
         return m_knotsV[index];
     }
 
     void
     SetKnotV(
-        const int& index,
-        const ScalarType& value)
+        const int index,
+        const ScalarType value)
     {
         m_knotsV[index] = value;
     }
@@ -176,26 +176,26 @@ public:
 
     virtual VectorType
     Pole(
-        const int& indexU,
-        const int& indexV) const = 0;
+        const int indexU,
+        const int indexV) const = 0;
 
     virtual void
     SetPole(
-        const int& indexU,
-        const int& indexV,
+        const int indexU,
+        const int indexV,
         const VectorType& value)
         = 0;
 
     virtual ScalarType
     Weight(
-        const int& indexU,
-        const int& indexV) const = 0;
+        const int indexU,
+        const int indexV) const = 0;
 
     virtual void
     SetWeight(
-        const int& indexU,
-        const int& indexV,
-        const ScalarType& value)
+        const int indexU,
+        const int indexV,
+        const ScalarType value)
         = 0;
 
     virtual bool
@@ -205,8 +205,8 @@ public:
     TValue
     EvaluateAt(
         TValues values,
-        const ScalarType& u,
-        const ScalarType& v) const
+        const ScalarType u,
+        const ScalarType v) const
     {
         // compute shape functions
 
@@ -244,9 +244,9 @@ public:
     std::vector<TValue>
     EvaluateAt(
         TValues values,
-        const ScalarType& u,
-        const ScalarType& v,
-        const int& order) const
+        const ScalarType u,
+        const ScalarType v,
+        const int order) const
     {
         // compute shape functions
 
@@ -286,8 +286,8 @@ public:
 
     VectorType
     PointAt(
-        const ScalarType& u,
-        const ScalarType& v)
+        const ScalarType u,
+        const ScalarType v)
     {
         auto poles = [&](int i, int j) -> VectorType { return Pole(i, j); };
 
@@ -296,9 +296,9 @@ public:
 
     std::vector<VectorType>
     DerivativesAt(
-        const ScalarType& u,
-        const ScalarType& v,
-        const int& order) const
+        const ScalarType u,
+        const ScalarType v,
+        const int order) const
     {
         auto poles = [&](int i, int j) -> VectorType { return Pole(i, j); };
 

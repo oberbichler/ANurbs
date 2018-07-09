@@ -30,16 +30,16 @@ public:
 
     virtual VectorType
     PointAt(
-        const ScalarType& t) const = 0;
+        const ScalarType t) const = 0;
 
     virtual std::vector<VectorType>
     DerivativesAt(
-        const ScalarType& t,
-        const int& order) const = 0;
+        const ScalarType t,
+        const int order) const = 0;
 
     ScalarType
     Length(
-        const ScalarType& tolerance = 1e-7) const
+        const ScalarType tolerance = 1e-7) const
     {
         ScalarType t0 = Domain().T0();
         ScalarType t1 = Domain().T1();
@@ -50,16 +50,16 @@ public:
     ScalarType
     SegmentLength(
         const IntervalType& domain,
-        const ScalarType& tolerance = 1e-7) const
+        const ScalarType tolerance = 1e-7) const
     {
         return SegmentLength(domain.T0(), domain.T1(), tolerance);
     }
 
     ScalarType
     SegmentLength(
-        const ScalarType& t0,
-        const ScalarType& t1,
-        const ScalarType& tolerance = 1e-7) const
+        const ScalarType t0,
+        const ScalarType t1,
+        const ScalarType tolerance = 1e-7) const
     {
         auto f = [&](ScalarType t) -> ScalarType {
             auto tangent = DerivativesAt(t, 1)[1];
