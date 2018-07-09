@@ -35,10 +35,10 @@ TEST_CASE( "Assign Point2D by index", "[Point]" ) {
     }
 }
 
-TEST_CASE( "Assign Point2D by XY", "[Point]" ) {
+TEST_CASE( "Assign Point2D by SetX/Y", "[Point]" ) {
     Point<double, 2> point;
-    point.X() = 1.2;
-    point.Y() = 3.4;
+    point.SetX(1.2);
+    point.SetY(3.4);
 
     SECTION( "Access values by index" ) {
         CHECK( point[0] == 1.2 );
@@ -86,11 +86,11 @@ TEST_CASE( "Assign Point3D by index", "[Point]" ) {
     }
 }
 
-TEST_CASE( "Assign Point3D by XYZ", "[Point]" ) {
+TEST_CASE( "Assign Point3D by SetX/Y/Z", "[Point]" ) {
     Point<double, 3> point;
-    point.X() = 1.2;
-    point.Y() = 3.4;
-    point.Z() = 5.6;
+    point.SetX(1.2);
+    point.SetY(3.4);
+    point.SetZ(5.6);
 
     SECTION( "Access values by index" ) {
         CHECK( point[0] == 1.2 );

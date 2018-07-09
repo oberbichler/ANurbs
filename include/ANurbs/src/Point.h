@@ -67,11 +67,12 @@ public:
         return m_coordinates[0];
     }
 
-    ScalarType&
-    X()
+    void
+    SetX(
+        const ScalarType& value)
     {
         static_assert(Dimension() >= 1, "Index out of range");
-        return m_coordinates[0];
+        m_coordinates[0] = value;
     }
 
     const ScalarType&
@@ -81,11 +82,12 @@ public:
         return m_coordinates[1];
     }
 
-    ScalarType&
-    Y()
+    void
+    SetY(
+        const ScalarType& value)
     {
         static_assert(Dimension() >= 2, "Index out of range");
-        return m_coordinates[1];
+        m_coordinates[1] = value;
     }
 
     const ScalarType&
@@ -95,11 +97,12 @@ public:
         return m_coordinates[2];
     }
 
-    ScalarType&
-    Z()
+    void
+    SetZ(
+        const ScalarType& value)
     {
         static_assert(Dimension() >= 3, "Index out of range");
-        return m_coordinates[2];
+        m_coordinates[2] = value;
     }
 
     friend PointType
