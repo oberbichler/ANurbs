@@ -35,7 +35,7 @@ private:
 
     static std::vector<IntegrationPoint1Type>&
     GaussLegendre(
-        const size_t& degree)
+        const size_t degree)
     {
         if (degree < 1 || degree > s_gaussLegendre.size()) {
             throw std::invalid_argument("Invalid degree");
@@ -47,7 +47,7 @@ private:
 public:
     static std::vector<IntegrationPoint1Type>
     Points1(
-        const size_t& degree,
+        const size_t degree,
         const Interval<ScalarType>& domain)
     {
         std::vector<IntegrationPoint1Type> integrationPoints(degree);
@@ -65,8 +65,8 @@ public:
 
     static std::vector<IntegrationPoint2Type>
     Points2(
-        const size_t& degreeU,
-        const size_t& degreeV,
+        const size_t degreeU,
+        const size_t degreeV,
         const Interval<ScalarType>& domainU,
         const Interval<ScalarType>& domainV)
     {
