@@ -38,7 +38,7 @@ private:
         const size_t& degree)
     {
         if (degree < 1 || degree > s_gaussLegendre.size()) {
-            throw std::invalid_argument("Degree must be 1...20");
+            throw std::invalid_argument("Invalid degree");
         }
 
         return s_gaussLegendre[degree - 1];
