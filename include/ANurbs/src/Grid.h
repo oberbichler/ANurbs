@@ -69,7 +69,7 @@ public:
         return m_values[index];
     }
 
-    DataType
+    const DataType&
     operator()(
         const int row,
         const int col) const
@@ -83,7 +83,7 @@ public:
     SetValue(
         const int row,
         const int col,
-        const DataType& value)
+        DataType value)
     {
         int index = Math::MatrixIndex(NbRows(), NbCols(), row, col);
 
