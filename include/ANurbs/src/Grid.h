@@ -83,7 +83,7 @@ public:
     SetValue(
         const int row,
         const int col,
-        DataType value)
+        const DataType& value)
     {
         int index = Math::MatrixIndex(NbRows(), NbCols(), row, col);
 
