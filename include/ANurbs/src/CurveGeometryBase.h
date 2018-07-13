@@ -119,7 +119,7 @@ public:
     TValue
     EvaluateAt(
         TValues values,
-        const ScalarType t)
+        const ScalarType t) const
     {
         // compute shape functions
 
@@ -187,7 +187,7 @@ public:
     }
 
     std::vector<IntervalType>
-    Spans()
+    Spans() const
     {
         int firstSpan = Degree() - 1;
         int lastSpan = NbKnots() - Degree() - 1;
@@ -208,7 +208,7 @@ public:
 
     VectorType
     PointAt(
-        const ScalarType t)
+        const ScalarType t) const
     {
         auto poles = [&](int i) -> VectorType { return Pole(i); };
 
