@@ -287,7 +287,7 @@ public:
     VectorType
     PointAt(
         const ScalarType u,
-        const ScalarType v)
+        const ScalarType v) const
     {
         auto poles = [&](int i, int j) -> VectorType { return Pole(i, j); };
 

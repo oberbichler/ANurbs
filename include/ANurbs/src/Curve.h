@@ -87,7 +87,7 @@ public:
     }
 
     std::vector<IntervalType>
-    Spans() override
+    Spans() const override
     {
         auto knots = CurveGeometry()->Knots();
 
