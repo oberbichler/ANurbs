@@ -70,7 +70,7 @@ public:
     }
 
     virtual std::vector<IntervalType>
-    Spans() = 0;
+    Spans() const = 0;
 };
 
 } // namespace ANurbs
