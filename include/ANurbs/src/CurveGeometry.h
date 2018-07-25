@@ -103,20 +103,20 @@ public:
         }
 
         for (int j = 0; j < a + 1; j++) {
-            refined->SetKnot(j, Knot(j));
+            refined->SetKnot(j, this->Knot(j));
         }
 
         for (int j = b + this->Degree(); j < this->NbKnots(); j++) {
-            refined->SetKnot(nbKnotsToInsert + j, Knot(j));
+            refined->SetKnot(nbKnotsToInsert + j, this->Knot(j));
         }
 
         int i = b + this->Degree() - 1;
         int k = b + this->Degree() + nbKnotsToInsert - 1;
 
         for (int j = nbKnotsToInsert - 1; j > -1; j--) {
-            while (knotsToInsert[j] <= Knot(i) && i > a) {
+            while (knotsToInsert[j] <= this->Knot(i) && i > a) {
                 refined->SetPole(k - this->Degree(), Pole(i - this->Degree()));
-                refined->SetKnot(k, Knot(i));
+                refined->SetKnot(k, this->Knot(i));
                 k--;
                 i--;
             }
@@ -130,7 +130,7 @@ public:
                 if (abs(alpha) == 0) {
                     refined->SetPole(index, refined->Pole(index + 1));
                 } else {
-                    alpha = alpha / (refined->Knot(k + l) - Knot(i - this->Degree() + l));
+                    alpha = alpha / (refined->Knot(k + l) - this->Knot(i - this->Degree() + l));
                     refined->SetPole(index, refined->Pole(index) * alpha +
                         refined->Pole(index + 1) * (1 - alpha));
                 }
