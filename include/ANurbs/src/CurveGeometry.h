@@ -132,7 +132,7 @@ public:
                 } else {
                     alpha = alpha / (refined->Knot(k + l) - this->Knot(i - this->Degree() + l));
                     refined->SetPole(index, refined->Pole(index) * alpha +
-                        refined->Pole(index + 1) * (1 - alpha));
+                        refined->Pole(index + 1) * (1.0 - alpha));
                 }
             }
 
