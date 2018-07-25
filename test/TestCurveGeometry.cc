@@ -276,31 +276,31 @@ TEST_CASE( "Refinement of a BSpline", "[CurveGeometry][Refinement][BSpline]" ) {
 
     std::vector<double> newKnots = {0.4, 0.8, 1.2};
 
-    auto result = *curve.Refined(newKnots);
+    auto result = curve.Refined(newKnots);
 
     SECTION( "Check knots" ) {
-        CHECK( result.NbKnots() == 8 );
+        CHECK( result->NbKnots() == 8 );
 
-        CHECK( result.Knot(0) == Approx( 0.0 ) );
-        CHECK( result.Knot(1) == Approx( 0.0 ) );
-        CHECK( result.Knot(2) == Approx( 0.4 ) );
-        CHECK( result.Knot(3) == Approx( 0.8 ) );
-        CHECK( result.Knot(4) == Approx( 1.0 ) );
-        CHECK( result.Knot(5) == Approx( 1.2 ) );
-        CHECK( result.Knot(6) == Approx( 2.0 ) );
-        CHECK( result.Knot(7) == Approx( 2.0 ) );
+        CHECK( result->Knot(0) == Approx( 0.0 ) );
+        CHECK( result->Knot(1) == Approx( 0.0 ) );
+        CHECK( result->Knot(2) == Approx( 0.4 ) );
+        CHECK( result->Knot(3) == Approx( 0.8 ) );
+        CHECK( result->Knot(4) == Approx( 1.0 ) );
+        CHECK( result->Knot(5) == Approx( 1.2 ) );
+        CHECK( result->Knot(6) == Approx( 2.0 ) );
+        CHECK( result->Knot(7) == Approx( 2.0 ) );
     }
 
     SECTION( "Check poles" ) {
-        CHECK( result.NbPoles() == 7 );
+        CHECK( result->NbPoles() == 7 );
 
-        CHECK( result.Pole(0).X() == Approx( 0.00 ) );
-        CHECK( result.Pole(1).X() == Approx( 0.50 ) );
-        CHECK( result.Pole(2).X() == Approx( 1.50 ) );
-        CHECK( result.Pole(3).X() == Approx( 2.25 ) );
-        CHECK( result.Pole(4).X() == Approx( 2.75 ) );
-        CHECK( result.Pole(5).X() == Approx( 4.00 ) );
-        CHECK( result.Pole(6).X() == Approx( 5.00 ) );
+        CHECK( result->Pole(0).X() == Approx( 0.00 ) );
+        CHECK( result->Pole(1).X() == Approx( 0.50 ) );
+        CHECK( result->Pole(2).X() == Approx( 1.50 ) );
+        CHECK( result->Pole(3).X() == Approx( 2.25 ) );
+        CHECK( result->Pole(4).X() == Approx( 2.75 ) );
+        CHECK( result->Pole(5).X() == Approx( 4.00 ) );
+        CHECK( result->Pole(6).X() == Approx( 5.00 ) );
     }
 }
 
