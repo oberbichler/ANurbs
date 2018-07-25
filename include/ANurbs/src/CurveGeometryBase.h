@@ -112,7 +112,7 @@ public:
     SpanAt(
         const ScalarType t) const
     {
-        return Knots::LowerSpan(Degree(), Knots(), t);
+        return Knots::UpperSpan(Degree(), Knots(), t);
     }
 
     template <typename TValue, typename TValues>
