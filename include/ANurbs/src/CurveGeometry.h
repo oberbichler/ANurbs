@@ -85,16 +85,16 @@ public:
     {
         int nbKnotsToInsert = static_cast<int>(knotsToInsert.size());
 
-        int a = Knots::UpperSpan(Degree(), Knots(), knotsToInsert.front());
-        int b = Knots::UpperSpan(Degree(), Knots(), knotsToInsert.back());
+        int a = Knots::UpperSpan(this->Degree(), Knots(), knotsToInsert.front());
+        int b = Knots::UpperSpan(this->Degree(), Knots(), knotsToInsert.back());
 
         int nbPolesRefined = NbPoles() + nbKnotsToInsert;
         int nbKnotsRefined = NbKnots() + nbKnotsToInsert;
 
-        auto refined = Create<CurveGeometryType>(Degree(), nbPolesRefined,
+        auto refined = Create<CurveGeometryType>(this->Degree(), nbPolesRefined,
             false);
 
-        for (int j = 0; j < a - Degree() + 2; j++) {
+        for (int j = 0; j < a - this->Degree() + 2; j++) {
             refined->SetPole(j, Pole(j));
         }
 
@@ -106,31 +106,31 @@ public:
             refined->SetKnot(j, Knot(j));
         }
 
-        for (int j = b + Degree(); j < NbKnots(); j++) {
+        for (int j = b + this->Degree(); j < NbKnots(); j++) {
             refined->SetKnot(nbKnotsToInsert + j, Knot(j));
         }
 
-        int i = b + Degree() - 1;
-        int k = b + Degree() + nbKnotsToInsert - 1;
+        int i = b + this->Degree() - 1;
+        int k = b + this->Degree() + nbKnotsToInsert - 1;
 
         for (int j = nbKnotsToInsert - 1; j > -1; j--) {
             while (knotsToInsert[j] <= Knot(i) && i > a) {
-                refined->SetPole(k - Degree(), Pole(i - Degree()));
+                refined->SetPole(k - this->Degree(), Pole(i - this->Degree()));
                 refined->SetKnot(k, Knot(i));
                 k--;
                 i--;
             }
 
-            refined->SetPole(k - Degree(), refined->Pole(k - Degree() + 1));
+            refined->SetPole(k - this->Degree(), refined->Pole(k - this->Degree() + 1));
 
-            for (int l = 1; l < Degree() + 1; l++) {
-                int index = k - Degree() + l;
+            for (int l = 1; l < this->Degree() + 1; l++) {
+                int index = k - this->Degree() + l;
                 ScalarType alpha = refined->Knot(k + l) - knotsToInsert[j];
 
                 if (abs(alpha) == 0) {
                     refined->SetPole(index, refined->Pole(index + 1));
                 } else {
-                    alpha = alpha / (refined->Knot(k + l) - Knot(i - Degree() + l));
+                    alpha = alpha / (refined->Knot(k + l) - Knot(i - this->Degree() + l));
                     refined->SetPole(index, refined->Pole(index) * alpha +
                         refined->Pole(index + 1) * (1 - alpha));
                 }
