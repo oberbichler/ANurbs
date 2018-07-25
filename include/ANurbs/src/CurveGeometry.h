@@ -88,8 +88,8 @@ public:
         int a = Knots::UpperSpan(this->Degree(), Knots(), knotsToInsert.front());
         int b = Knots::UpperSpan(this->Degree(), Knots(), knotsToInsert.back());
 
-        int nbPolesRefined = NbPoles() + nbKnotsToInsert;
-        int nbKnotsRefined = NbKnots() + nbKnotsToInsert;
+        int nbPolesRefined = this->NbPoles() + nbKnotsToInsert;
+        int nbKnotsRefined = this->NbKnots() + nbKnotsToInsert;
 
         auto refined = Create<CurveGeometryType>(this->Degree(), nbPolesRefined,
             false);
@@ -98,7 +98,7 @@ public:
             refined->SetPole(j, Pole(j));
         }
 
-        for (int j = b; j < NbPoles(); j++) {
+        for (int j = b; j < this->NbPoles(); j++) {
             refined->SetPole(nbKnotsToInsert + j, Pole(j));
         }
 
@@ -106,7 +106,7 @@ public:
             refined->SetKnot(j, Knot(j));
         }
 
-        for (int j = b + this->Degree(); j < NbKnots(); j++) {
+        for (int j = b + this->Degree(); j < this->NbKnots(); j++) {
             refined->SetKnot(nbKnotsToInsert + j, Knot(j));
         }
 
