@@ -13,7 +13,7 @@ public:
     using ScalarType = TScalar;
 
 private:
-    std::array<double, 3> m_coordinates;
+    std::array<double, TDimension> m_coordinates;
 
 public:
     Point()
