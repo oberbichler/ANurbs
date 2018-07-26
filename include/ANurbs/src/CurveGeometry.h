@@ -127,7 +127,7 @@ public:
                 int index = k - this->Degree() + l;
                 ScalarType alpha = refined->Knot(k + l) - knotsToInsert[j];
 
-                if (abs(alpha) == 0) {
+                if (std::abs(alpha) == 0) {
                     refined->SetPole(index, refined->Pole(index + 1));
                 } else {
                     alpha = alpha / (refined->Knot(k + l) - this->Knot(i - this->Degree() + l));
