@@ -153,6 +153,10 @@ public:
             k--;
         }
 
+        for (int i = 0; i < nbPolesRefined; i++) {
+            refined->SetPole(i, refined->Pole(i) * (1 / refined->Weight(i)));
+        }
+
         return refined;
     }
 };

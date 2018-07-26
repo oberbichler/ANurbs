@@ -355,12 +355,12 @@ TEST_CASE( "Refinement of a Nurbs curve", "[CurveGeometry][Refinement][Nurbs]" )
     SECTION( "Check poles" ) {
         CHECK( result.NbPoles() == 7 );
 
-        CHECK( result.Pole(0).X() / result.Weight(0) == Approx( 0.0000000000 ) );
-        CHECK( result.Pole(1).X() / result.Weight(1) == Approx( 0.9615384615 ) );
-        CHECK( result.Pole(2).X() / result.Weight(2) == Approx( 1.3144329897 ) );
-        CHECK( result.Pole(3).X() / result.Weight(3) == Approx( 1.5441176471 ) );
-        CHECK( result.Pole(4).X() / result.Weight(4) == Approx( 1.8269230769 ) );
-        CHECK( result.Pole(5).X() / result.Weight(5) == Approx( 4.0000000000 ) );
-        CHECK( result.Pole(6).X() / result.Weight(6) == Approx( 5.0000000000 ) );
+        CHECK( result.Pole(0).X() == Approx( 0.0000000000 ) );
+        CHECK( result.Pole(1).X() == Approx( 0.9615384615 ) );
+        CHECK( result.Pole(2).X() == Approx( 1.3144329897 ) );
+        CHECK( result.Pole(3).X() == Approx( 1.5441176471 ) );
+        CHECK( result.Pole(4).X() == Approx( 1.8269230769 ) );
+        CHECK( result.Pole(5).X() == Approx( 4.0000000000 ) );
+        CHECK( result.Pole(6).X() == Approx( 5.0000000000 ) );
     }
 }
