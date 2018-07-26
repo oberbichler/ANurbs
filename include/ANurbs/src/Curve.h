@@ -73,7 +73,7 @@ public:
 
     VectorType
     PointAt(
-        const ScalarType t) const
+        const ScalarType t) const override
     {
         return m_curveGeometry->PointAt(t);
     }
@@ -81,7 +81,7 @@ public:
     std::vector<VectorType>
     DerivativesAt(
         const ScalarType t,
-        const int order) const
+        const int order) const override
     {
         return m_curveGeometry->DerivativesAt(t, order);
     }
