@@ -85,11 +85,10 @@ public:
     {
         int nbKnotsToInsert = static_cast<int>(knotsToInsert.size());
 
-        ScalarType firstKnot = knotsToInsert.front();
-        ScalarType lastKnot = knotsToInsert.back();
-
-        int a = Knots::UpperSpan(this->Degree(), this->Knots(), firstKnot);
-        int b = Knots::UpperSpan(this->Degree(), this->Knots(), lastKnot);
+        int a = Knots::UpperSpan(this->Degree(), this->Knots(),
+            knotsToInsert.front());
+        int b = Knots::UpperSpan(this->Degree(), this->Knots(),
+            knotsToInsert.back());
 
         int nbPolesRefined = this->NbPoles() + nbKnotsToInsert;
         int nbKnotsRefined = this->NbKnots() + nbKnotsToInsert;
