@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CurveGeometryBase.h"
+#include "Pointer.h"
 
 #include <stdexcept>
 #include <vector>
@@ -14,6 +15,7 @@ class CurveGeometry
 {
 public:
     using CurveGeometryBaseType = CurveGeometryBase<TScalar, TVector>;
+    using CurveGeometryType = CurveGeometry<TScalar, TDimension, TVector>;
     using typename CurveGeometryBaseType::KnotsType;
     using typename CurveGeometryBaseType::ScalarType;
     using typename CurveGeometryBaseType::VectorType;
@@ -75,6 +77,71 @@ public:
         } else {
             throw std::invalid_argument("Geometry is not rational");
         }
+    }
+
+    Pointer<CurveGeometryType>
+    Refined(
+        const std::vector<ScalarType>& knotsToInsert) const
+    {
+        int nbKnotsToInsert = static_cast<int>(knotsToInsert.size());
+
+        int a = Knots::UpperSpan(this->Degree(), this->Knots(), knotsToInsert.front());
+        int b = Knots::UpperSpan(this->Degree(), this->Knots(), knotsToInsert.back());
+
+        int nbPolesRefined = this->NbPoles() + nbKnotsToInsert;
+        int nbKnotsRefined = this->NbKnots() + nbKnotsToInsert;
+
+        auto refined = Create<CurveGeometryType>(this->Degree(), nbPolesRefined,
+            false);
+
+        for (int j = 0; j < a - this->Degree() + 2; j++) {
+            refined->SetPole(j, Pole(j));
+        }
+
+        for (int j = b; j < this->NbPoles(); j++) {
+            refined->SetPole(nbKnotsToInsert + j, Pole(j));
+        }
+
+        for (int j = 0; j < a + 1; j++) {
+            refined->SetKnot(j, this->Knot(j));
+        }
+
+        for (int j = b + this->Degree(); j < this->NbKnots(); j++) {
+            refined->SetKnot(nbKnotsToInsert + j, this->Knot(j));
+        }
+
+        int i = b + this->Degree() - 1;
+        int k = b + this->Degree() + nbKnotsToInsert - 1;
+
+        for (int j = nbKnotsToInsert - 1; j > -1; j--) {
+            while (knotsToInsert[j] <= this->Knot(i) && i > a) {
+                refined->SetPole(k - this->Degree(), Pole(i - this->Degree()));
+                refined->SetKnot(k, this->Knot(i));
+                k--;
+                i--;
+            }
+
+            refined->SetPole(k - this->Degree(), refined->Pole(k - this->Degree() + 1));
+
+            for (int l = 1; l < this->Degree() + 1; l++) {
+                int index = k - this->Degree() + l;
+                ScalarType alpha = refined->Knot(k + l) - knotsToInsert[j];
+
+                if (std::abs(alpha) == 0) {
+                    refined->SetPole(index, refined->Pole(index + 1));
+                } else {
+                    alpha = alpha / (refined->Knot(k + l) - this->Knot(i - this->Degree() + l));
+                    refined->SetPole(index, refined->Pole(index) * alpha +
+                        refined->Pole(index + 1) * (1 - alpha));
+                }
+            }
+
+            refined->SetKnot(k, knotsToInsert[j]);
+
+            k--;
+        }
+
+        return refined;
     }
 };
 
