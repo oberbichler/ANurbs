@@ -72,9 +72,9 @@ public:
 
     ScalarType
     ParameterAtNormalized(
-        const ScalarType t) const
+        const ScalarType tNormalized) const
     {
-        return T0() + Delta() * t;
+        return T0() + Delta() * tNormalized;
     }
 
     static ScalarType
