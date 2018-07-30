@@ -97,12 +97,12 @@ public:
             true);
 
         for (int j = 0; j < a - this->Degree() + 2; j++) {
-            refined->SetPole(j, WeightedPole(j));
+            refined->SetPole(j, this->WeightedPole(j));
             refined->SetWeight(j, Weight(j));
         }
 
         for (int j = b; j < this->NbPoles(); j++) {
-            refined->SetPole(nbKnotsToInsert + j, WeightedPole(j));
+            refined->SetPole(nbKnotsToInsert + j, this->WeightedPole(j));
             refined->SetWeight(nbKnotsToInsert + j, Weight(j));
         }
 
@@ -119,7 +119,8 @@ public:
 
         for (int j = nbKnotsToInsert - 1; j > -1; j--) {
             while (knotsToInsert[j] <= this->Knot(i) && i > a) {
-                refined->SetPole(k - this->Degree(), WeightedPole(i - this->Degree()));
+                refined->SetPole(k - this->Degree(),
+                    this->WeightedPole(i - this->Degree()));
                 refined->SetWeight(k - this->Degree(), Weight(i - this->Degree()));
                 refined->SetKnot(k, this->Knot(i));
                 k--;
