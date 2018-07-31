@@ -33,7 +33,7 @@ TEST_CASE( "Spatial B-Spline curve", "[Curve]" ) {
     geometry->SetPole(6, {- 5, - 5, - 3});
     geometry->SetPole(7, {-25,  15,   4});
 
-    Curve3d curve(geometry);
+    Curve3D curve(geometry);
 
     SECTION( "Compute arc length" ) {
         double length = curve.Length();
