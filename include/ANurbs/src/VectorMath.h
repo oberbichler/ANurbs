@@ -60,6 +60,13 @@ struct VectorMath<Point<TScalar, TDimension>>
 
         return std::sqrt(sqSum);
     }
+
+    static ScalarType
+    Norm(
+        const ScalarType& scalar)
+    {
+        return std::abs(scalar);
+    }
 };
 
 } // namespace ANurbs
