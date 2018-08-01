@@ -78,6 +78,15 @@ public:
     }
 
     static ScalarType
+    ParameterAtNormalized(
+        const ScalarType a,
+        const ScalarType b,
+        const ScalarType tNormalized)
+    {
+        return a + (b - a) * tNormalized;
+    }
+
+    static ScalarType
     Clamp(
         const ScalarType value,
         const ScalarType min,
