@@ -28,6 +28,9 @@ public:
     virtual IntervalType
     Domain() const = 0;
 
+    virtual int
+    Degree() const = 0;
+
     virtual VectorType
     PointAt(
         const ScalarType t) const = 0;

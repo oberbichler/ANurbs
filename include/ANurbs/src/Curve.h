@@ -60,7 +60,7 @@ public:
     }
 
     int
-    Degree() const
+    Degree() const override
     {
         return m_curveGeometry->Degree();
     }
