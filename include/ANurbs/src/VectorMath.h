@@ -2,6 +2,8 @@
 
 #include "Point.h"
 
+#include <type_traits>
+
 namespace ANurbs {
 
 template <typename Point>
@@ -66,6 +68,32 @@ struct VectorMath<Point<TScalar, TDimension>>
         const ScalarType& scalar)
     {
         return std::abs(scalar);
+    }
+
+    template <typename = typename std::enable_if<TDimension == 2>::type>
+    static ScalarType
+    Cross(
+        VectorType& u,
+        VectorType& v
+    )
+    {
+        return v[0] * u[1] - v[1] * u[0];
+    }
+
+    template <typename = typename std::enable_if<TDimension == 3>::type>
+    static VectorType
+    Cross(
+        VectorType& u,
+        VectorType& v
+    )
+    {
+        VectorType result;
+
+        result[0] = v[1] * u[2] - v[2] * u[1];
+        result[1] = v[2] * u[0] - v[0] * u[2];
+        result[2] = v[0] * u[1] - v[1] * u[0];
+
+        return result;
     }
 };
 
