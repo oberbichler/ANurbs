@@ -143,12 +143,16 @@ public:
 
         // compute point
 
-        TValue value = values(0) * shape(0, 0);
+        TValue value;
 
-        for (int i = 1; i < shape.NbNonzeroPoles(); i++) {
+        for (int i = 0; i < shape.NbNonzeroPoles(); i++) {
             int index = shape.FirstNonzeroPole() + i;
 
+            if (i == 0) {
+                value = values(index) * shape(0, i);
+            } else {
             value += values(index) * shape(0, i);
+        }
         }
 
         return value;
