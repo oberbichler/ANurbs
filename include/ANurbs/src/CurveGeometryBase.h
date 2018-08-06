@@ -151,8 +151,8 @@ public:
             if (i == 0) {
                 value = values(index) * shape(0, i);
             } else {
-            value += values(index) * shape(0, i);
-        }
+                value += values(index) * shape(0, i);
+            }
         }
 
         return value;
