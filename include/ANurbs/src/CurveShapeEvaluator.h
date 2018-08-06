@@ -269,7 +269,7 @@ public:
         const TKnots& knots,
         const ScalarType t)
     {
-        int span = Knots::LowerSpan(Degree(), knots, t);
+        int span = Knots::UpperSpan(Degree(), knots, t);
 
         ComputeAtSpan(knots, span, t);
     }
@@ -281,7 +281,7 @@ public:
         const TWeights& weights,
         const ScalarType t)
     {
-        int span = Knots::LowerSpan(Degree(), knots, t);
+        int span = Knots::UpperSpan(Degree(), knots, t);
 
         ComputeAtSpan(knots, span, weights, t);
     }
