@@ -71,7 +71,7 @@ public:
         m_samplePoints.clear();
         m_points.clear();
 
-        IntervalType& domain = curve.Domain();
+        IntervalType domain = curve.Domain();
 
         // compute sample points
 
@@ -100,7 +100,7 @@ public:
             ParameterPoint a = m_samplePoints.back();
             m_samplePoints.pop_back();
 
-            m_points.push_back(a);
+            m_points.emplace_back(domain.ParameterAtNormalized(a.t), a.point);
 
             if (m_samplePoints.size() == 0) {
                 break;
@@ -142,11 +142,11 @@ public:
         return static_cast<int>(m_points.size());
     }
 
-    VectorType
+    ScalarType
     Parameter(
         const int index) const
     {
-        return m_points.at(index).parameter;
+        return m_points.at(index).t;
     }
 
     VectorType
@@ -154,6 +154,13 @@ public:
         const int index) const
     {
         return m_points.at(index).point;
+    }
+
+    ParameterPoint
+    operator()(
+        const int index) const
+    {
+        return m_points.at(index);
     }
 };
 

@@ -85,21 +85,25 @@ public:
     {
         int nbKnotsToInsert = static_cast<int>(knotsToInsert.size());
 
-        int a = Knots::UpperSpan(this->Degree(), this->Knots(), knotsToInsert.front());
-        int b = Knots::UpperSpan(this->Degree(), this->Knots(), knotsToInsert.back());
+        int a = Knots::UpperSpan(this->Degree(), this->Knots(),
+            knotsToInsert.front());
+        int b = Knots::UpperSpan(this->Degree(), this->Knots(),
+            knotsToInsert.back());
 
         int nbPolesRefined = this->NbPoles() + nbKnotsToInsert;
         int nbKnotsRefined = this->NbKnots() + nbKnotsToInsert;
 
         auto refined = Create<CurveGeometryType>(this->Degree(), nbPolesRefined,
-            false);
+            true);
 
         for (int j = 0; j < a - this->Degree() + 2; j++) {
-            refined->SetPole(j, Pole(j));
+            refined->SetPole(j, this->WeightedPole(j));
+            refined->SetWeight(j, Weight(j));
         }
 
         for (int j = b; j < this->NbPoles(); j++) {
-            refined->SetPole(nbKnotsToInsert + j, Pole(j));
+            refined->SetPole(nbKnotsToInsert + j, this->WeightedPole(j));
+            refined->SetWeight(nbKnotsToInsert + j, Weight(j));
         }
 
         for (int j = 0; j < a + 1; j++) {
@@ -115,30 +119,43 @@ public:
 
         for (int j = nbKnotsToInsert - 1; j > -1; j--) {
             while (knotsToInsert[j] <= this->Knot(i) && i > a) {
-                refined->SetPole(k - this->Degree(), Pole(i - this->Degree()));
+                refined->SetPole(k - this->Degree(),
+                    this->WeightedPole(i - this->Degree()));
+                refined->SetWeight(k - this->Degree(), Weight(i - this->Degree()));
                 refined->SetKnot(k, this->Knot(i));
                 k--;
                 i--;
             }
 
-            refined->SetPole(k - this->Degree(), refined->Pole(k - this->Degree() + 1));
+            refined->SetPole(k - this->Degree(), refined->Pole(k -
+                this->Degree() + 1));
+            refined->SetWeight(k - this->Degree(), refined->Weight(k -
+                this->Degree() + 1));
 
-            for (int l = 1; l < this->Degree() + 1; l++) {
+            for (int l = 1; l <= this->Degree(); l++) {
                 int index = k - this->Degree() + l;
                 ScalarType alpha = refined->Knot(k + l) - knotsToInsert[j];
 
                 if (std::abs(alpha) == 0) {
                     refined->SetPole(index, refined->Pole(index + 1));
+                    refined->SetWeight(index, refined->Weight(index + 1));
                 } else {
-                    alpha = alpha / (refined->Knot(k + l) - this->Knot(i - this->Degree() + l));
+                    alpha = alpha / (refined->Knot(k + l) - this->Knot(i + l -
+                        this->Degree()));
                     refined->SetPole(index, refined->Pole(index) * alpha +
                         refined->Pole(index + 1) * (1 - alpha));
+                    refined->SetWeight(index, refined->Weight(index) * alpha +
+                        refined->Weight(index + 1) * (1 - alpha));
                 }
             }
 
             refined->SetKnot(k, knotsToInsert[j]);
 
             k--;
+        }
+
+        for (int i = 0; i < nbPolesRefined; i++) {
+            refined->SetPole(i, refined->Pole(i) * (1 / refined->Weight(i)));
         }
 
         return refined;

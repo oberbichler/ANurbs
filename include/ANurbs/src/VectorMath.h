@@ -70,7 +70,8 @@ struct VectorMath<Point<TScalar, TDimension>>
         return std::abs(scalar);
     }
 
-    template <typename = typename std::enable_if<TDimension == 2>::type>
+    template <int T = TDimension,
+        typename = typename std::enable_if<T == 2>::type>
     static ScalarType
     Cross(
         VectorType& u,
@@ -80,7 +81,8 @@ struct VectorMath<Point<TScalar, TDimension>>
         return v[0] * u[1] - v[1] * u[0];
     }
 
-    template <typename = typename std::enable_if<TDimension == 3>::type>
+    template <int T = TDimension,
+        typename = typename std::enable_if<T == 3>::type>
     static VectorType
     Cross(
         VectorType& u,
