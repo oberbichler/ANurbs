@@ -100,7 +100,7 @@ public:
             ParameterPoint a = m_samplePoints.back();
             m_samplePoints.pop_back();
 
-            m_points.push_back(a);
+            m_points.emplace_back(domain.ParameterAtNormalized(a.t), a.point);
 
             if (m_samplePoints.size() == 0) {
                 break;
