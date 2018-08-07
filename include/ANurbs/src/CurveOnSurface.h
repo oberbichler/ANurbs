@@ -41,8 +41,9 @@ public:
     , m_domain(domain)
     {
         static_assert(TCurveGeometry::Dimension() == 2, "Not a planar curve");
-        static_assert(std::is_same<TCurveGeometry::ScalarType,
-            TSurfaceGeometry::ScalarType>::value, "Different scalar types");
+        static_assert(std::is_same<typename TCurveGeometry::ScalarType,
+            typename TSurfaceGeometry::ScalarType>::value,
+            "Different scalar types");
     }
 
     Pointer<CurveGeometryType>
