@@ -16,4 +16,6 @@
 #include "src/SurfaceBase.h"
 #include "src/Surface.h"
 
+#include "src/CurveOnSurface.h"
+
 #include "src/IntegrationPoints.h"
