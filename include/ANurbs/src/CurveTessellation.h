@@ -71,7 +71,7 @@ public:
         m_samplePoints.clear();
         m_points.clear();
 
-        IntervalType& domain = curve.Domain();
+        IntervalType domain = curve.Domain();
 
         // compute sample points
 
