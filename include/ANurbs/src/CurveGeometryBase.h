@@ -99,6 +99,13 @@ public:
         const ScalarType value)
         = 0;
 
+    VectorType
+    WeightedPole(
+        const int index) const
+    {
+        return Pole(index) * Weight(index);
+    }
+
     IntervalType
     Domain()
     {
