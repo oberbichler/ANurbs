@@ -60,7 +60,7 @@ TEST_CASE( "Spatial B-Spline curve on surface", "[CurveOnSurface3d]" ) {
 
     CurveOnSurface3D curveOnSurface(curveGeometry, surfaceGeometry, curveGeometry->Domain());
 
-    SECTION( "Compute point" ) {
+    SECTION( "Check point evaluation" ) {
         auto point = curveOnSurface.PointAt(8);
 
         REQUIRE( point[0] == Approx(3.75        ) );
@@ -68,7 +68,7 @@ TEST_CASE( "Spatial B-Spline curve on surface", "[CurveOnSurface3d]" ) {
         REQUIRE( point[2] == Approx(1.5063476563) );
     }
 
-    SECTION( "Compute derivatives" ) {
+    SECTION( "Check derivative evaluation" ) {
         auto point = curveOnSurface.DerivativesAt(8, 2);
 
         REQUIRE( point[0][0] == Approx( 3.75        ) );
@@ -78,5 +78,14 @@ TEST_CASE( "Spatial B-Spline curve on surface", "[CurveOnSurface3d]" ) {
         REQUIRE( point[1][0] == Approx(-2.5         ) );
         REQUIRE( point[1][1] == Approx( 3.75        ) );
         REQUIRE( point[1][2] == Approx(-0.658203125 ) );
+    }
+
+    SECTION( "Check spans" ) {
+        auto spans = curveOnSurface.Spans();
+
+        REQUIRE( spans.size() == 1 );
+
+        REQUIRE( spans[0].T0() == Approx(7.0) );
+        REQUIRE( spans[0].T1() == Approx(9.0) );
     }
 }
