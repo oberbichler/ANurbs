@@ -155,6 +155,13 @@ public:
     {
         return m_points.at(index).point;
     }
+
+    ParameterPoint
+    operator()(
+        const int index) const
+    {
+        return m_points.at(index);
+    }
 };
 
 using CurveTessellation2D = CurveTessellation<double, Point<double, 2>>;
