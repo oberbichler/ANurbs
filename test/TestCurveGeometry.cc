@@ -260,7 +260,7 @@ TEST_CASE( "Geometry of a spatial Nurbs curve", "[CurveGeometry]" ) {
     }
 }
 
-TEST_CASE( "Refinement of a BSpline", "[CurveGeometry][Refinement][BSpline]" ) {
+TEST_CASE( "Refinement of a BSpline curve", "[CurveGeometry][Refinement][BSpline]" ) {
     CurveGeometry1D curve(2, 4, false);
     
     curve.SetKnot(0, 0.0);
@@ -304,3 +304,63 @@ TEST_CASE( "Refinement of a BSpline", "[CurveGeometry][Refinement][BSpline]" ) {
     }
 }
 
+TEST_CASE( "Refinement of a Nurbs curve", "[CurveGeometry][Refinement][Nurbs]" ) {
+    CurveGeometry1D curve(2, 4, true);
+    
+    curve.SetKnot(0, 0.0);
+    curve.SetKnot(1, 0.0);
+    curve.SetKnot(2, 1.0);
+    curve.SetKnot(3, 2.0);
+    curve.SetKnot(4, 2.0);
+
+    curve.SetPole(0, {0.00});
+    curve.SetPole(1, {1.25});
+    curve.SetPole(2, {3.75});
+    curve.SetPole(3, {5.00});
+
+    curve.SetWeight(0, 1.0);
+    curve.SetWeight(1, 5.0);
+    curve.SetWeight(2, 1.0);
+    curve.SetWeight(3, 1.0);
+
+    std::vector<double> newKnots = {0.4, 0.8, 1.2};
+
+    auto result = *curve.Refined(newKnots);
+
+    SECTION( "Check knots" ) {
+        CHECK( result.NbKnots() == 8 );
+
+        CHECK( result.Knot(0) == Approx( 0.0 ) );
+        CHECK( result.Knot(1) == Approx( 0.0 ) );
+        CHECK( result.Knot(2) == Approx( 0.4 ) );
+        CHECK( result.Knot(3) == Approx( 0.8 ) );
+        CHECK( result.Knot(4) == Approx( 1.0 ) );
+        CHECK( result.Knot(5) == Approx( 1.2 ) );
+        CHECK( result.Knot(6) == Approx( 2.0 ) );
+        CHECK( result.Knot(7) == Approx( 2.0 ) );
+    }
+
+    SECTION( "Check weights" ) {
+        CHECK( result.NbPoles() == 7 );
+
+        CHECK( result.Weight(0) == Approx( 1.00 ) );
+        CHECK( result.Weight(1) == Approx( 2.60 ) );
+        CHECK( result.Weight(2) == Approx( 3.88 ) );
+        CHECK( result.Weight(3) == Approx( 3.40 ) );
+        CHECK( result.Weight(4) == Approx( 2.60 ) );
+        CHECK( result.Weight(5) == Approx( 1.00 ) );
+        CHECK( result.Weight(6) == Approx( 1.00 ) );
+    } 
+
+    SECTION( "Check poles" ) {
+        CHECK( result.NbPoles() == 7 );
+
+        CHECK( result.Pole(0).X() == Approx( 0.0000000000 ) );
+        CHECK( result.Pole(1).X() == Approx( 0.9615384615 ) );
+        CHECK( result.Pole(2).X() == Approx( 1.3144329897 ) );
+        CHECK( result.Pole(3).X() == Approx( 1.5441176471 ) );
+        CHECK( result.Pole(4).X() == Approx( 1.8269230769 ) );
+        CHECK( result.Pole(5).X() == Approx( 4.0000000000 ) );
+        CHECK( result.Pole(6).X() == Approx( 5.0000000000 ) );
+    }
+}

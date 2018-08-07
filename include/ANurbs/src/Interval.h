@@ -6,6 +6,7 @@ template <typename TScalar>
 class Interval
 {
 public:
+    using IntervalType = Interval<TScalar>;
     using ScalarType = TScalar;
 
 private:
@@ -72,9 +73,36 @@ public:
 
     ScalarType
     ParameterAtNormalized(
-        const ScalarType t) const
+        const ScalarType tNormalized) const
     {
-        return T0() + Delta() * t;
+        return T0() + Delta() * tNormalized;
+    }
+
+    static ScalarType
+    ParameterAtNormalized(
+        const ScalarType a,
+        const ScalarType b,
+        const ScalarType tNormalized)
+    {
+        return a + (b - a) * tNormalized;
+    }
+
+    IntervalType
+    NormalizedInterval(
+        const ScalarType t0,
+        const ScalarType t1) const
+    {
+        ScalarType t0Normalized = NormalizedAt(t0);
+        ScalarType t1Normalized = NormalizedAt(t1);
+
+        return IntervalType(t0Normalized, t1Normalized);
+    }
+
+    IntervalType
+    NormalizedInterval(
+        const IntervalType interval) const
+    {
+        return NormalizedInterval(interval.T0(), interval.T1());
     }
 
     static ScalarType

@@ -109,8 +109,8 @@ public:
     }
 };
 
-using Curve1d = Curve<CurveGeometry1D>;
-using Curve2d = Curve<CurveGeometry2D>;
-using Curve3d = Curve<CurveGeometry3D>;
+using Curve1D = Curve<CurveGeometry1D>;
+using Curve2D = Curve<CurveGeometry2D>;
+using Curve3D = Curve<CurveGeometry3D>;
 
 } // namespace ANurbs
