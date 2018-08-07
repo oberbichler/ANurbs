@@ -9,6 +9,7 @@ add_executable(run_tests
     TestSurfaceGeometry.cc
     TestSurface.cc
     TestIntegrationPoints.cc
+    TestCurveSpanIntersection.cc
 )
 
 install(TARGETS run_tests DESTINATION bin)
