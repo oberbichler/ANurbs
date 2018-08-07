@@ -142,11 +142,11 @@ public:
         return static_cast<int>(m_points.size());
     }
 
-    VectorType
+    ScalarType
     Parameter(
         const int index) const
     {
-        return m_points.at(index).parameter;
+        return m_points.at(index).t;
     }
 
     VectorType
