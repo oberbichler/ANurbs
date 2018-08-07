@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Curve.h"
 #include "CurveBase.h"
 #include "CurveGeometry.h"
+#include "CurveSpanIntersection.h"
 #include "Pointer.h"
 #include "SurfaceGeometry.h"
 
@@ -83,7 +85,7 @@ public:
 
         return point;
     }
-    
+
     std::vector<VectorType>
     DerivativesAt(
         const ScalarType t,
@@ -104,7 +106,7 @@ public:
         std::vector<VectorType> derivatives(order + 1);
 
         std::function<VectorType(int, int, int)> c;
-        
+
         c = [&](int order, int i, int j) -> VectorType {
             if (order > 0) {
                 Point<double, 3> result;
@@ -133,7 +135,29 @@ public:
     std::vector<IntervalType>
     Spans() const override
     {
-        throw "Not implemented";
+        using Vector2Type = typename CurveGeometryType::VectorType;
+
+        auto curve = Create<Curve<CurveGeometryType>>(CurveGeometry(),
+            Domain());
+
+        auto knotsU = SurfaceGeometry()->KnotsU();
+        auto knotsV = SurfaceGeometry()->KnotsV();
+
+        CurveSpanIntersection<ScalarType, Vector2Type> intersection(curve,
+            knotsU, knotsV, 1e-4, true);
+
+        int nbSpans = intersection.NbIntersections() - 1;
+
+        std::vector<IntervalType> result(nbSpans);
+
+        for (int i = 0; i < nbSpans; i++) {
+            ScalarType t0 = intersection.Parameter(i);
+            ScalarType t1 = intersection.Parameter(i + 1);
+
+            result[i] = IntervalType(t0, t1);
+        }
+
+        return result;
     }
 };
 
