@@ -135,8 +135,7 @@ public:
         if (IsRational()) {
             shape.Compute(Knots(), [&](int i) -> ScalarType {
                 return Weight(i);
-            },
-                t);
+            }, t);
         } else {
             shape.Compute(Knots(), t);
         }
@@ -172,8 +171,7 @@ public:
         if (IsRational()) {
             shape.Compute(Knots(), [&](int i) -> ScalarType {
                 return Weight(i);
-            },
-                t);
+            }, t);
         } else {
             shape.Compute(Knots(), t);
         }
