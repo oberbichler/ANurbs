@@ -18,4 +18,6 @@
 
 #include "src/CurveOnSurface.h"
 
+#include "src/PointOnCurveProjection.h"
+
 #include "src/IntegrationPoints.h"
