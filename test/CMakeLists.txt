@@ -8,6 +8,7 @@ add_executable(run_tests
     TestSurfaceShapeEvaluator.cc
     TestSurfaceGeometry.cc
     TestSurface.cc
+    TestCurveOnSurface.cc
     TestIntegrationPoints.cc
     TestCurveSpanIntersection.cc
     TestPointOnCurveProjection.cc
