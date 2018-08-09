@@ -76,4 +76,8 @@ public:
     Spans() const = 0;
 };
 
+using CurveBase1D = CurveBase<double, Point1D>;
+using CurveBase2D = CurveBase<double, Point2D>;
+using CurveBase3D = CurveBase<double, Point3D>;
+
 } // namespace ANurbs
