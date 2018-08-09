@@ -11,6 +11,7 @@ add_executable(run_tests
     TestCurveOnSurface.cc
     TestIntegrationPoints.cc
     TestCurveSpanIntersection.cc
+    TestPointOnCurveProjection.cc
 )
 
 install(TARGETS run_tests DESTINATION bin)
