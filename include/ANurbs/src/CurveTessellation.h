@@ -52,8 +52,7 @@ public:
     DistancePointToLine(
         const VectorType& point,
         const VectorType& lineA,
-        const VectorType& lineB
-    )
+        const VectorType& lineB)
     {
         VectorType v = lineA - point;
         VectorType u = lineB - lineA;
@@ -65,8 +64,7 @@ public:
     void
     Compute(
         const CurveBaseType& curve,
-        const ScalarType flatness
-    )
+        const ScalarType flatness)
     {
         m_samplePoints.clear();
         m_points.clear();
