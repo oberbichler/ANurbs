@@ -143,8 +143,8 @@ public:
         auto knotsU = SurfaceGeometry()->KnotsU();
         auto knotsV = SurfaceGeometry()->KnotsV();
 
-        CurveSpanIntersection<ScalarType, Vector2Type> intersection(curve,
-            knotsU, knotsV, 1e-4, true);
+        CurveSpanIntersection<ScalarType, Vector2Type> intersection;
+        intersection.Compute(*curve, knotsU, knotsV, 1e-4, true);
 
         int nbSpans = intersection.NbIntersections() - 1;
 
