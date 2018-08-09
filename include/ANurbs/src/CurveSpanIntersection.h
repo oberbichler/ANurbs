@@ -27,17 +27,10 @@ private:
     std::vector<ScalarType> m_intersectionParameters;
 
 public:
-    CurveSpanIntersection(
-        Pointer<CurveType> curve,
-        std::vector<ScalarType> knotsU,
-        std::vector<ScalarType> knotsV,
-        const double tolerance = 1e-3,
-        const bool includeCurveKnots = false)
+    CurveSpanIntersection()
     {
         static_assert(CurveType::Dimension() == 2,
             "Only planar curves are supported");
-
-        Compute(curve, knotsU, knotsV, tolerance, includeCurveKnots);
     }
 
     int
@@ -56,124 +49,111 @@ public:
 private:
     struct Axis
     {
-        std::vector<ScalarType> m_knots;
-        int m_position;
-        int m_axis;
-        ScalarType m_parameter;
+        int m_index;
+        std::vector<ScalarType> m_values;
+        ScalarType m_tolerance;
 
         inline ScalarType
         GetValue(
             const VectorType& point) const
         {
-            return point[m_axis];
+            return point[m_index];
         }
 
         void Initialize(
             const int axis,
             const std::vector<ScalarType>& knots,
-            const ScalarType& parameterAtStart)
+            ScalarType tolerance)
         {
-            m_knots.clear();
+            m_index = axis;
 
-            m_axis = axis;
+            m_values.clear();
 
             ScalarType mInf = std::numeric_limits<ScalarType>::lowest();
             ScalarType pInf = std::numeric_limits<ScalarType>::max();
 
-            m_knots.push_back(mInf);
+            m_values.push_back(mInf);
 
             for (ScalarType knot : knots) {
-                if (std::abs(m_knots.back() - knot) > 1e-7) {
-                    m_knots.push_back(knot);
+                if (std::abs(m_values.back() - knot) > tolerance) {
+                    m_values.push_back(knot);
                 }
             }
 
-            m_knots.push_back(pInf);
+            m_values.push_back(pInf);
 
-            for (int i = 0; i < m_knots.size(); i++) {
-                if (parameterAtStart < m_knots[i]) {
-                    m_position = i - 1;
-                    break;
-                }
-            }
+            m_tolerance = tolerance;
         }
 
-        ScalarType
-        Lower() const
-        {
-            return m_knots[m_position];
-        }
-
-        ScalarType
-        Upper() const
-        {
-            return m_knots[m_position + 1];
-        }
-
-        bool
+        void
         Intersect(
-            const Pointer<CurveType> curve,
+            const CurveType& curve,
             const ParameterPoint& a,
             const ParameterPoint& b,
-            const ScalarType tolerance)
+            std::vector<ScalarType>& parameters)
         {
-            ScalarType t0 = std::get<0>(a);
-            ScalarType v0 = GetValue(std::get<1>(a));
+            ScalarType tA = std::get<0>(a);
+            ScalarType valueA = GetValue(std::get<1>(a));
 
-            ScalarType t1 = std::get<0>(b);
-            ScalarType v1 = GetValue(std::get<1>(b));
-
-            ScalarType target;
-
-            if (v1 > Upper() - tolerance) {
-                target = Upper();
-                if (v1 > Upper()) {
-                    m_position += 1;
-                }
-            } else if (v1 < Lower() + tolerance) {
-                target = Lower();
-                if (v1 < Lower()) {
-                    m_position -= 1;
-                }
-            } else {
-                return false;
+            ScalarType tB = std::get<0>(b);
+            ScalarType valueB = GetValue(std::get<1>(b));
+            
+            // make sure that valueA <= valueB
+            if (valueA > valueB) {
+                std::swap(valueA, valueB);
+                std::swap(tA, tB);
+            }
+            
+            // index of the first intersect value
+            std::size_t indexA;
+            {
+                auto it = std::lower_bound(std::begin(m_values),
+                    std::end(m_values), valueA - m_tolerance);
+                indexA = std::distance(std::begin(m_values), it);
             }
 
-            ScalarType t = t0;
-
-            ScalarType delta = v0 - v1;
-
-            if (delta != 0) {
-                t += (v0 - target) / delta * (t1 - t0);
+            // index of the first non intersect value
+            std::size_t indexB;
+            {
+                auto it = std::upper_bound(std::begin(m_values),
+                    std::end(m_values), valueB + m_tolerance);
+                indexB = std::distance(std::begin(m_values), it);
             }
 
-            for (int j = 0; j < 100; j++) {
-                auto c = curve->DerivativesAt(t, 1);
+            // find intersections
+            for (std::size_t i = indexA; i < indexB; i++) {
+                ScalarType target = m_values[i];
+            
+                ScalarType t = tA;
 
-                ScalarType f = c[0][m_axis] - target;
-                ScalarType df = c[1][m_axis];
+                ScalarType delta = valueA - valueB;
 
-                if (df != 0) {
-                    t -= f / df;
+                if (delta != 0) {
+                    t += (valueA - target) / delta * (tB - tA);
                 }
 
-                if (std::abs(df) < 1e-7) {
-                    m_parameter = t;
-                    return true;
+                for (int j = 0; j < 100; j++) {
+                    auto c = curve.DerivativesAt(t, 1);
+
+                    ScalarType f = GetValue(c[0]) - target;
+                    
+                    if (std::abs(f) < m_tolerance) {
+                        break;
+                    }
+
+                    ScalarType df = GetValue(c[1]);
+
+                    if (df != 0) {
+                        t -= f / df;
+                    } else {
+                        break;
+                    }
                 }
+
+                // FIXME: check for convergency
+
+                parameters.push_back(t);
             }
-
-            m_parameter = t;
-
-            // FIXME: not converged
-
-            return true;
-        }
-
-        ScalarType
-        Parameter() const
-        {
-            return m_parameter;
         }
     };
 
@@ -195,48 +175,36 @@ private:
         container.resize(nbUnique);
     }
 
+public:
     void
     Compute(
-        Pointer<CurveType> curve,
+        CurveType& curve,
         const std::vector<ScalarType>& knotsU,
         const std::vector<ScalarType>& knotsV,
-        const ScalarType tolerance = 1e-3,
-        const bool includeCurveKnots = false)
+        const ScalarType tolerance,
+        const bool includeCurveKnots)
     {
         // approximate curve with a polyline
 
         CurveTessellation2D tessellation;
 
-        tessellation.Compute(*curve, tolerance);
-
-        // start parameter and point
-
-        ScalarType t0 = tessellation.Parameter(0);
-        ScalarType u0 = tessellation.Point(0)[0];
-        ScalarType v0 = tessellation.Point(0)[1];
+        tessellation.Compute(curve, tolerance);
 
         // initialize axes
 
         std::array<Axis, 2> axes;
 
-        axes[0].Initialize(0, knotsU, u0);
-        axes[1].Initialize(1, knotsV, v0);
-
-        // check start point
-
-        if ((std::abs(u0 - axes[0].Lower()) < tolerance) ||
-            (std::abs(u0 - axes[0].Upper()) < tolerance) ||
-            (std::abs(v0 - axes[1].Lower()) < tolerance) ||
-            (std::abs(v0 - axes[1].Upper()) < tolerance)) {
-            m_intersectionParameters.push_back(t0);
-        }
+        axes[0].Initialize(0, knotsU, tolerance);
+        axes[1].Initialize(1, knotsV, tolerance);
 
         // add curve knots
 
         if (includeCurveKnots) {
+            ScalarType t0 = tessellation.Parameter(0);
+
             m_intersectionParameters.push_back(t0);
 
-            for (const auto& span : curve->Spans()) {
+            for (const auto& span : curve.Spans()) {
                 m_intersectionParameters.push_back(span.T1());
             }
         }
@@ -255,10 +223,7 @@ private:
             };
 
             for (auto& axis : axes) {
-                if (axis.Intersect(curve, a, b, tolerance)) {
-                    ScalarType t = axis.Parameter();
-                    m_intersectionParameters.push_back(t);
-                }
+                axis.Intersect(curve, a, b, m_intersectionParameters);
             }
         }
 

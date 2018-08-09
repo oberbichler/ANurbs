@@ -38,7 +38,8 @@ TEST_CASE( "Intersect curve with surface knot spans (1)",
 
     // compute intersections
 
-    CurveSpanIntersection2D intersection(curve, knotsU, knotsV);
+    CurveSpanIntersection2D intersection;
+    intersection.Compute(*curve, knotsU, knotsV, 1e-7, false);
 
     SECTION( "Check intersections" ) {
         CHECK( intersection.NbIntersections() == 9 );
@@ -89,7 +90,8 @@ TEST_CASE( "Intersect curve with surface knot spans (2)",
 
     // compute intersections
 
-    CurveSpanIntersection2D intersection(curve, knotsU, knotsV);
+    CurveSpanIntersection2D intersection;
+    intersection.Compute(*curve, knotsU, knotsV, 1e-7, false);
 
     SECTION( "Check intersections" ) {
         CHECK( intersection.NbIntersections() == 5 );
@@ -134,7 +136,8 @@ TEST_CASE( "Intersect curve with surface knot spans (3)",
 
     // compute intersections
 
-    CurveSpanIntersection2D intersection(curve, knotsU, knotsV);
+    CurveSpanIntersection2D intersection;
+    intersection.Compute(*curve, knotsU, knotsV, 1e-7, false);
 
     SECTION( "Check intersections" ) {
         CHECK( intersection.NbIntersections() == 4 );
@@ -178,7 +181,8 @@ TEST_CASE( "Intersect curve with surface knot spans (4)",
 
     // compute intersections
 
-    CurveSpanIntersection2D intersection(curve, knotsU, knotsV, 1e-3, true);
+    CurveSpanIntersection2D intersection;
+    intersection.Compute(*curve, knotsU, knotsV, 1e-7, true);
 
     SECTION( "Check intersections" ) {
         CHECK( intersection.NbIntersections() == 5 );
