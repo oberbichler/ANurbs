@@ -152,8 +152,10 @@ private:
 
                 // FIXME: check for convergency
 
+                if (curve.Domain().Contains(t)) {
                 parameters.push_back(t);
             }
+        }
         }
     };
 
