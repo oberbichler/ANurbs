@@ -48,7 +48,7 @@ public:
     {
     }
 
-    ScalarType
+    static ScalarType
     DistancePointToLine(
         const VectorType& point,
         const VectorType& lineA,
