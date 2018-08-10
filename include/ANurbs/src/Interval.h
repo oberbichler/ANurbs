@@ -105,6 +105,13 @@ public:
         return NormalizedInterval(interval.T0(), interval.T1());
     }
 
+    bool
+    Contains(
+        const ScalarType t) const
+    {
+        return (Min() <= t) && (t <= Max());
+    }
+
     static ScalarType
     Clamp(
         const ScalarType value,
