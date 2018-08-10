@@ -14,7 +14,7 @@ TEST_CASE( "Tessellate a planar curve", "[CurveTessellation][Curve][2D]" ) {
     int nbPoles = 4;
     bool isRational = false;
 
-    Pointer<CurveGeometry2D> geometry = Create<CurveGeometry2D>(degree, nbPoles, isRational);
+    Pointer<CurveGeometry2D> geometry = New<CurveGeometry2D>(degree, nbPoles, isRational);
 
     geometry->SetKnot(0, 0.0);
     geometry->SetKnot(1, 0.0);
@@ -29,7 +29,7 @@ TEST_CASE( "Tessellate a planar curve", "[CurveTessellation][Curve][2D]" ) {
 
     // create curve
 
-    auto curve = Create<Curve2D>(geometry);
+    auto curve = New<Curve2D>(geometry);
 
     // tessellate
 
@@ -103,7 +103,7 @@ TEST_CASE( "Tessellate a spatial curve", "[CurveTessellation][Curve][3D]" ) {
     int nbPoles = 4;
     bool isRational = false;
 
-    Pointer<CurveGeometry3D> geometry = Create<CurveGeometry3D>(degree, nbPoles, isRational);
+    Pointer<CurveGeometry3D> geometry = New<CurveGeometry3D>(degree, nbPoles, isRational);
 
     geometry->SetKnot(0, 0.0);
     geometry->SetKnot(1, 0.0);
@@ -116,7 +116,7 @@ TEST_CASE( "Tessellate a spatial curve", "[CurveTessellation][Curve][3D]" ) {
     geometry->SetPole(2, {2.0, -1.0,  0.0});
     geometry->SetPole(3, {3.0, -1.0,  0.0});
 
-    auto curve = Create<Curve3D>(geometry);
+    auto curve = New<Curve3D>(geometry);
 
     const double flatness = 1e-2;
 

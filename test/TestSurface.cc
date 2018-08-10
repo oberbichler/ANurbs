@@ -14,7 +14,7 @@ TEST_CASE( "Geometry of a spatial B-Spline srf", "[Surface]" ) {
 
     bool isRational = false;
 
-    Pointer<SurfaceGeometry3D> geometry = Create<SurfaceGeometry3D>(degreeU,
+    Pointer<SurfaceGeometry3D> geometry = New<SurfaceGeometry3D>(degreeU,
         degreeV, nbPolesU, nbPolesV, isRational);
 
     geometry->SetKnotU(0,  0.0);

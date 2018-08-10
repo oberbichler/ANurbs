@@ -11,7 +11,7 @@ TEST_CASE( "Project point on spatial curve", "[PointOnCurveProjection]" ) {
     int nbPoles = 8;
     bool isRational = false;
 
-    Pointer<CurveGeometry3D> curveGeometry = Create<CurveGeometry3D>(degree, nbPoles, isRational);
+    Pointer<CurveGeometry3D> curveGeometry = New<CurveGeometry3D>(degree, nbPoles, isRational);
     {
         curveGeometry->SetKnot( 0,  3.0 );
         curveGeometry->SetKnot( 1,  3.0 );
@@ -35,7 +35,7 @@ TEST_CASE( "Project point on spatial curve", "[PointOnCurveProjection]" ) {
         curveGeometry->SetPole(7, {-25,  15,   4});
     }
 
-    Pointer<Curve3D> curve = Create<Curve3D>(curveGeometry, curveGeometry->Domain());
+    Pointer<Curve3D> curve = New<Curve3D>(curveGeometry, curveGeometry->Domain());
 
     PointOnCurveProjection3D projection(curve, 1e-7);
 
@@ -749,7 +749,7 @@ TEST_CASE( "Project point on CurveOnSurface", "[PointOnCurveProjection]" ) {
         int nbPoles = 3;
         bool isRational = false;
 
-        curveGeometry = Create<CurveGeometry2D>(degree, nbPoles, isRational);
+        curveGeometry = New<CurveGeometry2D>(degree, nbPoles, isRational);
 
         curveGeometry->SetKnot( 0, 7.0);
         curveGeometry->SetKnot( 1, 7.0);
@@ -773,7 +773,7 @@ TEST_CASE( "Project point on CurveOnSurface", "[PointOnCurveProjection]" ) {
 
         auto knotsU = {1, 1, 3, 3};
 
-        surfaceGeometry = Create<SurfaceGeometry3D>(degreeU, degreeV, nbPolesU, nbPolesV, isRational);
+        surfaceGeometry = New<SurfaceGeometry3D>(degreeU, degreeV, nbPolesU, nbPolesV, isRational);
 
         surfaceGeometry->SetKnotU(0, 1);
         surfaceGeometry->SetKnotU(1, 1);
@@ -796,7 +796,7 @@ TEST_CASE( "Project point on CurveOnSurface", "[PointOnCurveProjection]" ) {
         surfaceGeometry->SetPole(2, 2, {10, 10,  0});
     }
 
-    Pointer<CurveOnSurface3D> curve = Create<CurveOnSurface3D>(curveGeometry, surfaceGeometry, curveGeometry->Domain());
+    Pointer<CurveOnSurface3D> curve = New<CurveOnSurface3D>(curveGeometry, surfaceGeometry, curveGeometry->Domain());
 
     Point3D point = {0, 0, 0};
 

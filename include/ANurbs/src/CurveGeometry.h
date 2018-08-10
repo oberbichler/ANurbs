@@ -92,7 +92,7 @@ public:
         int nbPolesRefined = this->NbPoles() + nbKnotsToInsert;
         int nbKnotsRefined = this->NbKnots() + nbKnotsToInsert;
 
-        auto refined = Create<CurveGeometryType>(this->Degree(), nbPolesRefined,
+        auto refined = New<CurveGeometryType>(this->Degree(), nbPolesRefined,
             true);
 
         for (int j = 0; j < a - this->Degree() + 2; j++) {
