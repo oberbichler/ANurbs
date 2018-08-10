@@ -186,7 +186,7 @@ public:
     {
         // approximate curve with a polyline
 
-        CurveTessellation2D tessellation;
+        CurveTessellation<ScalarType, VectorType> tessellation;
 
         tessellation.Compute(curve, tolerance);
 

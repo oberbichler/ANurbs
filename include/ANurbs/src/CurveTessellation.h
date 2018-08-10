@@ -55,11 +55,12 @@ public:
         const VectorType& lineB
     )
     {
+        using Vector = VectorMath<VectorType>;
+
         VectorType v = lineA - point;
         VectorType u = lineB - lineA;
 
-        return VectorMath<TVector>::Norm(VectorMath<TVector>::Cross(v, u)) /
-            VectorMath<TVector>::Norm(u);
+        return Vector::Norm(Vector::Cross(v, u)) / Vector::Norm(u);
     }
 
     void
