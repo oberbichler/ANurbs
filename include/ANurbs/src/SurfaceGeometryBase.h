@@ -306,4 +306,8 @@ public:
     }
 };
 
+using SurfaceGeometryBase1D = SurfaceGeometryBase<Point1D>;
+using SurfaceGeometryBase2D = SurfaceGeometryBase<Point2D>;
+using SurfaceGeometryBase3D = SurfaceGeometryBase<Point3D>;
+
 } // namespace ANurbs
