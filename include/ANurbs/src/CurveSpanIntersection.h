@@ -11,14 +11,14 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class CurveSpanIntersection
 {
 public:
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
 
-    using CurveType = CurveBase<ScalarType, VectorType>;
+    using CurveType = CurveBase<VectorType>;
 
 private:
     using ParameterPoint = std::pair<ScalarType, VectorType>;
@@ -186,7 +186,7 @@ public:
     {
         // approximate curve with a polyline
 
-        CurveTessellation<ScalarType, VectorType> tessellation;
+        CurveTessellation<VectorType> tessellation;
 
         tessellation.Compute(curve, tolerance);
 
@@ -231,6 +231,6 @@ public:
     }
 };
 
-using CurveSpanIntersection2D = CurveSpanIntersection<double, Point2D>;
+using CurveSpanIntersection2D = CurveSpanIntersection<Point2D>;
 
 } // namespace ANurbs

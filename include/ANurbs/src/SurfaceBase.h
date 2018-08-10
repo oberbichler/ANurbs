@@ -7,21 +7,21 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class SurfaceBase
 {
 public:
-    using SurfaceBaseType = SurfaceBase<TScalar, TVector>;
+    using SurfaceBaseType = SurfaceBase<TVector>;
 
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
     using IntervalType = Interval<ScalarType>;
 
 public:
     static constexpr int
     Dimension()
     {
-        return VectorMath<VectorType>::Dimension();
+        return Internals::Dimension<VectorType>::value;
     }
 
     virtual IntervalType
@@ -48,8 +48,8 @@ public:
     SpansV() = 0;
 };
 
-using SurfaceBase1D = SurfaceBase<double, Point1D>;
-using SurfaceBase2D = SurfaceBase<double, Point2D>;
-using SurfaceBase3D = SurfaceBase<double, Point3D>;
+using SurfaceBase1D = SurfaceBase<Point1D>;
+using SurfaceBase2D = SurfaceBase<Point2D>;
+using SurfaceBase3D = SurfaceBase<Point3D>;
 
 } // namespace ANurbs
