@@ -48,12 +48,11 @@ public:
     {
     }
 
-    ScalarType
+    static ScalarType
     DistancePointToLine(
         const VectorType& point,
         const VectorType& lineA,
-        const VectorType& lineB
-    )
+        const VectorType& lineB)
     {
         using Vector = VectorMath<VectorType>;
 
@@ -66,8 +65,7 @@ public:
     void
     Compute(
         const CurveBaseType& curve,
-        const ScalarType flatness
-    )
+        const ScalarType flatness)
     {
         m_samplePoints.clear();
         m_points.clear();
