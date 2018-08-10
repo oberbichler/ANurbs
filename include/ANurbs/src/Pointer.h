@@ -8,11 +8,11 @@ template <typename T>
 using Pointer = std::shared_ptr<T>;
 
 template <typename T, typename... TArgs>
-Pointer<T>
+std::unique_ptr<T>
 Create(
     TArgs&&... args)
 {
-    return std::make_shared<T>(std::forward<TArgs>(args)...);
+    return std::unique_ptr<T>(new T(std::forward<TArgs>(args)...));
 }
 
 } // namespace ANurbs

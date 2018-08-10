@@ -11,7 +11,7 @@ TEST_CASE( "Project point on spatial curve", "[PointOnCurveProjection]" ) {
     int nbPoles = 8;
     bool isRational = false;
 
-    auto curveGeometry = Create<CurveGeometry3D>(degree, nbPoles, isRational);
+    Pointer<CurveGeometry3D> curveGeometry = Create<CurveGeometry3D>(degree, nbPoles, isRational);
     {
         curveGeometry->SetKnot( 0,  3.0 );
         curveGeometry->SetKnot( 1,  3.0 );
@@ -35,7 +35,7 @@ TEST_CASE( "Project point on spatial curve", "[PointOnCurveProjection]" ) {
         curveGeometry->SetPole(7, {-25,  15,   4});
     }
 
-    auto curve = Create<Curve3D>(curveGeometry, curveGeometry->Domain());
+    Pointer<Curve3D> curve = Create<Curve3D>(curveGeometry, curveGeometry->Domain());
 
     PointOnCurveProjection3D projection(curve, 1e-7);
 
@@ -796,8 +796,8 @@ TEST_CASE( "Project point on CurveOnSurface", "[PointOnCurveProjection]" ) {
         surfaceGeometry->SetPole(2, 2, {10, 10,  0});
     }
 
-    auto curve = Create<CurveOnSurface3D>(curveGeometry, surfaceGeometry, curveGeometry->Domain());
-    
+    Pointer<CurveOnSurface3D> curve = Create<CurveOnSurface3D>(curveGeometry, surfaceGeometry, curveGeometry->Domain());
+
     Point3D point = {0, 0, 0};
 
     PointOnCurveProjection3D projection(curve, 1e-7);

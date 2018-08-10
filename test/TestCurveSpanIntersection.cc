@@ -10,7 +10,7 @@ TEST_CASE( "Intersect curve with surface knot spans (1)",
 
     // create curve
 
-    auto geometry = Create<CurveGeometry2D>(
+    Pointer<CurveGeometry2D> geometry = Create<CurveGeometry2D>(
         2,      // degree
         5,      // nbPoles
         false   // isRational
@@ -62,7 +62,7 @@ TEST_CASE( "Intersect curve with surface knot spans (2)",
 
     // create curve
 
-    auto geometry = Create<CurveGeometry2D>(
+    Pointer<CurveGeometry2D> geometry = Create<CurveGeometry2D>(
         2,      // degree
         5,      // nbPoles
         false   // isRational
@@ -110,7 +110,7 @@ TEST_CASE( "Intersect curve with surface knot spans (3)",
 
     // create curve
 
-    auto geometry = Create<CurveGeometry2D>(
+    Pointer<CurveGeometry2D> geometry = Create<CurveGeometry2D>(
         2,      // degree
         4,      // nbPoles
         false   // isRational
@@ -155,7 +155,7 @@ TEST_CASE( "Intersect curve with surface knot spans (4)",
 
     // create curve
 
-    auto geometry = Create<CurveGeometry2D>(
+    Pointer<CurveGeometry2D> geometry = Create<CurveGeometry2D>(
         2,      // degree
         4,      // nbPoles
         false   // isRational

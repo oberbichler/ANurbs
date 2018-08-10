@@ -14,7 +14,7 @@ TEST_CASE( "Tessellate a planar curve", "[CurveTessellation][Curve][2D]" ) {
     int nbPoles = 4;
     bool isRational = false;
 
-    auto geometry = Create<CurveGeometry2D>(degree, nbPoles, isRational);
+    Pointer<CurveGeometry2D> geometry = Create<CurveGeometry2D>(degree, nbPoles, isRational);
 
     geometry->SetKnot(0, 0.0);
     geometry->SetKnot(1, 0.0);
@@ -103,7 +103,7 @@ TEST_CASE( "Tessellate a spatial curve", "[CurveTessellation][Curve][3D]" ) {
     int nbPoles = 4;
     bool isRational = false;
 
-    auto geometry = Create<CurveGeometry3D>(degree, nbPoles, isRational);
+    Pointer<CurveGeometry3D> geometry = Create<CurveGeometry3D>(degree, nbPoles, isRational);
 
     geometry->SetKnot(0, 0.0);
     geometry->SetKnot(1, 0.0);
