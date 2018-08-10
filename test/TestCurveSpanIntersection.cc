@@ -29,7 +29,7 @@ TEST_CASE( "Intersect curve with surface knot spans (1)",
     geometry->SetPole(3, { 8.0, 10.0});
     geometry->SetPole(4, { 9.0,  8.0});
 
-    auto curve = New<Curve2D>(geometry);
+    Curve2D curve(geometry);
 
     // spans
 
@@ -39,7 +39,7 @@ TEST_CASE( "Intersect curve with surface knot spans (1)",
     // compute intersections
 
     CurveSpanIntersection2D intersection;
-    intersection.Compute(*curve, knotsU, knotsV, 1e-7, false);
+    intersection.Compute(curve, knotsU, knotsV, 1e-7, false);
 
     SECTION( "Check intersections" ) {
         CHECK( intersection.NbIntersections() == 9 );
@@ -81,7 +81,7 @@ TEST_CASE( "Intersect curve with surface knot spans (2)",
     geometry->SetPole(3, {10.0,  9.0});
     geometry->SetPole(4, { 8.0, 10.0});
 
-    auto curve = New<Curve2D>(geometry);
+    Curve2D curve(geometry);
 
     // spans
 
@@ -91,7 +91,7 @@ TEST_CASE( "Intersect curve with surface knot spans (2)",
     // compute intersections
 
     CurveSpanIntersection2D intersection;
-    intersection.Compute(*curve, knotsU, knotsV, 1e-7, false);
+    intersection.Compute(curve, knotsU, knotsV, 1e-7, false);
 
     SECTION( "Check intersections" ) {
         CHECK( intersection.NbIntersections() == 5 );
@@ -127,7 +127,7 @@ TEST_CASE( "Intersect curve with surface knot spans (3)",
     geometry->SetPole(2, {6.0, 7.0});
     geometry->SetPole(3, {6.0, 8.0});
 
-    auto curve = New<Curve2D>(geometry);
+    Curve2D curve(geometry);
 
     // spans
 
@@ -137,7 +137,7 @@ TEST_CASE( "Intersect curve with surface knot spans (3)",
     // compute intersections
 
     CurveSpanIntersection2D intersection;
-    intersection.Compute(*curve, knotsU, knotsV, 1e-7, false);
+    intersection.Compute(curve, knotsU, knotsV, 1e-7, false);
 
     SECTION( "Check intersections" ) {
         CHECK( intersection.NbIntersections() == 4 );
@@ -172,7 +172,7 @@ TEST_CASE( "Intersect curve with surface knot spans (4)",
     geometry->SetPole(2, {6.0, 7.0});
     geometry->SetPole(3, {6.0, 8.0});
 
-    auto curve = New<Curve2D>(geometry);
+    Curve2D curve(geometry);
 
     // spans
 
@@ -182,7 +182,7 @@ TEST_CASE( "Intersect curve with surface knot spans (4)",
     // compute intersections
 
     CurveSpanIntersection2D intersection;
-    intersection.Compute(*curve, knotsU, knotsV, 1e-7, true);
+    intersection.Compute(curve, knotsU, knotsV, 1e-7, true);
 
     SECTION( "Check intersections" ) {
         CHECK( intersection.NbIntersections() == 5 );

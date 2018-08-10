@@ -29,7 +29,7 @@ TEST_CASE( "Tessellate a planar curve", "[CurveTessellation][Curve][2D]" ) {
 
     // create curve
 
-    auto curve = New<Curve2D>(geometry);
+    Curve2D curve(geometry);
 
     // tessellate
 
@@ -37,7 +37,7 @@ TEST_CASE( "Tessellate a planar curve", "[CurveTessellation][Curve][2D]" ) {
 
     CurveTessellation2D tessellation;
 
-    tessellation.Compute(*curve, flatness);
+    tessellation.Compute(curve, flatness);
 
 
     SECTION( "Check points" ) {
@@ -116,13 +116,13 @@ TEST_CASE( "Tessellate a spatial curve", "[CurveTessellation][Curve][3D]" ) {
     geometry->SetPole(2, {2.0, -1.0,  0.0});
     geometry->SetPole(3, {3.0, -1.0,  0.0});
 
-    auto curve = New<Curve3D>(geometry);
+    Curve3D curve(geometry);
 
     const double flatness = 1e-2;
 
     CurveTessellation3D tessellation;
 
-    tessellation.Compute(*curve, flatness);
+    tessellation.Compute(curve, flatness);
 
     SECTION( "Check points" ) {
         // FIXME: look for a better way to test the result
