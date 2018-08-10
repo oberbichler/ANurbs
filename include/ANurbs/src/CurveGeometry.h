@@ -78,7 +78,7 @@ public:
         }
     }
 
-    Pointer<CurveGeometryType>
+    Unique<CurveGeometryType>
     Refined(
         const std::vector<ScalarType>& knotsToInsert) const
     {
