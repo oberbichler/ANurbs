@@ -23,8 +23,8 @@ public:
     using CurveGeometryType = TCurveGeometry;
     using SurfaceGeometryType = TSurfaceGeometry;
 
-    using ScalarType = typename CurveBaseType::ScalarType;
     using VectorType = typename SurfaceGeometryType::VectorType;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
     using IntervalType = typename CurveBaseType::IntervalType;
 
 private:

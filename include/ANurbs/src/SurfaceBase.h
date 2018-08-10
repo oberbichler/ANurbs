@@ -13,8 +13,8 @@ class SurfaceBase
 public:
     using SurfaceBaseType = SurfaceBase<TScalar, TVector>;
 
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
     using IntervalType = Interval<ScalarType>;
 
 public:

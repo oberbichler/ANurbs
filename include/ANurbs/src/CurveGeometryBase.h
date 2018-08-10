@@ -13,8 +13,8 @@ template <typename TScalar, typename TVector>
 class CurveGeometryBase
 {
 public:
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
     using KnotsType = std::vector<ScalarType>;
     using IntervalType = Interval<ScalarType>;
 

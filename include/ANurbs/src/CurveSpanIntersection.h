@@ -15,8 +15,8 @@ template <typename TScalar, typename TVector>
 class CurveSpanIntersection
 {
 public:
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
 
     using CurveType = CurveBase<ScalarType, VectorType>;
 

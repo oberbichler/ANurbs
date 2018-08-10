@@ -10,8 +10,8 @@ class CurveTessellation
 public:
     using CurveBaseType = CurveBase<TScalar, TVector>;
 
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
     using IntervalType = Interval<ScalarType>;
 
 private:

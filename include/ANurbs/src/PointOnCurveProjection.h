@@ -14,8 +14,8 @@ template <typename TScalar, typename TVector>
 class PointOnCurveProjection
 {
 public:
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
 
     using CurveBaseType = CurveBase<ScalarType, VectorType>;
 
