@@ -133,14 +133,13 @@ public:
     {
         using Vector2Type = typename CurveGeometryType::VectorType;
 
-        auto curve = Create<Curve<CurveGeometryType>>(CurveGeometry(),
-            Domain());
+        Curve<CurveGeometryType> curve(CurveGeometry(), Domain());
 
         auto knotsU = SurfaceGeometry()->KnotsU();
         auto knotsV = SurfaceGeometry()->KnotsV();
 
         CurveSpanIntersection<Vector2Type> intersection;
-        intersection.Compute(*curve, knotsU, knotsV, 1e-4, true);
+        intersection.Compute(curve, knotsU, knotsV, 1e-4, true);
 
         int nbSpans = intersection.NbIntersections() - 1;
 

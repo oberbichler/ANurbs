@@ -10,7 +10,8 @@ TEST_CASE( "Spatial B-Spline curve", "[Curve]" ) {
     int nbPoles = 8;
     bool isRational = false;
 
-    auto geometry = Create<CurveGeometry3D>(degree, nbPoles, isRational);
+    Pointer<CurveGeometry3D> geometry = New<CurveGeometry3D>(degree, nbPoles,
+        isRational);
 
     geometry->SetKnot( 0,  3.0);
     geometry->SetKnot( 1,  3.0);
