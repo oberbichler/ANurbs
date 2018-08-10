@@ -21,7 +21,7 @@ public:
     static constexpr int
     Dimension()
     {
-        return VectorMath<VectorType>::Dimension();
+        return Internals::Dimension<VectorType>::value;
     }
 
     virtual IntervalType

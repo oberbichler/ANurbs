@@ -109,7 +109,7 @@ public:
 
         c = [&](int order, int i, int j) -> VectorType {
             if (order > 0) {
-                VectorType result = VectorMath<VectorType>::Zero();
+                VectorType result = Internals::Zero<VectorType>::get();
 
                 for (int a = 1; a <= order; a++) {
                     result += (

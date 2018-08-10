@@ -3,6 +3,7 @@
 #include "CurveShapeEvaluator.h"
 #include "Interval.h"
 #include "Knots.h"
+#include "VectorMath.h"
 
 #include <vector>
 
@@ -33,7 +34,7 @@ public:
     static constexpr int
     Dimension()
     {
-        return VectorMath<VectorType>::Dimension();
+        return Internals::Dimension<VectorType>::value;
     }
 
     int
