@@ -4,11 +4,11 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class CurveTessellation
 {
 public:
-    using CurveBaseType = CurveBase<TScalar, TVector>;
+    using CurveBaseType = CurveBase<TVector>;
 
     using VectorType = TVector;
     using ScalarType = typename Internals::Scalar<VectorType>::type;
@@ -165,7 +165,7 @@ public:
     }
 };
 
-using CurveTessellation2D = CurveTessellation<double, Point<double, 2>>;
-using CurveTessellation3D = CurveTessellation<double, Point<double, 3>>;
+using CurveTessellation2D = CurveTessellation<Point2D>;
+using CurveTessellation3D = CurveTessellation<Point3D>;
 
 } // namespace ANurbs

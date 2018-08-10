@@ -8,11 +8,11 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class CurveBase
 {
 public:
-    using CurveBaseType = CurveBase<TScalar, TVector>;
+    using CurveBaseType = CurveBase<TVector>;
 
     using VectorType = TVector;
     using ScalarType = typename Internals::Scalar<VectorType>::type;
@@ -76,8 +76,8 @@ public:
     Spans() const = 0;
 };
 
-using CurveBase1D = CurveBase<double, Point1D>;
-using CurveBase2D = CurveBase<double, Point2D>;
-using CurveBase3D = CurveBase<double, Point3D>;
+using CurveBase1D = CurveBase<Point1D>;
+using CurveBase2D = CurveBase<Point2D>;
+using CurveBase3D = CurveBase<Point3D>;
 
 } // namespace ANurbs

@@ -800,7 +800,7 @@ TEST_CASE( "Project point on CurveOnSurface", "[PointOnCurveProjection]" ) {
     
     Point3D point = {0, 0, 0};
 
-    PointOnCurveProjection<double, Point3D> projection(curve, 1e-7);
+    PointOnCurveProjection3D projection(curve, 1e-7);
     projection.Compute(point);
     
     REQUIRE( projection.Parameter() == Approx(7.8785895558) );

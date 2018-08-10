@@ -8,15 +8,13 @@ namespace ANurbs {
 
 template <typename TSurfaceGeometry>
 class Surface
-    : public SurfaceBase<typename TSurfaceGeometry::ScalarType,
-          typename TSurfaceGeometry::VectorType>
+    : public SurfaceBase<typename TSurfaceGeometry::VectorType>
 {
 private:
     using SurfaceGeometryType = TSurfaceGeometry;
 
 public:
-    using SurfaceBaseType = SurfaceBase<typename TSurfaceGeometry::ScalarType,
-        typename TSurfaceGeometry::VectorType>;
+    using SurfaceBaseType = SurfaceBase<typename TSurfaceGeometry::VectorType>;
 
     using SurfaceType = Surface<TSurfaceGeometry>;
 

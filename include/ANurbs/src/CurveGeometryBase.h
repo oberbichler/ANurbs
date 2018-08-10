@@ -9,7 +9,7 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class CurveGeometryBase
 {
 public:

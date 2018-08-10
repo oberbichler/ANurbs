@@ -11,14 +11,10 @@ namespace ANurbs {
 
 template <typename TCurveGeometry, typename TSurfaceGeometry>
 class CurveOnSurface
-    : public CurveBase<
-          typename TCurveGeometry::ScalarType,
-          typename TSurfaceGeometry::VectorType>
+    : public CurveBase<typename TSurfaceGeometry::VectorType>
 {
 public:
-    using CurveBaseType = CurveBase<
-        typename TCurveGeometry::ScalarType,
-        typename TSurfaceGeometry::VectorType>;
+    using CurveBaseType = CurveBase<typename TSurfaceGeometry::VectorType>;
 
     using CurveGeometryType = TCurveGeometry;
     using SurfaceGeometryType = TSurfaceGeometry;
@@ -143,7 +139,7 @@ public:
         auto knotsU = SurfaceGeometry()->KnotsU();
         auto knotsV = SurfaceGeometry()->KnotsV();
 
-        CurveSpanIntersection<ScalarType, Vector2Type> intersection;
+        CurveSpanIntersection<Vector2Type> intersection;
         intersection.Compute(*curve, knotsU, knotsV, 1e-4, true);
 
         int nbSpans = intersection.NbIntersections() - 1;

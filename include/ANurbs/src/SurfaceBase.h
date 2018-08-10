@@ -7,11 +7,11 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class SurfaceBase
 {
 public:
-    using SurfaceBaseType = SurfaceBase<TScalar, TVector>;
+    using SurfaceBaseType = SurfaceBase<TVector>;
 
     using VectorType = TVector;
     using ScalarType = typename Internals::Scalar<VectorType>::type;
@@ -48,8 +48,8 @@ public:
     SpansV() = 0;
 };
 
-using SurfaceBase1D = SurfaceBase<double, Point1D>;
-using SurfaceBase2D = SurfaceBase<double, Point2D>;
-using SurfaceBase3D = SurfaceBase<double, Point3D>;
+using SurfaceBase1D = SurfaceBase<Point1D>;
+using SurfaceBase2D = SurfaceBase<Point2D>;
+using SurfaceBase3D = SurfaceBase<Point3D>;
 
 } // namespace ANurbs
