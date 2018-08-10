@@ -48,4 +48,8 @@ public:
     SpansV() = 0;
 };
 
+using SurfaceBase1D = SurfaceBase<double, Point1D>;
+using SurfaceBase2D = SurfaceBase<double, Point2D>;
+using SurfaceBase3D = SurfaceBase<double, Point3D>;
+
 } // namespace ANurbs
