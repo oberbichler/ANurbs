@@ -2,22 +2,22 @@
 
 #include "Curve.h"
 #include "CurveBase.h"
-#include "CurveGeometry.h"
+#include "CurveGeometryBase.h"
 #include "CurveSpanIntersection.h"
 #include "Pointer.h"
-#include "SurfaceGeometry.h"
+#include "SurfaceGeometryBase.h"
 
 namespace ANurbs {
 
-template <typename TCurveGeometry, typename TSurfaceGeometry>
+template <typename TVector2, typename TVector>
 class CurveOnSurface
-    : public CurveBase<typename TSurfaceGeometry::VectorType>
+    : public CurveBase<TVector>
 {
 public:
-    using CurveBaseType = CurveBase<typename TSurfaceGeometry::VectorType>;
+    using CurveBaseType = CurveBase<TVector>;
 
-    using CurveGeometryType = TCurveGeometry;
-    using SurfaceGeometryType = TSurfaceGeometry;
+    using CurveGeometryType = CurveGeometryBase<TVector2>;
+    using SurfaceGeometryType = SurfaceGeometryBase<TVector>;
 
     using VectorType = typename SurfaceGeometryType::VectorType;
     using ScalarType = typename Internals::Scalar<VectorType>::type;
@@ -38,9 +38,9 @@ public:
     , m_surfaceGeometry(surfaceGeometry)
     , m_domain(domain)
     {
-        static_assert(TCurveGeometry::Dimension() == 2, "Not a planar curve");
-        static_assert(std::is_same<typename TCurveGeometry::ScalarType,
-            typename TSurfaceGeometry::ScalarType>::value,
+        static_assert(CurveGeometryType::Dimension() == 2, "Not a planar curve");
+        static_assert(std::is_same<typename CurveGeometryType::ScalarType,
+            typename SurfaceGeometryType::ScalarType>::value,
             "Different scalar types");
     }
 
@@ -156,8 +156,8 @@ public:
     }
 };
 
-using CurveOnSurface1D = CurveOnSurface<CurveGeometry2D, SurfaceGeometry1D>;
-using CurveOnSurface2D = CurveOnSurface<CurveGeometry2D, SurfaceGeometry2D>;
-using CurveOnSurface3D = CurveOnSurface<CurveGeometry2D, SurfaceGeometry3D>;
+using CurveOnSurface1D = CurveOnSurface<Point2D, Point1D>;
+using CurveOnSurface2D = CurveOnSurface<Point2D, Point2D>;
+using CurveOnSurface3D = CurveOnSurface<Point2D, Point3D>;
 
 } // namespace ANurbs
