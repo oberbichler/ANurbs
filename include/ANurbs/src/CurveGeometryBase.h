@@ -236,4 +236,8 @@ public:
     }
 };
 
+using CurveGeometryBase1D = CurveGeometryBase<Point1D>;
+using CurveGeometryBase2D = CurveGeometryBase<Point2D>;
+using CurveGeometryBase3D = CurveGeometryBase<Point3D>;
+
 } // namespace ANurbs
