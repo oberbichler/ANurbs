@@ -14,7 +14,8 @@ TEST_CASE( "Geometry of a spatial B-Spline surface", "[SurfaceGeometry]" ) {
 
     bool isRational = false;
 
-    SurfaceGeometry3D geometry(degreeU, degreeV, nbPolesU, nbPolesV, isRational);
+    SurfaceGeometry3D geometry(degreeU, degreeV, nbPolesU, nbPolesV,
+        isRational);
 
     geometry.SetKnotU(0,  0.0);
     geometry.SetKnotU(1,  0.0);
@@ -111,7 +112,8 @@ TEST_CASE( "Geometry of a spatial Nurbs surface", "[SurfaceGeometry]" ) {
 
     bool isRational = true;
 
-    SurfaceGeometry3D geometry(degreeU, degreeV, nbPolesU, nbPolesV, isRational);
+    SurfaceGeometry3D geometry(degreeU, degreeV, nbPolesU, nbPolesV,
+        isRational);
 
     geometry.SetKnotU(0,  0.0);
     geometry.SetKnotU(1,  0.0);

@@ -8,16 +8,13 @@ namespace ANurbs {
 
 template <typename TCurveGeometry>
 class Curve
-    : public CurveBase<
-          typename TCurveGeometry::ScalarType,
-          typename TCurveGeometry::VectorType>
+    : public CurveBase<typename TCurveGeometry::VectorType>
 {
 private:
     using CurveGeometryType = TCurveGeometry;
 
 public:
-    using CurveBaseType = CurveBase<typename TCurveGeometry::ScalarType,
-        typename TCurveGeometry::VectorType>;
+    using CurveBaseType = CurveBase<typename TCurveGeometry::VectorType>;
 
     using CurveType = Curve<TCurveGeometry>;
 

@@ -11,20 +11,16 @@ namespace ANurbs {
 
 template <typename TCurveGeometry, typename TSurfaceGeometry>
 class CurveOnSurface
-    : public CurveBase<
-          typename TCurveGeometry::ScalarType,
-          typename TSurfaceGeometry::VectorType>
+    : public CurveBase<typename TSurfaceGeometry::VectorType>
 {
 public:
-    using CurveBaseType = CurveBase<
-        typename TCurveGeometry::ScalarType,
-        typename TSurfaceGeometry::VectorType>;
+    using CurveBaseType = CurveBase<typename TSurfaceGeometry::VectorType>;
 
     using CurveGeometryType = TCurveGeometry;
     using SurfaceGeometryType = TSurfaceGeometry;
 
-    using ScalarType = typename CurveBaseType::ScalarType;
     using VectorType = typename SurfaceGeometryType::VectorType;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
     using IntervalType = typename CurveBaseType::IntervalType;
 
 private:
@@ -109,7 +105,7 @@ public:
 
         c = [&](int order, int i, int j) -> VectorType {
             if (order > 0) {
-                Point<double, 3> result;
+                VectorType result = Internals::Zero<VectorType>::get();
 
                 for (int a = 1; a <= order; a++) {
                     result += (
@@ -137,14 +133,13 @@ public:
     {
         using Vector2Type = typename CurveGeometryType::VectorType;
 
-        auto curve = Create<Curve<CurveGeometryType>>(CurveGeometry(),
-            Domain());
+        Curve<CurveGeometryType> curve(CurveGeometry(), Domain());
 
         auto knotsU = SurfaceGeometry()->KnotsU();
         auto knotsV = SurfaceGeometry()->KnotsV();
 
-        CurveSpanIntersection<ScalarType, Vector2Type> intersection;
-        intersection.Compute(*curve, knotsU, knotsV, 1e-4, true);
+        CurveSpanIntersection<Vector2Type> intersection;
+        intersection.Compute(curve, knotsU, knotsV, 1e-4, true);
 
         int nbSpans = intersection.NbIntersections() - 1;
 

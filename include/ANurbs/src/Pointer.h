@@ -7,12 +7,15 @@ namespace ANurbs {
 template <typename T>
 using Pointer = std::shared_ptr<T>;
 
+template <typename T>
+using Unique = std::unique_ptr<T>;
+
 template <typename T, typename... TArgs>
-Pointer<T>
-Create(
+Unique<T>
+New(
     TArgs&&... args)
 {
-    return std::make_shared<T>(std::forward<TArgs>(args)...);
+    return Unique<T>(new T(std::forward<TArgs>(args)...));
 }
 
 } // namespace ANurbs

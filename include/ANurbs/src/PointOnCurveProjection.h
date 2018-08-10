@@ -10,14 +10,14 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class PointOnCurveProjection
 {
 public:
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
 
-    using CurveBaseType = CurveBase<ScalarType, VectorType>;
+    using CurveBaseType = CurveBase<VectorType>;
 
 private:
     struct ParameterPoint
@@ -27,7 +27,7 @@ private:
     };
 
 private:
-    CurveTessellation<ScalarType, VectorType> m_tessellation;
+    CurveTessellation<VectorType> m_tessellation;
     Pointer<CurveBaseType> m_curve;
     ScalarType m_tessellationFlatness;
     ScalarType m_tolerance;
@@ -226,7 +226,7 @@ private:
     }
 };
 
-using PointOnCurveProjection2D = PointOnCurveProjection<double, Point2D>;
-using PointOnCurveProjection3D = PointOnCurveProjection<double, Point3D>;
+using PointOnCurveProjection2D = PointOnCurveProjection<Point2D>;
+using PointOnCurveProjection3D = PointOnCurveProjection<Point3D>;
 
 } // namespace ANurbs
