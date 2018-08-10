@@ -4,14 +4,14 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class CurveTessellation
 {
 public:
-    using CurveBaseType = CurveBase<TScalar, TVector>;
+    using CurveBaseType = CurveBase<TVector>;
 
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
     using IntervalType = Interval<ScalarType>;
 
 private:
@@ -55,11 +55,12 @@ public:
         const VectorType& lineB
     )
     {
+        using Vector = VectorMath<VectorType>;
+
         VectorType v = lineA - point;
         VectorType u = lineB - lineA;
 
-        return VectorMath<TVector>::Norm(VectorMath<TVector>::Cross(v, u)) /
-            VectorMath<TVector>::Norm(u);
+        return Vector::Norm(Vector::Cross(v, u)) / Vector::Norm(u);
     }
 
     void
@@ -164,7 +165,7 @@ public:
     }
 };
 
-using CurveTessellation2D = CurveTessellation<double, Point<double, 2>>;
-using CurveTessellation3D = CurveTessellation<double, Point<double, 3>>;
+using CurveTessellation2D = CurveTessellation<Point2D>;
+using CurveTessellation3D = CurveTessellation<Point3D>;
 
 } // namespace ANurbs

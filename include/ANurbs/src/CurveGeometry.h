@@ -8,14 +8,13 @@
 
 namespace ANurbs {
 
-template <typename TScalar, int TDimension,
-    typename TVector = Point<TScalar, TDimension>>
+template <typename TVector>
 class CurveGeometry
-    : public CurveGeometryBase<TScalar, TVector>
+    : public CurveGeometryBase<TVector>
 {
 public:
-    using CurveGeometryBaseType = CurveGeometryBase<TScalar, TVector>;
-    using CurveGeometryType = CurveGeometry<TScalar, TDimension, TVector>;
+    using CurveGeometryBaseType = CurveGeometryBase<TVector>;
+    using CurveGeometryType = CurveGeometry<TVector>;
     using typename CurveGeometryBaseType::KnotsType;
     using typename CurveGeometryBaseType::ScalarType;
     using typename CurveGeometryBaseType::VectorType;
@@ -79,7 +78,7 @@ public:
         }
     }
 
-    Pointer<CurveGeometryType>
+    Unique<CurveGeometryType>
     Refined(
         const std::vector<ScalarType>& knotsToInsert) const
     {
@@ -93,7 +92,7 @@ public:
         int nbPolesRefined = this->NbPoles() + nbKnotsToInsert;
         int nbKnotsRefined = this->NbKnots() + nbKnotsToInsert;
 
-        auto refined = Create<CurveGeometryType>(this->Degree(), nbPolesRefined,
+        auto refined = New<CurveGeometryType>(this->Degree(), nbPolesRefined,
             true);
 
         for (int j = 0; j < a - this->Degree() + 2; j++) {
@@ -162,8 +161,8 @@ public:
     }
 };
 
-using CurveGeometry1D = CurveGeometry<double, 1>;
-using CurveGeometry2D = CurveGeometry<double, 2>;
-using CurveGeometry3D = CurveGeometry<double, 3>;
+using CurveGeometry1D = CurveGeometry<Point1D>;
+using CurveGeometry2D = CurveGeometry<Point2D>;
+using CurveGeometry3D = CurveGeometry<Point3D>;
 
 } // namespace ANurbs

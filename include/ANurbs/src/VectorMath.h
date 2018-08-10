@@ -5,26 +5,49 @@
 #include <type_traits>
 
 namespace ANurbs {
+namespace Internals {
 
-template <typename Point>
-struct VectorMath;
+template <typename T>
+struct Dimension;
 
 template <typename TScalar, int TDimension>
-struct VectorMath<Point<TScalar, TDimension>>
+struct Dimension<Point<TScalar, TDimension>>
 {
-    using VectorType = Point<TScalar, TDimension>;
-    using ScalarType = TScalar;
+    static int constexpr value = Point<TScalar, TDimension>::Dimension();
+};
+
+template <typename T>
+struct Scalar;
+
+template <typename TScalar, int TDimension>
+struct Scalar<Point<TScalar, TDimension>>
+{
+    using type = typename Point<TScalar, TDimension>::ScalarType;
+};
+
+template <typename T>
+struct Zero;
+
+template <typename TScalar, int TDimension>
+struct Zero<Point<TScalar, TDimension>>
+{
+    static Point<TScalar, TDimension> get() {
+        return Point<TScalar, TDimension>();
+    }
+};
+
+} // namespace Internals
+
+template <typename TVector>
+struct VectorMath
+{
+    using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
 
     static constexpr int
     Dimension()
     {
-        return TDimension;
-    }
-
-    static VectorType
-    Zero()
-    {
-        return VectorType();
+        return Internals::Dimension<VectorType>::value;
     }
 
     static ScalarType
@@ -70,7 +93,7 @@ struct VectorMath<Point<TScalar, TDimension>>
         return std::abs(scalar);
     }
 
-    template <int T = TDimension,
+    template <int T = Dimension(),
         typename = typename std::enable_if<T == 2>::type>
     static ScalarType
     Cross(
@@ -81,7 +104,7 @@ struct VectorMath<Point<TScalar, TDimension>>
         return v[0] * u[1] - v[1] * u[0];
     }
 
-    template <int T = TDimension,
+    template <int T = Dimension(),
         typename = typename std::enable_if<T == 3>::type>
     static VectorType
     Cross(

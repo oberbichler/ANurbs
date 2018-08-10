@@ -37,7 +37,8 @@ TEST_CASE( "Integration points of domain [-1, 1]", "[IntegrationPoints]" ) {
     REQUIRE( integrationPoints[1].weight == 1.0 );
 }
 
-TEST_CASE( "Integration points of domain [[0, 1], [0, 1]]", "[IntegrationPoints]" ) {
+TEST_CASE( "Integration points of domain [[0, 1], [0, 1]]",
+    "[IntegrationPoints]" ) {
     int degreeU = 2;
     int degreeV = 3;
     Interval<double> domainU(0, 1);
@@ -68,7 +69,8 @@ TEST_CASE( "Integration points of domain [[0, 1], [0, 1]]", "[IntegrationPoints]
     REQUIRE( integrationPoints[5].weight == 0.13888888888888892 );
 }
 
-TEST_CASE( "Integration points of domain [[-1, 1], [-1, 1]]", "[IntegrationPoints]" ) {
+TEST_CASE( "Integration points of domain [[-1, 1], [-1, 1]]",
+    "[IntegrationPoints]" ) {
     int degreeU = 2;
     int degreeV = 3;
     Interval<double> domainU(-1, 1);

@@ -9,12 +9,12 @@
 
 namespace ANurbs {
 
-template <typename TScalar, typename TVector>
+template <typename TVector>
 class SurfaceGeometryBase
 {
 public:
-    using ScalarType = TScalar;
     using VectorType = TVector;
+    using ScalarType = typename Internals::Scalar<VectorType>::type;
     using KnotsType = std::vector<ScalarType>;
     using IntervalType = Interval<ScalarType>;
 
@@ -40,7 +40,7 @@ public:
     static constexpr int
     Dimension()
     {
-        return VectorMath<VectorType>::Dimension();
+        return Internals::Dimension<VectorType>::value;
     }
 
     int
