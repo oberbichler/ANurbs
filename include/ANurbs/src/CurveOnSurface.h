@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Curve.h"
 #include "CurveBase.h"
 #include "CurveGeometryBase.h"
 #include "CurveSpanIntersection.h"
