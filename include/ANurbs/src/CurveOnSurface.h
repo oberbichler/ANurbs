@@ -109,7 +109,7 @@ public:
 
         c = [&](int order, int i, int j) -> VectorType {
             if (order > 0) {
-                Point<double, 3> result;
+                VectorType result = VectorMath<VectorType>::Zero();
 
                 for (int a = 1; a <= order; a++) {
                     result += (
