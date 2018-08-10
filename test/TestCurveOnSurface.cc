@@ -35,7 +35,8 @@ TEST_CASE( "Spatial B-Spline curve on surface", "[CurveOnSurface3d]" ) {
 
         auto knotsU = {1, 1, 3, 3};
 
-        surfaceGeometry = New<SurfaceGeometry3D>(degreeU, degreeV, nbPolesU, nbPolesV, isRational);
+        surfaceGeometry = New<SurfaceGeometry3D>(degreeU, degreeV, nbPolesU,
+            nbPolesV, isRational);
 
         surfaceGeometry->SetKnotU(0, 1);
         surfaceGeometry->SetKnotU(1, 1);
@@ -58,7 +59,8 @@ TEST_CASE( "Spatial B-Spline curve on surface", "[CurveOnSurface3d]" ) {
         surfaceGeometry->SetPole(2, 2, {10, 10,  0});
     }
 
-    CurveOnSurface3D curveOnSurface(curveGeometry, surfaceGeometry, curveGeometry->Domain());
+    CurveOnSurface3D curveOnSurface(curveGeometry, surfaceGeometry,
+        curveGeometry->Domain());
 
     SECTION( "Check point evaluation" ) {
         auto point = curveOnSurface.PointAt(8);
