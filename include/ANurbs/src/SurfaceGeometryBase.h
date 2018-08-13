@@ -304,6 +304,46 @@ public:
 
         return EvaluateAt<VectorType>(poles, u, v, order);
     }
+
+    std::vector<IntervalType>
+    SpansU() const
+    {
+        int firstSpan = DegreeU() - 1;
+        int lastSpan = NbKnotsU() - DegreeU() - 1;
+
+        int nbSpans = lastSpan - firstSpan + 1;
+
+        std::vector<IntervalType> result(nbSpans);
+
+        for (int i = 0; i < nbSpans; i++) {
+            ScalarType t0 = KnotU(firstSpan + i);
+            ScalarType t1 = KnotU(firstSpan + i + 1);
+
+            result[i] = IntervalType(t0, t1);
+        }
+
+        return result;
+    }
+
+    std::vector<IntervalType>
+    SpansV() const
+    {
+        int firstSpan = DegreeV() - 1;
+        int lastSpan = NbKnotsV() - DegreeV() - 1;
+
+        int nbSpans = lastSpan - firstSpan + 1;
+
+        std::vector<IntervalType> result(nbSpans);
+
+        for (int i = 0; i < nbSpans; i++) {
+            ScalarType t0 = KnotV(firstSpan + i);
+            ScalarType t1 = KnotV(firstSpan + i + 1);
+
+            result[i] = IntervalType(t0, t1);
+        }
+
+        return result;
+    }
 };
 
 using SurfaceGeometryBase1D = SurfaceGeometryBase<Point1D>;
