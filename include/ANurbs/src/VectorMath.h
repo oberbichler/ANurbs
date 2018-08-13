@@ -188,7 +188,8 @@ SquaredNorm(
 }
 
 template <typename T>
-static ScalarTypeOf<T>
+static typename std::result_of<decltype(&Internals::Norm<T>::get)(const T&)>
+    ::type
 Norm(
     const T& vector)
 {
@@ -196,46 +197,13 @@ Norm(
 }
 
 template <typename T>
-static typename std::result_of<typename Internals::Cross<T>::get(const T&, const T&)>::type
+static typename std::result_of<decltype(&Internals::Cross<T>::get)(const T&,
+    const T&)>::type
 Cross(
     const T& u,
     const T& v)
 {
     return Internals::Cross<T>::get(u, v);
 }
-
-
-template <typename TVector>
-struct VectorMath
-{
-    using VectorType = TVector;
-    using ScalarType = typename Internals::Scalar<VectorType>::type;
-
-    template <int T = DimensionOf<VectorType>(),
-        typename = typename std::enable_if<T == 2>::type>
-    static ScalarType
-    Cross(
-        VectorType& u,
-        VectorType& v)
-    {
-        return Nth(v, 0) * Nth(u, 1) - Nth(v, 1) * Nth(u, 0);
-    }
-
-    template <int T = DimensionOf<VectorType>(),
-        typename = typename std::enable_if<T == 3>::type>
-    static VectorType
-    Cross(
-        VectorType& u,
-        VectorType& v)
-    {
-        VectorType result;
-
-        result[0] = Nth(v, 1) * Nth(u, 2) - Nth(v, 2) * Nth(u, 1);
-        result[1] = Nth(v, 2) * Nth(u, 0) - Nth(v, 0) * Nth(u, 2);
-        result[2] = Nth(v, 0) * Nth(u, 1) - Nth(v, 1) * Nth(u, 0);
-
-        return result;
-    }
-};
 
 } // namespace ANurbs
