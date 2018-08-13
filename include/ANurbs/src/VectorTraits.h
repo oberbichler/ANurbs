@@ -178,13 +178,7 @@ static ScalarTypeOf<T>
 SquaredNorm(
     const T& v)
 {
-    ScalarTypeOf<T> sqSum {0};
-
-    for (int i = 0; i < DimensionOf<T>(); i++) {
-        sqSum += Nth(v, i) * Nth(v, i);
-    }
-
-    return sqSum;
+    return Internals::SquaredNorm<T>::get(v);
 }
 
 template <typename T>
