@@ -95,8 +95,6 @@ public:
     Compute(
         const VectorType& sample)
     {
-        using Vector = VectorMath<VectorType>;
-
         auto domain = Curve()->Domain();
 
         // closest point to polyline
@@ -197,8 +195,6 @@ private:
         const ScalarType& t1
     )
     {
-        using Vector = VectorMath<VectorType>;
-
         VectorType dif = b - a;
         ScalarType l = SquaredNorm(dif);
 

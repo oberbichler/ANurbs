@@ -3,7 +3,7 @@
 #include "Knots.h"
 #include "Math.h"
 #include "Util.h"
-#include "VectorMath.h"
+#include "VectorTraits.h"
 
 #include <functional>
 #include <vector>

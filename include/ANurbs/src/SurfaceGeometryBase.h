@@ -3,7 +3,7 @@
 #include "Interval.h"
 #include "Knots.h"
 #include "SurfaceShapeEvaluator.h"
-#include "VectorMath.h"
+#include "VectorTraits.h"
 
 #include <vector>
 

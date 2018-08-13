@@ -54,8 +54,6 @@ public:
         const VectorType& lineA,
         const VectorType& lineB)
     {
-        using Vector = VectorMath<VectorType>;
-
         VectorType v = lineA - point;
         VectorType u = lineB - lineA;
 

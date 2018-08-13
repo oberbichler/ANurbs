@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Interval.h"
-#include "VectorMath.h"
+#include "VectorTraits.h"
 
 #include <vector>
 
