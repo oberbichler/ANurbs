@@ -2,7 +2,7 @@
 
 #include "CurveShapeEvaluator.h"
 #include "Math.h"
-#include "VectorMath.h"
+#include "VectorTraits.h"
 
 #include <vector>
 

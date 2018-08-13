@@ -11,7 +11,7 @@ public:
     using CurveBaseType = CurveBase<TVector>;
 
     using VectorType = TVector;
-    using ScalarType = typename Internals::Scalar<VectorType>::type;
+    using ScalarType = ScalarTypeOf<VectorType>;
     using IntervalType = Interval<ScalarType>;
 
 private:
@@ -54,12 +54,10 @@ public:
         const VectorType& lineA,
         const VectorType& lineB)
     {
-        using Vector = VectorMath<VectorType>;
-
         VectorType v = lineA - point;
         VectorType u = lineB - lineA;
 
-        return Vector::Norm(Vector::Cross(v, u)) / Vector::Norm(u);
+        return Norm(Cross(v, u)) / Norm(u);
     }
 
     void
