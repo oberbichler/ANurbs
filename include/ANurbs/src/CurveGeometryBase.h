@@ -14,7 +14,7 @@ class CurveGeometryBase
 {
 public:
     using VectorType = TVector;
-    using ScalarType = typename Internals::Scalar<VectorType>::type;
+    using ScalarType = ScalarTypeOf<VectorType>;
     using KnotsType = std::vector<ScalarType>;
     using IntervalType = Interval<ScalarType>;
 
@@ -34,7 +34,7 @@ public:
     static constexpr int
     Dimension()
     {
-        return Internals::Dimension<VectorType>::value;
+        return DimensionOf<VectorType>();
     }
 
     int

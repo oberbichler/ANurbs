@@ -14,14 +14,14 @@ public:
     using SurfaceBaseType = SurfaceBase<TVector>;
 
     using VectorType = TVector;
-    using ScalarType = typename Internals::Scalar<VectorType>::type;
+    using ScalarType = ScalarTypeOf<VectorType>;
     using IntervalType = Interval<ScalarType>;
 
 public:
     static constexpr int
     Dimension()
     {
-        return Internals::Dimension<VectorType>::value;
+        return DimensionOf<VectorType>();
     }
 
     virtual IntervalType

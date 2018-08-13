@@ -15,14 +15,14 @@ public:
     using CurveBaseType = CurveBase<TVector>;
 
     using VectorType = TVector;
-    using ScalarType = typename Internals::Scalar<VectorType>::type;
+    using ScalarType = ScalarTypeOf<VectorType>;
     using IntervalType = Interval<ScalarType>;
 
 public:
     static constexpr int
     Dimension()
     {
-        return Internals::Dimension<VectorType>::value;
+        return DimensionOf<VectorType>();
     }
 
     virtual IntervalType
@@ -66,7 +66,7 @@ public:
     {
         auto f = [&](ScalarType t) -> ScalarType {
             auto tangent = DerivativesAt(t, 1)[1];
-            return VectorMath<VectorType>::Norm(tangent);
+            return Norm(tangent);
         };
 
         return Math::Romberg(f, t0, t1, 1000, tolerance);

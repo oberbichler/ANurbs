@@ -19,7 +19,7 @@ public:
     using SurfaceGeometryType = SurfaceGeometryBase<TVector>;
 
     using VectorType = typename SurfaceGeometryType::VectorType;
-    using ScalarType = typename Internals::Scalar<VectorType>::type;
+    using ScalarType = ScalarTypeOf<VectorType>;
     using IntervalType = typename CurveBaseType::IntervalType;
 
 private:

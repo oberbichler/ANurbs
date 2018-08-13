@@ -16,7 +16,7 @@ class CurveSpanIntersection
 {
 public:
     using VectorType = TVector;
-    using ScalarType = typename Internals::Scalar<VectorType>::type;
+    using ScalarType = ScalarTypeOf<VectorType>;
 
     using CurveType = CurveBase<VectorType>;
 

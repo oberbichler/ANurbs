@@ -15,7 +15,7 @@ class PointOnCurveProjection
 {
 public:
     using VectorType = TVector;
-    using ScalarType = typename Internals::Scalar<VectorType>::type;
+    using ScalarType = ScalarTypeOf<VectorType>;
 
     using CurveBaseType = CurveBase<VectorType>;
 
@@ -118,7 +118,7 @@ public:
             ScalarType parameter = projection.parameter;
             VectorType point = projection.point;
 
-            auto sqrDistance = Vector::SquaredNorm(point - sample);
+            auto sqrDistance = SquaredNorm(point - sample);
 
             if (sqrDistance < closestSqrDistance) {
                 closestSqrDistance = sqrDistance;
@@ -138,10 +138,10 @@ public:
 
             VectorType dif = f[0] - sample;
 
-            ScalarType c1v = Vector::Norm(dif);
+            ScalarType c1v = Norm(dif);
 
-            ScalarType c2n = Vector::Dot(f[1], dif);
-            ScalarType c2d = Vector::Norm(f[1]) * c1v;
+            ScalarType c2n = Dot(f[1], dif);
+            ScalarType c2d = Norm(f[1]) * c1v;
             ScalarType c2v = c2d != 0 ? c2n / c2d : 0;
 
             bool c1 = c1v < eps1;
@@ -151,8 +151,8 @@ public:
                 break;
             }
 
-            ScalarType delta = Vector::Dot(f[1], dif) / (Vector::Dot(f[2], dif)
-                + Vector::SquaredNorm(f[1]));
+            ScalarType delta = Dot(f[1], dif) / (Dot(f[2], dif)
+                + SquaredNorm(f[1]));
 
             ScalarType nextParameter = closestParameter - delta;
 
@@ -165,11 +165,11 @@ public:
 
         closestPoint = Curve()->PointAt(closestParameter);
         
-        closestSqrDistance = Vector::SquaredNorm(sample - closestPoint);
+        closestSqrDistance = SquaredNorm(sample - closestPoint);
 
         VectorType pointAtT0 = Curve()->PointAt(domain.T0());
 
-        if (Vector::SquaredNorm(sample - pointAtT0) < closestSqrDistance) {
+        if (SquaredNorm(sample - pointAtT0) < closestSqrDistance) {
             m_parameter = domain.T0();
             m_point = pointAtT0;
             return;
@@ -177,7 +177,7 @@ public:
 
         VectorType pointAtT1 = Curve()->PointAt(domain.T1());
 
-        if (Vector::SquaredNorm(sample - pointAtT1) < closestSqrDistance) {
+        if (SquaredNorm(sample - pointAtT1) < closestSqrDistance) {
             m_parameter = domain.T1();
             m_point = pointAtT1;
             return;
@@ -200,7 +200,7 @@ private:
         using Vector = VectorMath<VectorType>;
 
         VectorType dif = b - a;
-        ScalarType l = Vector::SquaredNorm(dif);
+        ScalarType l = SquaredNorm(dif);
 
         if (l < 1e-14) {
             return {t0, a};
@@ -209,7 +209,7 @@ private:
         VectorType o = a;
         VectorType r = dif * (1.0 / l);
         VectorType o2pt = point - o;
-        ScalarType do2ptr = Vector::Dot(o2pt, r);
+        ScalarType do2ptr = Dot(o2pt, r);
 
         if (do2ptr < 0) {
             return {t0, a};

@@ -25,18 +25,185 @@ struct Scalar<Point<TScalar, TDimension>>
     using type = typename Point<TScalar, TDimension>::ScalarType;
 };
 
+template <>
+struct Scalar<double>
+{
+    using type = double;
+};
+
 template <typename T>
 struct Zero;
 
 template <typename TScalar, int TDimension>
 struct Zero<Point<TScalar, TDimension>>
 {
-    static Point<TScalar, TDimension> get() {
+    static Point<TScalar, TDimension>
+    get()
+    {
         return Point<TScalar, TDimension>();
     }
 };
 
+template <typename T>
+struct Nth
+{
+    static inline typename Scalar<T>::type
+    get(
+        const T& vector,
+        const int index)
+    {
+        return vector[index];
+    }
+};
+
+template <typename T>
+struct SquaredNorm
+{
+    static typename Scalar<T>::type
+    get(
+        const T& v)
+    {
+        typename Scalar<T>::type sqSum {0};
+
+        for (int i = 0; i < Dimension<T>::value; i++) {
+            sqSum += Nth<T>::get(v, i) * Nth<T>::get(v, i);
+        }
+
+        return sqSum;
+    }
+};
+
+template <typename T, typename = void>
+struct Norm
+{
+    static typename Scalar<T>::type
+    get(
+        const T& vector)
+    {
+        typename Scalar<T>::type sqSum = SquaredNorm<T>::get(vector);
+
+        return std::sqrt(sqSum);
+    }
+};
+
+template <typename T>
+struct Norm<T, typename std::enable_if<std::is_arithmetic<T>::value>::type>
+{
+    static double
+    get(
+        const double& scalar)
+    {
+        return std::abs(scalar);
+    }
+};
+
+template <typename T, typename = void>
+struct Cross;
+
+template <typename T>
+struct Cross<T, typename std::enable_if<Dimension<T>::value == 2>::type>
+{
+    static double
+    get(
+        const T& u,
+        const T& v)
+    {
+        return Nth<T>::get(v, 0) * Nth<T>::get(u, 1) - Nth<T>::get(v, 1) * Nth<T>::get(u, 0);
+    }
+};
+
+template <typename T>
+struct Cross<T, typename std::enable_if<Dimension<T>::value == 3>::type>
+{
+    static T
+    get(
+        const T& u,
+        const T& v)
+    {
+        T result;
+
+        result[0] = Nth<T>::get(v, 1) * Nth<T>::get(u, 2) - Nth<T>::get(v, 2) * Nth<T>::get(u, 1);
+        result[1] = Nth<T>::get(v, 2) * Nth<T>::get(u, 0) - Nth<T>::get(v, 0) * Nth<T>::get(u, 2);
+        result[2] = Nth<T>::get(v, 0) * Nth<T>::get(u, 1) - Nth<T>::get(v, 1) * Nth<T>::get(u, 0);
+
+        return result;
+    }
+};
+
 } // namespace Internals
+
+template <typename T>
+using ScalarTypeOf = typename Internals::Scalar<T>::type;
+
+template <typename T>
+static constexpr int
+DimensionOf()
+{
+    return Internals::Dimension<T>::value;
+}
+
+template <typename T>
+static ScalarTypeOf<T>
+Nth(
+    const T& vector,
+    const int index)
+{
+    return Internals::Nth<T>::get(vector, index);
+}
+
+template <typename T>
+static T
+Zero()
+{
+    return Internals::Zero<T>::get();
+}
+
+template <typename T>
+static ScalarTypeOf<T>
+Dot(
+    const T& u,
+    const T& v)
+{
+    ScalarTypeOf<T> result {0};
+
+    for (int i = 0; i < DimensionOf<T>(); i++) {
+        result += Nth(u, i) * Nth(v, i);
+    }
+
+    return result;
+}
+
+template <typename T>
+static ScalarTypeOf<T>
+SquaredNorm(
+    const T& v)
+{
+    ScalarTypeOf<T> sqSum {0};
+
+    for (int i = 0; i < DimensionOf<T>(); i++) {
+        sqSum += Nth(v, i) * Nth(v, i);
+    }
+
+    return sqSum;
+}
+
+template <typename T>
+static ScalarTypeOf<T>
+Norm(
+    const T& vector)
+{
+    return Internals::Norm<T>::get(vector);
+}
+
+template <typename T>
+static typename std::result_of<typename Internals::Cross<T>::get(const T&, const T&)>::type
+Cross(
+    const T& u,
+    const T& v)
+{
+    return Internals::Cross<T>::get(u, v);
+}
+
 
 template <typename TVector>
 struct VectorMath
@@ -44,79 +211,28 @@ struct VectorMath
     using VectorType = TVector;
     using ScalarType = typename Internals::Scalar<VectorType>::type;
 
-    static constexpr int
-    Dimension()
-    {
-        return Internals::Dimension<VectorType>::value;
-    }
-
-    static ScalarType
-    Dot(
-        const VectorType& u,
-        const VectorType& v)
-    {
-        ScalarType result{ 0 };
-
-        for (int i = 0; i < Dimension(); i++) {
-            result += u[i] * v[i];
-        }
-
-        return result;
-    }
-
-    static ScalarType
-    SquaredNorm(
-        const VectorType& vector)
-    {
-        ScalarType sqSum{ 0 };
-
-        for (int i = 0; i < Dimension(); i++) {
-            sqSum += vector[i] * vector[i];
-        }
-
-        return sqSum;
-    }
-
-    static ScalarType
-    Norm(
-        const VectorType& vector)
-    {
-        ScalarType sqSum = SquaredNorm(vector);
-
-        return std::sqrt(sqSum);
-    }
-
-    static ScalarType
-    Norm(
-        const ScalarType& scalar)
-    {
-        return std::abs(scalar);
-    }
-
-    template <int T = Dimension(),
+    template <int T = DimensionOf<VectorType>(),
         typename = typename std::enable_if<T == 2>::type>
     static ScalarType
     Cross(
         VectorType& u,
-        VectorType& v
-    )
+        VectorType& v)
     {
-        return v[0] * u[1] - v[1] * u[0];
+        return Nth(v, 0) * Nth(u, 1) - Nth(v, 1) * Nth(u, 0);
     }
 
-    template <int T = Dimension(),
+    template <int T = DimensionOf<VectorType>(),
         typename = typename std::enable_if<T == 3>::type>
     static VectorType
     Cross(
         VectorType& u,
-        VectorType& v
-    )
+        VectorType& v)
     {
         VectorType result;
 
-        result[0] = v[1] * u[2] - v[2] * u[1];
-        result[1] = v[2] * u[0] - v[0] * u[2];
-        result[2] = v[0] * u[1] - v[1] * u[0];
+        result[0] = Nth(v, 1) * Nth(u, 2) - Nth(v, 2) * Nth(u, 1);
+        result[1] = Nth(v, 2) * Nth(u, 0) - Nth(v, 0) * Nth(u, 2);
+        result[2] = Nth(v, 0) * Nth(u, 1) - Nth(v, 1) * Nth(u, 0);
 
         return result;
     }
