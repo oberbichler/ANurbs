@@ -116,7 +116,7 @@ public:
             ScalarType parameter = projection.parameter;
             VectorType point = projection.point;
 
-            auto sqrDistance = SquaredNorm(point - sample);
+            auto sqrDistance = SquaredNorm(VectorType(point - sample));
 
             if (sqrDistance < closestSqrDistance) {
                 closestSqrDistance = sqrDistance;
@@ -163,11 +163,11 @@ public:
 
         closestPoint = Curve()->PointAt(closestParameter);
         
-        closestSqrDistance = SquaredNorm(sample - closestPoint);
+        closestSqrDistance = SquaredNorm(VectorType(sample - closestPoint));
 
         VectorType pointAtT0 = Curve()->PointAt(domain.T0());
 
-        if (SquaredNorm(sample - pointAtT0) < closestSqrDistance) {
+        if (SquaredNorm(VectorType(sample - pointAtT0)) < closestSqrDistance) {
             m_parameter = domain.T0();
             m_point = pointAtT0;
             return;
@@ -175,7 +175,7 @@ public:
 
         VectorType pointAtT1 = Curve()->PointAt(domain.T1());
 
-        if (SquaredNorm(sample - pointAtT1) < closestSqrDistance) {
+        if (SquaredNorm(VectorType(sample - pointAtT1)) < closestSqrDistance) {
             m_parameter = domain.T1();
             m_point = pointAtT1;
             return;
