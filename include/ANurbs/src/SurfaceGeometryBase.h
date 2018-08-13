@@ -108,9 +108,9 @@ public:
         return static_cast<int>(m_knotsU.size());
     }
 
-    ScalarType&
+    ScalarType
     KnotU(
-        const int index)
+        const int index) const
     {
         return m_knotsU[index];
     }
@@ -135,9 +135,9 @@ public:
         return static_cast<int>(m_knotsV.size());
     }
 
-    ScalarType&
+    ScalarType
     KnotV(
-        const int index)
+        const int index) const
     {
         return m_knotsV[index];
     }
