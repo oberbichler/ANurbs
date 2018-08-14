@@ -163,6 +163,26 @@ public:
         return NbNonzeroPolesU() * NbNonzeroPolesV();
     }
 
+    std::vector<std::pair<int, int>>
+    NonzeroPoleIndices() const
+    {
+        std::vector<std::pair<int, int>> indices(NbNonzeroPoles());
+
+        for (int i = 0; i < NbNonzeroPolesU(); i++) {
+            for (int j = 0; j < NbNonzeroPolesV(); j++) {
+                int poleIndex = Math::MatrixIndex(NbNonzeroPolesU(),
+                    NbNonzeroPolesV(), i, j);
+
+                int poleU = FirstNonzeroPoleU() + i;
+                int poleV = FirstNonzeroPoleV() + j;
+
+                indices[poleIndex] = {poleU, poleV};
+            }
+        }
+
+        return indices;
+    }
+
     const ScalarType
     Value(
         const int derivative,
