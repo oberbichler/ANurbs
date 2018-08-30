@@ -80,9 +80,24 @@ struct Norm
     get(
         const T& vector)
     {
-        typename Scalar<T>::type sqSum = SquaredNorm<T>::get(vector);
+        Scalar<T>::type scale {0};
 
-        return std::sqrt(sqSum);
+        for (int i = 0; i < Dimension<T>::value; i++) {
+            scale += std::abs(Nth<T>::get(vector, i));
+        }
+
+        if (scale == 0) {
+            return 0;
+        }
+
+        Scalar<T>::type scaledSum {0};
+
+        for (int i = 0; i < Dimension<T>::value; i++) {
+            const Scalar<T>::type si = Nth<T>::get(vector, i) / scale;
+            scaledSum += si * si;
+        }
+
+        return scale * std::sqrt(scaledSum);
     }
 };
 
