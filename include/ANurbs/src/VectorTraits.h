@@ -93,7 +93,7 @@ struct Norm
         typename Scalar<T>::type scaledSum {0};
 
         for (int i = 0; i < Dimension<T>::value; i++) {
-            const Scalar<T>::type si = Nth<T>::get(vector, i) / scale;
+            const typename Scalar<T>::type si = Nth<T>::get(vector, i) / scale;
             scaledSum += si * si;
         }
 
