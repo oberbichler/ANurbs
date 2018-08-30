@@ -80,7 +80,7 @@ struct Norm
     get(
         const T& vector)
     {
-        Scalar<T>::type scale {0};
+        typename Scalar<T>::type scale {0};
 
         for (int i = 0; i < Dimension<T>::value; i++) {
             scale += std::abs(Nth<T>::get(vector, i));
@@ -90,7 +90,7 @@ struct Norm
             return 0;
         }
 
-        Scalar<T>::type scaledSum {0};
+        typename Scalar<T>::type scaledSum {0};
 
         for (int i = 0; i < Dimension<T>::value; i++) {
             const Scalar<T>::type si = Nth<T>::get(vector, i) / scale;
