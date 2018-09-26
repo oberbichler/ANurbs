@@ -27,7 +27,6 @@ TEST_CASE( "Knot utilities", "[Knots]" ) {
     int degree = 3;
     int nbKnots = 8;
     int nbPoles = 6;
-    int nbSpans = 3;
 
     SECTION( "Degree" ) {
         CHECK( ANurbs::Knots::Degree(nbKnots, nbPoles) == degree );
@@ -42,6 +41,6 @@ TEST_CASE( "Knot utilities", "[Knots]" ) {
     }
 
     SECTION( "Number of spans" ) {
-        CHECK( ANurbs::Knots::NbSpans(degree, nbKnots) == nbSpans );
+        CHECK( ANurbs::Knots::NbSpans(degree, nbKnots) == 3 );
     }
 }
