@@ -99,6 +99,13 @@ public:
         m_nbCols = nbCols;
         m_values.resize(nbRows * nbCols);
     }
+
+    void
+    Clear()
+    {
+        m_values.clear();
+        m_values.resize(nbRows * nbCols);
+    }
 };
 
 } // namespace ANurbs
