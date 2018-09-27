@@ -104,7 +104,7 @@ public:
     Clear()
     {
         m_values.clear();
-        m_values.resize(NbRows() * NbCols());
+        m_values.resize(NbValues());
     }
 };
 
