@@ -1,5 +1,6 @@
 add_executable(run_tests
     main.cc
+    TestKnots.cc
     TestPoint.cc
     TestCurveShapeEvaluator.cc
     TestCurveGeometry.cc

@@ -89,6 +89,23 @@ public:
 
         m_values[index] = value;
     }
+
+    void
+    Resize(
+        const int nbRows,
+        const int nbCols)
+    {
+        m_nbRows = nbRows;
+        m_nbCols = nbCols;
+        m_values.resize(nbRows * nbCols);
+    }
+
+    void
+    Clear()
+    {
+        m_values.clear();
+        m_values.resize(NbValues());
+    }
 };
 
 } // namespace ANurbs
