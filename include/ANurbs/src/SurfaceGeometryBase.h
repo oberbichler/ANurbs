@@ -179,6 +179,17 @@ public:
         const int indexU,
         const int indexV) const = 0;
 
+    void
+    SetPole(
+        const int index,
+        const VectorType& value)
+    {
+        const int indexU = index / NbPolesV();
+        const int indexV = index % NbPolesV();
+
+        SetPole(indexU, indexV, value);
+    }
+
     virtual void
     SetPole(
         const int indexU,
@@ -190,6 +201,17 @@ public:
     Weight(
         const int indexU,
         const int indexV) const = 0;
+
+    void
+    SetWeight(
+        const int index,
+        const ScalarType value)
+    {
+        const int indexU = index / NbPolesV();
+        const int indexV = index % NbPolesV();
+
+        SetWeight(indexU, indexV, value);
+    }
 
     virtual void
     SetWeight(

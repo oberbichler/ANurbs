@@ -81,6 +81,14 @@ public:
 
     void
     SetValue(
+        const int index,
+        const DataType value)
+    {
+        m_values[index] = value;
+    }
+
+    void
+    SetValue(
         const int row,
         const int col,
         const DataType& value)
