@@ -82,7 +82,7 @@ public:
     void
     SetValue(
         const int index,
-        const ScalarType value)
+        const DataType value)
     {
         m_values[index] = value;
     }
