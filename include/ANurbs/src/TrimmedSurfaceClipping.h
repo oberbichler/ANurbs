@@ -225,37 +225,13 @@ public:
     }
 
     template <typename TVector>
-    void
-    AddCurveOnSurface(
-        CurveOnSurface<Vector2Type, TVector>& curve)
-    {
-        CurveTessellation<TVector> tessellation;
-
-        ClipperLib::Path& path = m_paths.back();
-
-        tessellation.Compute(curve, m_tolerance);
-
-        for (int i = 0; i < tessellation.NbPoints(); i++) {
-            const ScalarType t = tessellation.Parameter(i);
-
-            const auto pt = ToIntPoint(curve.CurveGeometry()->PointAt(t));
-
-            if (i == 0 && path.size() > 0 && path.back() == pt) {
-                continue;
-            }
-
-            path.push_back(pt);
-        }
-    }
-
-    template <typename TVector>
     void Compute(
         SurfaceGeometryBase<TVector>& surface)
     {
-        Compute2(surface.SpansU(), surface.SpansV());
+        Compute(surface.SpansU(), surface.SpansV());
     }
 
-    void Compute2(
+    void Compute(
         const std::vector<IntervalType>& spansU,
         const std::vector<IntervalType>& spansV)
     {
