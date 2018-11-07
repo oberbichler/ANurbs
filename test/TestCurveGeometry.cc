@@ -43,6 +43,28 @@ TEST_CASE( "Geometry of a spatial B-Spline curve", "[CurveGeometry]" ) {
     REQUIRE( geometry.Domain().T0() ==   0              );
     REQUIRE( geometry.Domain().T1() == 131.892570399495 );
 
+    SECTION( "Check Poles" ) {
+        const auto poles = geometry.Poles();
+
+        for (int i = 0; i < poles.size(); i++) {
+            const auto actual = poles[i];
+            const auto expected = geometry.Pole(i);
+            CHECK( actual[0] == expected[0] );
+            CHECK( actual[1] == expected[1] );
+            CHECK( actual[2] == expected[2] );
+        }
+    }
+
+    SECTION( "Check Weights" ) {
+        const auto weights = geometry.Weights();
+
+        for (int i = 0; i < weights.size(); i++) {
+            const auto actual = weights[i];
+            const auto expected = geometry.Weight(i);
+            CHECK( actual == expected );
+        }
+    }
+
     SECTION( "PointAt(t=0.0)" ) {
         auto point = geometry.PointAt(0.0);
 
@@ -155,7 +177,7 @@ TEST_CASE( "Geometry of a spatial Nurbs curve", "[CurveGeometry]" ) {
     geometry.SetPole(5, { 15,  15,   6});
     geometry.SetPole(6, {- 5, - 5, - 3});
     geometry.SetPole(7, {-25,  15,   4});
-    
+
     geometry.SetWeight(0, 1.0);
     geometry.SetWeight(1, 1.0);
     geometry.SetWeight(2, 1.0);
@@ -262,7 +284,7 @@ TEST_CASE( "Geometry of a spatial Nurbs curve", "[CurveGeometry]" ) {
 
 TEST_CASE( "Refinement of a BSpline curve", "[CurveGeometry][Refinement][BSpline]" ) {
     CurveGeometry1D curve(2, 4, false);
-    
+
     curve.SetKnot(0, 0.0);
     curve.SetKnot(1, 0.0);
     curve.SetKnot(2, 1.0);
@@ -306,7 +328,7 @@ TEST_CASE( "Refinement of a BSpline curve", "[CurveGeometry][Refinement][BSpline
 
 TEST_CASE( "Refinement of a Nurbs curve", "[CurveGeometry][Refinement][Nurbs]" ) {
     CurveGeometry1D curve(2, 4, true);
-    
+
     curve.SetKnot(0, 0.0);
     curve.SetKnot(1, 0.0);
     curve.SetKnot(2, 1.0);
@@ -350,7 +372,7 @@ TEST_CASE( "Refinement of a Nurbs curve", "[CurveGeometry][Refinement][Nurbs]" )
         CHECK( result.Weight(4) == Approx( 2.60 ) );
         CHECK( result.Weight(5) == Approx( 1.00 ) );
         CHECK( result.Weight(6) == Approx( 1.00 ) );
-    } 
+    }
 
     SECTION( "Check poles" ) {
         CHECK( result.NbPoles() == 7 );

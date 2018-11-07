@@ -87,6 +87,18 @@ public:
         const VectorType& value)
         = 0;
 
+    std::vector<VectorType>
+    Poles() const
+    {
+        std::vector<VectorType> poles(NbPoles());
+
+        for (int i = 0; i < poles.size(); i++) {
+            poles[i] = Pole(i);
+        }
+
+        return poles;
+    }
+
     virtual bool
     IsRational() const = 0;
 
@@ -99,6 +111,18 @@ public:
         const int index,
         const ScalarType value)
         = 0;
+
+    std::vector<ScalarType>
+    Weights() const
+    {
+        std::vector<ScalarType> weights(NbPoles());
+
+        for (int i = 0; i < weights.size(); i++) {
+            weights[i] = Weight(i);
+        }
+
+        return weights;
+    }
 
     VectorType
     WeightedPole(
