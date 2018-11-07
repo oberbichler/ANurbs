@@ -89,17 +89,9 @@ public:
             contours.push_back(inner_path);
         }
 
-        for (std::size_t i = 0; i < contours.size(); i++) {
-            for (std::size_t j = 0; j < contours[i].size(); j++) {
-                contours[i][j] *= 100;
-            }
-        }
+        // FIXME: Check for quad
 
-        // if (contours.size() == 1 && contours[0].size() == 4) {
-        //     m_quads = {{0, 1, 2, 3}};
-        // } else {
         m_triangles = mapbox::earcut<int>(contours);
-        // }
     }
 
     int
