@@ -24,6 +24,12 @@ public:
         return DimensionOf<VectorType>();
     }
 
+    virtual int
+    DegreeU() const = 0;
+
+    virtual int
+    DegreeV() const = 0;
+
     virtual IntervalType
     DomainU() const = 0;
 
