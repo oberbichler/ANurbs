@@ -195,6 +195,14 @@ public:
     }
 
     const ScalarType
+    Value(
+        const int derivative,
+        const int pole) const
+    {
+        return m_values[pole];
+    }
+
+    const ScalarType
     GetValue(
         const int derivative,
         const int poleU,
