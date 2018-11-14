@@ -51,13 +51,13 @@ public:
     }
 
     int
-    DegreeU() const
+    DegreeU() const override
     {
         return m_surfaceGeometry->DegreeU();
     }
 
     int
-    DegreeV() const
+    DegreeV() const override
     {
         return m_surfaceGeometry->DegreeV();
     }

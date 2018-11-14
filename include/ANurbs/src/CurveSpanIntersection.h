@@ -180,7 +180,7 @@ private:
 public:
     void
     Compute(
-        CurveType& curve,
+        const CurveType& curve,
         const std::vector<ScalarType>& knotsU,
         const std::vector<ScalarType>& knotsV,
         const ScalarType tolerance,

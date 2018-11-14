@@ -175,6 +175,16 @@ public:
         return NbPolesU() * NbPolesV();
     }
 
+    VectorType
+    Pole(
+        const int index) const
+    {
+        const int indexU = index / NbPolesV();
+        const int indexV = index % NbPolesV();
+
+        return Pole(indexU, indexV);
+    }
+
     virtual VectorType
     Pole(
         const int indexU,
