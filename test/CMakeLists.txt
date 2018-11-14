@@ -13,6 +13,8 @@ add_executable(run_tests
     TestIntegrationPoints.cc
     TestCurveSpanIntersection.cc
     TestPointOnCurveProjection.cc
+
+    "${PROJECT_SOURCE_DIR}/external_libraries/ClipperLib/clipper.cpp"
 )
 
 install(TARGETS run_tests DESTINATION bin)
