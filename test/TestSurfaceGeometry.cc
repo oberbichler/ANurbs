@@ -40,6 +40,32 @@ TEST_CASE( "Geometry of a spatial B-Spline surface", "[SurfaceGeometry]" ) {
     geometry.SetPole(3, 1, {  5.0,   4.0, -1.0         });
     geometry.SetPole(3, 2, {  5.0,  11.0,  0.7649815786});
 
+    SECTION( "Check Poles" ) {
+        const auto poles = geometry.Poles();
+
+        for (int i = 0; i < poles.NbRows(); i++) {
+            for (int j = 0; j < poles.NbCols(); j++) {
+                const auto actual = poles(i, j);
+                const auto expected = geometry.Pole(i, j);
+                CHECK( actual[0] == expected[0] );
+                CHECK( actual[1] == expected[1] );
+                CHECK( actual[2] == expected[2] );
+            }
+        }
+    }
+
+    SECTION( "Check Weights" ) {
+        const auto weights = geometry.Weights();
+
+        for (int i = 0; i < weights.NbRows(); i++) {
+            for (int j = 0; j < weights.NbCols(); j++) {
+                const auto actual = weights(i, j);
+                const auto expected = geometry.Weight(i, j);
+                CHECK( actual == expected );
+            }
+        }
+    }
+
     SECTION( "Degrees" ) {
         REQUIRE( geometry.DegreeU() == 2 );
         REQUIRE( geometry.DegreeV() == 1 );
@@ -137,7 +163,7 @@ TEST_CASE( "Geometry of a spatial Nurbs surface", "[SurfaceGeometry]" ) {
     geometry.SetPole(3, 0, {  4.0, - 2.0,  0.0         });
     geometry.SetPole(3, 1, {  5.0,   4.0, -1.0         });
     geometry.SetPole(3, 2, {  5.0,  11.0,  0.7649815786});
-    
+
     geometry.SetWeight(0, 0, 1.0);
     geometry.SetWeight(0, 1, 1.0);
     geometry.SetWeight(0, 2, 1.0);

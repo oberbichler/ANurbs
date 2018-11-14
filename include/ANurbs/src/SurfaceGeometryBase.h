@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Grid.h"
 #include "Interval.h"
 #include "Knots.h"
 #include "SurfaceShapeEvaluator.h"
@@ -197,6 +198,20 @@ public:
         const VectorType& value)
         = 0;
 
+    Grid<VectorType>
+    Poles() const
+    {
+        Grid<VectorType> poles(NbPolesU(), NbPolesV());
+
+        for (int i = 0; i < poles.NbRows(); i++) {
+            for (int j = 0; j < poles.NbCols(); j++) {
+                poles.SetValue(i, j, Pole(i, j));
+            }
+        }
+
+        return poles;
+    }
+
     virtual ScalarType
     Weight(
         const int indexU,
@@ -219,6 +234,20 @@ public:
         const int indexV,
         const ScalarType value)
         = 0;
+
+    Grid<ScalarType>
+    Weights() const
+    {
+        Grid<ScalarType> weights(NbPolesU(), NbPolesV());
+
+        for (int i = 0; i < weights.NbRows(); i++) {
+            for (int j = 0; j < weights.NbCols(); j++) {
+                weights.SetValue(i, j, Weight(i, j));
+            }
+        }
+
+        return weights;
+    }
 
     virtual bool
     IsRational() const = 0;
