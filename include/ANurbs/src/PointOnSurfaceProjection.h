@@ -45,7 +45,7 @@ private:
             const size_t idx,
             const size_t dim) const
         {
-            return Nth(m_points[idx].point, dim);
+            return Nth(m_points[idx].point, static_cast<int>(dim));
         }
 
         template <typename BBOX>
