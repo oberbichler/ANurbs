@@ -244,6 +244,23 @@ public:
         m_closestPoint = Newton(sample, m_closestPoint.parameterU, m_closestPoint.parameterV);
     }
 
+    std::vector<ScalarType>
+    BoundingBox() const
+    {
+        const int dimension = DimensionOf<VectorType>();
+
+        std::vector<ScalarType> values(dimension * 2);
+
+        const auto& boundingBox = m_index->root_bbox;
+
+        for (int axis = 0; axis < dimension; axis++) {
+            values[axis] = boundingBox[axis].low;
+            values[dimension + axis] = boundingBox[axis].high;
+        }
+
+        return values;
+    }
+
     ParameterPoint
     Newton(
         const VectorType point,
