@@ -31,7 +31,7 @@ private:
 
         PointCloudAdaptor(
             const std::vector<ParameterPoint>& points)
-            : m_points(points)
+        : m_points(points)
         { }
 
         inline size_t
@@ -68,7 +68,7 @@ private:
     ScalarType m_distance;
     int m_gridU;
     int m_gridV;
-    KDTreeType m_index;
+    Unique<KDTreeType> m_index;
     const PointCloudAdaptor m_pointCloudAdaptor;
 
 public:
@@ -76,8 +76,6 @@ public:
         Pointer<SurfaceBaseType> surface)
     : m_surface(surface)
     , m_pointCloudAdaptor(m_tessellation)
-    , m_index(3, m_pointCloudAdaptor,
-        nanoflann::KDTreeSingleIndexAdaptorParams(10))
     {
         std::vector<ScalarType> us;
 
@@ -122,7 +120,10 @@ public:
             }
         }
 
-        m_index.buildIndex();
+        m_index = New<KDTreeType>(3, m_pointCloudAdaptor,
+            nanoflann::KDTreeSingleIndexAdaptorParams(10));
+
+        m_index->buildIndex();
 
         m_gridU = static_cast<int>(us.size()) - 1;
         m_gridV = static_cast<int>(vs.size()) - 1;
@@ -180,7 +181,7 @@ public:
 
         nanoflann::KNNResultSet<ScalarType> resultSet(1);
         resultSet.init(&minIndex, &minDistance);
-        m_index.findNeighbors(resultSet, &sample[0],
+        m_index->findNeighbors(resultSet, &sample[0],
             nanoflann::SearchParams(10));
 
         // ---
