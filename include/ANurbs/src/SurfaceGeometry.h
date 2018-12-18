@@ -44,6 +44,8 @@ public:
         return m_poles(indexU, indexV);
     }
 
+    using SurfaceGeometryBase<VectorType>::Pole;
+
     void
     SetPole(
         const int indexU,
@@ -52,6 +54,8 @@ public:
     {
         return m_poles.SetValue(indexU, indexV, value);
     }
+
+    using SurfaceGeometryBase<VectorType>::SetPole;
 
     ScalarType
     Weight(
@@ -65,6 +69,8 @@ public:
         }
     }
 
+    using SurfaceGeometryBase<VectorType>::Weight;
+
     void
     SetWeight(
         const int indexU,
@@ -77,6 +83,8 @@ public:
             throw std::invalid_argument("Geometry is not rational");
         }
     }
+
+    using SurfaceGeometryBase<VectorType>::SetWeight;
 
     bool
     IsRational() const override

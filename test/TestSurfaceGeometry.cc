@@ -30,7 +30,7 @@ TEST_CASE( "Geometry of a spatial B-Spline surface", "[SurfaceGeometry]" ) {
     geometry.SetPole(0, 0, {-10.0, - 5.0, -1.0         });
     geometry.SetPole(0, 1, {-12.0,   3.0,  3.0         });
     geometry.SetPole(0, 2, {- 9.0,  11.0, -0.0701928417});
-    geometry.SetPole(1, 0, {- 5.0, - 3.0,  1.0         });
+    geometry.SetPole(3,    {- 5.0, - 3.0,  1.0         });
     geometry.SetPole(1, 1, {- 6.0,   4.0, -2.0         });
     geometry.SetPole(1, 2, {- 5.0,   7.0,  0.9298071583});
     geometry.SetPole(2, 0, {  0.0, - 4.0, -1.0         });
@@ -154,7 +154,7 @@ TEST_CASE( "Geometry of a spatial Nurbs surface", "[SurfaceGeometry]" ) {
     geometry.SetPole(0, 0, {-10.0, - 5.0, -1.0         });
     geometry.SetPole(0, 1, {-12.0,   3.0,  3.0         });
     geometry.SetPole(0, 2, {- 9.0,  11.0, -0.0701928417});
-    geometry.SetPole(1, 0, {- 5.0, - 3.0,  1.0         });
+    geometry.SetPole(3,    {- 5.0, - 3.0,  1.0         });
     geometry.SetPole(1, 1, {- 6.0,   4.0, -2.0         });
     geometry.SetPole(1, 2, {- 5.0,   7.0,  0.9298071583});
     geometry.SetPole(2, 0, {  0.0, - 4.0, -1.0         });
@@ -171,7 +171,7 @@ TEST_CASE( "Geometry of a spatial Nurbs surface", "[SurfaceGeometry]" ) {
     geometry.SetWeight(1, 1, 2.5);
     geometry.SetWeight(1, 2, 1.0);
     geometry.SetWeight(2, 0, 1.0);
-    geometry.SetWeight(2, 1, 1.0);
+    geometry.SetWeight(7,    1.0);
     geometry.SetWeight(2, 2, 1.0);
     geometry.SetWeight(3, 0, 1.0);
     geometry.SetWeight(3, 1, 1.0);
