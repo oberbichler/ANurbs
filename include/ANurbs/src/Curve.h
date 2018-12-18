@@ -6,7 +6,7 @@
 
 namespace ANurbs {
 
-template <typename TCurveGeometry>
+template <typename TCurveGeometry, typename THandler=Pointer<TCurveGeometry>>
 class Curve
     : public CurveBase<typename TCurveGeometry::VectorType>
 {
@@ -23,18 +23,18 @@ public:
     using typename CurveBaseType::VectorType;
 
 private:
-    Pointer<CurveGeometryType> m_curveGeometry;
+    THandler m_curveGeometry;
     IntervalType m_domain;
 
 public:
     Curve(
-        Pointer<CurveGeometryType> geometry)
+        THandler geometry)
         : Curve(geometry, geometry->Domain())
     {
     }
 
     Curve(
-        Pointer<CurveGeometryType> geometry,
+        THandler geometry,
         const ScalarType t0,
         const ScalarType t1)
         : m_curveGeometry(geometry)
@@ -43,14 +43,14 @@ public:
     }
 
     Curve(
-        Pointer<CurveGeometryType> geometry,
+        THandler geometry,
         const IntervalType& domain)
         : m_curveGeometry(geometry)
         , m_domain(domain)
     {
     }
 
-    Pointer<CurveGeometryType>
+    THandler
     CurveGeometry() const
     {
         return m_curveGeometry;
