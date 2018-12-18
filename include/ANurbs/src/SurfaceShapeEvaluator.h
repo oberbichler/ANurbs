@@ -325,6 +325,8 @@ public:
         // apply weights
 
         for (int shape = 0; shape < NbShapes(); shape++) {
+            WeightedSum(shape) = ScalarType(0);
+
             for (int i = 0; i < NbNonzeroPolesU(); i++) {
                 for (int j = 0; j < NbNonzeroPolesV(); j++) {
                     int poleU = FirstNonzeroPoleU() + i;

@@ -73,6 +73,24 @@ TEST_CASE( "Shape functions of a surface", "[SurfaceShapeEvaluator]" ) {
         REQUIRE( shape(1, 1, 1) == Approx(-0.0533333333) );
         REQUIRE( shape(1, 2, 0) == Approx( 0.08        ) );
         REQUIRE( shape(1, 2, 1) == Approx( 0.08        ) );
+
+        // check second time
+
+        shape.Compute(knotsU, knotsV, weights, u, v);
+
+        REQUIRE( shape(0, 0, 0) == Approx( 0.04        ) );
+        REQUIRE( shape(0, 0, 1) == Approx( 0.04        ) );
+        REQUIRE( shape(0, 1, 0) == Approx( 0.28        ) );
+        REQUIRE( shape(0, 1, 1) == Approx( 0.28        ) );
+        REQUIRE( shape(0, 2, 0) == Approx( 0.18        ) );
+        REQUIRE( shape(0, 2, 1) == Approx( 0.18        ) );
+
+        REQUIRE( shape(1, 0, 0) == Approx(-0.0266666667) );
+        REQUIRE( shape(1, 0, 1) == Approx(-0.0266666667) );
+        REQUIRE( shape(1, 1, 0) == Approx(-0.0533333333) );
+        REQUIRE( shape(1, 1, 1) == Approx(-0.0533333333) );
+        REQUIRE( shape(1, 2, 0) == Approx( 0.08        ) );
+        REQUIRE( shape(1, 2, 1) == Approx( 0.08        ) );
     }
 
     SECTION( "Compute values of a weighted Nurbs" ) {
