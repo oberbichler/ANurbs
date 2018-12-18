@@ -6,7 +6,7 @@
 
 namespace ANurbs {
 
-template <typename TSurfaceGeometry>
+template <typename TSurfaceGeometry, typename THandler=Pointer<TSurfaceGeometry>>
 class Surface
     : public SurfaceBase<typename TSurfaceGeometry::VectorType>
 {
@@ -23,19 +23,19 @@ public:
     using typename SurfaceBaseType::VectorType;
 
 private:
-    Pointer<SurfaceGeometryType> m_surfaceGeometry;
+    THandler m_surfaceGeometry;
     IntervalType m_domainU;
     IntervalType m_domainV;
 
 public:
     Surface(
-        Pointer<SurfaceGeometryType> geometry)
+        THandler geometry)
         : Surface(geometry, geometry->DomainU(), geometry->DomainV())
     {
     }
 
     Surface(
-        Pointer<SurfaceGeometryType> geometry,
+        THandler geometry,
         const IntervalType& domainU,
         const IntervalType& domainV)
         : m_surfaceGeometry(geometry)
@@ -44,7 +44,7 @@ public:
     {
     }
 
-    Pointer<SurfaceGeometryType>
+    THandler
     SurfaceGeometry() const
     {
         return m_surfaceGeometry;
