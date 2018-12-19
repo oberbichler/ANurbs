@@ -199,16 +199,8 @@ public:
         const int derivative,
         const int pole) const
     {
-        return m_values[pole];
-    }
-
-    const ScalarType
-    GetValue(
-        const int derivative,
-        const int poleU,
-        const int poleV) const
-    {
-        int index = Index(derivative, poleU, poleV);
+        const int index = Math::MatrixIndex(NbShapes(), NbNonzeroPoles(),
+            derivative, pole);
 
         return m_values[index];
     }
