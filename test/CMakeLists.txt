@@ -1,5 +1,4 @@
-add_executable(run_tests
-    main.cc
+add_executable(run_tests run_tests.cc
     TestKnots.cc
     TestPoint.cc
     TestCurveShapeEvaluator.cc
