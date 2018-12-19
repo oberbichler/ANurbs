@@ -18,6 +18,8 @@ public:
     using IntervalType = Interval<ScalarType>;
 
 public:
+    virtual ~SurfaceBase() { }
+
     static constexpr int
     Dimension()
     {

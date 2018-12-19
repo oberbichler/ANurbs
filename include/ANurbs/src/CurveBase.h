@@ -19,6 +19,8 @@ public:
     using IntervalType = Interval<ScalarType>;
 
 public:
+    virtual ~CurveBase() { }
+
     static constexpr int
     Dimension()
     {
