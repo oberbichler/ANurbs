@@ -8,19 +8,43 @@ TEST_CASE( "Shape functions of a B-Spline surface",
 {
     using namespace ANurbs;
 
-    int degreeU = 2;
-    int degreeV = 1;
-    int order = 2;
+    const int degreeU = 2;
+    const int degreeV = 1;
+    const int order = 2;
 
     SurfaceShapeEvaluator<double> shape(degreeU, degreeV, order);
 
     std::vector<double> knotsU = {0, 0, 7.5, 15, 15.0};
     std::vector<double> knotsV = {0, 10, 20};
 
-    double u = 12;
-    double v = 5;
+    const double u = 12;
+    const double v = 5;
 
     shape.Compute(knotsU, knotsV, u, v);
+
+    CHECK( shape.DegreeU() == 2 );
+    CHECK( shape.DegreeV() == 1 );
+    CHECK( shape.NbShapes() == 6 );
+    CHECK( shape.NbNonzeroPoles() == 6 );
+    CHECK( shape.NbNonzeroPolesU() == 3 );
+    CHECK( shape.NbNonzeroPolesV() == 2 );
+    CHECK( shape.FirstNonzeroPoleU() == 1 );
+    CHECK( shape.FirstNonzeroPoleV() == 0 );
+    CHECK( shape.LastNonzeroPoleU() == 3 );
+    CHECK( shape.LastNonzeroPoleV() == 1 );
+
+    SECTION( "Check nonzero pole indices" ) {
+        const auto nonZeroPoleIndices = shape.NonzeroPoleIndices();
+
+        CHECK( nonZeroPoleIndices.size() == 6 );
+
+        CHECK( nonZeroPoleIndices[0] == std::pair<int, int>(1, 0) );
+        CHECK( nonZeroPoleIndices[1] == std::pair<int, int>(1, 1) );
+        CHECK( nonZeroPoleIndices[2] == std::pair<int, int>(2, 0) );
+        CHECK( nonZeroPoleIndices[3] == std::pair<int, int>(2, 1) );
+        CHECK( nonZeroPoleIndices[4] == std::pair<int, int>(3, 0) );
+        CHECK( nonZeroPoleIndices[5] == std::pair<int, int>(3, 1) );
+    }
 
     SECTION( "Double index access" ) {
         REQUIRE( shape(0, 0, 0) == Approx( 0.04        ) );
@@ -96,9 +120,9 @@ TEST_CASE( "Shape functions of a equal weighted Nurbs surface",
 {
     using namespace ANurbs;
 
-    int degreeU = 2;
-    int degreeV = 1;
-    int order = 2;
+    const int degreeU = 2;
+    const int degreeV = 1;
+    const int order = 2;
 
     SurfaceShapeEvaluator<double> shape(degreeU, degreeV, order);
  
@@ -119,10 +143,34 @@ TEST_CASE( "Shape functions of a equal weighted Nurbs surface",
     weights.SetValue(3, 1, 2.0);
     weights.SetValue(3, 2, 2.0);
 
-    double u = 12;
-    double v = 5;
+    const double u = 12;
+    const double v = 5;
 
     shape.Compute(knotsU, knotsV, weights, u, v);
+
+    CHECK( shape.DegreeU() == 2 );
+    CHECK( shape.DegreeV() == 1 );
+    CHECK( shape.NbShapes() == 6 );
+    CHECK( shape.NbNonzeroPoles() == 6 );
+    CHECK( shape.NbNonzeroPolesU() == 3 );
+    CHECK( shape.NbNonzeroPolesV() == 2 );
+    CHECK( shape.FirstNonzeroPoleU() == 1 );
+    CHECK( shape.FirstNonzeroPoleV() == 0 );
+    CHECK( shape.LastNonzeroPoleU() == 3 );
+    CHECK( shape.LastNonzeroPoleV() == 1 );
+
+    SECTION( "Check nonzero pole indices" ) {
+        const auto nonZeroPoleIndices = shape.NonzeroPoleIndices();
+
+        CHECK( nonZeroPoleIndices.size() == 6 );
+
+        CHECK( nonZeroPoleIndices[0] == std::pair<int, int>(1, 0) );
+        CHECK( nonZeroPoleIndices[1] == std::pair<int, int>(1, 1) );
+        CHECK( nonZeroPoleIndices[2] == std::pair<int, int>(2, 0) );
+        CHECK( nonZeroPoleIndices[3] == std::pair<int, int>(2, 1) );
+        CHECK( nonZeroPoleIndices[4] == std::pair<int, int>(3, 0) );
+        CHECK( nonZeroPoleIndices[5] == std::pair<int, int>(3, 1) );
+    }
 
     SECTION( "Double index access" ) {
         REQUIRE( shape(0, 0, 0) == Approx( 0.04        ) );
@@ -198,9 +246,9 @@ TEST_CASE( "Shape functions of a weighted Nurbs surface",
 {
     using namespace ANurbs;
 
-    int degreeU = 2;
-    int degreeV = 1;
-    int order = 2;
+    const int degreeU = 2;
+    const int degreeV = 1;
+    const int order = 2;
 
     SurfaceShapeEvaluator<double> shape(degreeU, degreeV, order);
  
@@ -221,10 +269,34 @@ TEST_CASE( "Shape functions of a weighted Nurbs surface",
     weights.SetValue(3, 1, 1.0);
     weights.SetValue(3, 2, 1.0);
 
-    double u = 12;
-    double v = 5;
+    const double u = 12;
+    const double v = 5;
 
     shape.Compute(knotsU, knotsV, weights, u, v);
+
+    CHECK( shape.DegreeU() == 2 );
+    CHECK( shape.DegreeV() == 1 );
+    CHECK( shape.NbShapes() == 6 );
+    CHECK( shape.NbNonzeroPoles() == 6 );
+    CHECK( shape.NbNonzeroPolesU() == 3 );
+    CHECK( shape.NbNonzeroPolesV() == 2 );
+    CHECK( shape.FirstNonzeroPoleU() == 1 );
+    CHECK( shape.FirstNonzeroPoleV() == 0 );
+    CHECK( shape.LastNonzeroPoleU() == 3 );
+    CHECK( shape.LastNonzeroPoleV() == 1 );
+
+    SECTION( "Check nonzero pole indices" ) {
+        const auto nonZeroPoleIndices = shape.NonzeroPoleIndices();
+
+        CHECK( nonZeroPoleIndices.size() == 6 );
+
+        CHECK( nonZeroPoleIndices[0] == std::pair<int, int>(1, 0) );
+        CHECK( nonZeroPoleIndices[1] == std::pair<int, int>(1, 1) );
+        CHECK( nonZeroPoleIndices[2] == std::pair<int, int>(2, 0) );
+        CHECK( nonZeroPoleIndices[3] == std::pair<int, int>(2, 1) );
+        CHECK( nonZeroPoleIndices[4] == std::pair<int, int>(3, 0) );
+        CHECK( nonZeroPoleIndices[5] == std::pair<int, int>(3, 1) );
+    }
 
     SECTION( "Double index access" ) {
         REQUIRE( shape(0, 0, 0) == Approx( 0.0377358491) );
