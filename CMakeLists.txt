@@ -10,3 +10,11 @@ include_directories(
 )
 
 add_subdirectory(test)
+
+add_subdirectory(external_libraries/pybind11)
+
+pybind11_add_module(ANurbs ${SOURCES}
+    "src/Module.cc"
+)
+
+install(TARGETS ANurbs DESTINATION bin)
