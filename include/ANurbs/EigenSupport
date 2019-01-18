@@ -1,0 +1,105 @@
+#pragma once
+
+#include <ANurbs/Core>
+#include <ANurbs/src/Data/Define.h>
+#include <ANurbs/Integration>
+
+#include <Eigen/Core>
+
+namespace nlohmann {
+    template <>
+    struct adl_serializer<Eigen::Matrix<double, 2, 1>>
+    {
+        template <typename TJson>
+        static void
+        to_json(
+            TJson& json,
+            const Eigen::Matrix<double, 2, 1>& point)
+        {
+            for (int i = 0; i < point.size(); i++) {
+                json.push_back(point[i]);
+            }
+        }
+
+        template <typename TJson>
+        static void
+        from_json(
+            const TJson& json,
+            Eigen::Matrix<double, 2, 1>& point)
+        {
+            assert(json.size() == point.size());
+
+            for (int i = 0; i < point.size(); i++) {
+                json.at(i).get_to(point[i]);
+            }
+        }
+    };
+
+    template <>
+    struct adl_serializer<Eigen::Matrix<double, 3, 1>> {
+        template <typename TJson>
+        static void
+        to_json(
+            TJson& json,
+            const Eigen::Matrix<double, 3, 1>& point)
+        {
+            for (size_t i = 0; i < point.size(); i++) {
+                json.push_back(point[i]);
+            }
+        }
+
+        template <typename TJson>
+        static void
+        from_json(
+            const TJson& json,
+            Eigen::Matrix<double, 3, 1>& point)
+        {
+            assert(json.size() == point.size());
+
+            for (size_t i = 0; i < point.size(); i++) {
+                json.at(i).get_to(point[i]);
+            }
+        }
+    };
+}
+
+namespace ANurbs {
+namespace Internals {
+
+template <typename TScalar, int TDimension>
+struct Dimension<Eigen::Matrix<TScalar, TDimension, 1>>
+{
+    static int constexpr value = TDimension;
+};
+
+template <typename TScalar, int TDimension>
+struct Scalar<Eigen::Matrix<TScalar, TDimension, 1>>
+{
+    using type = TScalar;
+};
+
+template <typename TScalar, int TDimension>
+struct Zero<Eigen::Matrix<TScalar, TDimension, 1>>
+{
+    static Eigen::Matrix<TScalar, TDimension, 1> get()
+    {
+        Eigen::Matrix<TScalar, TDimension, 1> zero;
+        for (std::size_t i = 0; i < TDimension; i++) {
+            zero[i] = 0;
+        }
+        return zero;
+    }
+};
+
+} // namespace Internals
+
+struct EigenTypeFactory
+{
+    template <typename TScalar, int TRows, int TCols>
+    using Matrix = Eigen::Matrix<TScalar, TRows, TCols>;
+
+    template <typename TScalar, int TSize>
+    using Vector = Eigen::Matrix<TScalar, TSize, 1>;
+};
+
+} // namespace ANurbs
