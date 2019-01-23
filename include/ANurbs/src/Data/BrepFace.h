@@ -16,6 +16,7 @@ class BrepFace
 private:
     Ref<Brep> m_brep;
     std::vector<Ref<BrepLoop>> m_loops;
+    Ref<SurfaceGeometry3D> m_geometry;
 
 public:
     static std::string
@@ -69,6 +70,12 @@ public:
             }
         }
 
+        // Read Geometry
+        {
+            const std::string key = data.at("Geometry");
+            result->m_geometry = model.GetLazy<SurfaceGeometry3D>(key);
+        }
+
         return result;
     }
 
@@ -79,6 +86,7 @@ public:
     {
         data["Brep"] = ToJson(m_brep);
         data["Loops"] = ToJson(m_loops);
+        data["Geometry"] = ToJson(m_geometry);
     }
 };
 
