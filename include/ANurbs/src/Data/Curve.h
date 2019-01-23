@@ -37,9 +37,9 @@ struct DataIO<Curve<CurveGeometry<TVector>, Ref<CurveGeometry<TVector>>>>
         const auto geometry = model.GetLazy<CurveGeometry<TVector>>(
             source.at("Geometry"));
 
-        auto result = New<DataType>(geometry, 0, 1);
+        const Interval<double> domain = source.at("Domain");
 
-        return result;
+        return New<DataType>(geometry, domain);
     }
 
     static void
@@ -48,6 +48,8 @@ struct DataIO<Curve<CurveGeometry<TVector>, Ref<CurveGeometry<TVector>>>>
         const DataType& data,
         Json& target)
     {
+        target["Geometry"] = data.CurveGeometry().Key();
+        target["Domain"] = ToJson(data.Domain());
     }
 };
 
