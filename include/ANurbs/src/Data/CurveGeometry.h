@@ -18,8 +18,7 @@ struct DataIO<CurveGeometry<TVector>>
     static std::string
     Type()
     {
-        return "NurbsCurveGeometry" + std::to_string(DimensionOf<TVector>()) + 
-            "D";
+        return "CurveGeometry" + std::to_string(DimensionOf<TVector>()) + "D";
     }
 
     static Unique<DataType>
