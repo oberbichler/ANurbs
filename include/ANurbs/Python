@@ -1,4 +1,3 @@
 #pragma once
 
-#include "./src/Python/RegisterAlgorithms.h"
 #include "./src/Python/RegisterData.h"
