@@ -69,6 +69,8 @@ struct DataIO<SurfaceGeometry<TVector>>
     {
         target["DegreeU"] = data.DegreeU();
         target["DegreeV"] = data.DegreeV();
+        target["NbPolesU"] = data.NbPolesU();
+        target["NbPolesV"] = data.NbPolesV();
         target["KnotsU"] = data.KnotsU();
         target["KnotsV"] = data.KnotsV();
         target["Poles"] = ToJson(data.Poles());
