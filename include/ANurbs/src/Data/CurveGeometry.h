@@ -62,6 +62,7 @@ struct DataIO<CurveGeometry<TVector>>
     {
         target["Degree"] = data.Degree();
         target["Knots"] = data.Knots();
+        target["NbPoles"] = data.NbPoles();
         target["Poles"] = ToJson(data.Poles());
 
         if (data.IsRational()) {
