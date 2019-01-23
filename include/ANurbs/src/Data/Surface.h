@@ -48,6 +48,7 @@ struct DataIO<Surface<SurfaceGeometry<TVector>, Ref<SurfaceGeometry<TVector>>>>
         const DataType& data,
         Json& target)
     {
+        target["Geometry"] = data.SurfaceGeometry().Key();
     }
 };
 
