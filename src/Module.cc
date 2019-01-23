@@ -13,6 +13,5 @@ PYBIND11_MODULE(ANurbs, m) {
 
     using TypeFactory = ANurbs::EigenTypeFactory;
 
-    RegisterAlgorithms<TypeFactory>(m);
     RegisterData<TypeFactory>(m);
 }
