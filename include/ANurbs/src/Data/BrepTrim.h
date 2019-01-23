@@ -79,6 +79,7 @@ public:
     {
         data["Loop"] = ToJson(m_loop);
         data["Edge"] = ToJson(m_edge);
+        data["Geometry"] = ToJson(m_geometry);
     }
 };
 
