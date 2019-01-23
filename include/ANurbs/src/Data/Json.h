@@ -59,6 +59,28 @@ from_json(
     }
 }
 
+void
+from_json(
+    const nlohmann::json& json,
+    Interval<double>& interval)
+{
+    assert(json.size() == 2);
+
+    const auto t0 = json.at(0).get<double>();
+    const auto t1 = json.at(1).get<double>();
+
+    interval = Interval<double>(t0, t1);
+}
+
+void
+to_json(
+    nlohmann::json& json,
+    const Interval<double>& interval)
+{
+    json.push_back(interval.T0());
+    json.push_back(interval.T1());
+}
+
 template<class TKey, class TValue, class TCompare, class TAllocator>
 using FiFoMap = nlohmann::fifo_map<TKey, TValue,
     nlohmann::fifo_map_compare<TKey>, TAllocator>;
