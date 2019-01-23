@@ -31,7 +31,7 @@ to_json(
     const Grid<TData>& grid)
 {
     for (int i = 0; i < grid.NbValues(); i++) {
-        // json.push_back(grid[i]);
+        json.push_back(grid[i]);
     }
 }
 
