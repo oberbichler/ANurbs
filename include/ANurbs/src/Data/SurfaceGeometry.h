@@ -18,8 +18,7 @@ struct DataIO<SurfaceGeometry<TVector>>
     static std::string
     Type()
     {
-        return "NurbsSurfaceGeometry" + std::to_string(DimensionOf<TVector>()) + 
-            "D";
+        return "SurfaceGeometry" + std::to_string(DimensionOf<TVector>()) + "D";
     }
 
     static Unique<DataType>
