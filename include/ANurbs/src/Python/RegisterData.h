@@ -284,13 +284,8 @@ RegisterCurve(
     const std::string name = "Curve" + std::to_string(TDimension) + "D";
 
     py::class_<Type, Base, Holder>(m, name.c_str())
-        .def(py::init<Ref<CurveGeometry<Vector>>>(), "geometry"_a)
-        .def("Degree", &Type::Degree)
+        .def(py::init<Ref<Geometry>>(), "geometry"_a)
         .def("Geometry", &Type::CurveGeometry)
-        .def("Domain", &Type::Domain)
-        .def("PointAt", &Type::PointAt, "t"_a)
-        .def("DerivativesAt", &Type::DerivativesAt, "t"_a, "order"_a)
-        .def("Spans", &Type::Spans)
     ;
 
     RegisterDataType<Type>(m, model, name);
