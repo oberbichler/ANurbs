@@ -385,6 +385,32 @@ RegisterCurveGeometryBase(
     ;
 }
 
+template <typename TTypeFactory, int TDimension, typename TModule,
+    typename TModel>
+void
+RegisterPoint(
+    TModule& m,
+    TModel& model)
+{
+    using namespace ANurbs;
+    using namespace pybind11::literals;
+    namespace py = pybind11;
+    
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
+    using Type = PointData<Vector>;
+    using Holder = ANurbs::Pointer<Type>;
+
+    const std::string name = "Point" + std::to_string(TDimension) + "D";
+
+    py::class_<Type, Holder>(m, name.c_str())
+        .def(py::init<Vector>(), "location"_a)
+        .def("Location", &Type::Location)
+        .def("SetLocation", &Type::SetLocation, "value"_a)
+    ;
+
+    RegisterDataType<Type>(m, model, name);
+}
+
 template <typename TTypeFactory, int TDimension, typename TModule>
 void
 RegisterPointOnCurveProjection(
@@ -922,26 +948,9 @@ RegisterData(
         RegisterCurveOnSurface<TTypeFactory, 3>(m);
     }
         
-    { // Point2D
-        using Vector = typename TTypeFactory::template Vector<double, 2>;
-        using Type = PointData<Vector>;
-
-        RegisterDataTypeAndType<Type>(m, model, "Point2D")
-            .def(py::init<Vector>(), "location"_a)
-            .def("Location", &Type::Location)
-            .def("SetLocation", &Type::SetLocation, "value"_a)
-        ;
-    }
-
-    { // Point3D
-        using Vector = typename TTypeFactory::template Vector<double, 3>;
-        using Type = PointData<Vector>;
-
-        RegisterDataTypeAndType<Type>(m, model, "Point3D")
-            .def(py::init<Vector>(), "location"_a)
-            .def("Location", &Type::Location)
-            .def("SetLocation", &Type::SetLocation, "value"_a)
-        ;
+    { // Point
+        RegisterPoint<TTypeFactory, 2>(m, model);
+        RegisterPoint<TTypeFactory, 3>(m, model);
     }
 
     { // SurfaceGeometryBase
