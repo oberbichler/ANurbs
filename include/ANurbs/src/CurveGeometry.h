@@ -159,6 +159,29 @@ public:
 
         return refined;
     }
+
+    Pointer<CurveGeometryType>
+    Clone()
+    {
+        Pointer<CurveGeometryType> clone = New<CurveGeometryType>(
+            this->Degree(), this->NbPoles(), this->IsRational());
+
+        for (int i = 0; i < this->NbKnots(); i++) {
+            clone->SetKnot(i, this->Knot(i));
+        }
+
+        for (int i = 0; i < this->NbPoles(); i++) {
+            clone->SetPole(i, this->Pole(i));
+        }
+
+        if (this->IsRational()) {
+            for (int i = 0; i < this->NbPoles(); i++) {
+                clone->SetWeight(i, this->Weight(i));
+            }
+        }
+
+        return clone;
+    }
 };
 
 using CurveGeometry1D = CurveGeometry<Point1D>;

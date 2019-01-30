@@ -347,6 +347,7 @@ RegisterCurveGeometry(
         .def("Knots", &Type::Knots)
         .def("Poles", &Type::Poles)
         .def("Weights", &Type::Weights)
+        .def("Clone", &Type::Clone)
     ;
 
     RegisterDataType<Type>(m, model, name);
