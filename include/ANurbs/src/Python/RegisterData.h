@@ -130,11 +130,12 @@ RegisterModel(
 {
     using namespace ANurbs;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     using Type = Model;
     
     return pybind11::class_<Type, ANurbs::Pointer<Type>>(m, "Model")
-        .def(pybind11::init<>())
+        .def(py::init<>())
         .def("Load", &Type::Load, "Path"_a)
         .def("Save", &Type::Save, "Path"_a)
         .def("AddArray", &Type::AddArray, "Content"_a)
@@ -164,10 +165,11 @@ RegisterDataTypeAndType(
 {
     using namespace ANurbs;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     Model::Register<TData>();
 
-    pybind11::class_<Ref<TData>>(m, (std::string("Ref") + name).c_str())
+    py::class_<Ref<TData>>(m, (std::string("Ref") + name).c_str())
         .def("Key", &Ref<TData>::Key)
         .def("Type", &Ref<TData>::Type)
         .def("Data", &Ref<TData>::Data)
@@ -202,10 +204,11 @@ RegisterDataTypeAndType(
 {
     using namespace ANurbs;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     Model::Register<TData>();
 
-    pybind11::class_<Ref<TData>>(m, (std::string("Ref") + name).c_str())
+    py::class_<Ref<TData>>(m, (std::string("Ref") + name).c_str())
         .def("Key", &Ref<TData>::Key)
         .def("Type", &Ref<TData>::Type)
         .def("Data", &Ref<TData>::Data)
@@ -236,10 +239,11 @@ RegisterDataType(
 {
     using namespace ANurbs;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     Model::Register<TData>();
 
-    pybind11::class_<Ref<TData>>(m, (std::string("Ref") + name).c_str())
+    py::class_<Ref<TData>>(m, (std::string("Ref") + name).c_str())
         .def("Key", &Ref<TData>::Key)
         .def("Type", &Ref<TData>::Type)
         .def("Data", &Ref<TData>::Data)
@@ -335,7 +339,7 @@ RegisterCurveGeometry(
     const std::string name = "CurveGeometry" + std::to_string(TDimension) + "D";
 
     py::class_<Type, Base, Holder>(m, name.c_str())
-        .def(pybind11::init<const int, const int, const bool>(), "degree"_a,
+        .def(py::init<const int, const int, const bool>(), "degree"_a,
             "nbPoles"_a, "isRational"_a)
         .def("Knots", &Type::Knots)
         .def("Poles", &Type::Poles)
@@ -388,6 +392,7 @@ RegisterPointOnCurveProjection(
 {
     using namespace ANurbs;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     using Vector = typename TTypeFactory::template Vector<double, TDimension>;
 
@@ -399,8 +404,8 @@ RegisterPointOnCurveProjection(
     std::string name = "PointOnCurveProjection" + std::to_string(TDimension) +
         "D";
 
-    pybind11::class_<Type, Handler>(m, name.c_str())
-        .def(pybind11::init<Pointer<CurveBaseType>, double>(), "curve"_a,
+    py::class_<Type, Handler>(m, name.c_str())
+        .def(py::init<Pointer<CurveBaseType>, double>(), "curve"_a,
             "tolerance"_a)
         .def("Compute", &Type::Compute, "point"_a)
         .def("Parameter", &Type::Parameter)
@@ -415,6 +420,7 @@ RegisterPointOnSurfaceProjection(
 {
     using namespace ANurbs;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     using Vector = typename TTypeFactory::template Vector<double, TDimension>;
 
@@ -426,8 +432,8 @@ RegisterPointOnSurfaceProjection(
     std::string name = "PointOnSurfaceProjection" + std::to_string(TDimension) +
         "D";
 
-    pybind11::class_<Type, Handler>(m, name.c_str())
-        .def(pybind11::init<Pointer<SurfaceBaseType>>(), "surface"_a)
+    py::class_<Type, Handler>(m, name.c_str())
+        .def(py::init<Pointer<SurfaceBaseType>>(), "surface"_a)
         .def("Compute", &Type::Compute, "point"_a)
         .def("ParameterU", &Type::ParameterU)
         .def("ParameterV", &Type::ParameterV)
@@ -513,7 +519,7 @@ RegisterSurfaceGeometry(
         "D";
 
     py::class_<Type, Base, Holder>(m, name.c_str())
-        .def(pybind11::init<const int, const int, const int, const int,
+        .def(py::init<const int, const int, const int, const int,
             const bool>(), "degreeU"_a, "degreeV"_a, "nbPolesU"_a,
             "nbPolesV"_a, "isRational"_a=false)
         .def("KnotsU", &Type::KnotsU)
@@ -587,6 +593,7 @@ RegisterCurveTessellation(
 {
     using namespace ANurbs;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     using Vector = typename TTypeFactory::template Vector<double, TDimension>;
 
@@ -595,8 +602,8 @@ RegisterCurveTessellation(
 
     std::string name = "CurveTessellation" + std::to_string(TDimension) + "D";
 
-    pybind11::class_<Type, Handler>(m, name.c_str())
-        .def(pybind11::init<>())
+    py::class_<Type, Handler>(m, name.c_str())
+        .def(py::init<>())
         .def("Compute", &Type::Compute, "curve"_a, "tolerance"_a)
         .def("NbPoints", &Type::NbPoints)
         .def("Parameter", &Type::Parameter, "index"_a)
@@ -610,6 +617,7 @@ void RegisterCurveOnSurface(
 {
     namespace py = pybind11;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     using Vector2 = typename TTypeFactory::template Vector<double, 2>;
     using Vector = typename TTypeFactory::template Vector<double, TDimension>;
@@ -623,8 +631,8 @@ void RegisterCurveOnSurface(
 
     std::string name = "CurveOnSurface" + std::to_string(TDimension) + "D";
 
-    pybind11::class_<Type, Base, Pointer>(m, name.c_str())
-        .def(pybind11::init<ANurbs::Pointer<CurveGeometryBaseType>,
+    py::class_<Type, Base, Pointer>(m, name.c_str())
+        .def(py::init<ANurbs::Pointer<CurveGeometryBaseType>,
             ANurbs::Pointer<SurfaceGeometryBaseType>,
             ANurbs::Interval<double>>(), "curveGeometry"_a, "surfaceGeometry"_a,
             "domain"_a)
@@ -637,6 +645,7 @@ void RegisterPolygonTessellation(
 {
     namespace py = pybind11;
     using namespace pybind11::literals;
+    namespace py = pybind11;
 
     using Vector = typename TTypeFactory::template Vector<double, TDimension>;
 
@@ -644,7 +653,7 @@ void RegisterPolygonTessellation(
 
     std::string name = "PolygonTessellation" + std::to_string(TDimension) + "D";
 
-    pybind11::class_<Type>(m, name.c_str())
+    py::class_<Type>(m, name.c_str())
         .def(py::init<>())
         .def("Compute", &Type::Compute, "polygon"_a)
         .def("NbTriangles", &Type::NbTriangles)
@@ -687,8 +696,8 @@ RegisterData(
     { // CurveShapeEvaluator
         using Type = ANurbs::CurveShapeEvaluator<double>;
 
-        pybind11::class_<Type>(m, "CurveShapeEvaluator")
-            .def(pybind11::init<int, int>(), "degree"_a, "order"_a)
+        py::class_<Type>(m, "CurveShapeEvaluator")
+            .def(py::init<int, int>(), "degree"_a, "order"_a)
             .def("__call__", (double (Type::*)(const int, const int, const int)
                 const) &Type::operator(), "derivative"_a, "poleU"_a, "poleV"_a)
             .def("__call__", (double (Type::*)(const int, const int) const)
@@ -711,8 +720,8 @@ RegisterData(
     { // SurfaceShapeEvaluator
         using Type = ANurbs::SurfaceShapeEvaluator<double>;
 
-        pybind11::class_<Type>(m, "SurfaceShapeEvaluator")
-            .def(pybind11::init<int, int, int>(), "degreeU"_a, "degreeV"_a,
+        py::class_<Type>(m, "SurfaceShapeEvaluator")
+            .def(py::init<int, int, int>(), "degreeU"_a, "degreeV"_a,
                 "order"_a)
             .def("Resize", &Type::Resize, "degreeU"_a, "degreeV"_a, "order"_a)
             .def("DegreeU", &Type::DegreeU)
@@ -756,7 +765,7 @@ RegisterData(
     { // IntegrationPoint1D
         using Type = IntegrationPoint1<double>;
 
-        pybind11::class_<Type>(m, "IntegrationPoint1D")
+        py::class_<Type>(m, "IntegrationPoint1D")
             .def("__iter__", [](const Type &self) {
                     return pybind11::make_iterator(&self.t, &self.t + 2);
                 }, pybind11::keep_alive<0, 1>())
@@ -768,7 +777,7 @@ RegisterData(
     { // IntegrationPoint2D
         using Type = ANurbs::IntegrationPoint2<double>;
 
-        pybind11::class_<Type>(m, "IntegrationPoint2D")
+        py::class_<Type>(m, "IntegrationPoint2D")
             .def("__iter__", [](const Type &self) {
                     return pybind11::make_iterator(&self.u, &self.u + 3);
                 }, pybind11::keep_alive<0, 1>())
@@ -781,7 +790,7 @@ RegisterData(
     { // IntegrationPoints
         using Type = IntegrationPoints<double>;
 
-        pybind11::class_<Type>(m, "IntegrationPoints")
+        py::class_<Type>(m, "IntegrationPoints")
             .def_static("Points1D", &Type::Points1, "degree"_a, "domain"_a)
             .def_static("Points2D", (std::vector<IntegrationPoint2<double>>
                 (*)(const size_t, const size_t, const Interval<double>&,
@@ -800,7 +809,7 @@ RegisterData(
         
         using Type = TrimmedSurfaceClipping<Vector2>;
         
-        pybind11::class_<Type>(m, "TrimmedSurfaceClipping")
+        py::class_<Type>(m, "TrimmedSurfaceClipping")
             .def(py::init<double, double>(), "tolerance"_a, "scale"_a)
             .def("Clear", &Type::Clear)
             .def("BeginLoop", &Type::BeginLoop)
@@ -829,7 +838,7 @@ RegisterData(
 
         using Type = PolygonIntegrationPoints<Vector>;
 
-        pybind11::class_<Type>(m, "PolygonIntegrationPoints")
+        py::class_<Type>(m, "PolygonIntegrationPoints")
             .def(py::init<>())
             .def("Compute", &Type::Compute, "degree"_a, "polygon"_a)
             .def("NbIntegrationPoints", &Type::NbIntegrationPoints)
@@ -840,7 +849,7 @@ RegisterData(
     { // TriangleIndices
         using Type = TriangleIndices;
 
-        pybind11::class_<Type>(m, "TriangleIndices")
+        py::class_<Type>(m, "TriangleIndices")
             .def(py::init<>())
             .def("__iter__", [](const Type &self) {
                     return pybind11::make_iterator(&self.a, &self.a + 3);
@@ -854,7 +863,7 @@ RegisterData(
     { // QuadIndices
         using Type = QuadIndices;
 
-        pybind11::class_<Type>(m, "QuadIndices")
+        py::class_<Type>(m, "QuadIndices")
             .def(py::init<>())
             .def("__iter__", [](const Type &self) {
                     return pybind11::make_iterator(&self.a, &self.a + 4);
@@ -918,7 +927,7 @@ RegisterData(
         using Type = PointData<Vector>;
 
         RegisterDataTypeAndType<Type>(m, model, "Point2D")
-            .def(pybind11::init<Vector>(), "location"_a)
+            .def(py::init<Vector>(), "location"_a)
             .def("Location", &Type::Location)
             .def("SetLocation", &Type::SetLocation, "value"_a)
         ;
@@ -929,7 +938,7 @@ RegisterData(
         using Type = PointData<Vector>;
 
         RegisterDataTypeAndType<Type>(m, model, "Point3D")
-            .def(pybind11::init<Vector>(), "location"_a)
+            .def(py::init<Vector>(), "location"_a)
             .def("Location", &Type::Location)
             .def("SetLocation", &Type::SetLocation, "value"_a)
         ;
@@ -1018,7 +1027,7 @@ RegisterData(
     { // Attributes
         using Type = Attributes;
 
-        pybind11::class_<Type, Pointer<Type>>(m, "Attributes")
+        py::class_<Type, Pointer<Type>>(m, "Attributes")
             .def("HasTag", &Type::HasTag, "name"_a)
             .def("AddTag", &Type::AddTag, "name"_a)
             .def("RemoveTag", &Type::RemoveTag, "name"_a)
@@ -1034,7 +1043,7 @@ RegisterData(
         using Holder = Pointer<Type>;
         using Base = Attributes;
 
-        pybind11::class_<Type, Holder, Base>(m, "CadAttributes")
+        py::class_<Type, Holder, Base>(m, "CadAttributes")
             .def("Layer", &Type::Layer)
             .def("SetLayer", &Type::SetLayer, "value"_a)
             .def("Color", &Type::Color)
