@@ -316,7 +316,7 @@ RegisterCurveBase(
     ;
 }
 
-template <typename TFactory, int TDimension, typename TModule, typename TModel>
+template <typename TTypeFactory, int TDimension, typename TModule, typename TModel>
 void
 RegisterCurveGeometry(
     TModule& m,
@@ -326,7 +326,7 @@ RegisterCurveGeometry(
     using namespace pybind11::literals;
     namespace py = pybind11;
 
-    using Vector = typename TFactory::template Vector<double, TDimension>;
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
 
     using Type = ANurbs::CurveGeometry<Vector>;
     using Holder = ANurbs::Pointer<Type>;
