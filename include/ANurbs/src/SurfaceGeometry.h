@@ -14,6 +14,7 @@ class SurfaceGeometry
     : public SurfaceGeometryBase<TVector>
 {
 public:
+    using SurfaceGeometryType = SurfaceGeometry<TVector>;
     using SurfaceGeometryBaseType = SurfaceGeometryBase<TVector>;
     using typename SurfaceGeometryBaseType::KnotsType;
     using typename SurfaceGeometryBaseType::ScalarType;
