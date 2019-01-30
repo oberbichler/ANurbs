@@ -1085,9 +1085,9 @@ RegisterData(
 
         RegisterDataTypeAndType<Type>(m, model, "Line2D")
             .def("Start", &Type::Start)
-            .def("SetStart", &Type::SetStart, "Value"_a)
+            .def("SetStart", &Type::SetStart, "value"_a)
             .def("End", &Type::End)
-            .def("SetEnd", &Type::SetEnd, "Value"_a)
+            .def("SetEnd", &Type::SetEnd, "value"_a)
         ;
     }
 
@@ -1097,9 +1097,9 @@ RegisterData(
 
         RegisterDataTypeAndType<Type>(m, model, "Line3D")
             .def("Start", &Type::Start)
-            .def("SetStart", &Type::SetStart, "Value"_a)
+            .def("SetStart", &Type::SetStart, "value"_a)
             .def("End", &Type::End)
-            .def("SetEnd", &Type::SetEnd, "Value"_a)
+            .def("SetEnd", &Type::SetEnd, "value"_a)
         ;
     }
 
@@ -1109,8 +1109,8 @@ RegisterData(
 
         RegisterDataTypeAndType<Type>(m, model, "Polyline2D")
             .def("NbPoints", &Type::NbPoints)
-            .def("Point", &Type::Point, "Index"_a)
-            .def("SetPoint", &Type::SetPoint, "Index"_a, "Value"_a)
+            .def("Point", &Type::Point, "index"_a)
+            .def("SetPoint", &Type::SetPoint, "index"_a, "value"_a)
         ;
     }
 
@@ -1120,8 +1120,8 @@ RegisterData(
 
         RegisterDataTypeAndType<Type>(m, model, "Polyline3D")
             .def("NbPoints", &Type::NbPoints)
-            .def("Point", &Type::Point, "Index"_a)
-            .def("SetPoint", &Type::SetPoint, "Index"_a, "Value"_a)
+            .def("Point", &Type::Point, "index"_a)
+            .def("SetPoint", &Type::SetPoint, "index"_a, "value"_a)
         ;
     }
 };
