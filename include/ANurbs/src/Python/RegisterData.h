@@ -383,6 +383,7 @@ RegisterCurveGeometryBase(
         .def("SetWeight", &Type::SetWeight, "index"_a, "value"_a)
         .def("PointAt", &Type::PointAt, "t"_a)
         .def("DerivativesAt", &Type::DerivativesAt, "t"_a, "order"_a)
+        .def("ShapeFunctionsAt", &Type::ShapeFunctionsAt, "t"_a, "order"_a)
     ;
 }
 
