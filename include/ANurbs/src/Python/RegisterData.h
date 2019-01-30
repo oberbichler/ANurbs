@@ -308,6 +308,7 @@ RegisterCurveBase(
     const std::string name = "CurveBase" + std::to_string(TDimension) + "D";
 
     py::class_<Type, Holder>(m, name.c_str())
+        .def("Degree", &Type::Degree)
         .def("Domain", &Type::Domain)
         .def("PointAt", &Type::PointAt, "t"_a)
         .def("DerivativesAt", &Type::DerivativesAt, "t"_a, "order"_a)
