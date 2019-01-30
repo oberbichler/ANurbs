@@ -963,6 +963,7 @@ RegisterData(
                 const double)) &Type::SetWeight, "indexU"_a, "indexV"_a,
                 "value"_a)
             .def("IsRational", &Type::IsRational)
+            .def("Clone", &Type::Clone)
         ;
     }
 

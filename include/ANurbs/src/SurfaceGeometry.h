@@ -91,6 +91,34 @@ public:
     {
         return m_weights.NbValues() != 0;
     }
+
+    Pointer<SurfaceGeometryType>
+    Clone()
+    {
+        Pointer<SurfaceGeometryType> clone = New<SurfaceGeometryType>(
+            this->DegreeU(), this->DegreeV(), this->NbPolesU(),
+            this->NbPolesV(), this->IsRational());
+
+        for (int i = 0; i < this->NbKnotsU(); i++) {
+            clone->SetKnotU(i, this->KnotU(i));
+        }
+
+        for (int i = 0; i < this->NbKnotsV(); i++) {
+            clone->SetKnotV(i, this->KnotU(i));
+        }
+
+        for (int i = 0; i < this->NbPoles(); i++) {
+            clone->SetPole(i, this->Pole(i));
+        }
+
+        if (this->IsRational()) {
+            for (int i = 0; i < this->NbPoles(); i++) {
+                clone->SetWeight(i, this->Weight(i));
+            }
+        }
+
+        return clone;
+    }
 };
 
 using SurfaceGeometry1D = SurfaceGeometry<Point1D>;
