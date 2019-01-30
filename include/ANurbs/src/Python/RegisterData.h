@@ -665,6 +665,7 @@ RegisterData(
             .def("NbNonzeroPoles", &Type::NbNonzeroPoles)
             .def("FirstNonzeroPole", &Type::FirstNonzeroPole)
             .def("LastNonzeroPole", &Type::LastNonzeroPole)
+            .def("NonzeroPoleIndices", &Type::NonzeroPoleIndices)
             .def("NbShapes", &Type::NbShapes)
             .def("Compute", &Type::Compute<std::vector<double>>, "knots"_a,
                 "t"_a)
