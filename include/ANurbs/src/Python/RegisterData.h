@@ -928,6 +928,7 @@ RegisterData(
                 const bool>(), "degreeU"_a, "degreeV"_a, "nbPolesU"_a,
                 "nbPolesV"_a, "isRational"_a=false)
             .def("PointAt", &Type::PointAt, "u"_a, "v"_a)
+            .def("DerivativesAt", &Type::DerivativesAt, "u"_a, "v"_a, "order"_a)
             .def("DegreeU", &Type::DegreeU)
             .def("DegreeV", &Type::DegreeV)
             .def("NbKnotsU", &Type::NbKnotsU)
