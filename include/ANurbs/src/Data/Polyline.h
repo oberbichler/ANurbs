@@ -20,6 +20,14 @@ private:
 public:
     using DataType = Polyline<TVector>;
 
+    Polyline()
+    { }
+    
+    Polyline(
+        const int nbPoints)
+    : m_points(nbPoints)
+    { }
+
     static std::string
     Type()
     {

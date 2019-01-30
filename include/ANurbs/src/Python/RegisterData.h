@@ -388,6 +388,34 @@ RegisterCurveGeometryBase(
 template <typename TTypeFactory, int TDimension, typename TModule,
     typename TModel>
 void
+RegisterLine(
+    TModule& m,
+    TModel& model)
+{
+    using namespace ANurbs;
+    using namespace pybind11::literals;
+    namespace py = pybind11;
+
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
+    using Type = Line<Vector>;
+    using Holder = ANurbs::Pointer<Type>;
+
+    const std::string name = "Line" + std::to_string(TDimension) + "D";
+
+    py::class_<Type, Holder>(m, name.c_str())
+        .def(py::init<const Vector&, const Vector&>(), "a"_a, "b"_a)
+        .def("A", &Type::A)
+        .def("SetA", &Type::SetA, "value"_a)
+        .def("B", &Type::B)
+        .def("SetB", &Type::SetB, "value"_a)
+    ;
+    
+    RegisterDataType<Type>(m, model, name);
+}
+
+template <typename TTypeFactory, int TDimension, typename TModule,
+    typename TModel>
+void
 RegisterPoint(
     TModule& m,
     TModel& model)
@@ -409,6 +437,31 @@ RegisterPoint(
     ;
 
     RegisterDataType<Type>(m, model, name);
+}
+
+template <typename TTypeFactory, int TDimension, typename TModule,
+    typename TModel>
+void
+RegisterPolyline(
+    TModule& m,
+    TModel& model)
+{
+    using namespace ANurbs;
+    using namespace pybind11::literals;
+    namespace py = pybind11;
+
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
+    using Type = Polyline<Vector>;
+    using Holder = ANurbs::Pointer<Type>;
+
+    const std::string name = "Polyline" + std::to_string(TDimension) + "D";
+
+    py::class_<Type, Holder>(m, name.c_str())
+        .def(py::init<int>(), "nbPoints"_a)
+        .def("NbPoints", &Type::NbPoints)
+        .def("Point", &Type::Point, "index"_a)
+        .def("SetPoint", &Type::SetPoint, "index"_a, "value"_a)
+    ;
 }
 
 template <typename TTypeFactory, int TDimension, typename TModule>
@@ -947,10 +1000,20 @@ RegisterData(
     { // CurveOnSurface
         RegisterCurveOnSurface<TTypeFactory, 3>(m);
     }
-        
+
+    { // Line
+        RegisterLine<TTypeFactory, 2>(m, model);
+        RegisterLine<TTypeFactory, 3>(m, model);
+    }
+
     { // Point
         RegisterPoint<TTypeFactory, 2>(m, model);
         RegisterPoint<TTypeFactory, 3>(m, model);
+    }
+
+    { // Polyline
+        RegisterPolyline<TTypeFactory, 2>(m, model);
+        RegisterPolyline<TTypeFactory, 3>(m, model);
     }
 
     { // SurfaceGeometryBase
@@ -1057,53 +1120,6 @@ RegisterData(
             .def("SetLayer", &Type::SetLayer, "value"_a)
             .def("Color", &Type::Color)
             .def("SetColor", &Type::SetColor, "value"_a)
-        ;
-    }
-
-
-    // Register Line2D
-    {
-        using Type = Line<Point2D>;
-
-        RegisterDataTypeAndType<Type>(m, model, "Line2D")
-            .def("Start", &Type::Start)
-            .def("SetStart", &Type::SetStart, "value"_a)
-            .def("End", &Type::End)
-            .def("SetEnd", &Type::SetEnd, "value"_a)
-        ;
-    }
-
-    // Register Line3D
-    {
-        using Type = Line<Point3D>;
-
-        RegisterDataTypeAndType<Type>(m, model, "Line3D")
-            .def("Start", &Type::Start)
-            .def("SetStart", &Type::SetStart, "value"_a)
-            .def("End", &Type::End)
-            .def("SetEnd", &Type::SetEnd, "value"_a)
-        ;
-    }
-
-    // Register Polyline2D
-    {
-        using Type = Polyline<Point2D>;
-
-        RegisterDataTypeAndType<Type>(m, model, "Polyline2D")
-            .def("NbPoints", &Type::NbPoints)
-            .def("Point", &Type::Point, "index"_a)
-            .def("SetPoint", &Type::SetPoint, "index"_a, "value"_a)
-        ;
-    }
-
-    // Register Polyline3D
-    {
-        using Type = Polyline<Point3D>;
-
-        RegisterDataTypeAndType<Type>(m, model, "Polyline3D")
-            .def("NbPoints", &Type::NbPoints)
-            .def("Point", &Type::Point, "index"_a)
-            .def("SetPoint", &Type::SetPoint, "index"_a, "value"_a)
         ;
     }
 };

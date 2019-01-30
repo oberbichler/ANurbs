@@ -15,11 +15,21 @@ template <typename TVector>
 class Line
 {
 private:
-    TVector m_start;
-    TVector m_end;
+    TVector m_a;
+    TVector m_b;
 
 public:
     using DataType = Line<TVector>;
+
+    Line()
+    { }
+    
+    Line(
+        const TVector& a,
+        const TVector& b)
+    : m_a(a)
+    , m_b(b)
+    { }
 
     static std::string
     Type()
@@ -28,29 +38,29 @@ public:
     }
 
     TVector
-    Start() const
+    A() const
     {
-        return m_start;
+        return m_a;
     }
 
     void
-    SetStart(
+    SetA(
         const TVector& value)
     {
-        m_start = value;
+        m_a = value;
     }
 
     TVector
-    End() const
+    B() const
     {
-        return m_end;
+        return m_b;
     }
 
     void
-    SetEnd(
+    SetB(
         const TVector& value)
     {
-        m_end = value;
+        m_b = value;
     }
 
     static Unique<Line>
@@ -60,8 +70,8 @@ public:
     {
         auto result = New<Line>();
 
-        result->m_start = data.at("Start");
-        result->m_end = data.at("End");
+        result->m_a = data.at("A");
+        result->m_b = data.at("B");
 
         return result;
     }
@@ -71,8 +81,8 @@ public:
         const Model& model,
         Json& data) const
     {
-        data["Start"] = ToJson(m_start);
-        data["End"] = ToJson(m_end);
+        data["A"] = ToJson(m_a);
+        data["B"] = ToJson(m_b);
     }
 };
 
