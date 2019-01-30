@@ -190,10 +190,7 @@ RegisterDataTypeAndType(
     model.def("Replace", &PythonDataType<TData>::ReplaceWithKey, "key"_a,
         "data"_a);
 
-    return pybind11::class_<TData, Pointer<TData>>(m, name.c_str())
-        .def(pybind11::init<TData>(), "Other"_a)
-        .def("Clone", [](const TData& self) { return New<TData>(self); })
-    ;
+    return pybind11::class_<TData, Pointer<TData>>(m, name.c_str());
 };
 
 template <typename TData, typename TBase, typename TPyModel, typename TModule>
