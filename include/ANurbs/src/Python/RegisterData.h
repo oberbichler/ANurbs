@@ -611,15 +611,15 @@ void RegisterCurveOnSurface(
     namespace py = pybind11;
     using namespace pybind11::literals;
 
-    using Vector2Type = typename TTypeFactory::template Vector<double, 2>;
-    using VectorType = typename TTypeFactory::template Vector<double, TDimension>;
+    using Vector2 = typename TTypeFactory::template Vector<double, 2>;
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
 
-    using CurveGeometryBaseType = ANurbs::CurveGeometryBase<Vector2Type>;
-    using SurfaceGeometryBaseType = ANurbs::SurfaceGeometryBase<VectorType>;
+    using CurveGeometryBaseType = ANurbs::CurveGeometryBase<Vector2>;
+    using SurfaceGeometryBaseType = ANurbs::SurfaceGeometryBase<Vector>;
 
-    using Type = ANurbs::CurveOnSurface<Vector2Type, VectorType>;
+    using Type = ANurbs::CurveOnSurface<Vector2, Vector>;
     using Pointer = ANurbs::Pointer<Type>;
-    using Base = ANurbs::CurveBase<VectorType>;
+    using Base = ANurbs::CurveBase<Vector>;
 
     std::string name = "CurveOnSurface" + std::to_string(TDimension) + "D";
 
@@ -631,133 +631,26 @@ void RegisterCurveOnSurface(
     ;
 }
 
-// template <typename TFactory, int TDimension>
-// void RegisterTrimmedSurfaceClipping(
-//     pybind11::module& m,
-//     const std::string& name)
-// {
-//     namespace py = pybind11;
-//     using namespace pybind11::literals;
+template <typename TTypeFactory, int TDimension, typename TModule>
+void RegisterPolygonTessellation(
+    TModule& m)
+{
+    namespace py = pybind11;
+    using namespace pybind11::literals;
 
-//     using Vector2Type = Eigen::Matrix<double, 2, 1>;
-//     using VectorType = typename TFactory::template Vector<double, TDimension>;
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
 
-//     using Type = ANurbs::TrimmedSurfaceClipping<Vector2Type>;
+    using Type = ANurbs::PolygonTessellation<Vector>;
 
-//     pybind11::class_<Type>(m, name.c_str())
-//         .def(py::init<double, double>(),
-//             "Tolerance"_a,
-//             "Scale"_a)
-//         .def("Clear", &Type::Clear)
-//         .def("BeginLoop", &Type::BeginLoop)
-//         .def("EndLoop", &Type::EndLoop)
-//         .def("AddCurve", &Type::AddCurve,
-//             "Curve"_a)
-//         .def("Compute", (void (Type::*)(
-//             const std::vector<ANurbs::Interval<double>>&,
-//             const std::vector<ANurbs::Interval<double>>&)) &Type::Compute,
-//             "KnotsU"_a,
-//             "KnotsV"_a)
-//         .def("Compute", (void (Type::*)
-//             (ANurbs::SurfaceGeometryBase<VectorType>&))
-//             &Type::Compute<VectorType>,
-//             "Surface"_a)
-//         .def_property_readonly("NbSpansU", &Type::NbSpansU)
-//         .def_property_readonly("NbSpansV", &Type::NbSpansV)
-//         .def("SpanU", &Type::SpanU,
-//             "Index"_a)
-//         .def("SpanV", &Type::SpanV,
-//             "Index"_a)
-//         .def("SpanTrimType", &Type::SpanTrimType,
-//             "IndexU"_a,
-//             "IndexV"_a)
-//         .def("SpanPolygons", &Type::SpanPolygons,
-//             "IndexU"_a,
-//             "IndexV"_a)
-//     ;
-// }
+    std::string name = "PolygonTessellation" + std::to_string(TDimension) + "D";
 
-// void RegisterTriangleIndices(
-//     pybind11::module& m,
-//     const std::string& name)
-// {
-//     namespace py = pybind11;
-//     using namespace pybind11::literals;
-
-//     using Type = ANurbs::TriangleIndices;
-
-//     pybind11::class_<Type>(m, name.c_str())
-//         .def(py::init<>())
-//         .def("__iter__",
-//             [](const Type &self) {
-//                 return pybind11::make_iterator(&self.a, &self.a + 3);
-//             }, pybind11::keep_alive<0, 1>())
-//         .def_readwrite("a", &Type::a)
-//         .def_readwrite("b", &Type::b)
-//         .def_readwrite("c", &Type::c)
-//     ;
-// }
-
-// void RegisterQuadIndices(
-//     pybind11::module& m,
-//     const std::string& name)
-// {
-//     namespace py = pybind11;
-//     using namespace pybind11::literals;
-
-//     using Type = ANurbs::QuadIndices;
-
-//     pybind11::class_<Type>(m, name.c_str())
-//         .def(py::init<>())
-//         .def_readwrite("a", &Type::a)
-//         .def_readwrite("b", &Type::b)
-//         .def_readwrite("c", &Type::c)
-//         .def_readwrite("d", &Type::d)
-//     ;
-// }
-
-// void RegisterPolygonTessellation(
-//     pybind11::module& m,
-//     const std::string& name)
-// {
-//     namespace py = pybind11;
-//     using namespace pybind11::literals;
-
-//     using VectorType = Eigen::Matrix<double, 2, 1>;
-
-//     using Type = ANurbs::PolygonTessellation<VectorType>;
-
-//     pybind11::class_<Type>(m, name.c_str())
-//         .def(py::init<>())
-//         .def("Compute", &Type::Compute,
-//             "Polygon"_a)
-//         .def_property_readonly("NbTriangles", &Type::NbTriangles)
-//         .def("Triangle", &Type::Triangle,
-//             "index"_a)
-//     ;
-// }
-
-// void RegisterPolygonIntegrationPoints(
-//     pybind11::module& m,
-//     const std::string& name)
-// {
-//     namespace py = pybind11;
-//     using namespace pybind11::literals;
-
-//     using VectorType = Eigen::Matrix<double, 2, 1>;
-
-//     using Type = ANurbs::PolygonIntegrationPoints<VectorType>;
-
-//     pybind11::class_<Type>(m, name.c_str())
-//         .def(py::init<>())
-//         .def("Compute", &Type::Compute,
-//             "Degree"_a,
-//             "Polygon"_a)
-//         .def_property_readonly("NbIntegrationPoints", &Type::NbIntegrationPoints)
-//         .def("IntegrationPoint", &Type::IntegrationPoint,
-//             "index"_a)
-//     ;
-// }
+    pybind11::class_<Type>(m, name.c_str())
+        .def(py::init<>())
+        .def("Compute", &Type::Compute, "polygon"_a)
+        .def("NbTriangles", &Type::NbTriangles)
+        .def("Triangle", &Type::Triangle, "index"_a)
+    ;
+}
 
 template <typename TTypeFactory, typename TModule>
 void
@@ -899,6 +792,77 @@ RegisterData(
                 const std::vector<Interval<double>>&,
                 const std::vector<Interval<double>>&)) &Type::Points2,
                 "degreeU"_a, "degreeV"_a, "domainsU"_a, "domainsV"_a)
+        ;
+    }
+
+    { // TrimmedSurfaceClipping
+        using Vector2 = typename TTypeFactory::template Vector<double, 2>;
+        
+        using Type = TrimmedSurfaceClipping<Vector2>;
+        
+        pybind11::class_<Type>(m, "TrimmedSurfaceClipping")
+            .def(py::init<double, double>(), "tolerance"_a, "scale"_a)
+            .def("Clear", &Type::Clear)
+            .def("BeginLoop", &Type::BeginLoop)
+            .def("EndLoop", &Type::EndLoop)
+            .def("AddCurve", &Type::AddCurve, "curve"_a)
+            .def("Compute", (void (Type::*)(
+                const std::vector<ANurbs::Interval<double>>&,
+                const std::vector<ANurbs::Interval<double>>&)) &Type::Compute,
+                "knotsU"_a, "knotsV"_a)
+            .def("NbSpansU", &Type::NbSpansU)
+            .def("NbSpansV", &Type::NbSpansV)
+            .def("SpanU", &Type::SpanU, "index"_a)
+            .def("SpanV", &Type::SpanV, "index"_a)
+            .def("SpanTrimType", &Type::SpanTrimType, "indexU"_a, "indexV"_a)
+            .def("SpanPolygons", &Type::SpanPolygons, "indexU"_a, "indexV"_a)
+        ;
+    }
+
+    { // RegisterPolygonTessellation
+        RegisterPolygonTessellation<TTypeFactory, 2>(m);
+        RegisterPolygonTessellation<TTypeFactory, 3>(m);
+    }
+
+    { // RegisterPolygonIntegrationPoints
+        using Vector = typename TTypeFactory::template Vector<double, 2>;
+
+        using Type = PolygonIntegrationPoints<Vector>;
+
+        pybind11::class_<Type>(m, "PolygonIntegrationPoints")
+            .def(py::init<>())
+            .def("Compute", &Type::Compute, "degree"_a, "polygon"_a)
+            .def("NbIntegrationPoints", &Type::NbIntegrationPoints)
+            .def("IntegrationPoint", &Type::IntegrationPoint, "index"_a)
+        ;
+    }
+    
+    { // TriangleIndices
+        using Type = TriangleIndices;
+
+        pybind11::class_<Type>(m, "TriangleIndices")
+            .def(py::init<>())
+            .def("__iter__", [](const Type &self) {
+                    return pybind11::make_iterator(&self.a, &self.a + 3);
+                }, pybind11::keep_alive<0, 1>())
+            .def_readwrite("a", &Type::a)
+            .def_readwrite("b", &Type::b)
+            .def_readwrite("c", &Type::c)
+        ;
+    }
+
+    { // QuadIndices
+        using Type = QuadIndices;
+
+        pybind11::class_<Type>(m, "QuadIndices")
+            .def(py::init<>())
+            .def("__iter__", [](const Type &self) {
+                    return pybind11::make_iterator(&self.a, &self.a + 4);
+                }, pybind11::keep_alive<0, 1>())
+            .def_readwrite("a", &Type::a)
+            .def_readwrite("b", &Type::b)
+            .def_readwrite("c", &Type::c)
+            .def_readwrite("d", &Type::d)
         ;
     }
 

@@ -14,7 +14,8 @@ add_subdirectory(test)
 add_subdirectory(external_libraries/pybind11)
 
 pybind11_add_module(ANurbs ${SOURCES}
-    "src/Module.cc"
+    "${PROJECT_SOURCE_DIR}/src/Module.cc"
+    "${PROJECT_SOURCE_DIR}/external_libraries/ClipperLib/clipper.cpp"
 )
 
 install(TARGETS ANurbs DESTINATION bin)
