@@ -964,6 +964,8 @@ RegisterData(
                 "value"_a)
             .def("IsRational", &Type::IsRational)
             .def("Clone", &Type::Clone)
+            .def("ShapeFunctionsAt", &Type::ShapeFunctionsAt, "u"_a, "v"_a,
+                "order"_a)
         ;
     }
 

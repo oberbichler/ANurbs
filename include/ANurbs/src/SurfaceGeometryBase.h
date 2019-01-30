@@ -376,6 +376,48 @@ public:
         return EvaluateAt<VectorType>(poles, u, v, order);
     }
 
+    std::pair<std::vector<int>, std::vector<std::vector<ScalarType>>>
+    ShapeFunctionsAt(
+        const ScalarType u,
+        const ScalarType v,
+        const int order) const
+    {
+        SurfaceShapeEvaluator<ScalarType> shape(DegreeU(), DegreeV(), order);
+
+        if (IsRational()) {
+            shape.Compute(KnotsU(), KnotsV(), [&](int i, int j) -> ScalarType {
+                return Weight(i, j);
+            }, u, v);
+        } else {
+            shape.Compute(KnotsU(), KnotsV(), u, v);
+        }
+
+        std::vector<std::vector<ScalarType>> shapeFunctions(shape.NbShapes());
+
+        for (int i = 0; i < shape.NbShapes(); i++) {
+            shapeFunctions[i] = std::vector<ScalarType>(shape.NbNonzeroPoles());
+
+            for (int j = 0; j < shape.NbNonzeroPoles(); j++) {
+                shapeFunctions[i][j] = shape(i, j);
+            }
+        }
+
+        std::vector<int> indices(shape.NbNonzeroPoles());
+        auto it = indices.begin();
+
+        for (int i = 0; i < shape.NbNonzeroPolesU(); i++) {
+            for (int j = 0; j < shape.NbNonzeroPolesV(); j++) {
+                int poleIndex = Math::MatrixIndex(NbPolesU(), NbPolesV(),
+                    shape.FirstNonzeroPoleU() + i,
+                    shape.FirstNonzeroPoleV() + j);
+
+                *(it++) = poleIndex;
+            }
+        }
+
+        return {indices, shapeFunctions};
+    }
+
     std::vector<IntervalType>
     SpansU() const
     {
