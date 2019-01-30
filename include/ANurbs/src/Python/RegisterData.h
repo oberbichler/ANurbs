@@ -641,7 +641,7 @@ template <typename TTypeFactory, int TDimension, typename TModule>
 void RegisterCurveOnSurface(
     TModule& m)
 {
-    namespace py = pybind11;
+    using namespace ANurbs;
     using namespace pybind11::literals;
     namespace py = pybind11;
 
@@ -669,7 +669,7 @@ template <typename TTypeFactory, int TDimension, typename TModule>
 void RegisterPolygonTessellation(
     TModule& m)
 {
-    namespace py = pybind11;
+    using namespace ANurbs;
     using namespace pybind11::literals;
     namespace py = pybind11;
 
