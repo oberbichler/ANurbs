@@ -2,6 +2,7 @@
 
 #include "Grid.h"
 #include "Point.h"
+#include "Pointer.h"
 #include "SurfaceGeometryBase.h"
 
 #include <stdexcept>
