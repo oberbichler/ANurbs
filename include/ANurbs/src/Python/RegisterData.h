@@ -436,6 +436,150 @@ RegisterPointOnSurfaceProjection(
     ;
 }
 
+template <typename TTypeFactory, int TDimension, typename TModule,
+    typename TModel>
+void
+RegisterSurface(
+    TModule& m,
+    TModel& model)
+{
+    using namespace ANurbs;
+    using namespace pybind11::literals;
+    namespace py = pybind11;
+
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
+    using Geometry = SurfaceGeometry<Vector>;
+
+    using Type = Surface<Geometry, Ref<Geometry>>;
+    using Holder = Pointer<Type>;
+    using Base = SurfaceBase<Vector>;
+
+    const std::string name = "Surface" + std::to_string(TDimension) + "D";
+
+    py::class_<Type, Base, Holder>(m, name.c_str())
+        .def(py::init<Ref<SurfaceGeometry<Vector>>>(), "geometry"_a)
+        .def("Geometry", &Type::SurfaceGeometry)
+    ;
+
+    RegisterDataType<Type>(m, model, name);
+}
+
+template <typename TTypeFactory, int TDimension, typename TModule>
+void
+RegisterSurfaceBase(
+    TModule& m)
+{
+    using namespace ANurbs;
+    using namespace pybind11::literals;
+    namespace py = pybind11;
+
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
+
+    using Type = SurfaceBase<Vector>;
+    using Holder = Pointer<Type>;
+
+    const std::string name = "SurfaceBase" + std::to_string(TDimension) + "D";
+
+    py::class_<Type, Holder>(m, name.c_str())
+        .def("DegreeU", &Type::DegreeU)
+        .def("DegreeV", &Type::DegreeV)
+        .def("DomainU", &Type::DomainU)
+        .def("DomainV", &Type::DomainV)
+        .def("PointAt", &Type::PointAt, "u"_a, "v"_a)
+        .def("DerivativesAt", &Type::DerivativesAt, "u"_a, "v"_a, "order"_a)
+        .def("SpansU", &Type::SpansU)
+        .def("SpansV", &Type::SpansV)
+    ;
+}
+
+template <typename TTypeFactory, int TDimension, typename TModule,
+    typename TModel>
+void
+RegisterSurfaceGeometry(
+    TModule& m,
+    TModel& model)
+{
+    using namespace ANurbs;
+    using namespace pybind11::literals;
+    namespace py = pybind11;
+
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
+
+    using Type = SurfaceGeometry<Vector>;
+    using Holder = Pointer<Type>;
+    using Base = SurfaceGeometryBase<Vector>;
+
+    const std::string name = "SurfaceGeometry" + std::to_string(TDimension) +
+        "D";
+
+    py::class_<Type, Base, Holder>(m, name.c_str())
+        .def(pybind11::init<const int, const int, const int, const int,
+            const bool>(), "degreeU"_a, "degreeV"_a, "nbPolesU"_a,
+            "nbPolesV"_a, "isRational"_a=false)
+        .def("KnotsU", &Type::KnotsU)
+        .def("KnotsV", &Type::KnotsV)
+        .def("Poles", &Type::Poles)
+        .def("Weights", &Type::Weights)
+    ;
+
+    RegisterDataType<Type>(m, model, name);
+}
+
+template <typename TTypeFactory, int TDimension, typename TModule>
+void
+RegisterSurfaceGeometryBase(
+    TModule& m)
+{
+    using namespace ANurbs;
+    using namespace pybind11::literals;
+    namespace py = pybind11;
+
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
+
+    using Type = SurfaceGeometryBase<Vector>;
+    using Holder = Pointer<Type>;
+
+    const std::string name = "SurfaceGeometryBase" +
+        std::to_string(TDimension) + "D";
+
+    py::class_<Type, Holder>(m, name.c_str())
+        .def("DegreeU", &Type::DegreeU)
+        .def("DegreeV", &Type::DegreeV)
+        .def("IsRational", &Type::IsRational)
+        .def("NbKnotsU", &Type::NbKnotsU)
+        .def("NbKnotsV", &Type::NbKnotsV)
+        .def("KnotU", &Type::KnotU, "index"_a)
+        .def("KnotV", &Type::KnotV, "index"_a)
+        .def("SetKnotU", &Type::SetKnotU, "index"_a, "value"_a)
+        .def("SetKnotV", &Type::SetKnotV, "index"_a, "value"_a)
+        .def("NbPoles", &Type::NbPoles)
+        .def("NbPolesU", &Type::NbPolesU)
+        .def("NbPolesV", &Type::NbPolesV)
+        .def("Pole", (Vector (Type::*)(const int) const) &Type::Pole,
+            "index"_a)
+        .def("SetPole", (void (Type::*)(const int, const Vector&))
+            &Type::SetPole, "index"_a, "value"_a)
+        .def("Pole", (Vector (Type::*)(const int, const int) const)
+            &Type::Pole, "indexU"_a, "indexV"_a)
+        .def("SetPole", (void (Type::*)(const int, const int,
+            const Vector&)) &Type::SetPole, "indexU"_a, "indexV"_a,
+            "value"_a)
+        .def("Weight", (double (Type::*)(const int) const) &Type::Weight,
+            "index"_a)
+        .def("SetWeight", (void (Type::*)(const int, const double))
+            &Type::SetWeight, "index"_a, "value"_a)
+        .def("Weight", (double (Type::*)(const int, const int) const)
+            &Type::Weight, "indexU"_a, "indexV"_a)
+        .def("SetWeight", (void (Type::*)(const int, const int,
+            const double)) &Type::SetWeight, "indexU"_a, "indexV"_a,
+            "value"_a)
+        .def("PointAt", &Type::PointAt, "u"_a, "v"_a)
+        .def("DerivativesAt", &Type::DerivativesAt, "u"_a, "v"_a, "order"_a)
+        .def("ShapeFunctionsAt", &Type::ShapeFunctionsAt, "u"_a, "v"_a,
+            "order"_a)
+    ;
+}
+
 template <typename TTypeFactory, int TDimension, typename TModule>
 void
 RegisterCurveTessellation(
@@ -826,6 +970,26 @@ RegisterData(
             .def("SetLocation", &Type::SetLocation, "value"_a)
         ;
     }
+
+    { // SurfaceGeometryBase
+        RegisterSurfaceGeometryBase<TTypeFactory, 2>(m);
+        RegisterSurfaceGeometryBase<TTypeFactory, 3>(m);
+    }
+    
+    { // SurfaceGeometry
+        RegisterSurfaceGeometry<TTypeFactory, 2>(m, model);
+        RegisterSurfaceGeometry<TTypeFactory, 3>(m, model);
+    }
+    
+    { // SurfaceBase
+        RegisterSurfaceBase<TTypeFactory, 2>(m);
+        RegisterSurfaceBase<TTypeFactory, 3>(m);
+    }
+    
+    { // Surface
+        RegisterSurface<TTypeFactory, 2>(m, model);
+        RegisterSurface<TTypeFactory, 3>(m, model);
+    }
     
 
     // --- Brep
@@ -911,85 +1075,6 @@ RegisterData(
             .def("SetLayer", &Type::SetLayer, "value"_a)
             .def("Color", &Type::Color)
             .def("SetColor", &Type::SetColor, "value"_a)
-        ;
-    }
-
-
-
-    // Register SurfaceGeometry3D
-    {
-        using Type = SurfaceGeometry<Vector3D>;
-
-        RegisterDataTypeAndType<Type>(m, model, "SurfaceGeometry3D")
-            .def(pybind11::init<const int, const int, const int, const int,
-                const bool>(), "degreeU"_a, "degreeV"_a, "nbPolesU"_a,
-                "nbPolesV"_a, "isRational"_a=false)
-            .def("PointAt", &Type::PointAt, "u"_a, "v"_a)
-            .def("DerivativesAt", &Type::DerivativesAt, "u"_a, "v"_a, "order"_a)
-            .def("DegreeU", &Type::DegreeU)
-            .def("DegreeV", &Type::DegreeV)
-            .def("NbKnotsU", &Type::NbKnotsU)
-            .def("NbKnotsV", &Type::NbKnotsV)
-            .def("KnotsU", &Type::KnotsU)
-            .def("KnotsV", &Type::KnotsV)
-            .def("KnotU", &Type::KnotU, "index"_a)
-            .def("KnotV", &Type::KnotV, "index"_a)
-            .def("SetKnotU", (void (Type::*)(const int, const double))
-                &Type::SetKnotU, "index"_a, "value"_a)
-            .def("SetKnotV", (void (Type::*)(const int, const double))
-                &Type::SetKnotV, "index"_a, "value"_a)
-            .def("NbPoles", &Type::NbPoles)
-            .def("NbPolesU", &Type::NbPolesU)
-            .def("NbPolesV", &Type::NbPolesV)
-            .def("Pole", (Vector3D (Type::*)(const int) const) &Type::Pole,
-                "index"_a)
-            .def("SetPole", (void (Type::*)(const int, const Vector3D&))
-                &Type::SetPole, "index"_a, "value"_a)
-            .def("Pole", (Vector3D (Type::*)(const int, const int) const)
-                &Type::Pole, "indexU"_a, "indexV"_a)
-            .def("SetPole", (void (Type::*)(const int, const int,
-                const Vector3D&)) &Type::SetPole, "indexU"_a, "indexV"_a,
-                "value"_a)
-            .def("Weight", (double (Type::*)(const int) const) &Type::Weight,
-                "index"_a)
-            .def("SetWeight", (void (Type::*)(const int, const double))
-                &Type::SetWeight, "index"_a, "value"_a)
-            .def("Weight", (double (Type::*)(const int, const int) const)
-                &Type::Weight, "indexU"_a, "indexV"_a)
-            .def("SetWeight", (void (Type::*)(const int, const int,
-                const double)) &Type::SetWeight, "indexU"_a, "indexV"_a,
-                "value"_a)
-            .def("IsRational", &Type::IsRational)
-            .def("Clone", &Type::Clone)
-            .def("ShapeFunctionsAt", &Type::ShapeFunctionsAt, "u"_a, "v"_a,
-                "order"_a)
-        ;
-    }
-
-    // Register SurfaceBase3D
-    {
-        using Type = SurfaceBase<Vector3D>;
-        using Holder = Pointer<Type>;
-
-        pybind11::class_<Type, Holder>(m, "SurfaceBase3D")
-            .def("DomainU", &Type::DomainU)
-            .def("DomainV", &Type::DomainV)
-            .def("PointAt", &Type::PointAt, "u"_a, "v"_a)
-            .def("DerivativesAt", &Type::DerivativesAt, "u"_a, "v"_a, "order"_a)
-            .def("SpansU", &Type::SpansU)
-            .def("SpansV", &Type::SpansV)
-        ;
-    }
-
-    // Register Surface3D
-    {
-        using Type = Surface<SurfaceGeometry<Vector3D>,
-            Ref<SurfaceGeometry<Vector3D>>>;
-        using Base = SurfaceBase<Vector3D>;
-
-        RegisterDataTypeAndType<Type, Base>(m, model, "Surface3D")
-            .def(pybind11::init<Ref<SurfaceGeometry<Vector3D>>>(), "geometry"_a)
-            .def("Geometry", &Type::SurfaceGeometry)
         ;
     }
 
