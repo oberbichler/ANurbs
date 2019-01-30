@@ -215,14 +215,14 @@ RegisterDataTypeAndType(
     PythonDataTypeBase::s_types[TypeStringOf<TData>()] =
         New<PythonDataType<TData>>();
 
-    model.def("Add", &PythonDataType<TData>::Add, "Data"_a);
+    model.def("Add", &PythonDataType<TData>::Add, "data"_a);
 
-    model.def("Add", &PythonDataType<TData>::AddWithKey, "Key"_a, "Data"_a);
+    model.def("Add", &PythonDataType<TData>::AddWithKey, "key"_a, "data"_a);
 
-    model.def("Replace", &PythonDataType<TData>::Replace, "Index"_a, "Data"_a);
+    model.def("Replace", &PythonDataType<TData>::Replace, "index"_a, "data"_a);
 
-    model.def("Replace", &PythonDataType<TData>::ReplaceWithKey, "Key"_a,
-        "Data"_a);
+    model.def("Replace", &PythonDataType<TData>::ReplaceWithKey, "key"_a,
+        "data"_a);
 
     return pybind11::class_<TData, TBase, Pointer<TData>>(m, name.c_str());
 };
@@ -249,18 +249,18 @@ RegisterDataType(
     PythonDataTypeBase::s_types[TypeStringOf<TData>()] =
         New<PythonDataType<TData>>();
 
-    model.def("Add", &PythonDataType<TData>::Add, "Data"_a);
+    model.def("Add", &PythonDataType<TData>::Add, "data"_a);
 
-    model.def("Add", &PythonDataType<TData>::AddWithKey, "Key"_a, "Data"_a);
+    model.def("Add", &PythonDataType<TData>::AddWithKey, "key"_a, "data"_a);
 
     model.def("Add", [](ANurbs::Model& self, const Ref<TData>& ref) {
         return PythonDataType<TData>::AddWithKey(self, ref.Key(), ref.Data());
     }, "ref"_a);
     
-    model.def("Replace", &PythonDataType<TData>::Replace, "Index"_a, "Data"_a);
+    model.def("Replace", &PythonDataType<TData>::Replace, "index"_a, "data"_a);
 
-    model.def("Replace", &PythonDataType<TData>::ReplaceWithKey, "Key"_a,
-        "Data"_a);
+    model.def("Replace", &PythonDataType<TData>::ReplaceWithKey, "key"_a,
+        "data"_a);
 };
 
 template <typename TTypeFactory, int TDimension, typename TModule,
