@@ -368,6 +368,7 @@ RegisterCurveGeometryBase(
         .def("IsRational", &Type::IsRational)
         .def("Domain", &Type::Domain)
         .def("NbKnots", &Type::NbKnots)
+        .def("NbPoles", &Type::NbPoles)
         .def("Knot", &Type::Knot, "index"_a)
         .def("SetKnot", &Type::SetKnot, "index"_a, "value"_a)
         .def("Spans", &Type::Spans)
