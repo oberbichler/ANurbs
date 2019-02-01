@@ -1113,6 +1113,9 @@ RegisterData(
     }
 
     { // BrepTrim
+        using Vector2 = typename TTypeFactory::template Vector<double, 2>;
+        using Vector = typename TTypeFactory::template Vector<double, 3>;
+
         using Type = BrepTrim;
 
         RegisterDataTypeAndType<Type>(m, model, "BrepTrim")
@@ -1125,7 +1128,9 @@ RegisterData(
                 return self.Loop()->Face();
             })
             .def("Geometry", &Type::Geometry)
-            // .def("EdgeGeometry", &Type::EdgeGeometry)
+            // .def("EdgeGeometry", [](Type& self) {
+            //     return New<CurveOnSurface<Vector2, Vector>>(self.Geometry(), Loop()->Face()->Geometry(), m_geometry->Domain())
+            // })
         ;
     }
 
@@ -1180,6 +1185,15 @@ RegisterData(
             .def("SetLayer", &Type::SetLayer, "value"_a)
             .def("Color", &Type::Color)
             .def("SetColor", &Type::SetColor, "value"_a)
+        ;
+    }
+    
+    { // TrimTypes
+        py::enum_<ANurbs::TrimTypes>(m, "TrimTypes")
+            .value("Empty", ANurbs::TrimTypes::Empty)
+            .value("Full", ANurbs::TrimTypes::Full)
+            .value("Trimmed", ANurbs::TrimTypes::Trimmed)
+            .export_values()
         ;
     }
 };
