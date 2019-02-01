@@ -1046,12 +1046,16 @@ RegisterData(
         RegisterDataTypeAndType<Type>(m, model, "Brep")
             .def("NbFaces", &Type::NbFaces)
             .def("Face", &Type::Face, "index"_a)
+            .def("Faces", &Type::Faces)
             .def("NbLoops", &Type::NbLoops)
             .def("Loop", &Type::Loop, "index"_a)
+            .def("Loops", &Type::Loops)
             .def("NbTrims", &Type::NbTrims)
             .def("Trim", &Type::Trim, "index"_a)
+            .def("Trims", &Type::Trims)
             .def("NbEdges", &Type::NbEdges)
             .def("Edge", &Type::Edge, "index"_a)
+            .def("Edges", &Type::Edges)
         ;
     }
 
@@ -1062,6 +1066,27 @@ RegisterData(
             .def("Brep", &Type::Brep)
             .def("NbLoops", &Type::NbLoops)
             .def("Loop", &Type::Loop, "index"_a)
+            .def("Loops", &Type::Loops)
+            .def("Trims", [](Type& self) -> std::vector<Ref<BrepTrim>> {
+                std::vector<Ref<BrepTrim>> trims;
+                for (size_t i = 0; i < self.NbLoops(); i++) {
+                    auto loop = self.Loop(i);
+                    for (size_t j = 0; j < loop->NbTrims(); j++) {
+                        trims.push_back(loop->Trim(j));
+                    }
+                }
+                return trims;
+            })
+            .def("Edges", [](Type& self) -> std::vector<Ref<BrepEdge>> {
+                std::vector<Ref<BrepEdge>> edges;
+                for (size_t i = 0; i < self.NbLoops(); i++) {
+                    auto loop = self.Loop(i);
+                    for (size_t j = 0; j < loop->NbTrims(); j++) {
+                        edges.push_back(loop->Trim(j)->Edge());
+                    }
+                }
+                return edges;
+            })
             .def("Geometry", &Type::Geometry)
         ;
     }
@@ -1070,9 +1095,20 @@ RegisterData(
         using Type = BrepLoop;
 
         RegisterDataTypeAndType<Type>(m, model, "BrepLoop")
+            .def("Brep", [](Type& self) -> Ref<Brep> {
+                return self.Face()->Brep();
+            })
             .def("Face", &Type::Face)
             .def("NbTrims", &Type::NbTrims)
             .def("Trim", &Type::Trim, "index"_a)
+            .def("Trims", &Type::Trims)
+            .def("Edges", [](Type& self) -> std::vector<Ref<BrepEdge>> {
+                std::vector<Ref<BrepEdge>> edges(self.NbTrims());
+                for (size_t i = 0; i < edges.size(); i++) {
+                    edges[i] = self.Trim(i)->Edge();
+                }
+                return edges;
+            })
         ;
     }
 
@@ -1080,9 +1116,16 @@ RegisterData(
         using Type = BrepTrim;
 
         RegisterDataTypeAndType<Type>(m, model, "BrepTrim")
+            .def("Brep", [](Type& self) -> Ref<Brep> {
+                return self.Loop()->Face()->Brep();
+            })
             .def("Loop", &Type::Loop)
             .def("Edge", &Type::Edge)
+            .def("Face", [](Type& self) -> Ref<BrepFace> {
+                return self.Loop()->Face();
+            })
             .def("Geometry", &Type::Geometry)
+            // .def("EdgeGeometry", &Type::EdgeGeometry)
         ;
     }
 
@@ -1092,6 +1135,21 @@ RegisterData(
         RegisterDataTypeAndType<Type>(m, model, "BrepEdge")
             .def("NbTrims", &Type::NbTrims)
             .def("Trim", &Type::Trim, "index"_a)
+            .def("Trims", &Type::Trims)
+            .def("Loops", [](Type& self) -> std::vector<Ref<BrepLoop>> {
+                std::vector<Ref<BrepLoop>> loops(self.NbTrims());
+                for (size_t i = 0; i < loops.size(); i++) {
+                    loops[i] = self.Trim(i)->Loop();
+                }
+                return loops;
+            })
+            .def("Faces", [](Type& self) -> std::vector<Ref<BrepFace>> {
+                std::vector<Ref<BrepFace>> faces(self.NbTrims());
+                for (size_t i = 0; i < faces.size(); i++) {
+                    faces[i] = self.Trim(i)->Loop()->Face();
+                }
+                return faces;
+            })
         ;
     }
 

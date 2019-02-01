@@ -40,6 +40,12 @@ public:
         return m_faces[index];
     }
 
+    std::vector<Ref<BrepFace>>
+    Faces()
+    {
+        return m_faces;
+    }
+
     size_t
     NbLoops() const
     {
@@ -51,6 +57,12 @@ public:
         size_t index) const
     {
         return m_loops[index];
+    }
+
+    std::vector<Ref<BrepLoop>>
+    Loops()
+    {
+        return m_loops;
     }
 
     size_t
@@ -66,6 +78,12 @@ public:
         return m_trims[index];
     }
 
+    std::vector<Ref<BrepTrim>>
+    Trims()
+    {
+        return m_trims;
+    }
+
     size_t
     NbEdges() const
     {
@@ -77,6 +95,12 @@ public:
         size_t index) const
     {
         return m_edges[index];
+    }
+
+    std::vector<Ref<BrepEdge>>
+    Edges()
+    {
+        return m_edges;
     }
 
     static Unique<Brep>

@@ -44,6 +44,12 @@ public:
         return m_trims[index];
     }
 
+    std::vector<Ref<BrepTrim>>
+    Trims()
+    {
+        return m_trims;
+    }
+
     static Unique<BrepLoop>
     Load(
         Model& model,

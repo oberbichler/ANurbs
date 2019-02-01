@@ -27,8 +27,7 @@ public:
     }
 
     Ref<Brep>
-    Brep(
-        size_t index)
+    Brep()
     {
         return m_brep;
     }
@@ -44,6 +43,12 @@ public:
         size_t index)
     {
         return m_loops[index];
+    }
+
+    std::vector<Ref<BrepLoop>>
+    Loops()
+    {
+        return m_loops;
     }
     
     Ref<SurfaceGeometry<Eigen::Matrix<double, 3, 1>>>
