@@ -636,6 +636,8 @@ RegisterSurfaceGeometryBase(
         .def("NbKnotsV", &Type::NbKnotsV)
         .def("KnotU", &Type::KnotU, "index"_a)
         .def("KnotV", &Type::KnotV, "index"_a)
+        .def("SpansU", &Type::SpansU)
+        .def("SpansV", &Type::SpansV)
         .def("SetKnotU", &Type::SetKnotU, "index"_a, "value"_a)
         .def("SetKnotV", &Type::SetKnotV, "index"_a, "value"_a)
         .def("NbPoles", &Type::NbPoles)
