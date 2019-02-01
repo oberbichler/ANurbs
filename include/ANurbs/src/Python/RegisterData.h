@@ -1061,6 +1061,7 @@ RegisterData(
             .def("Brep", &Type::Brep)
             .def("NbLoops", &Type::NbLoops)
             .def("Loop", &Type::Loop, "index"_a)
+            .def("Geometry", &Type::Geometry)
         ;
     }
 

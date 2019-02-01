@@ -44,6 +44,12 @@ public:
     {
         return m_loops[index];
     }
+    
+    Ref<SurfaceGeometry3D>
+    Geometry()
+    {
+        return m_geometry;
+    }
 
     static Unique<BrepFace>
     Load(
