@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../EigenSupport"
 #include "Define.h"
 #include "Ref.h"
 #include "Model.h"
@@ -16,7 +17,7 @@ class BrepFace
 private:
     Ref<Brep> m_brep;
     std::vector<Ref<BrepLoop>> m_loops;
-    Ref<SurfaceGeometry3D> m_geometry;
+    Ref<SurfaceGeometry<Eigen::Matrix<double, 3, 1>>> m_geometry;
 
 public:
     static std::string
@@ -45,7 +46,7 @@ public:
         return m_loops[index];
     }
     
-    Ref<SurfaceGeometry3D>
+    Ref<SurfaceGeometry<Eigen::Matrix<double, 3, 1>>>
     Geometry()
     {
         return m_geometry;
@@ -79,7 +80,7 @@ public:
         // Read Geometry
         {
             const std::string key = data.at("Geometry");
-            result->m_geometry = model.GetLazy<SurfaceGeometry3D>(key);
+            result->m_geometry = model.GetLazy<SurfaceGeometry<Eigen::Matrix<double, 3, 1>>>(key);
         }
 
         return result;
