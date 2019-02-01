@@ -518,6 +518,7 @@ RegisterPointOnSurfaceProjection(
         .def("ParameterV", &Type::ParameterV)
         .def("Point", &Type::Point)
         .def("Distance", &Type::Distance)
+        .def("BoundingBox", &Type::BoundingBox)
     ;
 }
 
