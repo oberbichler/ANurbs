@@ -910,6 +910,22 @@ RegisterData(
         ;
     }
 
+    { // Polygon
+        using Vector2 = typename TTypeFactory::template Vector<double, 2>;
+
+        using Type = ANurbs::Polygon<Vector2>;
+
+        pybind11::class_<Type>(m, "Polygon2D")
+            .def(py::init<>())
+            .def("NbLoops", &Type::NbLoops)
+            .def("NbVerticesOfLoop", &Type::NbVerticesOfLoop, "index"_a)
+            .def("VertexOfLoop", &Type::VertexOfLoop, "loopIndex"_a,
+                "vertexIndex"_a)
+            .def("NbVertices", &Type::NbVertices)
+            .def("Vertex", &Type::Vertex, "index"_a)
+        ;
+    }
+
     { // RegisterPolygonTessellation
         RegisterPolygonTessellation<TTypeFactory, 2>(m);
         RegisterPolygonTessellation<TTypeFactory, 3>(m);
