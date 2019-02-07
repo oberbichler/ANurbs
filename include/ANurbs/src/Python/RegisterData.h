@@ -775,6 +775,17 @@ RegisterData(
         ;
     }
     
+    { // KnotInsertion
+        using Type = ANurbs::KnotInsertion;
+
+        using Vector = typename TTypeFactory::template Vector<double, 3>;
+
+        py::class_<Type>(m, "KnotInsertion")
+            .def_static("InsertKnotsU", &Type::InsertKnotsU<SurfaceGeometryBase<Vector>>)
+            .def_static("InsertKnotsV", &Type::InsertKnotsV<SurfaceGeometryBase<Vector>>)
+        ;
+    }
+    
     { // CurveShapeEvaluator
         using Type = ANurbs::CurveShapeEvaluator<double>;
 
