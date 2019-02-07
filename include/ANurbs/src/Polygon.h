@@ -15,7 +15,7 @@ struct Polygon
     int
     NbLoops() const
     {
-        return inner_paths.size() + 1;
+        return static_cast<int>(inner_paths.size()) + 1;
     }
 
     int
@@ -44,7 +44,7 @@ struct Polygon
     int
     NbVertices() const
     {
-        int nbVertices = outer_path.size();
+        int nbVertices = static_cast<int>(outer_path.size());
 
         for (const auto& path : inner_paths) {
             nbVertices += static_cast<int>(path.size());

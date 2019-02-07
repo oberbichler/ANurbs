@@ -37,7 +37,7 @@ public:
             IntegrationPoints<ScalarType>::XiaoGimbutas(degree);
 
         const int nbIntegrationPoints =
-            m_tessellation.NbTriangles() * xiaogimb.size();
+            m_tessellation.NbTriangles() * static_cast<int>(xiaogimb.size());
 
         m_integrationPoints.resize(nbIntegrationPoints);
 
