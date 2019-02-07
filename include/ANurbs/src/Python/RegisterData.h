@@ -774,7 +774,7 @@ RegisterData(
             .def_static("NbSpans", &Type::NbSpans)
         ;
     }
-    
+
     { // KnotInsertion
         using Type = ANurbs::KnotInsertion;
 
@@ -1214,6 +1214,8 @@ RegisterData(
             .def("SetLayer", &Type::SetLayer, "value"_a)
             .def("Color", &Type::Color)
             .def("SetColor", &Type::SetColor, "value"_a)
+            .def("Arrowhead", &Type::Arrowhead)
+            .def("SetArrowhead", &Type::SetArrowhead, "value"_a)
         ;
     }
     

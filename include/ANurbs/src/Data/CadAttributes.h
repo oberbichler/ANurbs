@@ -9,6 +9,7 @@ class CadAttributes : public Attributes
 private:
     std::string m_layer;
     std::string m_color;
+    std::string m_arrowhead;
 
 public:
     template <typename TModel, typename TSource>
@@ -21,6 +22,7 @@ public:
 
         m_layer = source.value("Layer", "");
         m_color = source.value("Color", "");
+        m_arrowhead = source.value("Arrowhead", "");
     }
 
     template <typename TModel, typename TTarget>
@@ -37,6 +39,10 @@ public:
         
         if (!m_color.empty()) {
             target["Color"] = m_color;
+        }
+        
+        if (!m_arrowhead.empty()) {
+            target["Arrowhead"] = m_arrowhead;
         }
     }
 
@@ -65,6 +71,19 @@ public:
         const std::string& value)
     {
         m_color = value;
+    }
+
+    std::string
+    Arrowhead() const
+    {
+        return m_arrowhead;
+    }
+
+    void
+    SetArrowhead(
+        const std::string& value)
+    {
+        m_arrowhead = value;
     }
 };
 
