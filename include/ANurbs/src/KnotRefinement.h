@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CurveGeometry.h"
 #include "Knots.h"
 #include "SurfaceGeometry.h"
 
@@ -12,6 +13,108 @@ class KnotRefinement
 {
 
 public:
+    template <typename TCurveGeometry>
+    static Pointer<CurveGeometry<typename TCurveGeometry::VectorType>>
+    InsertKnots(
+        const TCurveGeometry& surfaceGeometry,
+        std::vector<typename TCurveGeometry::ScalarType> knots)
+    {
+        using CurveGeometryType = CurveGeometry<TCurveGeometry::VectorType>;
+
+        std::sort(knots.begin(), knots.end());
+
+        const int nbKnotsToInsert = static_cast<int>(knots.size());
+
+        const int degree = surfaceGeometry.DegreeU();
+
+        const int nbPoles = surfaceGeometry.NbPolesU();
+
+        const int nbKnots = surfaceGeometry.NbKnotsU();
+
+        const int a = Knots::UpperSpan(degree, surfaceGeometry.KnotsU(),
+            knots.front());
+        const int b = Knots::UpperSpan(degree, surfaceGeometry.KnotsU(),
+            knots.back());
+
+        const int nbPolesRefined = nbPoles + nbKnotsToInsert;
+        const int nbKnotsRefined = nbKnots + nbKnotsToInsert + 2;
+
+        Pointer<CurveGeometryType> refined = New<CurveGeometryType>(degree,
+            nbPolesRefined, true); // FIXME: isRational
+
+        for (int i = 0; i < a + 1 - degree + 1; i++) {
+            refined->SetPole(i, surfaceGeometry.Pole(i) * surfaceGeometry.Weight(i));
+            refined->SetWeight(i, surfaceGeometry.Weight(i));
+        }
+
+        for (int i = b + 2 - 1; i < nbPoles; i++) {
+            refined->SetPole(nbKnotsToInsert + i, surfaceGeometry.Pole(i) * surfaceGeometry.Weight(i));
+            refined->SetWeight(nbKnotsToInsert + i, surfaceGeometry.Weight(i));
+        }
+
+        for (int i = 0; i < a + 1 + 1 - 1; i++) {
+            refined->SetKnotU(i, surfaceGeometry.KnotU(i));
+        }
+        
+        for (int i = b + 2 + degree - 1; i < nbPoles + degree + 1 - 2 - 1; i++) {
+            refined->SetKnotU(i + nbKnotsToInsert, surfaceGeometry.KnotU(i));
+        }
+
+        for (int i = 0; i < surfaceGeometry.NbKnotsV(); i++) {
+            refined->SetKnotV(i, surfaceGeometry.KnotV(i));
+        }
+
+        const int n = nbPoles - 1;
+        const int m = n + degree + 1;
+        const int r = nbKnotsToInsert - 1;
+
+        int i = b + 2 + degree - 1;
+        int k = b + 2 + degree + r;
+        int j = r;
+
+        while (j >= 0) {
+            while (knots[j] <= surfaceGeometry.KnotU(-1 + i) && i > a + 1) {
+                const auto pole = surfaceGeometry.Pole(i - degree - 1);
+                const auto weight = surfaceGeometry.Weight(i - degree - 1);
+                refined->SetPole(k - degree - 1, pole * weight);
+                refined->SetWeight(k - degree - 1, weight);
+
+                refined->SetKnotU(-1+k, surfaceGeometry.KnotU(-1 + i));
+
+                k -= 1;
+                i -= 1;
+            }
+
+            refined->SetPole(k - degree - 1, refined->Pole(k - degree));
+            refined->SetWeight(k - degree - 1, refined->Weight(k - degree));
+
+            for (int l = 1; l < degree + 1; l++) {
+                const int index = k - degree + l;
+                auto alpha = refined->KnotU(-1+k + l) - knots[j];
+
+                if (std::abs(alpha) < 1e-7) {
+                    refined->SetPole(index - 1, refined->Pole(index));
+                    refined->SetWeight(index - 1, refined->Weight(index));
+                } else {
+                    alpha = alpha / (refined->KnotU(k + l - 1) - surfaceGeometry.KnotU(i + l - degree - 1));
+                    refined->SetPole(index - 1, refined->Pole(index - 1) * alpha + refined->Pole(index) * (1 - alpha));
+                    refined->SetWeight(index - 1, refined->Weight(index - 1) * alpha + refined->Weight(index) * (1 - alpha));
+                }
+            }
+
+            refined->SetKnotU(-1 + k, knots[j]);
+
+            k -= 1;
+            j -= 1;
+        }
+
+        for (int i = 0; i < refined->NbPoles(); i++) {
+            refined->SetPole(i, refined->Pole(i) / refined->Weight(i));
+        }
+
+        return refined;                
+    }
+
     template <typename TSurfaceGeometry>
     static Pointer<SurfaceGeometry<typename TSurfaceGeometry::VectorType>>
     InsertKnotsU(

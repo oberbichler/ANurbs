@@ -781,6 +781,9 @@ RegisterData(
         using Vector = typename TTypeFactory::template Vector<double, 3>;
 
         py::class_<Type>(m, "KnotRefinement")
+            .def_static("InsertKnots",
+                &Type::InsertKnots<CurveGeometryBase<Vector>>, "geometry"_a,
+                "knots"_a)
             .def_static("InsertKnotsU",
                 &Type::InsertKnotsU<SurfaceGeometryBase<Vector>>, "geometry"_a,
                 "knots"_a)
