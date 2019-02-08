@@ -8,7 +8,7 @@
 
 namespace ANurbs {
 
-class KnotInsertion
+class KnotRefinement
 {
 
 public:

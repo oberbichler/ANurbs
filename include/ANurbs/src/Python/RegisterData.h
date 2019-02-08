@@ -775,14 +775,12 @@ RegisterData(
         ;
     }
 
-    { // KnotInsertion
-        using Type = ANurbs::KnotInsertion;
+    { // KnotRefinement
+        using Type = ANurbs::KnotRefinement;
 
         using Vector = typename TTypeFactory::template Vector<double, 3>;
 
-        py::class_<Type>(m, "KnotInsertion")
-            .def_static("InsertKnotsU", &Type::InsertKnotsU<SurfaceGeometryBase<Vector>>)
-            .def_static("InsertKnotsV", &Type::InsertKnotsV<SurfaceGeometryBase<Vector>>)
+        py::class_<Type>(m, "KnotRefinement")
         ;
     }
     
