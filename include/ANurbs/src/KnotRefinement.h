@@ -25,15 +25,15 @@ public:
 
         const int nbKnotsToInsert = static_cast<int>(knots.size());
 
-        const int degree = surfaceGeometry.DegreeU();
+        const int degree = surfaceGeometry.Degree();
 
-        const int nbPoles = surfaceGeometry.NbPolesU();
+        const int nbPoles = surfaceGeometry.NbPoles();
 
-        const int nbKnots = surfaceGeometry.NbKnotsU();
+        const int nbKnots = surfaceGeometry.NbKnots();
 
-        const int a = Knots::UpperSpan(degree, surfaceGeometry.KnotsU(),
+        const int a = Knots::UpperSpan(degree, surfaceGeometry.Knots(),
             knots.front());
-        const int b = Knots::UpperSpan(degree, surfaceGeometry.KnotsU(),
+        const int b = Knots::UpperSpan(degree, surfaceGeometry.Knots(),
             knots.back());
 
         const int nbPolesRefined = nbPoles + nbKnotsToInsert;
@@ -53,15 +53,11 @@ public:
         }
 
         for (int i = 0; i < a + 1 + 1 - 1; i++) {
-            refined->SetKnotU(i, surfaceGeometry.KnotU(i));
+            refined->SetKnot(i, surfaceGeometry.Knot(i));
         }
         
         for (int i = b + 2 + degree - 1; i < nbPoles + degree + 1 - 2 - 1; i++) {
-            refined->SetKnotU(i + nbKnotsToInsert, surfaceGeometry.KnotU(i));
-        }
-
-        for (int i = 0; i < surfaceGeometry.NbKnotsV(); i++) {
-            refined->SetKnotV(i, surfaceGeometry.KnotV(i));
+            refined->SetKnot(i + nbKnotsToInsert, surfaceGeometry.Knot(i));
         }
 
         const int n = nbPoles - 1;
@@ -73,13 +69,13 @@ public:
         int j = r;
 
         while (j >= 0) {
-            while (knots[j] <= surfaceGeometry.KnotU(-1 + i) && i > a + 1) {
+            while (knots[j] <= surfaceGeometry.Knot(-1 + i) && i > a + 1) {
                 const auto pole = surfaceGeometry.Pole(i - degree - 1);
                 const auto weight = surfaceGeometry.Weight(i - degree - 1);
                 refined->SetPole(k - degree - 1, pole * weight);
                 refined->SetWeight(k - degree - 1, weight);
 
-                refined->SetKnotU(-1+k, surfaceGeometry.KnotU(-1 + i));
+                refined->SetKnot(-1+k, surfaceGeometry.Knot(-1 + i));
 
                 k -= 1;
                 i -= 1;
@@ -90,19 +86,19 @@ public:
 
             for (int l = 1; l < degree + 1; l++) {
                 const int index = k - degree + l;
-                auto alpha = refined->KnotU(-1+k + l) - knots[j];
+                auto alpha = refined->Knot(-1+k + l) - knots[j];
 
                 if (std::abs(alpha) < 1e-7) {
                     refined->SetPole(index - 1, refined->Pole(index));
                     refined->SetWeight(index - 1, refined->Weight(index));
                 } else {
-                    alpha = alpha / (refined->KnotU(k + l - 1) - surfaceGeometry.KnotU(i + l - degree - 1));
+                    alpha = alpha / (refined->Knot(k + l - 1) - surfaceGeometry.Knot(i + l - degree - 1));
                     refined->SetPole(index - 1, refined->Pole(index - 1) * alpha + refined->Pole(index) * (1 - alpha));
                     refined->SetWeight(index - 1, refined->Weight(index - 1) * alpha + refined->Weight(index) * (1 - alpha));
                 }
             }
 
-            refined->SetKnotU(-1 + k, knots[j]);
+            refined->SetKnot(-1 + k, knots[j]);
 
             k -= 1;
             j -= 1;
