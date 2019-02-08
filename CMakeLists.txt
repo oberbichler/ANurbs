@@ -15,6 +15,7 @@ add_subdirectory(external_libraries/pybind11)
 
 add_definitions(
     -DEIGEN_DEFAULT_TO_ROW_MAJOR
+    -DANURBS_VERSION="${ANURBS_VERSION}"
 )
 
 pybind11_add_module(ANurbs ${SOURCES}
