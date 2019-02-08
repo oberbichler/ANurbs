@@ -1,16 +1,11 @@
 sudo: false
 language: cpp
 
-matrix:
-  include:
-  - os: linux
-    env: PYTHON=3.6
-  - os: linux
-    env: CONDA=3.6
-  - os: osx
-    env: PYTHON=3.6
-  - os: osx
-    env: CONDA=3.6
+os:
+  - linux
+  - osx
+  
+env: CONDA=3.6
 
 compiler:
   - gcc
