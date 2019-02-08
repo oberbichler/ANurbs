@@ -788,7 +788,7 @@ RegisterData(
                 &Type::InsertKnotsU<SurfaceGeometryBase<Vector>>, "geometry"_a,
                 "knots"_a)
             .def_static("InsertKnotsV",
-                &Type::InsertKnotsV<SurfaceGeometryBase<Vector>>, "geometry"_a
+                &Type::InsertKnotsV<SurfaceGeometryBase<Vector>>, "geometry"_a,
                 "knots"_a)
         ;
     }
