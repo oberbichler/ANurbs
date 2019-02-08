@@ -19,7 +19,8 @@ public:
         const TCurveGeometry& surfaceGeometry,
         std::vector<typename TCurveGeometry::ScalarType> knots)
     {
-        using CurveGeometryType = CurveGeometry<TCurveGeometry::VectorType>;
+        using CurveGeometryType = CurveGeometry<
+            typename TCurveGeometry::VectorType>;
 
         std::sort(knots.begin(), knots.end());
 
@@ -118,7 +119,7 @@ public:
         std::vector<typename TSurfaceGeometry::ScalarType> knotsU)
     {
         using SurfaceGeometryType = SurfaceGeometry<
-            TSurfaceGeometry::VectorType>;
+            typename TSurfaceGeometry::VectorType>;
 
         std::sort(knotsU.begin(), knotsU.end());
 
@@ -236,7 +237,7 @@ public:
         std::vector<typename TSurfaceGeometry::ScalarType> knotsV)
     {
         using SurfaceGeometryType = SurfaceGeometry<
-            TSurfaceGeometry::VectorType>;
+            typename TSurfaceGeometry::VectorType>;
 
         std::sort(knotsV.begin(), knotsV.end());
 
