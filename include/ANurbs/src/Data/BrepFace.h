@@ -27,7 +27,7 @@ public:
     }
 
     Ref<Brep>
-    Brep()
+    GetBrep()
     {
         return m_brep;
     }
