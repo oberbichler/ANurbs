@@ -1099,7 +1099,7 @@ RegisterData(
         using Type = BrepFace;
 
         RegisterDataTypeAndType<Type>(m, model, "BrepFace")
-            .def("Brep", &Type::GetBrep)
+            .def("Brep", &Type::Brep)
             .def("NbLoops", &Type::NbLoops)
             .def("Loop", &Type::Loop, "index"_a)
             .def("Loops", &Type::Loops)
@@ -1132,7 +1132,7 @@ RegisterData(
 
         RegisterDataTypeAndType<Type>(m, model, "BrepLoop")
             .def("Brep", [](Type& self) -> Ref<Brep> {
-                return self.Face()->GetBrep();
+                return self.Face()->Brep();
             })
             .def("Face", &Type::Face)
             .def("NbTrims", &Type::NbTrims)
@@ -1156,7 +1156,7 @@ RegisterData(
 
         RegisterDataTypeAndType<Type>(m, model, "BrepTrim")
             .def("Brep", [](Type& self) -> Ref<Brep> {
-                return self.Loop()->Face()->GetBrep();
+                return self.Loop()->Face()->Brep();
             })
             .def("Loop", &Type::Loop)
             .def("Edge", &Type::Edge)

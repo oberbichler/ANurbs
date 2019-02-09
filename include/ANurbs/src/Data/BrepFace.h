@@ -15,7 +15,7 @@ namespace ANurbs {
 class BrepFace
 {
 private:
-    Ref<Brep> m_brep;
+    Ref<ANurbs::Brep> m_brep;
     std::vector<Ref<BrepLoop>> m_loops;
     Ref<SurfaceGeometry<Eigen::Matrix<double, 3, 1>>> m_geometry;
 
@@ -26,8 +26,8 @@ public:
         return "BrepFace";
     }
 
-    Ref<Brep>
-    GetBrep()
+    Ref<ANurbs::Brep>
+    Brep()
     {
         return m_brep;
     }
