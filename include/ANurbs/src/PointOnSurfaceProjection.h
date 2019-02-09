@@ -329,9 +329,9 @@ public:
     ParameterPoint
     TriangleProjection(
         const VectorType point,
-        const int& indexA,
-        const int& indexB,
-        const int& indexC)
+        const size_t& indexA,
+        const size_t& indexB,
+        const size_t& indexC)
     {
         const auto a = m_tessellation[indexA];
         const auto b = m_tessellation[indexB];
