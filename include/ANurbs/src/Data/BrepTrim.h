@@ -46,6 +46,12 @@ public:
         return m_geometry;
     }
 
+    Interval<double>
+    Domain()
+    {
+        return m_domain;
+    }
+
     static Unique<BrepTrim>
     Load(
         Model& model,
