@@ -1098,6 +1098,8 @@ RegisterData(
     { // BrepFace
         using Type = BrepFace;
 
+        using Vector = typename TTypeFactory::template Vector<double, 3>;
+
         RegisterDataTypeAndType<Type>(m, model, "BrepFace")
             .def("Brep", &Type::Brep)
             .def("NbLoops", &Type::NbLoops)
@@ -1124,6 +1126,10 @@ RegisterData(
                 return edges;
             })
             .def("Geometry", &Type::Geometry)
+            .def("UntrimmedSurface", [](Type& self) {
+                return New<Surface<SurfaceGeometry<Vector>>>(
+                    self.Geometry().Data());
+            })
         ;
     }
 
@@ -1164,9 +1170,15 @@ RegisterData(
                 return self.Loop()->Face();
             })
             .def("Geometry", &Type::Geometry)
-            // .def("EdgeGeometry", [](Type& self) {
-            //     return New<CurveOnSurface<Vector2, Vector>>(self.Geometry(), Loop()->Face()->Geometry(), m_geometry->Domain())
-            // })
+            .def("Curve2D", [](Type& self) {
+                return New<Curve<CurveGeometry<Vector2>>>(
+                    self.Geometry().Data(), self.Domain());
+            })
+            .def("Curve3D", [](Type& self) {
+                return New<CurveOnSurface<Vector2, Vector>>(
+                    self.Geometry().Data(),
+                    self.Loop()->Face()->Geometry().Data(), self.Domain());
+            })
         ;
     }
 
