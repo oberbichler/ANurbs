@@ -1098,8 +1098,10 @@ RegisterData(
     { // BrepFace
         using Type = BrepFace;
 
+        using Vector = typename TTypeFactory::template Vector<double, 3>;
+
         RegisterDataTypeAndType<Type>(m, model, "BrepFace")
-            .def("Brep", &Type::GetBrep)
+            .def("Brep", &Type::Brep)
             .def("NbLoops", &Type::NbLoops)
             .def("Loop", &Type::Loop, "index"_a)
             .def("Loops", &Type::Loops)
@@ -1124,6 +1126,10 @@ RegisterData(
                 return edges;
             })
             .def("Geometry", &Type::Geometry)
+            .def("UntrimmedSurface", [](Type& self) {
+                return New<Surface<SurfaceGeometry<Vector>>>(
+                    self.Geometry().Data());
+            })
         ;
     }
 
@@ -1132,7 +1138,7 @@ RegisterData(
 
         RegisterDataTypeAndType<Type>(m, model, "BrepLoop")
             .def("Brep", [](Type& self) -> Ref<Brep> {
-                return self.Face()->GetBrep();
+                return self.Face()->Brep();
             })
             .def("Face", &Type::Face)
             .def("NbTrims", &Type::NbTrims)
@@ -1156,7 +1162,7 @@ RegisterData(
 
         RegisterDataTypeAndType<Type>(m, model, "BrepTrim")
             .def("Brep", [](Type& self) -> Ref<Brep> {
-                return self.Loop()->Face()->GetBrep();
+                return self.Loop()->Face()->Brep();
             })
             .def("Loop", &Type::Loop)
             .def("Edge", &Type::Edge)
@@ -1164,9 +1170,15 @@ RegisterData(
                 return self.Loop()->Face();
             })
             .def("Geometry", &Type::Geometry)
-            // .def("EdgeGeometry", [](Type& self) {
-            //     return New<CurveOnSurface<Vector2, Vector>>(self.Geometry(), Loop()->Face()->Geometry(), m_geometry->Domain())
-            // })
+            .def("Curve2D", [](Type& self) {
+                return New<Curve<CurveGeometry<Vector2>>>(
+                    self.Geometry().Data(), self.Domain());
+            })
+            .def("Curve3D", [](Type& self) {
+                return New<CurveOnSurface<Vector2, Vector>>(
+                    self.Geometry().Data(),
+                    self.Loop()->Face()->Geometry().Data(), self.Domain());
+            })
         ;
     }
 

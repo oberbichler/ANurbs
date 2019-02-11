@@ -19,6 +19,7 @@ private:
     Ref<BrepLoop> m_loop;
     Ref<BrepEdge> m_edge;
     Ref<CurveGeometry<Eigen::Matrix<double, 2, 1>>> m_geometry;
+    Interval<double> m_domain;
 
 public:
     static std::string
@@ -43,6 +44,12 @@ public:
     Geometry()
     {
         return m_geometry;
+    }
+
+    Interval<double>
+    Domain()
+    {
+        return m_domain;
     }
 
     static Unique<BrepTrim>
@@ -70,6 +77,13 @@ public:
             result->m_geometry = model.GetLazy<CurveGeometry<Eigen::Matrix<double, 2, 1>>>(key);
         }
 
+        // Read Domain
+        if (data.find("Domain") != data.end()) {
+            result->m_domain = data.at("Domain");
+        } else {
+            result->m_domain = result->m_geometry->Domain();
+        }
+
         return result;
     }
 
@@ -81,6 +95,7 @@ public:
         data["Loop"] = ToJson(m_loop);
         data["Edge"] = ToJson(m_edge);
         data["Geometry"] = ToJson(m_geometry);
+        data["Domain"] = ToJson(m_domain);
     }
 };
 
