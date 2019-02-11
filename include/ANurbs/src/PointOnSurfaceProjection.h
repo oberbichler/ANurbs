@@ -87,7 +87,7 @@ public:
             const int n = surface->DegreeU() + 1;
 
             for (int i = 0; i < n; i++) {
-                const ScalarType u = span.ParameterAtNormalized(1.0 / n);
+                const ScalarType u = span.ParameterAtNormalized(1.0 / n * i);
                 us.push_back(u);
             }
         }
@@ -104,7 +104,7 @@ public:
             const int n = surface->DegreeV() + 1;
 
             for (int i = 0; i < n; i++) {
-                const ScalarType v = span.ParameterAtNormalized(1.0 / n);
+                const ScalarType v = span.ParameterAtNormalized(1.0 / n * i);
                 vs.push_back(v);
             }
         }
