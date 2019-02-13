@@ -265,8 +265,8 @@ public:
 
         for (int i = 0; i < a + 1 - degreeV + 1; i++) {
             for (int m = 0; m < surfaceGeometry.NbPolesU(); m++) {
-                refined->SetPole(i, m, surfaceGeometry.Pole(i, m) * surfaceGeometry.Weight(i, m));
-                refined->SetWeight(i, m, surfaceGeometry.Weight(i, m));
+                refined->SetPole(m, i, surfaceGeometry.Pole(m, i) * surfaceGeometry.Weight(m, i));
+                refined->SetWeight(m, i, surfaceGeometry.Weight(m, i));
             }
         }
 
