@@ -163,7 +163,7 @@ public:
             refined->SetKnotU(i, surfaceGeometry.KnotU(i));
         }
         
-        for (int i = b + 2 + degreeU - 1; i < nbPolesU + degreeU + 1 - 2 - 1; i++) {
+        for (int i = b + 2 + degreeU - 1; i < surfaceGeometry.NbKnotsU(); i++) {
             refined->SetKnotU(i + nbKnotsToInsert, surfaceGeometry.KnotU(i));
         }
 
@@ -281,7 +281,7 @@ public:
             refined->SetKnotV(i, surfaceGeometry.KnotV(i));
         }
         
-        for (int i = b + 2 + degreeV - 1; i < nbPolesV + degreeV + 1 - 2 - 1; i++) {
+        for (int i = b + 2 + degreeV - 1; i < surfaceGeometry.NbKnotsV(); i++) {
             refined->SetKnotV(i + nbKnotsToInsert, surfaceGeometry.KnotV(i));
         }
 
