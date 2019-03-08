@@ -66,7 +66,7 @@ public:
         }
 
         // Read Edge
-        {
+        if (data.find("Edge") != data.end()) {
             const std::string key = data.at("Edge");
             result->m_edge = model.GetLazy<BrepEdge>(key);
         }
@@ -93,7 +93,9 @@ public:
         Json& data) const
     {
         data["Loop"] = ToJson(m_loop);
-        data["Edge"] = ToJson(m_edge);
+        if (!m_edge.IsEmpty()) {
+            data["Edge"] = ToJson(m_edge);
+        }
         data["Geometry"] = ToJson(m_geometry);
         data["Domain"] = ToJson(m_domain);
     }
