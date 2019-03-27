@@ -18,4 +18,6 @@
 #include "./src/Data/Line.h"
 #include "./src/Data/Polyline.h"
 
+#include "./src/Data/TextDot.h"
+
 #include "./src/Data/Model.h"
