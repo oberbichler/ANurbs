@@ -208,16 +208,14 @@ public:
         const VectorType& value)
         = 0;
 
-    Grid<VectorType>
+    std::vector<VectorType>
     Poles() const
     {
-        Grid<VectorType> poles(NbPolesU(), NbPolesV());
+        std::vector<VectorType> poles(NbPoles());
 
-        for (int i = 0; i < poles.NbRows(); i++) {
-            for (int j = 0; j < poles.NbCols(); j++) {
-                poles.SetValue(i, j, Pole(i, j));
+        for (int i = 0; i < poles.size(); i++) {
+            poles[i] = Pole(i);
             }
-        }
 
         return poles;
     }
