@@ -268,7 +268,7 @@ public:
         = 0;
 
     Grid<ScalarType>
-    Weights() const
+    WeightsGrid() const
     {
         Grid<ScalarType> weights(NbPolesU(), NbPolesV());
 
