@@ -106,7 +106,7 @@ public:
         }
 
         for (int i = 0; i < this->NbKnotsV(); i++) {
-            clone->SetKnotV(i, this->KnotU(i));
+            clone->SetKnotV(i, this->KnotV(i));
         }
 
         for (int i = 0; i < this->NbPoles(); i++) {
