@@ -267,6 +267,18 @@ public:
         const ScalarType value)
         = 0;
 
+    std::vector<double>
+    Weights() const
+    {
+        std::vector<double> weights(NbPoles());
+
+        for (int i = 0; i < weights.size(); i++) {
+            weights[i] = Weight(i);
+        }
+
+        return weights;
+    }
+
     Grid<ScalarType>
     WeightsGrid() const
     {
