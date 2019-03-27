@@ -41,7 +41,7 @@ TEST_CASE( "Geometry of a spatial B-Spline surface", "[SurfaceGeometry]" ) {
     geometry.SetPole(3, 2, {  5.0,  11.0,  0.7649815786});
 
     SECTION( "Check Poles" ) {
-        const auto poles = geometry.Poles();
+        const auto poles = geometry.PolesGrid();
 
         for (int i = 0; i < poles.NbRows(); i++) {
             for (int j = 0; j < poles.NbCols(); j++) {
@@ -55,7 +55,7 @@ TEST_CASE( "Geometry of a spatial B-Spline surface", "[SurfaceGeometry]" ) {
     }
 
     SECTION( "Check Weights" ) {
-        const auto weights = geometry.Weights();
+        const auto weights = geometry.WeightsGrid();
 
         for (int i = 0; i < weights.NbRows(); i++) {
             for (int j = 0; j < weights.NbCols(); j++) {
