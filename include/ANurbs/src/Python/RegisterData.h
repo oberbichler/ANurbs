@@ -668,6 +668,8 @@ RegisterSurfaceGeometryBase(
         .def("DerivativesAt", &Type::DerivativesAt, "u"_a, "v"_a, "order"_a)
         .def("ShapeFunctionsAt", &Type::ShapeFunctionsAt, "u"_a, "v"_a,
             "order"_a)
+    ;
+}
 
 template <typename TTypeFactory, int TDimension, typename TModule,
     typename TModel>
@@ -1035,6 +1037,15 @@ RegisterData(
 
 
     // --- Geometry
+    
+    { // Grid3D
+        using Vector = typename TTypeFactory::template Vector<double, 3>;
+
+        using Type = ANurbs::Grid<double>;
+
+        py::class_<Type>(m, "Vector")
+        ;
+    }
 
     { // Interval
         using Type = ANurbs::Interval<double>;
@@ -1114,7 +1125,7 @@ RegisterData(
         RegisterSurface<TTypeFactory, 2>(m, model);
         RegisterSurface<TTypeFactory, 3>(m, model);
     }
-    
+
     { // TextDot
         RegisterTextDot<TTypeFactory, 2>(m, model);
         RegisterTextDot<TTypeFactory, 3>(m, model);
