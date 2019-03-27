@@ -220,6 +220,20 @@ public:
         return poles;
     }
 
+    Grid<VectorType>
+    PolesGrid() const
+    {
+        Grid<VectorType> poles(NbPolesU(), NbPolesV());
+
+        for (int i = 0; i < poles.NbRows(); i++) {
+            for (int j = 0; j < poles.NbCols(); j++) {
+                poles.SetValue(i, j, Pole(i, j));
+            }
+        }
+
+        return poles;
+    }
+
     ScalarType
     Weight(
         const int index) const
