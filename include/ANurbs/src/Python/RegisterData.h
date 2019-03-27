@@ -666,7 +666,33 @@ RegisterSurfaceGeometryBase(
         .def("DerivativesAt", &Type::DerivativesAt, "u"_a, "v"_a, "order"_a)
         .def("ShapeFunctionsAt", &Type::ShapeFunctionsAt, "u"_a, "v"_a,
             "order"_a)
+
+template <typename TTypeFactory, int TDimension, typename TModule,
+    typename TModel>
+void
+RegisterTextDot(
+    TModule& m,
+    TModel& model)
+{
+    using namespace ANurbs;
+    using namespace pybind11::literals;
+    namespace py = pybind11;
+    
+    using Vector = typename TTypeFactory::template Vector<double, TDimension>;
+    using Type = TextDot<Vector>;
+    using Holder = ANurbs::Pointer<Type>;
+
+    const std::string name = "TextDot" + std::to_string(TDimension) + "D";
+
+    py::class_<Type, Holder>(m, name.c_str())
+        .def(py::init<Vector, std::string>(), "location"_a, "text"_a)
+        .def("Location", &Type::Location)
+        .def("SetLocation", &Type::SetLocation, "value"_a)
+        .def("Text", &Type::Text)
+        .def("SetText", &Type::SetText, "value"_a)
     ;
+
+    RegisterDataType<Type>(m, model, name);
 }
 
 template <typename TTypeFactory, int TDimension, typename TModule>
@@ -1072,6 +1098,11 @@ RegisterData(
     { // Surface
         RegisterSurface<TTypeFactory, 2>(m, model);
         RegisterSurface<TTypeFactory, 3>(m, model);
+    }
+    
+    { // TextDot
+        RegisterTextDot<TTypeFactory, 2>(m, model);
+        RegisterTextDot<TTypeFactory, 3>(m, model);
     }
     
 
