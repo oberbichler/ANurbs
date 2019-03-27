@@ -789,6 +789,19 @@ RegisterData(
 
     // --- Algorithm
 
+    { // CurveSpanIntersection
+        using Vector2D = typename TTypeFactory::template Vector<double, 2>;
+        using Type = ANurbs::CurveSpanIntersection<Vector2D>;
+
+        py::class_<Type>(m, "CurveSpanIntersection")
+            .def(py::init<>())
+            .def("Compute", &Type::Compute, "curve"_a, "knotsU"_a,
+                "knotsV"_a, "tolerance"_a, "includeCurveKnots"_a)
+            .def("NbIntersections", &Type::NbIntersections)
+            .def("Parameter", &Type::Parameter, "index"_a)
+        ;
+    }
+
     { // Knots
         using Type = ANurbs::Knots;
 
