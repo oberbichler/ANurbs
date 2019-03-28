@@ -9,6 +9,19 @@ compiler:
   - gcc
   - clang
 
+before_install:
+- |
+  if [ "$TRAVIS_OS_NAME" = "linux" ]; then OS=Linux-x86_64; else OS=MacOSX-x86_64; fi
+  wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest-$OS.sh
+  bash miniconda.sh -b -p $HOME/miniconda
+  export PATH="$HOME/miniconda/bin:$PATH"
+  conda config --set always_yes yes --set changeps1 no
+  conda config --add channels conda-forge
+  conda update -q conda
+  conda install -q conda-build
+  conda create -q -n test-environment python=$CONDA
+  source activate test-environment
+
 script:
   - mkdir build
   - cd build

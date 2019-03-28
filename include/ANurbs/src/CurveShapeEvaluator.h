@@ -142,7 +142,7 @@ public:
     }
 
     std::vector<int>
-    NonZeroPoleIndices() const
+    NonzeroPoleIndices() const
     {
         std::vector<int> indices(NbNonzeroPoles());
 

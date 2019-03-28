@@ -258,6 +258,34 @@ public:
 
         return EvaluateAt<VectorType>(poles, t, order);
     }
+
+    std::pair<std::vector<int>, std::vector<std::vector<ScalarType>>>
+    ShapeFunctionsAt(
+        const ScalarType t,
+        const int order) const
+    {
+        CurveShapeEvaluator<ScalarType> shape(Degree(), order);
+
+        if (IsRational()) {
+            shape.Compute(Knots(), [&](int i) -> ScalarType {
+                return Weight(i);
+            }, t);
+        } else {
+            shape.Compute(Knots(), t);
+        }
+
+        std::vector<std::vector<ScalarType>> shapeFunctions(shape.NbShapes());
+
+        for (int i = 0; i < shape.NbShapes(); i++) {
+            shapeFunctions[i] = std::vector<ScalarType>(shape.NbNonzeroPoles());
+
+            for (int j = 0; j < shape.NbNonzeroPoles(); j++) {
+                shapeFunctions[i][j] = shape(i, j);
+            }
+        }
+
+        return {shape.NonzeroPoleIndices(), shapeFunctions};
+    }
 };
 
 using CurveGeometryBase1D = CurveGeometryBase<Point1D>;

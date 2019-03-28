@@ -86,12 +86,12 @@ public:
     std::vector<IntervalType>
     Spans() const override
     {
-        auto knots = CurveGeometry()->Knots();
+        const auto knots = CurveGeometry()->Knots();
 
-        int firstSpan = Knots::UpperSpan(Degree(), knots, Domain().T0());
-        int lastSpan = Knots::LowerSpan(Degree(), knots, Domain().T1());
+        const int firstSpan = Knots::UpperSpan(Degree(), knots, Domain().T0());
+        const int lastSpan = Knots::LowerSpan(Degree(), knots, Domain().T1());
 
-        int nbSpans = lastSpan - firstSpan + 1;
+        const int nbSpans = lastSpan - firstSpan + 1;
 
         std::vector<IntervalType> result(nbSpans);
 
@@ -99,7 +99,7 @@ public:
             ScalarType t0 = CurveGeometry()->Knot(firstSpan + i);
             ScalarType t1 = CurveGeometry()->Knot(firstSpan + i + 1);
 
-            result[i] = IntervalType(t0, t1);
+            result[i] = IntervalType(Domain().Clamp(t0), Domain().Clamp(t1));
         }
 
         return result;
