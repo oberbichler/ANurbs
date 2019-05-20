@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Define.h"
+
 #include "CurveTessellation.h"
 
 #include "../Geometry/CurveBase.h"

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Define.h"
+
 #include "TrimmedSurfaceClipping.h"
 
 #include "../Geometry/Polygon.h"

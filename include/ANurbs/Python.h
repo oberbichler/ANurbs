@@ -320,86 +320,6 @@ RegisterPolyline(
     ;
 }
 
-template <int TDimension, typename TModule>
-void
-RegisterPointOnBrepProjection(
-    TModule& m)
-{
-    using namespace ANurbs;
-    using namespace pybind11::literals;
-    namespace py = pybind11;
-
-    using Vector = Vector<TDimension>;
-
-    using Type = PointOnBrepProjection<Brep>;
-    using Handler = Pointer<Type>;
-
-    std::string name = "PointOnBrepProjection" + std::to_string(TDimension) +
-        "D";
-
-    py::class_<Type, Handler>(m, name.c_str())
-        .def(py::init<Pointer<Brep>, double>(), "brep"_a, "tolerance"_a)
-    ;
-}
-
-template <int TDimension, typename TModule>
-void
-RegisterPointOnCurveProjection(
-    TModule& m)
-{
-    using namespace ANurbs;
-    using namespace pybind11::literals;
-    namespace py = pybind11;
-
-    using Vector = Vector<TDimension>;
-
-    using CurveBaseType = CurveBase<TDimension>;
-
-    using Type = PointOnCurveProjection<TDimension>;
-    using Handler = Pointer<Type>;
-
-    std::string name = "PointOnCurveProjection" + std::to_string(TDimension) +
-        "D";
-
-    py::class_<Type, Handler>(m, name.c_str())
-        .def(py::init<Pointer<CurveBaseType>, double>(), "curve"_a,
-            "tolerance"_a)
-        .def("Compute", &Type::Compute, "point"_a)
-        .def("Parameter", &Type::Parameter)
-        .def("Point", &Type::Point)
-    ;
-}
-
-template <int TDimension, typename TModule>
-void
-RegisterPointOnSurfaceProjection(
-    TModule& m)
-{
-    using namespace ANurbs;
-    using namespace pybind11::literals;
-    namespace py = pybind11;
-
-    using Vector = Vector<TDimension>;
-
-    using SurfaceBaseType = ANurbs::SurfaceBase<TDimension>;
-
-    using Type = PointOnSurfaceProjection<TDimension>;
-    using Handler = Pointer<Type>;
-
-    std::string name = "PointOnSurfaceProjection" + std::to_string(TDimension) +
-        "D";
-
-    py::class_<Type, Handler>(m, name.c_str())
-        .def(py::init<Pointer<SurfaceBaseType>>(), "surface"_a)
-        .def("Compute", &Type::Compute, "point"_a)
-        .def("ParameterU", &Type::ParameterU)
-        .def("ParameterV", &Type::ParameterV)
-        .def("Point", &Type::Point)
-        .def("Distance", &Type::Distance)
-        .def("BoundingBox", &Type::BoundingBox)
-    ;
-}
-
 template <int TDimension, typename TModule,
     typename TModel>
 void
@@ -463,6 +383,15 @@ RegisterData(
         KnotRefinement<3>::register_python(m);
     }
 
+    { // PointOnCurveProjection
+        PointOnCurveProjection<2>::register_python(m);
+        PointOnCurveProjection<3>::register_python(m);
+    }
+
+    { // PointOnSurfaceProjection
+        PointOnSurfaceProjection<3>::register_python(m);
+    }
+
     { // PolygonTessellation
         PolygonTessellation::register_python(m);
     }
@@ -519,18 +448,6 @@ RegisterData(
 
 
 
-    { // PointOnBrepProjection
-        RegisterPointOnBrepProjection<3>(m);
-    }
-
-    { // PointOnCurveProjection
-        RegisterPointOnCurveProjection<2>(m);
-        RegisterPointOnCurveProjection<3>(m);
-    }
-
-    { // PointOnSurfaceProjection
-        RegisterPointOnSurfaceProjection<3>(m);
-    }
 
     { // IntegrationPoint1D
         using Type = IntegrationPoint1;

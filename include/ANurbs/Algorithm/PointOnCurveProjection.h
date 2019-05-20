@@ -1,9 +1,12 @@
 #pragma once
 
+#include "../Define.h"
+
+#include "CurveTessellation.h"
+
 #include "../Geometry/CurveBase.h"
 #include "../Geometry/NurbsCurveGeometry.h"
 #include "../Geometry/NurbsSurfaceGeometry.h"
-#include "../Algorithm/CurveTessellation.h"
 
 #include <utility>
 
@@ -20,19 +23,19 @@ public:     // types
 private:    // variables
     std::vector<std::pair<double, Vector>> m_tessellation;
     Pointer<CurveBase> m_curve;
-    double m_tessellationFlatness;
+    double m_tessellation_flatness;
     double m_tolerance;
     double m_parameter;
     Vector m_point;
 
 public:     // constructors
     PointOnCurveProjection(Pointer<CurveBase> curve, const double& tolerance)
-        : m_tessellation(), m_curve(curve), m_tessellationFlatness(1e-3),
+        : m_tessellation(), m_curve(curve), m_tessellation_flatness(1e-3),
         m_tolerance(tolerance)
     {
         // create polyline
         m_tessellation = CurveTessellation<TDimension>::compute(*Curve(),
-            TessellationFlatness());
+            tessellation_flatness());
     }
 
 public:     // methods
@@ -41,37 +44,37 @@ public:     // methods
         return m_curve;
     }
 
-    double TessellationFlatness() const
+    double tessellation_flatness() const
     {
-        return m_tessellationFlatness;
+        return m_tessellation_flatness;
     }
 
-    void SetTessellationFlatness(const double value)
+    void set_tessellation_flatness(const double value)
     {
-        m_tessellationFlatness = value;
+        m_tessellation_flatness = value;
     }
 
-    double Tolerance() const
+    double tolerance() const
     {
         return m_tolerance;
     }
 
-    void SetTolerance(const double value)
+    void set_tolerance(const double value)
     {
         m_tolerance = value;
     }
 
-    double Parameter() const
+    double parameter() const
     {
         return m_parameter;
     }
     
-    Vector Point() const
+    Vector point() const
     {
         return m_point;
     }
 
-    void Compute(const Vector& sample)
+    void compute(const Vector& sample)
     {
         const auto domain = Curve()->domain();
 
@@ -103,8 +106,8 @@ public:     // methods
         // newton-raphson
 
         const int max_iter = 5;
-        const double eps1 = Tolerance();
-        const double eps2 = Tolerance() * 5;
+        const double eps1 = tolerance();
+        const double eps2 = tolerance() * 5;
 
         for (int i = 0; i < max_iter; i++) {
             auto f = Curve()->derivatives_at(closestParameter, 2);
@@ -140,19 +143,19 @@ public:     // methods
         
         closest_sqr_distance = squared_norm(Vector(sample - closestPoint));
 
-        Vector pointAtT0 = Curve()->point_at(domain.t0());
+        Vector point_at_t0 = Curve()->point_at(domain.t0());
 
-        if (squared_norm(Vector(sample - pointAtT0)) < closest_sqr_distance) {
+        if (squared_norm(Vector(sample - point_at_t0)) < closest_sqr_distance) {
             m_parameter = domain.t0();
-            m_point = pointAtT0;
+            m_point = point_at_t0;
             return;
         }
 
-        Vector pointAtT1 = Curve()->point_at(domain.t1());
+        Vector point_at_t1 = Curve()->point_at(domain.t1());
 
-        if (squared_norm(Vector(sample - pointAtT1)) < closest_sqr_distance) {
+        if (squared_norm(Vector(sample - point_at_t1)) < closest_sqr_distance) {
             m_parameter = domain.t1();
-            m_point = pointAtT1;
+            m_point = point_at_t1;
             return;
         }
 
@@ -160,15 +163,9 @@ public:     // methods
         m_point = closestPoint;
     }
 
-private:
-    static ParameterPoint
-    project_to_line(
-        const Vector& point,
-        const Vector& a,
-        const Vector& b,
-        const double& t0,
-        const double& t1
-    )
+private:    // static methods
+    static ParameterPoint project_to_line(const Vector& point, const Vector& a,
+        const Vector& b, const double& t0, const double& t1)
     {
         Vector dif = b - a;
         double l = squared_norm(dif);
@@ -194,6 +191,28 @@ private:
         Vector closestPoint = o + r * do2ptr;
 
         return {t, closestPoint};
+    }
+
+public:     // python
+    template <typename TModule>
+    static void register_python(TModule& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = PointOnCurveProjection<TDimension>;
+        using Handler = Pointer<Type>;
+
+        std::string name = "PointOnCurveProjection" + std::to_string(TDimension)
+            + "D";
+
+        py::class_<Type, Handler>(m, name.c_str())
+            .def(py::init<Pointer<CurveBase>, double>(), "curve"_a,
+                "tolerance"_a)
+            .def("compute", &Type::compute, "point"_a)
+            .def("parameter", &Type::parameter)
+            .def("point", &Type::point)
+        ;
     }
 };
 

@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Define.h"
-
 #include "Algorithm/CurveSpanIntersection.h"
 #include "Algorithm/CurveTessellation.h"
 #include "Algorithm/KnotRefinement.h"
 #include "Algorithm/NurbsCurveShapeFunction.h"
 #include "Algorithm/NurbsSurfaceShapeFunction.h"
+#include "Algorithm/PointOnCurveProjection.h"
+#include "Algorithm/PointOnSurfaceProjection.h"
 #include "Algorithm/PolygonTessellation.h"
 #include "Algorithm/TrimmedSurfaceClipping.h"
+#include "Define.h"
 #include "Geometry/Curve.h"
 #include "Geometry/CurveBase.h"
 #include "Geometry/CurveOnSurface.h"
@@ -20,7 +21,4 @@
 #include "Geometry/SurfaceBase.h"
 
 #include "src/IntegrationPoints.h"
-#include "src/PointOnBrepProjection.h"
-#include "src/PointOnCurveProjection.h"
-#include "src/PointOnSurfaceProjection.h"
 #include "src/PolygonIntegrationPoints.h"

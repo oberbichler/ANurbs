@@ -147,31 +147,31 @@ public:
     }
 
     double
-    ParameterU() const
+    parameter_u() const
     {
         return m_closestPoint.parameterU;
     }
 
     double
-    ParameterV() const
+    parameter_v() const
     {
         return m_closestPoint.parameterV;
     }
 
     Vector
-    Point() const
+    point() const
     {
         return m_closestPoint.point;
     }
 
     double
-    Distance() const
+    distance() const
     {
         return m_distance;
     }
 
     void
-    Compute(
+    compute(
         const Vector& sample)
     {
         size_t minIndex;
@@ -243,7 +243,7 @@ public:
     }
 
     std::vector<double>
-    BoundingBox() const
+    bounding_box() const
     {
         const int dimension = TDimension;
 
@@ -355,9 +355,30 @@ public:
 
         return cp;
     }
-};
 
-using PointOnSurfaceProjection2D = PointOnSurfaceProjection<2>;
-using PointOnSurfaceProjection3D = PointOnSurfaceProjection<3>;
+public:     // python
+    template <typename TModule>
+    static void register_python(TModule& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = PointOnSurfaceProjection<TDimension>;
+        using Handler = Pointer<Type>;
+
+        std::string name = "PointOnSurfaceProjection" +
+            std::to_string(TDimension) + "D";
+
+        py::class_<Type, Handler>(m, name.c_str())
+            .def(py::init<Pointer<SurfaceBase>>(), "surface"_a)
+            .def("compute", &Type::compute, "point"_a)
+            .def("parameter_u", &Type::parameter_u)
+            .def("parameter_v", &Type::parameter_v)
+            .def("point", &Type::point)
+            .def("distance", &Type::distance)
+            .def("bounding_box", &Type::bounding_box)
+        ;
+    }
+};
 
 } // namespace ANurbs
