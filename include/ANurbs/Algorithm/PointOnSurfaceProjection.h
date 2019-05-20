@@ -64,16 +64,14 @@ private:
     std::vector<ParameterPoint> m_tessellation;
     double m_tolerance;
     double m_distance;
-    int m_gridU;
-    int m_gridV;
+    int m_grid_u;
+    int m_grid_v;
     Unique<KDTreeType> m_index;
-    const PointCloudAdaptor m_pointCloudAdaptor;
+    const PointCloudAdaptor m_point_cloud_adaptor;
 
 public:
-    PointOnSurfaceProjection(
-        Pointer<SurfaceBase> surface)
-    : m_surface(surface)
-    , m_pointCloudAdaptor(m_tessellation)
+    PointOnSurfaceProjection(Pointer<SurfaceBase> surface)
+        : m_surface(surface), m_point_cloud_adaptor(m_tessellation)
     {
         std::vector<double> us;
 
@@ -118,61 +116,51 @@ public:
             }
         }
 
-        m_index = New<KDTreeType>(3, m_pointCloudAdaptor,
+        m_index = New<KDTreeType>(3, m_point_cloud_adaptor,
             nanoflann::KDTreeSingleIndexAdaptorParams(10));
 
         m_index->buildIndex();
 
-        m_gridU = static_cast<int>(us.size()) - 1;
-        m_gridV = static_cast<int>(vs.size()) - 1;
+        m_grid_u = static_cast<int>(us.size()) - 1;
+        m_grid_v = static_cast<int>(vs.size()) - 1;
     }
 
-    Pointer<SurfaceBase>
-    Surface() const
+    Pointer<SurfaceBase> surface() const
     {
         return m_surface;
     }
 
-    double
-    Tolerance() const
+    double tolerance() const
     {
         return m_tolerance;
     }
 
-    void
-    SetTolerance(
-        double value)
+    void set_tolerance(const double value)
     {
         m_tolerance = value;
     }
 
-    double
-    parameter_u() const
+    double parameter_u() const
     {
         return m_closestPoint.parameterU;
     }
 
-    double
-    parameter_v() const
+    double parameter_v() const
     {
         return m_closestPoint.parameterV;
     }
 
-    Vector
-    point() const
+    Vector point() const
     {
         return m_closestPoint.point;
     }
 
-    double
-    distance() const
+    double distance() const
     {
         return m_distance;
     }
 
-    void
-    compute(
-        const Vector& sample)
+    void compute(const Vector& sample)
     {
         size_t minIndex;
         double minDistance;
@@ -184,13 +172,13 @@ public:
 
         // ---
 
-        const size_t p = minIndex % (m_gridV + 1);
-        const size_t o = minIndex / (m_gridV + 1);
+        const size_t p = minIndex % (m_grid_v + 1);
+        const size_t o = minIndex / (m_grid_v + 1);
 
         m_closestPoint = m_tessellation[minIndex];
 
-        if (o != m_gridU && p != m_gridV) {
-            const auto pt = TriangleProjection(sample, minIndex, minIndex + 1, minIndex + m_gridV + 1);
+        if (o != m_grid_u && p != m_grid_v) {
+            const auto pt = triangle_projection(sample, minIndex, minIndex + 1, minIndex + m_grid_v + 1);
 
             const Vector v = sample - pt.point;
             const auto distance = squared_norm(v);
@@ -201,8 +189,8 @@ public:
             }
         }
 
-        if (o != m_gridU && p != 0) {
-            const auto pt = TriangleProjection(sample, minIndex, minIndex - 1, minIndex + m_gridV + 1);
+        if (o != m_grid_u && p != 0) {
+            const auto pt = triangle_projection(sample, minIndex, minIndex - 1, minIndex + m_grid_v + 1);
 
             const Vector v = sample - pt.point;
             const auto distance = squared_norm(v);
@@ -213,8 +201,8 @@ public:
             }
         }
 
-        if (o != 0 && p != m_gridV) {
-            const auto pt = TriangleProjection(sample, minIndex, minIndex + 1, minIndex - m_gridV - 1);
+        if (o != 0 && p != m_grid_v) {
+            const auto pt = triangle_projection(sample, minIndex, minIndex + 1, minIndex - m_grid_v - 1);
 
             const Vector v = sample - pt.point;
             const auto distance = squared_norm(v);
@@ -226,7 +214,7 @@ public:
         }
 
         if (o != 0 && p != 0) {
-            const auto pt = TriangleProjection(sample, minIndex, minIndex - 1, minIndex - m_gridV - 1);
+            const auto pt = triangle_projection(sample, minIndex, minIndex - 1, minIndex - m_grid_v - 1);
 
             const Vector v = sample - pt.point;
             const auto distance = squared_norm(v);
@@ -239,11 +227,10 @@ public:
 
         // ---
 
-        m_closestPoint = Newton(sample, m_closestPoint.parameterU, m_closestPoint.parameterV);
+        m_closestPoint = newton(sample, m_closestPoint.parameterU, m_closestPoint.parameterV);
     }
 
-    std::vector<double>
-    bounding_box() const
+    std::vector<double> bounding_box() const
     {
         const int dimension = TDimension;
 
@@ -259,12 +246,7 @@ public:
         return values;
     }
 
-    ParameterPoint
-    Newton(
-        const Vector point,
-        const double u,
-        const double v
-    )
+    ParameterPoint newton(const Vector point, const double u, const double v)
     {
         double cu = u;
         double cv = v;
@@ -324,16 +306,12 @@ public:
         return {cu, cv, m_surface->point_at(cu, cv)};
     }
 
-    ParameterPoint
-    TriangleProjection(
-        const Vector point,
-        const size_t& indexA,
-        const size_t& indexB,
-        const size_t& indexC)
+    ParameterPoint triangle_projection(const Vector point,
+        const size_t& index_a, const size_t& index_b, const size_t& index_c)
     {
-        const auto a = m_tessellation[indexA];
-        const auto b = m_tessellation[indexB];
-        const auto c = m_tessellation[indexC];
+        const auto a = m_tessellation[index_a];
+        const auto b = m_tessellation[index_b];
+        const auto c = m_tessellation[index_c];
 
         const Vector u = b.point - a.point;
         const Vector v = c.point - a.point;
