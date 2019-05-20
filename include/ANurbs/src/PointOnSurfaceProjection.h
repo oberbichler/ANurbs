@@ -4,7 +4,7 @@
 #include "Pointer.h"
 #include "VectorTraits.h"
 
-#include <nanoflann.hpp>
+#include <nanoflann\nanoflann.hpp>
 
 namespace ANurbs {
 
