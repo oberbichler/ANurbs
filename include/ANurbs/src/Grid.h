@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math.h"
+#include "../Algorithm/Math.h"
 
 #include <vector>
 
@@ -74,7 +74,7 @@ public:
         const int row,
         const int col) const
     {
-        int index = Math::MatrixIndex(NbRows(), NbCols(), row, col);
+        int index = Math::matrix_index(NbRows(), NbCols(), row, col);
 
         return m_values[index];
     }
@@ -93,7 +93,7 @@ public:
         const int col,
         const DataType& value)
     {
-        int index = Math::MatrixIndex(NbRows(), NbCols(), row, col);
+        int index = Math::matrix_index(NbRows(), NbCols(), row, col);
 
         m_values[index] = value;
     }

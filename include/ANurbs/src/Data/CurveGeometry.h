@@ -4,21 +4,21 @@
 #include "Model.h"
 #include "Ref.h"
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 
 #include <vector>
 
 namespace ANurbs {
 
-template <typename TVector>
-struct DataIO<CurveGeometry<TVector>>
+template <int TDimension>
+struct DataIO<NurbsCurveGeometry<TDimension>>
 {
-    using DataType = CurveGeometry<TVector>;
+    using DataType = NurbsCurveGeometry<TDimension>;
 
     static std::string
     Type()
     {
-        return "CurveGeometry" + std::to_string(DimensionOf<TVector>()) + "D";
+        return "NurbsCurveGeometry" + std::to_string(TDimension) + "D";
     }
 
     static Unique<DataType>
@@ -26,31 +26,32 @@ struct DataIO<CurveGeometry<TVector>>
         Model& model,
         const Json& source)
     {
-        const auto poles = source.at("Poles");
-        const auto knots = source.at("Knots");
-        const auto weights = source.value("Weights", std::vector<double>());
+        // const auto poles = source.at("Poles");
+        // const auto knots = source.at("Knots");
+        // const auto weights = source.value("Weights", std::vector<double>());
         
-        const int degree = source.at("Degree");
-        const int nbPoles = static_cast<int>(poles.size());
-        const bool isRational = !weights.empty();
+        // const int degree = source.at("Degree");
+        // const int nbPoles = static_cast<int>(poles.size());
+        // const bool isRational = !weights.empty();
 
-        auto result = New<DataType>(degree, nbPoles, isRational);
+        // auto result = New<DataType>(degree, nbPoles, isRational);
 
-        for (int i = 0; i < knots.size(); i++) {
-            result->SetKnot(i, knots[i]);
-        }
+        // for (int i = 0; i < knots.size(); i++) {
+        //     result->SetKnot(i, knots[i]);
+        // }
 
-        for (int i = 0; i < nbPoles; i++) {
-            result->SetPole(i, poles[i]);
-        }
+        // for (int i = 0; i < nbPoles; i++) {
+        //     result->SetPole(i, poles[i]);
+        // }
 
-        if (isRational) {
-            for (int i = 0; i < weights.size(); i++) {
-                result->SetWeight(i, weights[i]);
-            }
-        }
+        // if (isRational) {
+        //     for (int i = 0; i < weights.size(); i++) {
+        //         result->SetWeight(i, weights[i]);
+        //     }
+        // }
 
-        return result;
+        // return result;
+        return nullptr;
     }
 
     static void
@@ -59,14 +60,14 @@ struct DataIO<CurveGeometry<TVector>>
         const DataType& data,
         Json& target)
     {
-        target["Degree"] = data.Degree();
-        target["Knots"] = data.Knots();
-        target["NbPoles"] = data.NbPoles();
-        target["Poles"] = ToJson(data.Poles());
+        // target["Degree"] = data.degree();
+        // target["Knots"] = data.knots();
+        // target["NbPoles"] = data.nb_poles();
+        // target["Poles"] = ToJson(data.poles());
 
-        if (data.IsRational()) {
-            target["Weights"] = data.Weights();
-        }
+        // if (data.IsRational()) {
+        //     target["Weights"] = data.weights();
+        // }
     }
 };
 

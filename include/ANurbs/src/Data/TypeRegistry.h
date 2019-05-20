@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 #include "Json.h"
 
 #include <map>

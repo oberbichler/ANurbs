@@ -1,6 +1,5 @@
 #pragma once
 
-// #include "./src/Data/Point.h"
 #include "./src/Data/PointData.h"
 
 #include "./src/Data/CurveGeometry.h"
@@ -19,5 +18,4 @@
 #include "./src/Data/Polyline.h"
 
 #include "./src/Data/TextDot.h"
-
 #include "./src/Data/Model.h"

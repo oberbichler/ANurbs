@@ -1,7 +1,7 @@
 #include "catch.hpp"
 
-#include <ANurbs/src/Curve.h>
-#include <ANurbs/src/CurveOnSurface.h>
+#include <ANurbs/Geometry/Curve.h>
+#include <ANurbs/Geometry/CurveOnSurface.h>
 #include <ANurbs/src/PointOnCurveProjection.h>
 
 TEST_CASE( "Project point on spatial curve", "[PointOnCurveProjection]" ) {

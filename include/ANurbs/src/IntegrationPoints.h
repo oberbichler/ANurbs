@@ -1,44 +1,40 @@
 #pragma once
 
-#include "Interval.h"
+#include "../Geometry/Interval.h"
 
 #include <stdexcept>
 #include <vector>
 
 namespace ANurbs {
 
-template <typename TScalar>
 struct IntegrationPoint1
 {
-    TScalar t;
-    TScalar weight;
+    double t;
+    double weight;
 };
 
-template <typename TScalar>
 struct IntegrationPoint2
 {
-    TScalar u;
-    TScalar v;
-    TScalar weight;
+    double u;
+    double v;
+    double weight;
 };
 
-template <typename TScalar>
 struct IntegrationPointBarycentric
 {
-    TScalar a;
-    TScalar b;
-    TScalar c;
-    TScalar weight;
+    double a;
+    double b;
+    double c;
+    double weight;
 };
 
-template <typename TScalar>
 class IntegrationPoints
 {
 public:
-    using ScalarType = TScalar;
-    using IntegrationPoint1Type = IntegrationPoint1<ScalarType>;
-    using IntegrationPoint2Type = IntegrationPoint2<ScalarType>;
-    using IntegrationPointBarycentricType = IntegrationPointBarycentric<ScalarType>;
+    using ScalarType = double;
+    using IntegrationPoint1Type = IntegrationPoint1;
+    using IntegrationPoint2Type = IntegrationPoint2;
+    using IntegrationPointBarycentricType = IntegrationPointBarycentric;
 
 private:
     static std::vector<std::vector<IntegrationPoint1Type>> s_gaussLegendre;
@@ -70,15 +66,15 @@ public:
     static std::vector<IntegrationPoint1Type>
     Points1(
         const size_t degree,
-        const Interval<ScalarType>& domain)
+        const Interval& domain)
     {
         std::vector<IntegrationPoint1Type> integrationPoints(degree);
 
         auto integrationPoint = integrationPoints.begin();
 
         for (const auto& gaussLegendrePoint : GaussLegendre(degree)) {
-            integrationPoint->t = domain.ParameterAtNormalized(gaussLegendrePoint.t);
-            integrationPoint->weight = gaussLegendrePoint.weight * domain.Length();
+            integrationPoint->t = domain.parameter_at_normalized(gaussLegendrePoint.t);
+            integrationPoint->weight = gaussLegendrePoint.weight * domain.length();
             integrationPoint++;
         }
 
@@ -89,8 +85,8 @@ public:
     Points2(
         const size_t degreeU,
         const size_t degreeV,
-        const Interval<ScalarType>& domainU,
-        const Interval<ScalarType>& domainV)
+        const Interval& domainU,
+        const Interval& domainV)
     {
         auto integrationPointsU = Points1(degreeU, domainU);
         auto integrationPointsV = Points1(degreeV, domainV);
@@ -112,9 +108,8 @@ public:
     }
 };
 
-template <typename TScalar>
-std::vector<std::vector<IntegrationPoint1<TScalar>>>
-IntegrationPoints<TScalar>::s_gaussLegendre = {
+std::vector<std::vector<IntegrationPoint1>>
+IntegrationPoints::s_gaussLegendre = {
     {   // degree 1
         { 0.5000000000000000000, 1.0000000000000000000 },
     },
@@ -1492,9 +1487,8 @@ IntegrationPoints<TScalar>::s_gaussLegendre = {
     }
 };
 
-template <typename TScalar>
-std::vector<std::vector<IntegrationPointBarycentric<TScalar>>>
-IntegrationPoints<TScalar>::s_xiaoGimbutas = {
+std::vector<std::vector<IntegrationPointBarycentric>>
+IntegrationPoints::s_xiaoGimbutas = {
     {   // degree 1
         {0.3333333333333333, 0.3333333333333333, 0.3333333333333333, 1.0},
     },

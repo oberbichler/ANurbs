@@ -1,11 +1,11 @@
 #include "catch.hpp"
 
-#include <ANurbs/src/Curve.h>
-#include <ANurbs/src/CurveGeometry.h>
-#include <ANurbs/src/CurveSpanIntersection.h>
+#include <ANurbs/Geometry/Curve.h>
+#include <ANurbs/Geometry/NurbsCurveGeometry.h>
+#include <ANurbs/Geometry/CurveSpanIntersection.h>
 
 TEST_CASE( "Intersect curve with surface knot spans (1)",
-    "[CurveSpanIntersection][Curve][CurveGeometry][2D]" ) {
+    "[CurveSpanIntersection][Curve][NurbsCurveGeometry][2D]" ) {
     using namespace ANurbs;
 
     // create curve
@@ -57,7 +57,7 @@ TEST_CASE( "Intersect curve with surface knot spans (1)",
 }
 
 TEST_CASE( "Intersect curve with surface knot spans (2)",
-    "[CurveSpanIntersection][Curve][CurveGeometry][2D]" ) {
+    "[CurveSpanIntersection][Curve][NurbsCurveGeometry][2D]" ) {
     using namespace ANurbs;
 
     // create curve
@@ -105,7 +105,7 @@ TEST_CASE( "Intersect curve with surface knot spans (2)",
 }
 
 TEST_CASE( "Intersect curve with surface knot spans (3)",
-    "[CurveSpanIntersection][Curve][CurveGeometry][2D]" ) {
+    "[CurveSpanIntersection][Curve][NurbsCurveGeometry][2D]" ) {
     using namespace ANurbs;
 
     // create curve
@@ -150,7 +150,7 @@ TEST_CASE( "Intersect curve with surface knot spans (3)",
 }
 
 TEST_CASE( "Intersect curve with surface knot spans (4)",
-    "[CurveSpanIntersection][Curve][CurveGeometry][2D]" ) {
+    "[CurveSpanIntersection][Curve][NurbsCurveGeometry][2D]" ) {
     using namespace ANurbs;
 
     // create curve

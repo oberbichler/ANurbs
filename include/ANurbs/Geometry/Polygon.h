@@ -1,26 +1,28 @@
 #pragma once
 
+#include "../Define.h"
+
 #include <vector>
 
 namespace ANurbs {
 
-template <typename TVector>
 struct Polygon
 {
-    using Path = std::vector<TVector>;
+public:     // types
+    using Vector = Vector<2>;
+    using Path = std::vector<Vector>;
 
+public:     // variables
     Path outer_path;
     std::vector<Path> inner_paths;
 
-    int
-    NbLoops() const
+public:     // methods
+    int nb_loops() const
     {
         return static_cast<int>(inner_paths.size()) + 1;
     }
 
-    int
-    NbVerticesOfLoop(
-        const int index) const
+    int nb_vertices_of_loop(const int index) const
     {
         if (index == 0) {
             return static_cast<int>(outer_path.size());
@@ -29,10 +31,7 @@ struct Polygon
         }
     }
 
-    TVector
-    VertexOfLoop(
-        int loopIndex,
-        int vertexIndex) const
+    Vector vertex_of_loop(int loopIndex, int vertexIndex) const
     {
         if (loopIndex == 0) {
             return outer_path[vertexIndex];
@@ -41,8 +40,7 @@ struct Polygon
         }
     }
 
-    int
-    NbVertices() const
+    int nb_vertices() const
     {
         int nbVertices = static_cast<int>(outer_path.size());
 
@@ -53,9 +51,7 @@ struct Polygon
         return nbVertices;
     }
 
-    TVector
-    Vertex(
-        int index) const
+    Vector vertex(int index) const
     {
         if (index < outer_path.size()) {
             return outer_path[index];
@@ -72,6 +68,26 @@ struct Polygon
         }
 
         throw std::exception();
+    }
+
+public:     // python
+    template <typename TModule>
+    static void register_python(TModule& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = Polygon;
+
+        pybind11::class_<Type>(m, "Polygon")
+            .def(py::init<>())
+            .def("nb_loops", &Type::nb_loops)
+            .def("nb_vertices_of_loop", &Type::nb_vertices_of_loop, "index"_a)
+            .def("vertex_of_loop", &Type::vertex_of_loop, "loop_index"_a,
+                "vertex_index"_a)
+            .def("nb_vertices", &Type::nb_vertices)
+            .def("vertex", &Type::vertex, "index"_a)
+        ;
     }
 };
 

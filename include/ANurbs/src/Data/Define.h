@@ -1,9 +1,9 @@
 #pragma once
 
+#include "../../Define.h"
+
 #include "Attributes.h"
 #include "CadAttributes.h"
-
-#include <ANurbs/src/Pointer.h>
 
 namespace ANurbs {
 

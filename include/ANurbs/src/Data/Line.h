@@ -5,28 +5,31 @@
 #include "Model.h"
 #include "Ref.h"
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 
 #include <vector>
 
 namespace ANurbs {
 
-template <typename TVector>
+template <int TDimension>
 class Line
 {
+public:
+    using Vector = Vector<TDimension>;
+
 private:
-    TVector m_a;
-    TVector m_b;
+    Vector m_a;
+    Vector m_b;
 
 public:
-    using DataType = Line<TVector>;
+    using DataType = Line<TDimension>;
 
     Line()
     { }
     
     Line(
-        const TVector& a,
-        const TVector& b)
+        const Vector& a,
+        const Vector& b)
     : m_a(a)
     , m_b(b)
     { }
@@ -34,10 +37,10 @@ public:
     static std::string
     Type()
     {
-        return "Line" + std::to_string(DimensionOf<TVector>()) + "D";
+        return "Line" + std::to_string(TDimension) + "D";
     }
 
-    TVector
+    Vector
     A() const
     {
         return m_a;
@@ -45,12 +48,12 @@ public:
 
     void
     SetA(
-        const TVector& value)
+        const Vector& value)
     {
         m_a = value;
     }
 
-    TVector
+    Vector
     B() const
     {
         return m_b;
@@ -58,7 +61,7 @@ public:
 
     void
     SetB(
-        const TVector& value)
+        const Vector& value)
     {
         m_b = value;
     }
@@ -70,8 +73,8 @@ public:
     {
         auto result = New<Line>();
 
-        result->m_a = data.at("A");
-        result->m_b = data.at("B");
+        // result->m_a = data.at("A");
+        // result->m_b = data.at("B");
 
         return result;
     }
@@ -81,13 +84,13 @@ public:
         const Model& model,
         Json& data) const
     {
-        data["A"] = ToJson(m_a);
-        data["B"] = ToJson(m_b);
+        // data["A"] = ToJson(m_a);
+        // data["B"] = ToJson(m_b);
     }
 };
 
-template <typename TVector>
-struct AttributesType<Line<TVector>>
+template <int TDimension>
+struct AttributesType<Line<TDimension>>
 {
     using Type = CadAttributes;
 };

@@ -2,8 +2,6 @@
 
 #include "Entry.h"
 
-#include <ANurbs/src/Pointer.h>
-
 #include <memory>
 #include <stdexcept>
 #include <string>

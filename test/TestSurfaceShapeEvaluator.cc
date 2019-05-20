@@ -1,10 +1,10 @@
 #include "catch.hpp"
 
 #include <ANurbs/src/Grid.h>
-#include <ANurbs/src/SurfaceShapeEvaluator.h>
+#include <ANurbs/src/NurbsSurfaceShapeFunction.h>
 
 TEST_CASE( "Shape functions of a B-Spline surface",
-    "[SurfaceShapeEvaluator]" )
+    "[NurbsSurfaceShapeFunction]" )
 {
     using namespace ANurbs;
 
@@ -12,7 +12,7 @@ TEST_CASE( "Shape functions of a B-Spline surface",
     const int degreeV = 1;
     const int order = 2;
 
-    SurfaceShapeEvaluator<double> shape(degreeU, degreeV, order);
+    NurbsSurfaceShapeFunction shape(degreeU, degreeV, order);
 
     std::vector<double> knotsU = {0, 0, 7.5, 15, 15.0};
     std::vector<double> knotsV = {0, 10, 20};
@@ -116,7 +116,7 @@ TEST_CASE( "Shape functions of a B-Spline surface",
 }
 
 TEST_CASE( "Shape functions of a equal weighted Nurbs surface",
-    "[SurfaceShapeEvaluator]" )
+    "[NurbsSurfaceShapeFunction]" )
 {
     using namespace ANurbs;
 
@@ -124,7 +124,7 @@ TEST_CASE( "Shape functions of a equal weighted Nurbs surface",
     const int degreeV = 1;
     const int order = 2;
 
-    SurfaceShapeEvaluator<double> shape(degreeU, degreeV, order);
+    NurbsSurfaceShapeFunction shape(degreeU, degreeV, order);
  
     std::vector<double> knotsU = {0, 0, 7.5, 15, 15.0};
     std::vector<double> knotsV = {0, 10, 20};
@@ -242,7 +242,7 @@ TEST_CASE( "Shape functions of a equal weighted Nurbs surface",
 }
 
 TEST_CASE( "Shape functions of a weighted Nurbs surface",
-    "[SurfaceShapeEvaluator]" )
+    "[NurbsSurfaceShapeFunction]" )
 {
     using namespace ANurbs;
 
@@ -250,7 +250,7 @@ TEST_CASE( "Shape functions of a weighted Nurbs surface",
     const int degreeV = 1;
     const int order = 2;
 
-    SurfaceShapeEvaluator<double> shape(degreeU, degreeV, order);
+    NurbsSurfaceShapeFunction shape(degreeU, degreeV, order);
  
     std::vector<double> knotsU = {0, 0, 7.5, 15, 15.0};
     std::vector<double> knotsV = {0, 10, 20};

@@ -6,7 +6,7 @@
 #include "Model.h"
 #include "Ref.h"
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 
 #include <vector>
 
@@ -45,19 +45,22 @@ namespace Eigen {
 
 namespace ANurbs {
 
-template <typename TVector>
+template <int TDimension>
 class PointData
 {
+public:
+    using Vector = Vector<TDimension>;
+
 private:
-    TVector m_location;
+    Vector m_location;
 
 public:
-    using DataType = PointData<TVector>;
+    using DataType = PointData<TDimension>;
 
     static std::string
     Type()
     {
-        return "Point" + std::to_string(DimensionOf<TVector>()) + "D";
+        return "Point" + std::to_string(TDimension) + "D";
     }
 
     PointData()
@@ -65,12 +68,12 @@ public:
     }
 
     PointData(
-        const TVector& value)
+        const Vector& value)
     : m_location(value)
     {
     }
 
-    TVector
+    Vector
     Location() const
     {
         return m_location;
@@ -78,7 +81,7 @@ public:
 
     void
     SetLocation(
-        const TVector& value)
+        const Vector& value)
     {
         m_location = value;
     }
@@ -88,9 +91,9 @@ public:
         Model& model,
         const Json& source)
     {
-        auto data = New<PointData<TVector>>();
+        auto data = New<PointData<TDimension>>();
 
-        data->m_location = source.at("Location");
+        // data->m_location = source.at("Location");
 
         return data;
     }
@@ -100,12 +103,12 @@ public:
         const Model& model,
         Json& target) const
     {
-        target["Location"] = ToJson(m_location);
+        // target["Location"] = ToJson(m_location);
     }
 };
 
-template <typename TVector>
-struct AttributesType<PointData<TVector>>
+template <int TDimension>
+struct AttributesType<PointData<TDimension>>
 {
     using Type = CadAttributes;
 };

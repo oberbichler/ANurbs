@@ -1,24 +1,24 @@
 #include "catch.hpp"
 
-#include <ANurbs/src/CurveShapeEvaluator.h>
+#include <ANurbs/Geometry/NurbsCurveShapeFunction.h>
 
 #include <functional>
 
 using namespace ANurbs;
 
 
-TEST_CASE( "Shape functions of a curve", "[CurveShapeEvaluator]" ) {
+TEST_CASE( "Shape functions of a curve", "[NurbsCurveShapeFunction]" ) {
     int degree = 2;
     int order = 2;
 
-    CurveShapeEvaluator<double> shape(degree, order);
+    NurbsCurveShapeFunction shape(degree, order);
 
     SECTION( "Compute values of a B-Spline" ) {
         std::vector<double> knots = {1, 1, 3, 3};
 
         double t = 2;
 
-        shape.Compute(knots, t);
+        shape.compute(knots, t);
 
         CHECK( shape(0, 0) == Approx( 0.25) );
         CHECK( shape(0, 1) == Approx( 0.50) );
@@ -39,7 +39,7 @@ TEST_CASE( "Shape functions of a curve", "[CurveShapeEvaluator]" ) {
 
         double t = 2;
 
-        shape.Compute(knots, weights, t);
+        shape.compute(knots, weights, t);
 
         CHECK( shape(0, 0) == Approx( 0.25) );
         CHECK( shape(0, 1) == Approx( 0.50) );
@@ -60,7 +60,7 @@ TEST_CASE( "Shape functions of a curve", "[CurveShapeEvaluator]" ) {
 
         double t = 2;
 
-        shape.Compute(knots, weights, t);
+        shape.compute(knots, weights, t);
 
         CHECK( shape(0, 0) == Approx( 0.20) );
         CHECK( shape(0, 1) == Approx( 0.60) );
@@ -76,11 +76,11 @@ TEST_CASE( "Shape functions of a curve", "[CurveShapeEvaluator]" ) {
     }
 }
 
-TEST_CASE( "Shape functions of a curve 2", "[CurveShapeEvaluator]" ) {
+TEST_CASE( "Shape functions of a curve 2", "[NurbsCurveShapeFunction]" ) {
     int degree = 1;
     int order = 1;
 
-    CurveShapeEvaluator<double> shape(degree, order);
+    NurbsCurveShapeFunction shape(degree, order);
 
     std::vector<double> knots = {0, 5};
 
@@ -88,7 +88,7 @@ TEST_CASE( "Shape functions of a curve 2", "[CurveShapeEvaluator]" ) {
     
     t = 1.0566243270259357;
 
-    shape.Compute(knots, t);
+    shape.compute(knots, t);
 
     CHECK( shape(0, 0) == Approx( 0.788675134594813  ) );
     CHECK( shape(0, 1) == Approx( 0.21132486540518713) );
@@ -98,7 +98,7 @@ TEST_CASE( "Shape functions of a curve 2", "[CurveShapeEvaluator]" ) {
 
     t = 3.9433756729740645;
 
-    shape.Compute(knots, t);
+    shape.compute(knots, t);
 
     CHECK( shape(0, 0) == Approx( 0.2113248654051871 ) );
     CHECK( shape(0, 1) == Approx( 0.788675134594813  ) );

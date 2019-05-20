@@ -5,28 +5,27 @@
 #include "Model.h"
 #include "Ref.h"
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 
 #include <vector>
 
 namespace ANurbs {
 
-template <typename TVector>
-struct AttributesType<Curve<CurveGeometry<TVector>,
-    Ref<CurveGeometry<TVector>>>>
+template <int TDimension>
+struct AttributesType<Curve<TDimension, Ref<NurbsCurveGeometry<TDimension>>>>
 {
     using Type = CadAttributes;
 };
 
-template <typename TVector>
-struct DataIO<Curve<CurveGeometry<TVector>, Ref<CurveGeometry<TVector>>>>
+template <int TDimension>
+struct DataIO<Curve<TDimension, Ref<NurbsCurveGeometry<TDimension>>>>
 {
-    using DataType = Curve<CurveGeometry<TVector>, Ref<CurveGeometry<TVector>>>;
+    using DataType = Curve<TDimension, Ref<NurbsCurveGeometry<TDimension>>>;
 
     static std::string
     Type()
     {
-        return "Curve" + std::to_string(DimensionOf<TVector>()) + "D";
+        return "Curve" + std::to_string(DataType::dimension()) + "D";
     }
 
     static Unique<DataType>
@@ -34,10 +33,10 @@ struct DataIO<Curve<CurveGeometry<TVector>, Ref<CurveGeometry<TVector>>>>
         Model& model,
         const Json& source)
     {
-        const auto geometry = model.GetLazy<CurveGeometry<TVector>>(
+        const auto geometry = model.GetLazy<NurbsCurveGeometry<TDimension>>(
             source.at("Geometry"));
 
-        const Interval<double> domain = source.at("Domain");
+        const Interval domain = source.at("Domain");
 
         return New<DataType>(geometry, domain);
     }
@@ -48,8 +47,8 @@ struct DataIO<Curve<CurveGeometry<TVector>, Ref<CurveGeometry<TVector>>>>
         const DataType& data,
         Json& target)
     {
-        target["Geometry"] = data.CurveGeometry().Key();
-        target["Domain"] = ToJson(data.Domain());
+        target["Geometry"] = data.curve_geometry().Key();
+        target["Domain"] = ToJson(data.domain());
     }
 };
 

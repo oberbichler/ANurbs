@@ -1,28 +1,26 @@
 #pragma once
 
-#include "SurfaceBase.h"
-#include "Pointer.h"
-#include "VectorTraits.h"
+#include "../Define.h"
+
+#include "../Geometry/SurfaceBase.h"
 
 #include <nanoflann\nanoflann.hpp>
 
 namespace ANurbs {
 
-template <typename TVector>
+template <int TDimension>
 class PointOnSurfaceProjection
 {
 public:
-    using VectorType = TVector;
-    using ScalarType = ScalarTypeOf<VectorType>;
-
-    using SurfaceBaseType = SurfaceBase<VectorType>;
+    using Vector = Vector<TDimension>;
+    using SurfaceBase = SurfaceBase<TDimension>;
 
 private:
     struct ParameterPoint
     {
-        ScalarType parameterU;
-        ScalarType parameterV;
-        VectorType point;
+        double parameterU;
+        double parameterV;
+        Vector point;
     };
 
     struct PointCloudAdaptor
@@ -40,12 +38,12 @@ private:
             return m_points.size();
         }
 
-        inline ScalarType
+        inline double
         kdtree_get_pt(
             const size_t idx,
             const size_t dim) const
         {
-            return Nth(m_points[idx].point, static_cast<int>(dim));
+            return m_points[idx].point[dim];
         }
 
         template <typename BBOX>
@@ -57,15 +55,15 @@ private:
     };
 
     using KDTreeType = nanoflann::KDTreeSingleIndexAdaptor<
-        nanoflann::L2_Simple_Adaptor<ScalarType, PointCloudAdaptor>,
+        nanoflann::L2_Simple_Adaptor<double, PointCloudAdaptor>,
         PointCloudAdaptor, 3>;
 
 private:
-    Pointer<SurfaceBaseType> m_surface;
+    Pointer<SurfaceBase> m_surface;
     ParameterPoint m_closestPoint;
     std::vector<ParameterPoint> m_tessellation;
-    ScalarType m_tolerance;
-    ScalarType m_distance;
+    double m_tolerance;
+    double m_distance;
     int m_gridU;
     int m_gridV;
     Unique<KDTreeType> m_index;
@@ -73,49 +71,49 @@ private:
 
 public:
     PointOnSurfaceProjection(
-        Pointer<SurfaceBaseType> surface)
+        Pointer<SurfaceBase> surface)
     : m_surface(surface)
     , m_pointCloudAdaptor(m_tessellation)
     {
-        std::vector<ScalarType> us;
+        std::vector<double> us;
 
-        for (const auto& span : surface->SpansU()) {
-            if (span.Length() < 1e-7) {
+        for (const auto& span : surface->spans_u()) {
+            if (span.length() < 1e-7) {
                 continue;
             }
 
-            const int n = surface->DegreeU() + 1;
+            const int n = surface->degree_u() + 1;
 
             for (int i = 0; i < n; i++) {
-                const ScalarType u = span.ParameterAtNormalized(1.0 / n * i);
+                const double u = span.parameter_at_normalized(1.0 / n * i);
                 us.push_back(u);
             }
         }
 
-        us.push_back(surface->DomainU().T1());
+        us.push_back(surface->domain_u().t1());
 
-        std::vector<ScalarType> vs;
+        std::vector<double> vs;
 
-        for (const auto& span : surface->SpansV()) {
-            if (span.Length() < 1e-7) {
+        for (const auto& span : surface->spans_v()) {
+            if (span.length() < 1e-7) {
                 continue;
             }
 
-            const int n = surface->DegreeV() + 1;
+            const int n = surface->degree_v() + 1;
 
             for (int i = 0; i < n; i++) {
-                const ScalarType v = span.ParameterAtNormalized(1.0 / n * i);
+                const double v = span.parameter_at_normalized(1.0 / n * i);
                 vs.push_back(v);
             }
         }
 
-        vs.push_back(surface->DomainV().T1());
+        vs.push_back(surface->domain_v().t1());
 
         m_tessellation.reserve(us.size() * vs.size());
 
         for (const auto u : us) {
             for (const auto v : vs) {
-                const auto point = m_surface->PointAt(u, v);
+                const auto point = m_surface->point_at(u, v);
                 m_tessellation.push_back({u, v, point});
             }
         }
@@ -129,13 +127,13 @@ public:
         m_gridV = static_cast<int>(vs.size()) - 1;
     }
 
-    Pointer<SurfaceBaseType>
+    Pointer<SurfaceBase>
     Surface() const
     {
         return m_surface;
     }
 
-    ScalarType
+    double
     Tolerance() const
     {
         return m_tolerance;
@@ -143,30 +141,30 @@ public:
 
     void
     SetTolerance(
-        ScalarType value)
+        double value)
     {
         m_tolerance = value;
     }
 
-    ScalarType
+    double
     ParameterU() const
     {
         return m_closestPoint.parameterU;
     }
 
-    ScalarType
+    double
     ParameterV() const
     {
         return m_closestPoint.parameterV;
     }
 
-    VectorType
+    Vector
     Point() const
     {
         return m_closestPoint.point;
     }
 
-    ScalarType
+    double
     Distance() const
     {
         return m_distance;
@@ -174,12 +172,12 @@ public:
 
     void
     Compute(
-        const VectorType& sample)
+        const Vector& sample)
     {
         size_t minIndex;
-        ScalarType minDistance;
+        double minDistance;
 
-        nanoflann::KNNResultSet<ScalarType> resultSet(1);
+        nanoflann::KNNResultSet<double> resultSet(1);
         resultSet.init(&minIndex, &minDistance);
         m_index->findNeighbors(resultSet, &sample[0],
             nanoflann::SearchParams(10));
@@ -194,8 +192,8 @@ public:
         if (o != m_gridU && p != m_gridV) {
             const auto pt = TriangleProjection(sample, minIndex, minIndex + 1, minIndex + m_gridV + 1);
 
-            const VectorType v = sample - pt.point;
-            const auto distance = SquaredNorm(v);
+            const Vector v = sample - pt.point;
+            const auto distance = squared_norm(v);
 
             if (distance < minDistance) {
                 m_closestPoint = pt;
@@ -206,8 +204,8 @@ public:
         if (o != m_gridU && p != 0) {
             const auto pt = TriangleProjection(sample, minIndex, minIndex - 1, minIndex + m_gridV + 1);
 
-            const VectorType v = sample - pt.point;
-            const auto distance = SquaredNorm(v);
+            const Vector v = sample - pt.point;
+            const auto distance = squared_norm(v);
 
             if (distance < minDistance) {
                 m_closestPoint = pt;
@@ -218,8 +216,8 @@ public:
         if (o != 0 && p != m_gridV) {
             const auto pt = TriangleProjection(sample, minIndex, minIndex + 1, minIndex - m_gridV - 1);
 
-            const VectorType v = sample - pt.point;
-            const auto distance = SquaredNorm(v);
+            const Vector v = sample - pt.point;
+            const auto distance = squared_norm(v);
 
             if (distance < minDistance) {
                 m_closestPoint = pt;
@@ -230,8 +228,8 @@ public:
         if (o != 0 && p != 0) {
             const auto pt = TriangleProjection(sample, minIndex, minIndex - 1, minIndex - m_gridV - 1);
 
-            const VectorType v = sample - pt.point;
-            const auto distance = SquaredNorm(v);
+            const Vector v = sample - pt.point;
+            const auto distance = squared_norm(v);
 
             if (distance < minDistance) {
                 m_closestPoint = pt;
@@ -244,12 +242,12 @@ public:
         m_closestPoint = Newton(sample, m_closestPoint.parameterU, m_closestPoint.parameterV);
     }
 
-    std::vector<ScalarType>
+    std::vector<double>
     BoundingBox() const
     {
-        const int dimension = DimensionOf<VectorType>();
+        const int dimension = TDimension;
 
-        std::vector<ScalarType> values(dimension * 2);
+        std::vector<double> values(dimension * 2);
 
         const auto& boundingBox = m_index->root_bbox;
 
@@ -263,72 +261,72 @@ public:
 
     ParameterPoint
     Newton(
-        const VectorType point,
-        const ScalarType u,
-        const ScalarType v
+        const Vector point,
+        const double u,
+        const double v
     )
     {
-        ScalarType cu = u;
-        ScalarType cv = v;
+        double cu = u;
+        double cv = v;
 
         int maxits = 5;
-        ScalarType eps1 = 0.00001;
-        ScalarType eps2 = 0.000005;
+        double eps1 = 0.00001;
+        double eps2 = 0.000005;
         
-        ScalarType minu = m_surface->DomainU().T0();
-        ScalarType maxu = m_surface->DomainU().T1();
-        ScalarType minv = m_surface->DomainV().T0();
-        ScalarType maxv = m_surface->DomainV().T1();
+        double minu = m_surface->domain_u().t0();
+        double maxu = m_surface->domain_u().t1();
+        double minv = m_surface->domain_v().t0();
+        double maxv = m_surface->domain_v().t1();
 
         for (int i = 0; i < maxits; i++) {
-            const auto s = m_surface->DerivativesAt(cu, cv, 2);
+            const auto s = m_surface->derivatives_at(cu, cv, 2);
 
-            const VectorType dif = s[0] - point;
+            const Vector dif = s[0] - point;
 
-            const ScalarType c1v = Norm(dif);
+            const double c1v = norm(dif);
             
             if (c1v < eps1) {
                 return {cu, cv, s[0]};
             }
 
-            ScalarType s1_l = Norm(s[1]);
-            ScalarType s2_l = Norm(s[2]);
+            double s1_l = norm(s[1]);
+            double s2_l = norm(s[2]);
             
-            ScalarType c2an = std::abs(Dot(s[1], dif));
-            ScalarType c2ad = s1_l * c1v;
+            double c2an = std::abs(dot(s[1], dif));
+            double c2ad = s1_l * c1v;
 
-            ScalarType c2bn = std::abs(Dot(s[2], dif));
-            ScalarType c2bd = s2_l * c1v;
+            double c2bn = std::abs(dot(s[2], dif));
+            double c2bd = s2_l * c1v;
 
-            ScalarType c2av = c2an / c2ad;
-            ScalarType c2bv = c2bn / c2bd;
+            double c2av = c2an / c2ad;
+            double c2bv = c2bn / c2bd;
 
             if (c2av < eps2 && c2bv < eps2) {
                 return {cu, cv, s[0]};
             }
             
-            ScalarType f = Dot(s[1], dif);
-            ScalarType g = Dot(s[2], dif);
+            double f = dot(s[1], dif);
+            double g = dot(s[2], dif);
 
-            ScalarType J00 = Dot(s[1], s[1]) + Dot(s[3], dif);
-            ScalarType J01 = Dot(s[1], s[2]) + Dot(s[4], dif);
-            ScalarType J11 = Dot(s[2], s[2]) + Dot(s[5], dif);
+            double J00 = dot(s[1], s[1]) + dot(s[3], dif);
+            double J01 = dot(s[1], s[2]) + dot(s[4], dif);
+            double J11 = dot(s[2], s[2]) + dot(s[5], dif);
 
-            ScalarType det = J00 * J11 - J01 * J01;
+            double det = J00 * J11 - J01 * J01;
             
-            ScalarType du = (g * J01 - f * J11) / det;
-            ScalarType dv = (f * J01 - g * J00) / det;
+            double du = (g * J01 - f * J11) / det;
+            double dv = (f * J01 - g * J00) / det;
             
             cu += du;
             cv += dv;
         }
 
-        return {cu, cv, m_surface->PointAt(cu, cv)};
+        return {cu, cv, m_surface->point_at(cu, cv)};
     }
 
     ParameterPoint
     TriangleProjection(
-        const VectorType point,
+        const Vector point,
         const size_t& indexA,
         const size_t& indexB,
         const size_t& indexC)
@@ -337,14 +335,14 @@ public:
         const auto b = m_tessellation[indexB];
         const auto c = m_tessellation[indexC];
 
-        const VectorType u = b.point - a.point;
-        const VectorType v = c.point - a.point;
-        const VectorType n = Cross(u, v);
-        const VectorType w = point - a.point;
+        const Vector u = b.point - a.point;
+        const Vector v = c.point - a.point;
+        const Vector n = cross(u, v);
+        const Vector w = point - a.point;
 
-        const ScalarType gam = Dot(Cross(u, w), n) / SquaredNorm(n);
-        const ScalarType bet = Dot(Cross(w, v), n) / SquaredNorm(n);
-        const ScalarType alp = 1.0 - gam - bet;
+        const double gam = dot(cross(u, w), n) / squared_norm(n);
+        const double bet = dot(cross(w, v), n) / squared_norm(n);
+        const double alp = 1.0 - gam - bet;
 
         ParameterPoint cp;
 
@@ -353,13 +351,13 @@ public:
         cp.parameterV = alp * a.parameterV + bet * b.parameterV +
             gam * c.parameterV;
 
-        cp.point = m_surface->PointAt(cp.parameterU, cp.parameterV);
+        cp.point = m_surface->point_at(cp.parameterU, cp.parameterV);
 
         return cp;
     }
 };
 
-using PointOnSurfaceProjection2D = PointOnSurfaceProjection<Point2D>;
-using PointOnSurfaceProjection3D = PointOnSurfaceProjection<Point3D>;
+using PointOnSurfaceProjection2D = PointOnSurfaceProjection<2>;
+using PointOnSurfaceProjection3D = PointOnSurfaceProjection<3>;
 
 } // namespace ANurbs

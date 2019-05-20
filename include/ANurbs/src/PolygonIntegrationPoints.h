@@ -1,59 +1,53 @@
 #pragma once
 
+#include "../Define.h"
+
 #include "IntegrationPoints.h"
-#include "Interval.h"
-#include "Polygon.h"
-#include "PolygonTessellation.h"
+
+#include "../Algorithm/PolygonTessellation.h"
+#include "../Geometry/Interval.h"
+#include "../Geometry/Polygon.h"
 
 #include <stdexcept>
 #include <vector>
 
 namespace ANurbs {
 
-template <typename TVector2>
 class PolygonIntegrationPoints
 {
 public:
-    using Vector2Type = TVector2;
-    using ScalarType = ScalarTypeOf<Vector2Type>;
-
-    using IntegrationPoint2Type = IntegrationPoint2<ScalarType>;
-    using IntegrationPointBarycentricType = IntegrationPointBarycentric<ScalarType>;
+    using IntegrationPoint2Type = IntegrationPoint2;
+    using IntegrationPointBarycentricType = IntegrationPointBarycentric;
 
 private:
     std::vector<IntegrationPoint2Type> m_integrationPoints;
-
-    PolygonTessellation<Vector2Type> m_tessellation;
+    PolygonTessellation m_tessellation;
 
 public:
-    void
-    Compute(
-        const size_t degree,
-        const Polygon<Vector2Type>& polygon)
+    void Compute(const size_t degree, const Polygon& polygon)
     {
-        m_tessellation.Compute(polygon);
+        m_tessellation.compute(polygon);
 
-        const auto& xiaogimb =
-            IntegrationPoints<ScalarType>::XiaoGimbutas(degree);
+        const auto& xiaogimb = IntegrationPoints::XiaoGimbutas(degree);
 
         const int nbIntegrationPoints =
-            m_tessellation.NbTriangles() * static_cast<int>(xiaogimb.size());
+            m_tessellation.nb_triangles() * static_cast<int>(xiaogimb.size());
 
         m_integrationPoints.resize(nbIntegrationPoints);
 
         auto integrationPoint = m_integrationPoints.begin();
 
-        for (int i = 0; i < m_tessellation.NbTriangles(); i++) {
-            const auto triangle = m_tessellation.Triangle(i);
+        for (int i = 0; i < m_tessellation.nb_triangles(); i++) {
+            const auto [a, b, c] = m_tessellation.triangle(i);
 
-            const Vector2Type vertexA = polygon.Vertex(triangle.a);
-            const Vector2Type vertexB = polygon.Vertex(triangle.b);
-            const Vector2Type vertexC = polygon.Vertex(triangle.c);
+            const Vector<2> vertexA = polygon.vertex(a);
+            const Vector<2> vertexB = polygon.vertex(b);
+            const Vector<2> vertexC = polygon.vertex(c);
 
-            const Vector2Type vectorAB = vertexB - vertexA;
-            const Vector2Type vectorAC = vertexC - vertexA;
+            const Vector<2> vectorAB = vertexB - vertexA;
+            const Vector<2> vectorAC = vertexC - vertexA;
 
-            const ScalarType area = 0.5 * Norm(Cross(vectorAB, vectorAC));
+            const double area = 0.5 * norm(cross(vectorAB, vectorAC));
 
             for (const auto& normalizedPoint : xiaogimb) {
                 const auto uv = vertexA * normalizedPoint.a +
@@ -67,15 +61,12 @@ public:
         }
     }
 
-    int
-    NbIntegrationPoints() const
+    int NbIntegrationPoints() const
     {
         return static_cast<int>(m_integrationPoints.size());
     }
 
-    IntegrationPoint2Type
-    IntegrationPoint(
-        const int index) const
+    IntegrationPoint2Type IntegrationPoint(const int index) const
     {
         return m_integrationPoints[index];
     }

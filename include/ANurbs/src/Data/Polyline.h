@@ -5,20 +5,23 @@
 #include "Model.h"
 #include "Ref.h"
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 
 #include <vector>
 
 namespace ANurbs {
 
-template <typename TVector>
+template <int TDimension>
 class Polyline
 {
+public:
+    using Vector = Vector<TDimension>;
+
 private:
-    std::vector<TVector> m_points;
+    std::vector<Vector> m_points;
 
 public:
-    using DataType = Polyline<TVector>;
+    using DataType = Polyline<TDimension>;
 
     Polyline()
     { }
@@ -31,7 +34,7 @@ public:
     static std::string
     Type()
     {
-        return "Polyline" + std::to_string(DimensionOf<TVector>()) + "D";
+        return "Polyline" + std::to_string(TDimension) + "D";
     }
 
     size_t
@@ -40,7 +43,7 @@ public:
         return m_points.size();
     }
 
-    TVector
+    Vector
     Point(
         const size_t index) const
     {
@@ -50,17 +53,17 @@ public:
     void
     SetPoint(
         const size_t index,
-        const TVector& value)
+        const Vector& value)
     {
         m_points[index] = value;
     }
 
-    static Unique<Polyline<TVector>>
+    static Unique<Polyline<TDimension>>
     Load(
         Model& model,
         const Json& data)
     {
-        auto result = New<Polyline<TVector>>();
+        auto result = New<Polyline<TDimension>>();
 
         // Load Points
         {
@@ -85,8 +88,8 @@ public:
     }
 };
 
-template <typename TVector>
-struct AttributesType<Polyline<TVector>>
+template <int TDimension>
+struct AttributesType<Polyline<TDimension>>
 {
     using Type = CadAttributes;
 };

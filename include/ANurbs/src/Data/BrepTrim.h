@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../EigenSupport"
 #include "Ref.h"
 #include "Model.h"
 #include "BrepEdge.h"
@@ -18,8 +17,8 @@ class BrepTrim
 private:
     Ref<BrepLoop> m_loop;
     Ref<BrepEdge> m_edge;
-    Ref<CurveGeometry<Eigen::Matrix<double, 2, 1>>> m_geometry;
-    Interval<double> m_domain;
+    Ref<NurbsCurveGeometry<2>> m_geometry;
+    Interval m_domain;
 
 public:
     static std::string
@@ -40,13 +39,13 @@ public:
         return m_edge;
     }
 
-    Ref<CurveGeometry<Eigen::Matrix<double, 2, 1>>>
+    Ref<NurbsCurveGeometry<2>>
     Geometry()
     {
         return m_geometry;
     }
 
-    Interval<double>
+    Interval
     Domain()
     {
         return m_domain;
@@ -74,14 +73,14 @@ public:
         // Read Geometry
         {
             const std::string key = data.at("Geometry");
-            result->m_geometry = model.GetLazy<CurveGeometry<Eigen::Matrix<double, 2, 1>>>(key);
+            result->m_geometry = model.GetLazy<NurbsCurveGeometry<2>>(key);
         }
 
         // Read Domain
         if (data.find("Domain") != data.end()) {
             result->m_domain = data.at("Domain");
         } else {
-            result->m_domain = result->m_geometry->Domain();
+            result->m_domain = result->m_geometry->domain();
         }
 
         return result;

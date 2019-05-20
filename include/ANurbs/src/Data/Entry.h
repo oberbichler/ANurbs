@@ -3,8 +3,6 @@
 #include "Define.h"
 #include "Attributes.h"
 
-#include <ANurbs/src/Pointer.h>
-
 #include <memory>
 #include <string>
 #include <stdexcept>

@@ -5,37 +5,32 @@
 #include "Model.h"
 #include "Ref.h"
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 
 #include <vector>
 
 namespace ANurbs {
 
-template <typename TVector>
-struct AttributesType<Surface<SurfaceGeometry<TVector>,
-    Ref<SurfaceGeometry<TVector>>>>
+template <int TDimension>
+struct AttributesType<Surface<TDimension, Ref<NurbsSurfaceGeometry<TDimension>>>>
 {
     using Type = CadAttributes;
 };
 
-template <typename TVector>
-struct DataIO<Surface<SurfaceGeometry<TVector>, Ref<SurfaceGeometry<TVector>>>>
+template <int TDimension>
+struct DataIO<Surface<TDimension, Ref<NurbsSurfaceGeometry<TDimension>>>>
 {
-    using DataType = Surface<SurfaceGeometry<TVector>,
-        Ref<SurfaceGeometry<TVector>>>;
+    using DataType = Surface<TDimension, Ref<NurbsSurfaceGeometry<TDimension>>>;
 
     static std::string
     Type()
     {
-        return "Surface" + std::to_string(DimensionOf<TVector>()) + "D";
+        return "Surface" + std::to_string(TDimension) + "D";
     }
 
-    static Unique<DataType>
-    Load(
-        Model& model,
-        const Json& source)
+    static Unique<DataType> Load(Model& model, const Json& source)
     {
-        const auto geometry = model.GetLazy<SurfaceGeometry<TVector>>(source.at("Geometry"));
+        const auto geometry = model.GetLazy<NurbsSurfaceGeometry<TDimension>>(source.at("Geometry"));
 
         auto result = New<DataType>(geometry);
 
@@ -48,7 +43,7 @@ struct DataIO<Surface<SurfaceGeometry<TVector>, Ref<SurfaceGeometry<TVector>>>>
         const DataType& data,
         Json& target)
     {
-        target["Geometry"] = data.SurfaceGeometry().Key();
+        target["Geometry"] = data.surface_geometry().Key();
     }
 };
 

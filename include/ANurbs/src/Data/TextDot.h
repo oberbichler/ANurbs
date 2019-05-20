@@ -6,7 +6,7 @@
 #include "Model.h"
 #include "Ref.h"
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 
 #include <Eigen/Core>
 
@@ -16,20 +16,23 @@
 
 namespace ANurbs {
 
-template <typename TVector>
+template <int TDimension>
 class TextDot
 {
+public:
+    using Vector = Vector<TDimension>;
+
 private:
-    TVector m_location;
+    Vector m_location;
     std::string m_text;
 
 public:
-    using DataType = TextDot<TVector>;
+    using DataType = TextDot<TDimension>;
 
     static std::string
     Type()
     {
-        return "TextDot" + std::to_string(DimensionOf<TVector>()) + "D";
+        return "TextDot" + std::to_string(TDimension) + "D";
     }
 
     TextDot()
@@ -37,14 +40,14 @@ public:
     }
 
     TextDot(
-        const TVector& location,
+        const Vector& location,
         const std::string& text)
     : m_location(location)
     , m_text(text)
     {
     }
 
-    TVector
+    Vector
     Location() const
     {
         return m_location;
@@ -52,7 +55,7 @@ public:
 
     void
     SetLocation(
-        const TVector& value)
+        const Vector& value)
     {
         m_location = value;
     }
@@ -75,10 +78,10 @@ public:
         Model& model,
         const Json& source)
     {
-        auto data = New<TextDot<TVector>>();
+        auto data = New<TextDot<TDimension>>();
 
-        data->m_location = source.at("Location");
-        data->m_text = source.at("Text");
+        // data->m_location = source.at("Location");
+        // data->m_text = source.at("Text");
 
         return data;
     }
@@ -88,13 +91,13 @@ public:
         const Model& model,
         Json& target) const
     {
-        target["Location"] = ToJson(m_location);
-        target["Text"] = ToJson(m_text);
+        // target["Location"] = ToJson(m_location);
+        // target["Text"] = ToJson(m_text);
     }
 };
 
-template <typename TVector>
-struct AttributesType<TextDot<TVector>>
+template <int TDimension>
+struct AttributesType<TextDot<TDimension>>
 {
     using Type = CadAttributes;
 };

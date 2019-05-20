@@ -1,8 +1,8 @@
 #include "catch.hpp"
 
-#include <ANurbs/src/Curve.h>
-#include <ANurbs/src/CurveGeometry.h>
-#include <ANurbs/src/CurveTessellation.h>
+#include <ANurbs/Geometry/Curve.h>
+#include <ANurbs/src/NurbsCurveGeometry.h>
+#include <ANurbs/Geometry/CurveTessellation.h>
 
 using namespace ANurbs;
 

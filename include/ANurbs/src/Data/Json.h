@@ -5,9 +5,55 @@
 #include <nlohmann/fifo_map.hpp>
 #include <nlohmann/json.hpp>
 
-#include <ANurbs/Core>
+#include <ANurbs/ANurbs.h>
 
 #include <stdexcept>
+
+namespace nlohmann {
+    template <>
+    struct adl_serializer<ANurbs::Vector<2>>
+    {
+        template <typename TJson>
+        static void to_json(TJson& json, const ANurbs::Vector<2>& point)
+        {
+            for (int i = 0; i < point.size(); i++) {
+                json.push_back(point[i]);
+            }
+        }
+
+        template <typename TJson>
+        static void from_json(const TJson& json, ANurbs::Vector<2>& point)
+        {
+            assert(json.size() == point.size());
+
+            for (int i = 0; i < point.size(); i++) {
+                json.at(i).get_to(point[i]);
+            }
+        }
+    };
+
+    template <>
+    struct adl_serializer<ANurbs::Vector<3>> {
+        template <typename TJson>
+        static void
+        to_json(TJson& json, const ANurbs::Vector<3>& point)
+        {
+            for (int i = 0; i < point.size(); i++) {
+                json.push_back(point[i]);
+            }
+        }
+
+        template <typename TJson>
+        static void from_json(const TJson& json, ANurbs::Vector<3>& point)
+        {
+            assert(json.size() == point.size());
+
+            for (int i = 0; i < point.size(); i++) {
+                json.at(i).get_to(point[i]);
+            }
+        }
+    };
+}
 
 namespace ANurbs {
 
@@ -24,61 +70,26 @@ to_json(
     json = ref.Key();
 }
 
-template <typename TData>
-void
-to_json(
-    nlohmann::json& json,
-    const Grid<TData>& grid)
-{
-    for (int i = 0; i < grid.NbValues(); i++) {
-        json.push_back(grid[i]);
-    }
-}
-
-template <int TDimension>
-void
-to_json(
-    nlohmann::json& json,
-    const Point<double, TDimension>& point)
-{
-    for (int i = 0; i < TDimension; i++) {
-        json.push_back(point[i]);
-    }
-}
-
-template <int TDimension>
 void
 from_json(
     const nlohmann::json& json,
-    Point<double, TDimension>& point)
-{
-    assert(json.size() == TDimension);
-
-    for (int i = 0; i < TDimension; i++) {
-        json.at(i).get_to(point[i]);
-    }
-}
-
-void
-from_json(
-    const nlohmann::json& json,
-    Interval<double>& interval)
+    Interval& interval)
 {
     assert(json.size() == 2);
 
     const auto t0 = json.at(0).get<double>();
     const auto t1 = json.at(1).get<double>();
 
-    interval = Interval<double>(t0, t1);
+    interval = Interval(t0, t1);
 }
 
 void
 to_json(
     nlohmann::json& json,
-    const Interval<double>& interval)
+    const Interval& interval)
 {
-    json.push_back(interval.T0());
-    json.push_back(interval.T1());
+    json.push_back(interval.t0());
+    json.push_back(interval.t1());
 }
 
 template<class TKey, class TValue, class TCompare, class TAllocator>

@@ -1,11 +1,11 @@
 #include "catch.hpp"
 
-#include <ANurbs/src/SurfaceGeometry.h>
+#include <ANurbs/src/NurbsSurfaceGeometry.h>
 
 using namespace ANurbs;
 
 
-TEST_CASE( "Geometry of a spatial B-Spline surface", "[SurfaceGeometry]" ) {
+TEST_CASE( "Geometry of a spatial B-Spline surface", "[NurbsSurfaceGeometry]" ) {
     int degreeU = 2;
     int degreeV = 1;
 
@@ -129,7 +129,7 @@ TEST_CASE( "Geometry of a spatial B-Spline surface", "[SurfaceGeometry]" ) {
     }
 }
 
-TEST_CASE( "Geometry of a spatial Nurbs surface", "[SurfaceGeometry]" ) {
+TEST_CASE( "Geometry of a spatial Nurbs surface", "[NurbsSurfaceGeometry]" ) {
     int degreeU = 2;
     int degreeV = 1;
 

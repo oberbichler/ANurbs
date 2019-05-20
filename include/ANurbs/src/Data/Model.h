@@ -5,8 +5,6 @@
 #include "JsonWriter.h"
 #include "Ref.h"
 
-#include <ANurbs/src/Pointer.h>
-
 #include <iostream>
 #include <unordered_map>
 #include <memory>
