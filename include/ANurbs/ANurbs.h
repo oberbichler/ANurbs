@@ -2,11 +2,13 @@
 
 #include "Algorithm/CurveSpanIntersection.h"
 #include "Algorithm/CurveTessellation.h"
+#include "Algorithm/IntegrationPoints.h"
 #include "Algorithm/KnotRefinement.h"
 #include "Algorithm/NurbsCurveShapeFunction.h"
 #include "Algorithm/NurbsSurfaceShapeFunction.h"
 #include "Algorithm/PointOnCurveProjection.h"
 #include "Algorithm/PointOnSurfaceProjection.h"
+#include "Algorithm/PolygonIntegrationPoints.h"
 #include "Algorithm/PolygonTessellation.h"
 #include "Algorithm/TrimmedSurfaceClipping.h"
 #include "Define.h"
@@ -19,6 +21,3 @@
 #include "Geometry/Polygon.h"
 #include "Geometry/Surface.h"
 #include "Geometry/SurfaceBase.h"
-
-#include "src/IntegrationPoints.h"
-#include "src/PolygonIntegrationPoints.h"

@@ -383,6 +383,10 @@ RegisterData(
         KnotRefinement<3>::register_python(m);
     }
 
+    { // IntegrationPoints
+        IntegrationPoints::register_python(m);
+    }
+
     { // PointOnCurveProjection
         PointOnCurveProjection<2>::register_python(m);
         PointOnCurveProjection<3>::register_python(m);
@@ -390,6 +394,10 @@ RegisterData(
 
     { // PointOnSurfaceProjection
         PointOnSurfaceProjection<3>::register_python(m);
+    }
+
+    { // PolygonIntegrationPoints
+        PolygonIntegrationPoints::register_python(m);
     }
 
     { // PolygonTessellation
@@ -446,61 +454,6 @@ RegisterData(
     }
 
 
-
-
-
-    { // IntegrationPoint1D
-        using Type = IntegrationPoint1;
-
-        py::class_<Type>(m, "IntegrationPoint1D")
-            .def("__iter__", [](const Type &self) {
-                    return pybind11::make_iterator(&self.t, &self.t + 2);
-                }, pybind11::keep_alive<0, 1>())
-            .def_readwrite("t", &Type::t)
-            .def_readwrite("weight", &Type::weight)
-        ;
-    }
-   
-    { // IntegrationPoint2D
-        using Type = ANurbs::IntegrationPoint2;
-
-        py::class_<Type>(m, "IntegrationPoint2D")
-            .def("__iter__", [](const Type &self) {
-                    return pybind11::make_iterator(&self.u, &self.u + 3);
-                }, pybind11::keep_alive<0, 1>())
-            .def_readwrite("u", &Type::u)
-            .def_readwrite("v", &Type::v)
-            .def_readwrite("weight", &Type::weight)
-        ;
-    }
-
-    { // IntegrationPoints
-        using Type = IntegrationPoints;
-
-        py::class_<Type>(m, "IntegrationPoints")
-            .def_static("Points1D", &Type::Points1, "degree"_a, "domain"_a)
-            .def_static("Points2D", (std::vector<IntegrationPoint2>
-                (*)(const size_t, const size_t, const Interval&,
-                const Interval&)) &Type::Points2, "degreeU"_a,
-                "degreeV"_a, "domainU"_a, "domainV"_a)
-            .def_static("Points2D", (std::vector<IntegrationPoint2>
-                (*)(const size_t, const size_t,
-                const std::vector<Interval>&,
-                const std::vector<Interval>&)) &Type::Points2,
-                "degreeU"_a, "degreeV"_a, "domainsU"_a, "domainsV"_a)
-        ;
-    }
-
-    { // RegisterPolygonIntegrationPoints
-        using Type = PolygonIntegrationPoints;
-
-        py::class_<Type>(m, "PolygonIntegrationPoints")
-            .def(py::init<>())
-            .def("Compute", &Type::Compute, "degree"_a, "polygon"_a)
-            .def("NbIntegrationPoints", &Type::NbIntegrationPoints)
-            .def("IntegrationPoint", &Type::IntegrationPoint, "index"_a)
-        ;
-    }
 
 
     // --- Geometry

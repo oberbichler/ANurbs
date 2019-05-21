@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Define.h"
+
 #include "../Geometry/Interval.h"
 
 #include <stdexcept>
@@ -7,109 +9,101 @@
 
 namespace ANurbs {
 
-struct IntegrationPoint1
-{
-    double t;
-    double weight;
-};
+template <int TDimension>
+using IntegrationPoint = Vector<TDimension + 1>;
 
-struct IntegrationPoint2
-{
-    double u;
-    double v;
-    double weight;
-};
-
-struct IntegrationPointBarycentric
-{
-    double a;
-    double b;
-    double c;
-    double weight;
-};
+template <int TDimension>
+using IntegrationPointList = std::vector<IntegrationPoint<TDimension>>;
 
 class IntegrationPoints
 {
-public:
-    using ScalarType = double;
-    using IntegrationPoint1Type = IntegrationPoint1;
-    using IntegrationPoint2Type = IntegrationPoint2;
-    using IntegrationPointBarycentricType = IntegrationPointBarycentric;
-
 private:
-    static std::vector<std::vector<IntegrationPoint1Type>> s_gaussLegendre;
-    static std::vector<std::vector<IntegrationPointBarycentricType>> s_xiaoGimbutas;
+    static std::vector<std::vector<IntegrationPoint<1>>> s_gauss_legendre;
+    static std::vector<std::vector<IntegrationPoint<3>>> s_xiao_gimbutas;
 
 public:
-    static std::vector<IntegrationPoint1Type>&
-    GaussLegendre(
-        const size_t degree)
+    static IntegrationPointList<1>& gauss_legendre(const size_t degree)
     {
-        if (degree < 1 || degree > s_gaussLegendre.size()) {
+        if (degree < 1 || degree > s_gauss_legendre.size()) {
             throw std::invalid_argument("Invalid degree");
         }
 
-        return s_gaussLegendre[degree - 1];
+        return s_gauss_legendre[degree - 1];
     }
 
-    static std::vector<IntegrationPointBarycentricType>&
-    XiaoGimbutas(
-        const size_t degree)
+    static IntegrationPointList<3>& xiao_gimbutas(const size_t degree)
     {
-        if (degree < 1 || degree > s_xiaoGimbutas.size()) {
+        if (degree < 1 || degree > s_xiao_gimbutas.size()) {
             throw std::invalid_argument("Invalid degree");
         }
 
-        return s_xiaoGimbutas[degree - 1];
+        return s_xiao_gimbutas[degree - 1];
     }
 
-    static std::vector<IntegrationPoint1Type>
-    Points1(
-        const size_t degree,
+    static IntegrationPointList<1> compute(const size_t degree,
         const Interval& domain)
     {
-        std::vector<IntegrationPoint1Type> integrationPoints(degree);
+        IntegrationPointList<1> integration_points(degree);
 
-        auto integrationPoint = integrationPoints.begin();
+        int i = 0;
 
-        for (const auto& gaussLegendrePoint : GaussLegendre(degree)) {
-            integrationPoint->t = domain.parameter_at_normalized(gaussLegendrePoint.t);
-            integrationPoint->weight = gaussLegendrePoint.weight * domain.length();
-            integrationPoint++;
+        for (const auto& norm_point : gauss_legendre(degree)) {
+            integration_points[i++] = IntegrationPoint<1>(
+                domain.parameter_at_normalized(norm_point[0]),
+                norm_point[1] * domain.length());
         }
 
-        return integrationPoints;
+        return integration_points;
     }
 
-    static std::vector<IntegrationPoint2Type>
-    Points2(
-        const size_t degreeU,
-        const size_t degreeV,
-        const Interval& domainU,
-        const Interval& domainV)
+    static IntegrationPointList<2>
+    compute(const size_t degree_u, const size_t degree_v,
+        const Interval& domain_u, const Interval& domain_v)
     {
-        auto integrationPointsU = Points1(degreeU, domainU);
-        auto integrationPointsV = Points1(degreeV, domainV);
+        auto integration_points_u = compute(degree_u, domain_u);
+        auto integration_points_v = compute(degree_v, domain_v);
 
-        std::vector<IntegrationPoint2Type> integrationPoints(degreeU * degreeV);
+        IntegrationPointList<2> integration_points(degree_u * degree_v);
 
-        auto integrationPoint = integrationPoints.begin();
+        int i = 0;
 
-        for (const auto& integrationPointU : integrationPointsU) {
-            for (const auto& integrationPointV : integrationPointsV) {
-                integrationPoint->u = integrationPointU.t;
-                integrationPoint->v = integrationPointV.t;
-                integrationPoint->weight = integrationPointU.weight * integrationPointV.weight;
-                integrationPoint++;
+        for (const auto& norm_point_u : integration_points_u) {
+            for (const auto& norm_point_v : integration_points_v) {
+                integration_points[i++] = IntegrationPoint<2>(
+                    norm_point_u[0], norm_point_v[0],
+                    norm_point_u[1] * norm_point_v[1]);
             }
         }
 
-        return integrationPoints;
+        return integration_points;
+    }
+
+public:     // python
+    template <typename TModule>
+    static void register_python(TModule& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+        
+        using Type = IntegrationPoints;
+
+        py::class_<Type>(m, "IntegrationPoints")
+            // .def_static("compute", &Type::compute, "degree"_a, "domain"_a)
+            // .def_static("compute", (std::vector<IntegrationPoint2>
+            //     (*)(const size_t, const size_t, const Interval&,
+            //     const Interval&)) &Type::compute, "degreeU"_a,
+            //     "degreeV"_a, "domainU"_a, "domainV"_a)
+            // .def_static("compute", (std::vector<IntegrationPoint2>
+            //     (*)(const size_t, const size_t,
+            //     const std::vector<Interval>&,
+            //     const std::vector<Interval>&)) &Type::compute,
+            //     "degreeU"_a, "degreeV"_a, "domainsU"_a, "domainsV"_a)
+        ;
     }
 };
 
-std::vector<std::vector<IntegrationPoint1>>
-IntegrationPoints::s_gaussLegendre = {
+std::vector<IntegrationPointList<1>>
+IntegrationPoints::s_gauss_legendre = {
     {   // degree 1
         { 0.5000000000000000000, 1.0000000000000000000 },
     },
@@ -1487,8 +1481,8 @@ IntegrationPoints::s_gaussLegendre = {
     }
 };
 
-std::vector<std::vector<IntegrationPointBarycentric>>
-IntegrationPoints::s_xiaoGimbutas = {
+std::vector<IntegrationPointList<3>>
+IntegrationPoints::s_xiao_gimbutas = {
     {   // degree 1
         {0.3333333333333333, 0.3333333333333333, 0.3333333333333333, 1.0},
     },
