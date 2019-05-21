@@ -1,6 +1,8 @@
 #pragma once
 
+#include "BrepEdge.h"
 #include "BrepLoop.h"
+#include "BrepTrim.h"
 #include "NurbsSurfaceGeometry.h"
 
 #include "../Model/Json.h"
@@ -11,6 +13,11 @@
 
 namespace ANurbs {
 
+class Brep;
+class BrepEdge;
+class BrepLoop;
+class BrepTrim;
+
 class BrepFace
 {
 private:
@@ -19,30 +26,15 @@ private:
     Ref<NurbsSurfaceGeometry<3>> m_geometry;
 
 public:
-    Ref<ANurbs::Brep> Brep()
-    {
-        return m_brep;
-    }
+    Ref<ANurbs::Brep> Brep();
 
-    size_t nb_loops()
-    {
-        return m_loops.size();
-    }
+    size_t nb_loops();
 
-    Ref<BrepLoop> loop(size_t index)
-    {
-        return m_loops[index];
-    }
+    Ref<BrepLoop> loop(size_t index);
 
-    std::vector<Ref<BrepLoop>> loops()
-    {
-        return m_loops;
-    }
+    std::vector<Ref<BrepLoop>> loops();
     
-    Ref<NurbsSurfaceGeometry<3>> Geometry()
-    {
-        return m_geometry;
-    }
+    Ref<NurbsSurfaceGeometry<3>> Geometry();
 
 public:     // serialization
     using Attributes = Attributes;
@@ -54,7 +46,7 @@ public:     // serialization
 
     static Unique<BrepFace> load(Model& model, const Json& data)
     {
-        auto result = New<BrepFace>();
+        auto result = new_<BrepFace>();
 
         // Read Brep
         {
@@ -91,8 +83,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -126,7 +118,7 @@ public:     // python
             // })
             // .def("Geometry", &Type::Geometry)
             // .def("UntrimmedSurface", [](Type& self) {
-            //     return New<Surface<NurbsSurfaceGeometry<Vector>>>(
+            //     return new_<Surface<NurbsSurfaceGeometry<Vector>>>(
             //         self.Geometry().Data());
             // })
         ;

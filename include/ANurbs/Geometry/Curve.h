@@ -101,7 +101,7 @@ public:     // serialization
 
         const Interval domain = source.at("Domain");
 
-        return New<Type>(geometry, domain);
+        return new_<Type>(geometry, domain);
     }
 
     static void save(const Model& model, const Type& data, Json& target)
@@ -111,8 +111,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

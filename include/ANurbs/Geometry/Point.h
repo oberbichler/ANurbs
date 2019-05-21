@@ -72,7 +72,7 @@ public:     // serialization
         Model& model,
         const Json& source)
     {
-        auto data = New<Point<TDimension>>();
+        auto data = new_<Point<TDimension>>();
 
         // data->m_location = source.at("Location");
         // data->m_text = source.at("Text");
@@ -87,8 +87,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

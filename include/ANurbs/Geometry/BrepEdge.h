@@ -1,5 +1,11 @@
 #pragma once
 
+#include "../Define.h"
+
+#include "BrepFace.h"
+#include "BrepLoop.h"
+#include "BrepTrim.h"
+
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -8,28 +14,22 @@
 
 namespace ANurbs {
 
+class Brep;
+class BrepFace;
+class BrepLoop;
 class BrepTrim;
 
 class BrepEdge
 {
-private:
+private:    // variables
     std::vector<Ref<BrepTrim>> m_trims;
 
-public:
-    size_t nb_trims()
-    {
-        return m_trims.size();
-    }
+public:     // methods
+    size_t nb_trims();
 
-    Ref<BrepTrim> trim(size_t index)
-    {
-        return m_trims[index];
-    }
+    Ref<BrepTrim> trim(size_t index);
 
-    std::vector<Ref<BrepTrim>> trims()
-    {
-        return m_trims;
-    }
+    std::vector<Ref<BrepTrim>> trims();
 
 public:     // serialization
     using Attributes = Attributes;
@@ -41,7 +41,7 @@ public:     // serialization
 
     static Unique<BrepEdge> load(Model& model, const Json& data)
     {
-        auto result = New<BrepEdge>();
+        auto result = new_<BrepEdge>();
 
         // Read trims
         {
@@ -64,8 +64,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -73,8 +73,8 @@ public:     // python
         using Type = BrepEdge;
 
         py::class_<Type>(m, "BrepEdge")
-            .def("NbTrims", &Type::nb_trims)
-            .def("Trim", &Type::trim, "index"_a)
+            .def("nb_trims", &Type::nb_trims)
+            .def("trim", &Type::trim, "index"_a)
             .def("trims", &Type::trims)
             // .def("loops", [](Type& self) -> std::vector<Ref<BrepLoop>> {
             //     std::vector<Ref<BrepLoop>> loops(self.nb_trims());

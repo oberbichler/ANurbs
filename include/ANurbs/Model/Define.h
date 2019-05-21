@@ -7,6 +7,4 @@
 
 namespace ANurbs {
 
-class Brep;
-
 } // namespace ANurbs

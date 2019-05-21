@@ -1,11 +1,11 @@
 #pragma once
 
+#include "ANurbs.h"
+
 #include "Model/Model.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-
-#include <ANurbs/ANurbs.h>
 
 #include <functional>
 #include <string>
@@ -173,7 +173,7 @@ RegisterDataTypeAndType(
     Ref<TData>::register_python(m);
 
     PythonDataTypeBase::s_types[TData::type_name()] =
-        New<PythonDataType<TData>>();
+        new_<PythonDataType<TData>>();
 
     model.def("Add", &PythonDataType<TData>::Add, "data"_a);
 
@@ -207,7 +207,7 @@ RegisterDataTypeAndType(
     Ref<TData>::register_python(m);
 
     PythonDataTypeBase::s_types[TData::type_name()] =
-        New<PythonDataType<TData>>();
+        new_<PythonDataType<TData>>();
 
     model.def("Add", &PythonDataType<TData>::Add, "data"_a);
 
@@ -237,7 +237,7 @@ RegisterDataType(
     Ref<TData>::register_python(m);
 
     PythonDataTypeBase::s_types[TData::type_name()] =
-        New<PythonDataType<TData>>();
+        new_<PythonDataType<TData>>();
 
     model.def("Add", &PythonDataType<TData>::Add, "data"_a);
 

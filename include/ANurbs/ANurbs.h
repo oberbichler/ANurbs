@@ -30,3 +30,8 @@
 #include "Geometry/Polyline.h"
 #include "Geometry/Surface.h"
 #include "Geometry/SurfaceBase.h"
+
+#include "Geometry/BrepEdge.hxx"
+#include "Geometry/BrepFace.hxx"
+#include "Geometry/BrepLoop.hxx"
+#include "Geometry/BrepTrim.hxx"

@@ -33,7 +33,7 @@ public:     // constructors
         : m_tessellation(), m_curve(curve), m_tessellation_flatness(1e-3),
         m_tolerance(tolerance)
     {
-        // create polyline
+        // new_ polyline
         m_tessellation = CurveTessellation<TDimension>::compute(*Curve(),
             tessellation_flatness());
     }
@@ -194,8 +194,8 @@ private:    // static methods
     }
 
 public:     // python
-    template <typename TModule>
-    static void register_python(TModule& m)
+
+    static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

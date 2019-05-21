@@ -33,8 +33,8 @@ public:     // methods
         const = 0;
 
 public:     // python
-    template <typename TModule>
-    static void register_python(TModule& m)
+
+    static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

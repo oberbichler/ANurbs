@@ -86,16 +86,16 @@ public:
         std::string key,
         std::shared_ptr<TData> data)
     {
-        Pointer<AttributesType> attributes = New<AttributesType>();
-        return New<Entry<TData>>(key, data, attributes);
+        Pointer<AttributesType> attributes = new_<AttributesType>();
+        return new_<Entry<TData>>(key, data, attributes);
     }
 
     static Unique<Entry<TData>>
     Create(
         std::shared_ptr<TData> data)
     {
-        Pointer<AttributesType> attributes = New<AttributesType>();
-        return New<Entry<TData>>(data, attributes);
+        Pointer<AttributesType> attributes = new_<AttributesType>();
+        return new_<Entry<TData>>(data, attributes);
     }
 
     bool

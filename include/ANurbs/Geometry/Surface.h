@@ -131,7 +131,7 @@ public:     // serialization
         const auto geometry = model.GetLazy<NurbsSurfaceGeometry<TDimension>>(
             source.at("Geometry"));
 
-        auto result = New<Type>(geometry);
+        auto result = new_<Type>(geometry);
 
         return result;
     }
@@ -142,8 +142,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

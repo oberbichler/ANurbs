@@ -56,7 +56,7 @@ public:     // serialization
 
     static Unique<Polyline<TDimension>> load(Model& model, const Json& data)
     {
-        auto result = New<Polyline<TDimension>>();
+        auto result = new_<Polyline<TDimension>>();
 
         // load Points
         {
@@ -78,8 +78,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

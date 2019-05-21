@@ -73,7 +73,7 @@ struct TypeRegistry
             throw std::runtime_error("Entity already registered");
         }
 
-        s_registry[type] = New<TypeEntry<TData, TModel>>();
+        s_registry[type] = new_<TypeEntry<TData, TModel>>();
     }
 
     static bool load(const std::string type, TModel& model, const Json& source)

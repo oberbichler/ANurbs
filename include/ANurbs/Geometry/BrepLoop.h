@@ -1,5 +1,7 @@
 #pragma once
 
+#include "BrepEdge.h"
+#include "BrepFace.h"
 #include "BrepTrim.h"
 
 #include "../Model/Json.h"
@@ -10,7 +12,10 @@
 
 namespace ANurbs {
 
+class Brep;
+class BrepEdge;
 class BrepFace;
+class BrepTrim;
 
 class BrepLoop
 {
@@ -19,25 +24,17 @@ private:
     std::vector<Ref<BrepTrim>> m_trims;
 
 public:
-    Ref<BrepFace> face()
-    {
-        return m_face;
-    }
+    Ref<Brep> brep();
 
-    size_t nb_trims()
-    {
-        return m_trims.size();
-    }
+    Ref<BrepFace> face();
 
-    Ref<BrepTrim> trim(size_t index)
-    {
-        return m_trims[index];
-    }
+    size_t nb_trims();
 
-    std::vector<Ref<BrepTrim>> trims()
-    {
-        return m_trims;
-    }
+    Ref<BrepTrim> trim(size_t index);
+
+    std::vector<Ref<BrepTrim>> trims();
+
+    std::vector<Ref<BrepEdge>> edges();
 
 public:     // serialization
     using Attributes = Attributes;
@@ -49,7 +46,7 @@ public:     // serialization
 
     static Unique<BrepLoop> load(Model& model, const Json& data)
     {
-        auto result = New<BrepLoop>();
+        auto result = new_<BrepLoop>();
 
         // Read Face
         {
@@ -79,8 +76,7 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    static void register_python(pybind11::module& m, pybind11::class_<Model, Pointer<Model>> model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -88,20 +84,12 @@ public:     // python
         using Type = BrepLoop;
 
         py::class_<Type>(m, "BrepLoop")
-            // .def("Brep", [](Type& self) -> Ref<Brep> {
-            //     return self.face()->Brep();
-            // })
-            // .def("Face", &Type::face)
-            // .def("NbTrims", &Type::nb_trims)
-            // .def("Trim", &Type::trim, "index"_a)
-            // .def("trims", &Type::trims)
-            // .def("edges", [](Type& self) -> std::vector<Ref<BrepEdge>> {
-            //     std::vector<Ref<BrepEdge>> edges(self.nb_trims());
-            //     for (size_t i = 0; i < edges.size(); i++) {
-            //         edges[i] = self.trim(i)->edge();
-            //     }
-            //     return edges;
-            // })
+            .def("brep", &Type::brep)
+            .def("face", &Type::face)
+            .def("nb_trims", &Type::nb_trims)
+            .def("trim", &Type::trim, "index"_a)
+            .def("trims", &Type::trims)
+            .def("edges", &Type::edges)
         ;
     }
 };

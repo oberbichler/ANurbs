@@ -40,7 +40,7 @@ public:     // static methods
         const int nb_poles_refined = nb_poles + nb_knots_to_insert;
         const int nb_knots_refined = nb_knots + nb_knots_to_insert + 2;
 
-        Pointer<CurveGeometry> refined = New<CurveGeometry>(degree,
+        Pointer<CurveGeometry> refined = new_<CurveGeometry>(degree,
             nb_poles_refined, true); // FIXME: isRational
 
         for (int i = 0; i < a + 1 - degree + 1; i++) {
@@ -137,7 +137,7 @@ public:     // static methods
         const int nb_poles_refined = nb_poles_u + nb_knots_to_insert;
         const int nb_knots_refined = geometry.nb_knots_u() + 2 + nb_knots_to_insert;
 
-        Pointer<SurfaceGeometry> refined = New<SurfaceGeometry>(degree_u,
+        Pointer<SurfaceGeometry> refined = new_<SurfaceGeometry>(degree_u,
             degree_v, nb_poles_refined, nb_poles_v, true); // FIXME: isRational
 
         for (int i = 0; i < a + 1 - degree_u + 1; i++) {
@@ -250,7 +250,7 @@ public:     // static methods
         const int nb_poles_refined = nb_poles_v + nb_knots_to_insert;
         const int nb_knots_refined = nb_knots_v + 2 + nb_knots_to_insert;
 
-        Pointer<SurfaceGeometry> refined = New<SurfaceGeometry>(degree_u,
+        Pointer<SurfaceGeometry> refined = new_<SurfaceGeometry>(degree_u,
             degree_v, nb_poles_u, nb_poles_refined, true); // FIXME: isRational
 
         for (int i = 0; i < a + 1 - degree_v + 1; i++) {
@@ -339,8 +339,8 @@ public:     // static methods
     }
 
 public:     // python
-    template <typename TModule>
-    static void register_python(TModule& m)
+
+    static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

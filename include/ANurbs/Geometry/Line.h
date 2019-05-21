@@ -62,7 +62,7 @@ public:     // serialization
 
     static Unique<Line> load(Model& model, const Json& data)
     {
-        auto result = New<Line>();
+        auto result = new_<Line>();
 
         // result->m_a = data.at("A");
         // result->m_b = data.at("B");
@@ -77,8 +77,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

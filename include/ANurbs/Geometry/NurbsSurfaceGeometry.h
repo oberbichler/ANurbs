@@ -114,7 +114,7 @@ public:     // methods
 
     Pointer<Type> clone()
     {
-        Pointer<Type> clone = New<Type>(
+        Pointer<Type> clone = new_<Type>(
             this->degree_u(), this->degree_v(), this->nb_poles_u(),
             this->nb_poles_v(), this->is_rational());
 
@@ -493,7 +493,7 @@ public:     // serialization
         // const int nbPolesV = source.at("NbPolesV");
         // const bool isRational = !weights.empty();
 
-        // auto result = New<Type>(degreeU, degreeV, nbPolesU, nbPolesV,
+        // auto result = new_<Type>(degreeU, degreeV, nbPolesU, nbPolesV,
         //     isRational);
 
         // for (int i = 0; i < knotsU.size(); i++) {
@@ -534,8 +534,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

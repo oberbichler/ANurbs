@@ -223,7 +223,7 @@ public:     // serialization
         const int nbPoles = static_cast<int>(poles.size());
         const bool isRational = !weights.empty();
 
-        auto result = New<Type>(degree, nbPoles, isRational);
+        auto result = new_<Type>(degree, nbPoles, isRational);
 
         for (int i = 0; i < knots.size(); i++) {
             result->set_knot(i, knots[i]);
@@ -273,7 +273,7 @@ public:     // serialization
         // const int nbPoles = static_cast<int>(poles.size());
         // const bool isRational = !weights.empty();
 
-        // auto result = New<Type>(degree, nbPoles, isRational);
+        // auto result = new_<Type>(degree, nbPoles, isRational);
 
         // for (int i = 0; i < knots.size(); i++) {
         //     result->SetKnot(i, knots[i]);
@@ -306,8 +306,8 @@ public:     // serialization
     }
 
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
