@@ -15,14 +15,11 @@ template <typename TModel>
 class JsonReader
 {
 private:
-    static bool
-    Load(
-        TModel& model,
-        const Json& source)
+    static bool load(TModel& model, const Json& source)
     {
         const auto type = type_name_from_json(source);
 
-        const auto success = TypeRegistry<TModel>::Load(type, model, source);
+        const auto success = TypeRegistry<TModel>::load(type, model, source);
 
         if (!success) {
             throw std::runtime_error("Unknown data type \"" + type + "\"");
@@ -33,15 +30,12 @@ private:
 
 public:
     template <typename TSource>
-    static void
-    LoadArray(
-        TModel& model,
-        TSource& source)
+    static void load_array(TModel& model, TSource& source)
     {
         Json::parser_callback_t cb = [&](int depth, Json::parse_event_t event,
             Json& parsed) {
             if (depth == 1 && event == Json::parse_event_t::object_end) {
-                Load(model, parsed);
+                load(model, parsed);
 
                 return false;
             }
@@ -52,26 +46,20 @@ public:
     }
 
     template <typename TSource>
-    static void
-    LoadObject(
-        TModel& model,
-        TSource& source)
+    static void load_object(TModel& model, TSource& source)
     {
         const auto parsed = Json::parse(source);
 
-        Load(model, parsed);
+        load(model, parsed);
     }
 
-    static void
-    LoadFile(
-        TModel& model,
-        const std::string& path)
+    static void load_file(TModel& model, const std::string& path)
     {
         std::fstream file;
 
         file.open(path, std::fstream::in);
 
-        LoadArray(model, file);
+        load_array(model, file);
     }
 };
 

@@ -30,9 +30,9 @@ public:
         return m_entry->Key();
     }
 
-    std::string Type() const
+    std::string type_name() const
     {
-        return m_entry->Type();
+        return m_entry->type_name();
     }
 
     Pointer<TData> Data() const
@@ -40,10 +40,10 @@ public:
         return m_entry->Data();
     }
 
-    Pointer<AttributeTypeOf<TData>> Attributes() const
-    {
-        return m_entry->Attributes();
-    }
+    // Pointer<typename Entry<TData>::AttributeType> Attributes() const
+    // {
+    //     return m_entry->Attributes();
+    // }
 
     TData& operator*()
     {
@@ -76,9 +76,9 @@ public:     // python
 
         py::class_<Ref<TData>>(m, name.c_str())
             .def("Key", &Ref<TData>::Key)
-            .def("Type", &Ref<TData>::Type)
+            .def("Type", &Ref<TData>::type_name)
             .def("Data", &Ref<TData>::Data)
-            .def("Attributes", &Ref<TData>::Attributes)
+            // .def("Attributes", &Ref<TData>::Attributes)
         ;
     }
 };

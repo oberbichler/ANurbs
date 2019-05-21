@@ -7,7 +7,8 @@
 #include <nlohmann/fifo_map.hpp>
 #include <nlohmann/json.hpp>
 
-#include <ANurbs/ANurbs.h>
+#include "../Define.h"
+#include "../Geometry/Interval.h"
 
 #include <stdexcept>
 

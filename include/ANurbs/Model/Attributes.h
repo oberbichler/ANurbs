@@ -1,7 +1,8 @@
 #pragma once
 
 #include <set>
-#include <unordered_map>
+#include <string>
+#include <map>
 
 namespace ANurbs {
 
@@ -9,25 +10,19 @@ class Attributes
 {
 private:
     std::set<std::string> m_tags;
-    std::unordered_map<std::string, std::string> m_userStrings;
+    std::map<std::string, std::string> m_userStrings;
 
 public:
     template <typename TModel, typename TSource>
-    void
-    Load(
-        TModel& model,
-        const TSource& source)
+    void load(TModel& model, const TSource& source)
     {
         m_tags = source.value("Tags", std::set<std::string>());
         m_userStrings = source.value("UserStrings",
-            std::unordered_map<std::string, std::string>());
+            std::map<std::string, std::string>());
     }
 
     template <typename TModel, typename TTarget>
-    void
-    Save(
-        const TModel& model,
-        TTarget& target) const
+    void save(const TModel& model, TTarget& target) const
     {
         if (m_tags.size() != 0) {
             target["Tags"] = m_tags;
@@ -39,54 +34,59 @@ public:
     }
 
 public:
-    bool
-    HasTag(
-        const std::string& name)
+    bool HasTag(const std::string& name)
     {
         return (m_tags.find(name) != m_tags.end());
     }
 
-    void
-    AddTag(
-        const std::string& name)
+    void AddTag(const std::string& name)
     {
         m_tags.insert(name);
     }
 
-    void
-    RemoveTag(
-        const std::string& name)
+    void RemoveTag(const std::string& name)
     {
         m_tags.erase(name);
     }
 
-    bool
-    HasUserString(
-        const std::string& name)
+    bool HasUserString(const std::string& name)
     {
         return (m_userStrings.find(name) != m_userStrings.end());
     }
 
-    std::string
-    UserString(
-        const std::string& name)
+    std::string UserString(const std::string& name)
     {
         return m_userStrings.at(name);
     }
 
-    void
-    SetUserString(
-        const std::string& name,
-        const std::string& value)
+    void SetUserString(const std::string& name, const std::string& value)
     {
         m_userStrings.insert({name, value});
     }
 
-    void
-    RemoveUserString(
-        const std::string& name)
+    void RemoveUserString(const std::string& name)
     {
         m_userStrings.erase(name);
+    }
+
+public:     // python
+    template <typename TModule>
+    static void register_python(TModule& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = Attributes;
+
+        py::class_<Type, Pointer<Type>>(m, "Attributes")
+            .def("HasTag", &Type::HasTag, "name"_a)
+            .def("AddTag", &Type::AddTag, "name"_a)
+            .def("RemoveTag", &Type::RemoveTag, "name"_a)
+            .def("HasUserString", &Type::HasUserString, "name"_a)
+            .def("UserString", &Type::UserString, "name"_a)
+            .def("SetUserString", &Type::SetUserString, "name"_a, "value"_a)
+            .def("RemoveUserString", &Type::RemoveUserString, "name"_a)
+        ;
     }
 };
 

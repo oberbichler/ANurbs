@@ -7,6 +7,10 @@
 #include "../Algorithm/KnotVector.h"
 #include "../Algorithm/NurbsCurveShapeFunction.h"
 
+#include "../Model/Json.h"
+#include "../Model/Model.h"
+#include "../Model/Ref.h"
+
 #include <vector>
 
 namespace ANurbs {
@@ -252,9 +256,53 @@ public:     // serialization
     }
 
 public:     // serialization
+    using Attributes = Attributes;
+
     static std::string type_name()
     {
         return "NurbsCurveGeometry" + std::to_string(dimension()) + "D";
+    }
+
+    static Unique<Type> load(Model& model, const Json& source)
+    {
+        // const auto poles = source.at("Poles");
+        // const auto knots = source.at("Knots");
+        // const auto weights = source.value("Weights", std::vector<double>());
+        
+        // const int degree = source.at("Degree");
+        // const int nbPoles = static_cast<int>(poles.size());
+        // const bool isRational = !weights.empty();
+
+        // auto result = New<Type>(degree, nbPoles, isRational);
+
+        // for (int i = 0; i < knots.size(); i++) {
+        //     result->SetKnot(i, knots[i]);
+        // }
+
+        // for (int i = 0; i < nbPoles; i++) {
+        //     result->SetPole(i, poles[i]);
+        // }
+
+        // if (isRational) {
+        //     for (int i = 0; i < weights.size(); i++) {
+        //         result->SetWeight(i, weights[i]);
+        //     }
+        // }
+
+        // return result;
+        return nullptr;
+    }
+
+    static void save(const Model& model, const Type& data, Json& target)
+    {
+        // target["Degree"] = data.degree();
+        // target["Knots"] = data.knots();
+        // target["NbPoles"] = data.nb_poles();
+        // target["Poles"] = ToJson(data.poles());
+
+        // if (data.IsRational()) {
+        //     target["Weights"] = data.weights();
+        // }
     }
 
 public:     // python

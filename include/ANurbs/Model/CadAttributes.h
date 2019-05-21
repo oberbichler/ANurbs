@@ -13,12 +13,9 @@ private:
 
 public:
     template <typename TModel, typename TSource>
-    void
-    Load(
-        TModel& model,
-        const TSource& source)
+    void load(TModel& model, const TSource& source)
     {
-        Attributes::Load(model, source);
+        Attributes::load(model, source);
 
         m_layer = source.value("Layer", "");
         m_color = source.value("Color", "");
@@ -26,12 +23,9 @@ public:
     }
 
     template <typename TModel, typename TTarget>
-    void
-    Save(
-        const TModel& model,
-        TTarget& target) const
+    void save(const TModel& model, TTarget& target) const
     {
-        Attributes::Save(model, target);
+        Attributes::save(model, target);
 
         if (!m_layer.empty()) {
             target["Layer"] = m_layer;
@@ -47,43 +41,55 @@ public:
     }
 
 public:
-    std::string
-    Layer() const
+    std::string Layer() const
     {
         return m_layer;
     }
 
-    void
-    SetLayer(
-        const std::string& value)
+    void SetLayer(const std::string& value)
     {
         m_layer = value;
     }
 
-    std::string
-    Color() const
+    std::string Color() const
     {
         return m_color;
     }
 
-    void
-    SetColor(
-        const std::string& value)
+    void SetColor(const std::string& value)
     {
         m_color = value;
     }
 
-    std::string
-    Arrowhead() const
+    std::string Arrowhead() const
     {
         return m_arrowhead;
     }
 
-    void
-    SetArrowhead(
-        const std::string& value)
+    void SetArrowhead(const std::string& value)
     {
         m_arrowhead = value;
+    }
+
+public:     // python
+    template <typename TModule>
+    static void register_python(TModule& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = CadAttributes;
+        using Base = Attributes;
+        using Holder = Pointer<Type>;
+
+        py::class_<Type, Base, Holder>(m, "CadAttributes")
+            .def("Layer", &Type::Layer)
+            .def("SetLayer", &Type::SetLayer, "value"_a)
+            .def("Color", &Type::Color)
+            .def("SetColor", &Type::SetColor, "value"_a)
+            .def("Arrowhead", &Type::Arrowhead)
+            .def("SetArrowhead", &Type::SetArrowhead, "value"_a)
+        ;
     }
 };
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ANurbs/ANurbs.h>
+#include "../Define.h"
 #include "Json.h"
 
 #include <map>
@@ -13,29 +13,20 @@ struct TypeEntryBase
 {
     virtual ~TypeEntryBase() { }
 
-    virtual bool
-    Load(
-        TModel& model,
-        const Json& source) = 0;
+    virtual bool load(TModel& model, const Json& source) = 0;
 
-    virtual bool
-    Save(
-        const TModel& model,
-        const size_t index,
-        Json& target) = 0;
+    virtual bool save(const TModel& model, const size_t index, Json& target)
+        = 0;
 };
 
 template <typename TData, typename TModel>
 struct TypeEntry : public TypeEntryBase<TModel>
 {
-    bool
-    Load(
-        TModel& model,
-        const Json& source) override
+    bool load(TModel& model, const Json& source) override
     {
         const auto key = key_from_json(source);
 
-        Pointer<TData> data = DataIO<TData>::Load(model, source);
+        Pointer<TData> data = TData::load(model, source);
 
         Ref<TData> ref;
 
@@ -45,16 +36,12 @@ struct TypeEntry : public TypeEntryBase<TModel>
             ref = model.template Add<TData>(key, data);
         }
 
-        ref.Attributes()->Load(model, source);
+        // ref.Attributes()->load(model, source);
 
         return true;
     };
 
-    bool
-    Save(
-        const TModel& model,
-        const size_t index,
-        Json& target) override
+    bool save(const TModel& model, const size_t index, Json& target) override
     {
         const auto entry = model.template Get<TData>(index);
 
@@ -62,8 +49,8 @@ struct TypeEntry : public TypeEntryBase<TModel>
             return false;
         }
 
-        DataIO<TData>::Save(model, *entry, target);
-        entry.Attributes()->Save(model, target);
+        TData::save(model, *entry, target);
+        // entry.Attributes()->save(model, target);
 
         return true;
     };
@@ -75,11 +62,9 @@ struct TypeRegistry
     static std::map<std::string, Unique<TypeEntryBase<TModel>>> s_registry;
 
     template <typename TData>
-    static void
-    Register(
-        bool noException)
+    static void Register(bool noException)
     {
-        const std::string type = TypeStringOf<TData>();
+        const std::string type = TData::type_name();
 
         if (s_registry.find(type) != s_registry.end()) {
             if (noException) {
@@ -91,33 +76,25 @@ struct TypeRegistry
         s_registry[type] = New<TypeEntry<TData, TModel>>();
     }
 
-    static bool
-    Load(
-        const std::string type,
-        TModel& model,
-        const Json& source)
+    static bool load(const std::string type, TModel& model, const Json& source)
     {
         const auto it = s_registry.find(type);
 
         if (it != s_registry.end()) {
-            it->second->Load(model, source);
+            it->second->load(model, source);
             return true;
         } else {
             return false;
         }
     }
 
-    static bool
-    Save(
-        const std::string type,
-        const TModel& model,
-        const size_t index,
-        Json& target)
+    static bool save(const std::string type, const TModel& model,
+        const size_t index, Json& target)
     {
         const auto it = s_registry.find(type);
 
         if (it != s_registry.end()) {
-            return it->second->Save(model, index, target);
+            return it->second->save(model, index, target);
         }
 
         return false;

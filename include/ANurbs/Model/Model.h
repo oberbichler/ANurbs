@@ -142,7 +142,7 @@ public:
 
     std::string GetType(size_t index) const
     {
-        return m_entries.at(m_entryMap.at(index))->Type();
+        return m_entries.at(m_entryMap.at(index))->type_name();
     }
 
     std::string GetType(const std::string& key) const
@@ -159,7 +159,7 @@ public:
 
         const auto index = std::get<0>(it->second);
 
-        return m_entries.at(index)->Type();
+        return m_entries.at(index)->type_name();
     }
 
     std::string GetKey(size_t index) const
@@ -182,7 +182,7 @@ public:
         std::vector<Ref<TData>> list;
 
         for (size_t i = 0; i < NbEntries(); i++) {
-            if (GetType(i) != TypeStringOf<TData>()) {
+            if (GetType(i) != TData::type_name()) {
                 continue;
             }
             list.push_back(Get<TData>(i));
@@ -241,24 +241,24 @@ public:
         return m_keyMap.find(key) != m_keyMap.end();
     }
 
-    void Load(const std::string& path)
+    void load(const std::string& path)
     {
-        JsonReader<Model>::LoadFile(*this, path);
+        JsonReader<Model>::load_file(*this, path);
     }
 
-    void Save(const std::string& path)
+    void save(const std::string& path)
     {
-        JsonWriter<Model>::SaveFile(*this, path);
+        JsonWriter<Model>::save_file(*this, path);
     }
 
     void AddArray(const std::string& content)
     {
-        JsonReader<Model>::LoadArray(*this, content);
+        JsonReader<Model>::load_array(*this, content);
     }
 
     void AddObject(const std::string& content)
     {
-        JsonReader<Model>::LoadObject(*this, content);
+        JsonReader<Model>::load_object(*this, content);
     }
 };
 

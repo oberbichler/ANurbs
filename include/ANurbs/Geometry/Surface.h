@@ -4,6 +4,11 @@
 
 #include "Interval.h"
 #include "NurbsSurfaceGeometry.h"
+#include "SurfaceBase.h"
+
+#include "../Model/Json.h"
+#include "../Model/Model.h"
+#include "../Model/Ref.h"
 
 namespace ANurbs {
 
@@ -11,6 +16,7 @@ template <int TDimension, typename TRef=Pointer<NurbsSurfaceGeometry<TDimension>
 class Surface : public SurfaceBase<TDimension>
 {
 public:     // types
+    using Type = Surface<TDimension>;
     using Vector = typename SurfaceBase<TDimension>::Vector;
 
 private:    // variables
@@ -113,9 +119,26 @@ public:     // methods
     }
 
 public:     // serialization
+    using Attributes = CadAttributes;
+
     static std::string type_name()
     {
         return "Surface" + std::to_string(dimension()) + "D";
+    }
+
+    static Unique<Type> load(Model& model, const Json& source)
+    {
+        const auto geometry = model.GetLazy<NurbsSurfaceGeometry<TDimension>>(
+            source.at("Geometry"));
+
+        auto result = New<Type>(geometry);
+
+        return result;
+    }
+
+    static void save(const Model& model, const Type& data, Json& target)
+    {
+        target["Geometry"] = data.surface_geometry().Key();
     }
 
 public:     // python

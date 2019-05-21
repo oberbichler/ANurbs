@@ -6,6 +6,10 @@
 #include "Interval.h"
 #include "NurbsCurveGeometry.h"
 
+#include "../Model/Json.h"
+#include "../Model/Model.h"
+#include "../Model/Ref.h"
+
 #include <vector>
 
 namespace ANurbs {
@@ -14,6 +18,7 @@ template <int TDimension, typename TRef = Pointer<NurbsCurveGeometry<TDimension>
 struct Curve : public CurveBase<TDimension>
 {
 public:     // types
+    using Type = Curve<TDimension>;
     using CurveGeometry = NurbsCurveGeometry<TDimension>;
     using Vector = typename CurveBase<TDimension>::Vector;
 
@@ -82,9 +87,27 @@ public:     // methods
     }
 
 public:     // serialization
+    using Attributes = CadAttributes;
+
     static std::string type_name()
     {
         return "Curve" + std::to_string(dimension()) + "D";
+    }
+
+    static Unique<Type> load(Model& model, const Json& source)
+    {
+        const auto geometry = model.GetLazy<NurbsCurveGeometry<TDimension>>(
+            source.at("Geometry"));
+
+        const Interval domain = source.at("Domain");
+
+        return New<Type>(geometry, domain);
+    }
+
+    static void save(const Model& model, const Type& data, Json& target)
+    {
+        target["Geometry"] = data.curve_geometry().Key();
+        target["Domain"] = ToJson(data.domain());
     }
 
 public:     // python
