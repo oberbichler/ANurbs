@@ -4,7 +4,7 @@
 
 #include "../Geometry/SurfaceBase.h"
 
-#include <nanoflann\nanoflann.hpp>
+#include <nanoflann/nanoflann.hpp>
 
 namespace ANurbs {
 
