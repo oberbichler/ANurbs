@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Define.h"
+
 #include "Json.h"
 #include "TypeRegistry.h"
 #include "Model.h"

@@ -4,9 +4,9 @@
 #include "BrepLoop.h"
 #include "BrepTrim.h"
 #include "BrepEdge.h"
-#include "Json.h"
-#include "Model.h"
-#include "Ref.h"
+#include "../../Model/Json.h"
+#include "../../Model/Model.h"
+#include "../../Model/Ref.h"
 
 #include <vector>
 
@@ -170,6 +170,12 @@ public:
         data["Loops"] = ToJson(m_loops);
         data["Trims"] = ToJson(m_trims);
         data["Edges"] = ToJson(m_edges);
+    }
+
+public:     // serialization
+    static std::string type_name()
+    {
+        return "Brep";
     }
 };
 

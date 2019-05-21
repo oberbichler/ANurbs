@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Json.h"
-#include "Model.h"
-#include "Ref.h"
+#include "../../Model/Json.h"
+#include "../../Model/Model.h"
+#include "../../Model/Ref.h"
 
 #include <ANurbs/ANurbs.h>
 

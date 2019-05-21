@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Ref.h"
-#include "Model.h"
+#include "../../Model/Ref.h"
+#include "../../Model/Model.h"
 
-#include "Json.h"
+#include "../../Model/Json.h"
 
 #include <vector>
 
@@ -70,6 +70,12 @@ public:
         Json& data) const
     {
         data["Trims"] = ToJson(m_trims);
+    }
+
+public:     // serialization
+    static std::string type_name()
+    {
+        return "BrepEdge";
     }
 };
 

@@ -18,7 +18,7 @@
 #include "./src/Data/Polyline.h"
 
 #include "./src/Data/TextDot.h"
-#include "./src/Data/Model.h"
+#include "Model/Model.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -188,12 +188,14 @@ RegisterDataTypeAndType(
 
     Model::Register<TData>();
 
-    py::class_<Ref<TData>>(m, (std::string("Ref") + name).c_str())
-        .def("Key", &Ref<TData>::Key)
-        .def("Type", &Ref<TData>::Type)
-        .def("Data", &Ref<TData>::Data)
-        .def("Attributes", &Ref<TData>::Attributes)
-    ;
+    Ref<TData>::register_python(m);
+
+    // py::class_<Ref<TData>>(m, (std::string("Ref") + name).c_str())
+    //     .def("Key", &Ref<TData>::Key)
+    //     .def("Type", &Ref<TData>::Type)
+    //     .def("Data", &Ref<TData>::Data)
+    //     .def("Attributes", &Ref<TData>::Attributes)
+    // ;
 
     PythonDataTypeBase::s_types[TypeStringOf<TData>()] =
         New<PythonDataType<TData>>();

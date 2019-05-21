@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Define.h"
-#include "Ref.h"
-#include "Model.h"
+#include "../../Model/Define.h"
+#include "../../Model/Ref.h"
+#include "../../Model/Model.h"
 #include "BrepLoop.h"
 
-#include "Json.h"
+#include "../../Model/Json.h"
 
 #include <vector>
 
@@ -98,6 +98,12 @@ public:
         data["Brep"] = ToJson(m_brep);
         data["Loops"] = ToJson(m_loops);
         data["Geometry"] = ToJson(m_geometry);
+    }
+
+public:     // serialization
+    static std::string type_name()
+    {
+        return "BrepFace";
     }
 };
 

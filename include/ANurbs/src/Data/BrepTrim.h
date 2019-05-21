@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Ref.h"
-#include "Model.h"
+#include "../../Model/Ref.h"
+#include "../../Model/Model.h"
 #include "BrepEdge.h"
 
-#include "Json.h"
+#include "../../Model/Json.h"
 
 #include <vector>
 
@@ -97,6 +97,12 @@ public:
         }
         data["Geometry"] = ToJson(m_geometry);
         data["Domain"] = ToJson(m_domain);
+    }
+
+public:     // serialization
+    static std::string type_name()
+    {
+        return "BrepTrim";
     }
 };
 

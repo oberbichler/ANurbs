@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Define.h"
+
 #include "Ref.h"
 
 #include <nlohmann/fifo_map.hpp>
