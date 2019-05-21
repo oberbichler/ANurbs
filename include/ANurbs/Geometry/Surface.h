@@ -10,6 +10,9 @@ namespace ANurbs {
 template <int TDimension, typename TRef=Pointer<NurbsSurfaceGeometry<TDimension>>>
 class Surface : public SurfaceBase<TDimension>
 {
+public:     // types
+    using Vector = typename SurfaceBase<TDimension>::Vector;
+
 private:    // variables
     TRef m_surface_geometry;
     Interval m_domain_u;
@@ -26,6 +29,9 @@ public:     // constructors
         m_domain_v(domain_v)
     {
     }
+
+public:     // static methods
+    using SurfaceBase<TDimension>::dimension;
 
 public:     // methods
     TRef surface_geometry() const

@@ -15,6 +15,7 @@ struct Curve : public CurveBase<TDimension>
 {
 public:     // types
     using CurveGeometry = NurbsCurveGeometry<TDimension>;
+    using Vector = typename CurveBase<TDimension>::Vector;
 
 private:    // variables
     TRef m_curve_geometry;
@@ -26,6 +27,9 @@ public:     // constructor
     {
         static_assert(TDimension > 0);
     }
+
+public:     // static methods
+    using CurveBase<TDimension>::dimension;
 
 public:     // methods
     TRef curve_geometry() const

@@ -16,6 +16,7 @@ struct NurbsCurveGeometry : public CurveBase<TDimension>
 {
 public:     // types
     using Type = NurbsCurveGeometry<TDimension>;
+    using Vector = typename CurveBase<TDimension>::Vector;
 
 private:    // variables
     const int m_degree;
@@ -31,6 +32,9 @@ public:     // constructor
     {
         static_assert(TDimension > 0);
     }
+
+public:     // static methods
+    using CurveBase<TDimension>::dimension;
 
 public:     // methods
     int degree() const override

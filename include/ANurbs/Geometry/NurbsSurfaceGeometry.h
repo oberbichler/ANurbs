@@ -17,6 +17,7 @@ class NurbsSurfaceGeometry : public SurfaceBase<TDimension>
 {
 public:     // types
     using Type = NurbsSurfaceGeometry<TDimension>;
+    using Vector = typename SurfaceBase<TDimension>::Vector;
 
 private:    // variables
     int m_degree_u;
@@ -37,6 +38,9 @@ public:     // constructor
         m_weights(is_rational ? nb_poles_u * nb_poles_v : 0)
     {
     }
+
+public:     // static methods
+    using SurfaceBase<TDimension>::dimension;
 
 public:     // methods
     int to_single_index(const int index_u, const int index_v) const
