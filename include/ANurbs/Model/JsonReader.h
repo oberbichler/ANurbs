@@ -42,7 +42,7 @@ public:
             return true;
         };
 
-        Json::parse(source, cb);
+        auto no_warning = Json::parse(source, cb);
     }
 
     template <typename TSource>
