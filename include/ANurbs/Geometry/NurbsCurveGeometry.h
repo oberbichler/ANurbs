@@ -294,7 +294,7 @@ public:     // python
                 "order"_a)
         ;
 
-        RegisterDataType<Type>(m, model, name);
+        // RegisterDataType<Type>(m, model, name);
     }
 };
 

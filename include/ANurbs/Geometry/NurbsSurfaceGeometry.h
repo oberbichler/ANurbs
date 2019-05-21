@@ -531,7 +531,7 @@ public:     // python
             .def("Reparametrize", &Type::reparametrize, "domainU"_a, "domainV"_a)
         ;
 
-        RegisterDataType<Type>(m, model, name);
+        // RegisterDataType<Type>(m, model, name);
     }
 };
 

@@ -132,7 +132,7 @@ public:     // python
             .def("Geometry", &Type::surface_geometry)
         ;
 
-        RegisterDataType<Type>(m, model, name);
+        // RegisterDataType<Type>(m, model, name);
     }
 };
 

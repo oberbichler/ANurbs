@@ -100,7 +100,7 @@ public:     // python
             .def("Geometry", &Type::curve_geometry)
         ;
 
-        RegisterDataType<Type>(m, model, name);
+        // RegisterDataType<Type>(m, model, name);
     }
 };
 
