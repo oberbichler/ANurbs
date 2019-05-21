@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(
     "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/external_libraries"
+    "${PROJECT_SOURCE_DIR}/external_libraries/pybind11/include"
 )
 
 add_subdirectory(test)
