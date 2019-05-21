@@ -17,6 +17,7 @@ class CurveOnSurface : public CurveBase<TDimension>
 public:     // types
     using CurveGeometry = NurbsCurveGeometry<2>;
     using SurfaceGeometry = NurbsSurfaceGeometry<TDimension>;
+    using Vector = typename CurveBase<TDimension>::Vector;
 
 private:    // variables
     Pointer<CurveGeometry> m_curve_geometry;
@@ -30,6 +31,9 @@ public:     // constructors
         m_surface_geometry(surface_geometry), m_domain(domain)
     {
     }
+
+public:     // static methods
+    using CurveBase<TDimension>::dimension;
 
 public:     // methods
     Pointer<CurveGeometry> curve_geometry() const
@@ -131,9 +135,15 @@ public:     // methods
         return result;
     }
 
+public:     // serialization
+    static std::string type_name()
+    {
+        return "CurveOnSurface" + std::to_string(dimension()) + "D";
+    }
+
 public:     // python
-    template <typename TModule>
-    static void register_python(TModule& m)
+
+    static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -142,8 +152,7 @@ public:     // python
         using Base = CurveBase<TDimension>;
         using Handler = Pointer<Type>;
 
-        const std::string name = "CurveOnSurface" + std::to_string(TDimension) +
-            "D";
+        const std::string name = Type::type_name();
 
         py::class_<Type, Base, Handler>(m, name.c_str())
             .def(py::init<Pointer<CurveGeometry>, Pointer<SurfaceGeometry>,

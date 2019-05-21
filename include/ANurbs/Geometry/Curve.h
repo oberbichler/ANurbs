@@ -6,6 +6,10 @@
 #include "Interval.h"
 #include "NurbsCurveGeometry.h"
 
+#include "../Model/Json.h"
+#include "../Model/Model.h"
+#include "../Model/Ref.h"
+
 #include <vector>
 
 namespace ANurbs {
@@ -14,7 +18,9 @@ template <int TDimension, typename TRef = Pointer<NurbsCurveGeometry<TDimension>
 struct Curve : public CurveBase<TDimension>
 {
 public:     // types
+    using Type = Curve<TDimension>;
     using CurveGeometry = NurbsCurveGeometry<TDimension>;
+    using Vector = typename CurveBase<TDimension>::Vector;
 
 private:    // variables
     TRef m_curve_geometry;
@@ -26,6 +32,9 @@ public:     // constructor
     {
         static_assert(TDimension > 0);
     }
+
+public:     // static methods
+    using CurveBase<TDimension>::dimension;
 
 public:     // methods
     TRef curve_geometry() const
@@ -77,9 +86,33 @@ public:     // methods
         return result;
     }
 
+public:     // serialization
+    using Attributes = CadAttributes;
+
+    static std::string type_name()
+    {
+        return "Curve" + std::to_string(dimension()) + "D";
+    }
+
+    static Unique<Type> load(Model& model, const Json& source)
+    {
+        const auto geometry = model.GetLazy<NurbsCurveGeometry<TDimension>>(
+            source.at("Geometry"));
+
+        const Interval domain = source.at("Domain");
+
+        return new_<Type>(geometry, domain);
+    }
+
+    static void save(const Model& model, const Type& data, Json& target)
+    {
+        target["Geometry"] = data.curve_geometry().Key();
+        target["Domain"] = ToJson(data.domain());
+    }
+
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -88,7 +121,7 @@ public:     // python
         using Holder = Pointer<Type>;
         using Base = CurveBase<TDimension>;
 
-        const std::string name = "Curve" + std::to_string(dimension()) + "D";
+        const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             .def(py::init<Ref<CurveGeometry>, Interval>(), "geometry"_a,
@@ -96,7 +129,7 @@ public:     // python
             .def("Geometry", &Type::curve_geometry)
         ;
 
-        RegisterDataType<Type>(m, model, name);
+        // RegisterDataType<Type>(m, model, name);
     }
 };
 

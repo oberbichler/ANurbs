@@ -7,6 +7,10 @@
 #include "../Algorithm/KnotVector.h"
 #include "../Algorithm/NurbsCurveShapeFunction.h"
 
+#include "../Model/Json.h"
+#include "../Model/Model.h"
+#include "../Model/Ref.h"
+
 #include <vector>
 
 namespace ANurbs {
@@ -16,6 +20,7 @@ struct NurbsCurveGeometry : public CurveBase<TDimension>
 {
 public:     // types
     using Type = NurbsCurveGeometry<TDimension>;
+    using Vector = typename CurveBase<TDimension>::Vector;
 
 private:    // variables
     const int m_degree;
@@ -31,6 +36,9 @@ public:     // constructor
     {
         static_assert(TDimension > 0);
     }
+
+public:     // static methods
+    using CurveBase<TDimension>::dimension;
 
 public:     // methods
     int degree() const override
@@ -215,7 +223,7 @@ public:     // serialization
         const int nbPoles = static_cast<int>(poles.size());
         const bool isRational = !weights.empty();
 
-        auto result = New<Type>(degree, nbPoles, isRational);
+        auto result = new_<Type>(degree, nbPoles, isRational);
 
         for (int i = 0; i < knots.size(); i++) {
             result->set_knot(i, knots[i]);
@@ -247,9 +255,59 @@ public:     // serialization
         }
     }
 
+public:     // serialization
+    using Attributes = Attributes;
+
+    static std::string type_name()
+    {
+        return "NurbsCurveGeometry" + std::to_string(dimension()) + "D";
+    }
+
+    static Unique<Type> load(Model& model, const Json& source)
+    {
+        // const auto poles = source.at("Poles");
+        // const auto knots = source.at("Knots");
+        // const auto weights = source.value("Weights", std::vector<double>());
+        
+        // const int degree = source.at("Degree");
+        // const int nbPoles = static_cast<int>(poles.size());
+        // const bool isRational = !weights.empty();
+
+        // auto result = new_<Type>(degree, nbPoles, isRational);
+
+        // for (int i = 0; i < knots.size(); i++) {
+        //     result->SetKnot(i, knots[i]);
+        // }
+
+        // for (int i = 0; i < nbPoles; i++) {
+        //     result->SetPole(i, poles[i]);
+        // }
+
+        // if (isRational) {
+        //     for (int i = 0; i < weights.size(); i++) {
+        //         result->SetWeight(i, weights[i]);
+        //     }
+        // }
+
+        // return result;
+        return nullptr;
+    }
+
+    static void save(const Model& model, const Type& data, Json& target)
+    {
+        // target["Degree"] = data.degree();
+        // target["Knots"] = data.knots();
+        // target["NbPoles"] = data.nb_poles();
+        // target["Poles"] = ToJson(data.poles());
+
+        // if (data.IsRational()) {
+        //     target["Weights"] = data.weights();
+        // }
+    }
+
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -258,8 +316,7 @@ public:     // python
         using Base = CurveBase<TDimension>; 
         using Holder = Pointer<Type>;
 
-        const std::string name = "NurbsCurveGeometry" +
-            std::to_string(dimension()) + "D";
+        const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
@@ -290,7 +347,7 @@ public:     // python
                 "order"_a)
         ;
 
-        RegisterDataType<Type>(m, model, name);
+        // RegisterDataType<Type>(m, model, name);
     }
 };
 

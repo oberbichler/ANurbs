@@ -10,8 +10,6 @@
 #include "../Geometry/Polygon.h"
 #include "../Geometry/SurfaceBase.h"
 
-#include "../src/Grid.h"
-
 #include <ClipperLib/clipper.hpp>
 
 #include <vector>
@@ -22,7 +20,7 @@ enum TrimTypes
 {
     Empty,
     Full,
-    Trimmed
+    trimmed
 };
 
 class TrimmedSurfaceClipping
@@ -33,8 +31,8 @@ public:
 
 private:
     ClipperLib::Paths m_paths;
-    Grid<TrimTypes> m_span_trim_type;
-    Grid<std::vector<Polygon>> m_span_polygons;
+    std::vector<TrimTypes> m_span_trim_type;
+    std::vector<std::vector<Polygon>> m_span_polygons;
     double m_scale;
     double m_tolerance;
     std::vector<Interval> m_spans_u;
@@ -55,7 +53,7 @@ private:
         return int_pt;
     }
 
-    inline Vector FromIntPoint(const ClipperLib::IntPoint& int_pt) const
+    inline Vector from_int_pt(const ClipperLib::IntPoint& int_pt) const
     {
         Vector point;
 
@@ -66,6 +64,16 @@ private:
     }
 
 private:
+    TrimTypes& span_trim_type(int i, int j)
+    {
+        return m_span_trim_type[i * nb_spans_v() + j];
+    }
+
+    std::vector<Polygon>& span_polygons(int i, int j)
+    {
+        return m_span_polygons[i * nb_spans_v() + j];
+    }
+
     static inline bool is_rect(ClipperLib::Path rect, ClipperLib::Path contour,
         std::size_t a, std::size_t b, std::size_t c, std::size_t d)
     {
@@ -113,8 +121,8 @@ private:
         std::vector<Polygon> regions;
 
         if (polytree.Total() == 0) {
-            m_span_trim_type.SetValue(index_u, index_v, TrimTypes::Empty);
-            m_span_polygons.SetValue(index_u, index_v, {});
+            span_trim_type(index_u, index_v) = TrimTypes::Empty;
+            span_polygons(index_u, index_v) = {};
             return;
         }
 
@@ -122,8 +130,8 @@ private:
             const auto& contour = polynode->Contour;
 
             if (contour.size() == 4 && is_rect(clip[0], contour)) {
-                m_span_trim_type.SetValue(index_u, index_v, TrimTypes::Full);
-                m_span_polygons.SetValue(index_u, index_v, {});
+                span_trim_type(index_u, index_v) = TrimTypes::Full;
+                span_polygons(index_u, index_v) = {};
                 return;
             }
         }
@@ -138,7 +146,7 @@ private:
                 region.outer_path.reserve(outer_contour.size());
 
                 for (const auto& pt : outer_contour) {
-                    region.outer_path.push_back(FromIntPoint(pt));
+                    region.outer_path.push_back(from_int_pt(pt));
                 }
 
                 for (std::size_t i = 0; i < inner_contours.size(); i++) {
@@ -147,7 +155,7 @@ private:
                     inner_path.reserve(inner_contours[i]->Contour.size());
 
                     for (const auto& pt : inner_contours[i]->Contour) {
-                        inner_path.push_back(FromIntPoint(pt));
+                        inner_path.push_back(from_int_pt(pt));
                     }
 
                     region.inner_paths.push_back(inner_path);
@@ -159,14 +167,14 @@ private:
             polynode = polynode->GetNext();
         }
 
-        m_span_trim_type.SetValue(index_u, index_v, TrimTypes::Trimmed);
-        m_span_polygons.SetValue(index_u, index_v, regions);
+        span_trim_type(index_u, index_v) = TrimTypes::trimmed;
+        span_polygons(index_u, index_v) = regions;
     }
 
 public:     // constructors
     TrimmedSurfaceClipping(const double tolerance, const double unit)
-        : m_tolerance(tolerance), m_scale(unit), m_span_polygons(1, 1),
-        m_span_trim_type(1, 1)
+        : m_tolerance(tolerance), m_scale(unit), m_span_polygons(0),
+        m_span_trim_type(0)
     {
     }
 
@@ -217,8 +225,8 @@ public:     // methods
         m_spans_u = spans_u;
         m_spans_v = spans_v;
 
-        m_span_trim_type.Resize(nb_spans_u(), nb_spans_v());
-        m_span_polygons.Resize(nb_spans_u(), nb_spans_v());
+        m_span_trim_type.resize(nb_spans_u() * nb_spans_v());
+        m_span_polygons.resize(nb_spans_u() * nb_spans_v());
 
         for (int v = 0; v < nb_spans_v(); v++) {
             for (int u = 0; u < nb_spans_u(); u++) {
@@ -249,17 +257,17 @@ public:     // methods
 
     TrimTypes span_trim_type(int index_u, int index_v) const
     {
-        return m_span_trim_type(index_u, index_v);
+        return span_trim_type(index_u, index_v);
     }
 
     const std::vector<Polygon>& span_polygons(int index_u, int index_v) const
     {
-        return m_span_polygons(index_u, index_v);
+        return span_polygons(index_u, index_v);
     }
 
 public:     // python
-    template <typename TModule>
-    static void register_python(TModule& m)
+
+    static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -267,7 +275,7 @@ public:     // python
         py::enum_<TrimTypes>(m, "TrimTypes")
             .value("Empty", TrimTypes::Empty)
             .value("Full", TrimTypes::Full)
-            .value("Trimmed", TrimTypes::Trimmed)
+            .value("trimmed", TrimTypes::trimmed)
             .export_values()
         ;
 
@@ -287,8 +295,8 @@ public:     // python
             .def("nb_spans_v", &Type::nb_spans_v)
             .def("span_u", &Type::span_u, "index"_a)
             .def("span_v", &Type::span_v, "index"_a)
-            .def("span_trim_type", &Type::span_trim_type, "index_u"_a, "index_v"_a)
-            .def("span_polygons", &Type::span_polygons, "index_u"_a, "index_v"_a)
+            // .def("span_trim_type", &Type::span_trim_type, "index_u"_a, "index_v"_a)
+            // .def("span_polygons", &Type::span_polygons, "index_u"_a, "index_v"_a)
         ;
     }
 };

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Define.h"
+
 #include "Json.h"
 #include "TypeRegistry.h"
 #include "Model.h"
@@ -12,9 +14,7 @@ template <typename TModel>
 struct JsonWriter
 {
     template <typename TStream>
-    static void SaveStream(
-        const TModel& model,
-        TStream& stream)
+    static void save_stream(const TModel& model, TStream& stream)
     {
         stream << "[" << std::endl;
 
@@ -31,7 +31,7 @@ struct JsonWriter
             }
             data["Type"] = type;
 
-            if (!TypeRegistry<TModel>::Save(type, model, i, data)) {
+            if (!TypeRegistry<TModel>::save(type, model, i, data)) {
                 continue;
             }
 
@@ -57,16 +57,13 @@ struct JsonWriter
         stream << "\n]" << std::endl;
     }
 
-    static void
-    SaveFile(
-        const TModel& model,
-        const std::string& path)
+    static void save_file(const TModel& model, const std::string& path)
     {
         std::fstream file;
 
         file.open(path, std::fstream::out);
 
-        SaveStream(model, file);
+        save_stream(model, file);
     }
 };
 

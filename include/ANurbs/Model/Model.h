@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Define.h"
+
 #include "Entry.h"
 #include "JsonReader.h"
 #include "JsonWriter.h"
@@ -22,17 +24,13 @@ class Model
 
 public:
     template <typename TData>
-    static void
-    Register(
-        bool noException = false)
+    static void Register(bool noException = false)
     {
         TypeRegistry<Model>::Register<TData>(noException);
     }
 
     template <typename TData>
-    Ref<TData>
-    Add(
-        Pointer<TData> data)
+    Ref<TData> Add(Pointer<TData> data)
     {
         if (data == nullptr) {
             throw std::invalid_argument("Data is null");
@@ -48,10 +46,7 @@ public:
     }
 
     template <typename TData>
-    Ref<TData>
-    Add(
-        const std::string& key,
-        Pointer<TData> data)
+    Ref<TData> Add(const std::string& key, Pointer<TData> data)
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -94,10 +89,7 @@ public:
     }
 
     template <typename TData>
-    Ref<TData>
-    Replace(
-        size_t index,
-        Pointer<TData> data)
+    Ref<TData> Replace(size_t index, Pointer<TData> data)
     {
         if (data == nullptr) {
             throw std::invalid_argument("Data is null");
@@ -112,10 +104,7 @@ public:
     }
 
     template <typename TData>
-    Ref<TData>
-    Replace(
-        const std::string& key,
-        Pointer<TData> data)
+    Ref<TData> Replace(const std::string& key, Pointer<TData> data)
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -129,16 +118,12 @@ public:
         return Replace(index, data);
     }
 
-    void
-    Remove(
-        const size_t index)
+    void Remove(const size_t index)
     {
         m_entryMap.erase(m_entryMap.begin() + index);
     }
 
-    void
-    Remove(
-        const std::string& key)
+    void Remove(const std::string& key)
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -155,16 +140,12 @@ public:
         }
     }
 
-    std::string
-    GetType(
-        size_t index) const
+    std::string GetType(size_t index) const
     {
-        return m_entries.at(m_entryMap.at(index))->Type();
+        return m_entries.at(m_entryMap.at(index))->type_name();
     }
 
-    std::string
-    GetType(
-        const std::string& key) const
+    std::string GetType(const std::string& key) const
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -178,20 +159,16 @@ public:
 
         const auto index = std::get<0>(it->second);
 
-        return m_entries.at(index)->Type();
+        return m_entries.at(index)->type_name();
     }
 
-    std::string
-    GetKey(
-        size_t index) const
+    std::string GetKey(size_t index) const
     {
         return m_entries.at(m_entryMap.at(index))->Key();
     }
 
     template <typename TData>
-    Ref<TData>
-    Get(
-        size_t index) const
+    Ref<TData> Get(size_t index) const
     {
         const auto entry = std::static_pointer_cast<Entry<TData>>(
             m_entries.at(m_entryMap.at(index)));
@@ -200,13 +177,12 @@ public:
     }
 
     template <typename TData>
-    std::vector<Ref<TData>>
-    GetByType() const
+    std::vector<Ref<TData>> GetByType() const
     {
         std::vector<Ref<TData>> list;
 
         for (size_t i = 0; i < NbEntries(); i++) {
-            if (GetType(i) != TypeStringOf<TData>()) {
+            if (GetType(i) != TData::type_name()) {
                 continue;
             }
             list.push_back(Get<TData>(i));
@@ -222,9 +198,7 @@ public:
     }
 
     template <typename TData>
-    Ref<TData>
-    Get(
-        std::string key) const
+    Ref<TData> Get(std::string key) const
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -243,9 +217,7 @@ public:
     }
 
     template <typename TData>
-    Ref<TData>
-    GetLazy(
-        std::string key)
+    Ref<TData> GetLazy(std::string key)
     {
         Pointer<Entry<TData>> entry;
 
@@ -264,39 +236,29 @@ public:
         return Ref<TData>(entry);
     }
 
-    bool
-    Contains(
-        const std::string& key)
+    bool Contains(const std::string& key)
     {
         return m_keyMap.find(key) != m_keyMap.end();
     }
 
-    void
-    Load(
-        const std::string& path)
+    void load(const std::string& path)
     {
-        JsonReader<Model>::LoadFile(*this, path);
+        JsonReader<Model>::load_file(*this, path);
     }
 
-    void
-    Save(
-        const std::string& path)
+    void save(const std::string& path)
     {
-        JsonWriter<Model>::SaveFile(*this, path);
+        JsonWriter<Model>::save_file(*this, path);
     }
 
-    void
-    AddArray(
-        const std::string& content)
+    void AddArray(const std::string& content)
     {
-        JsonReader<Model>::LoadArray(*this, content);
+        JsonReader<Model>::load_array(*this, content);
     }
 
-    void
-    AddObject(
-        const std::string& content)
+    void AddObject(const std::string& content)
     {
-        JsonReader<Model>::LoadObject(*this, content);
+        JsonReader<Model>::load_object(*this, content);
     }
 };
 

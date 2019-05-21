@@ -4,9 +4,10 @@
 #include "BrepLoop.h"
 #include "BrepTrim.h"
 #include "BrepEdge.h"
-#include "Json.h"
-#include "Model.h"
-#include "Ref.h"
+
+#include "../Model/Json.h"
+#include "../Model/Model.h"
+#include "../Model/Ref.h"
 
 #include <vector>
 
@@ -21,96 +22,79 @@ private:
     std::vector<Ref<BrepEdge>> m_edges;
 
 public:
-    static std::string
-    Type()
-    {
-        return "Brep";
-    }
-
-    size_t
-    NbFaces() const
+    size_t nb_faces() const
     {
         return m_faces.size();
     }
 
-    Ref<BrepFace>
-    Face(
-        size_t index) const
+    Ref<BrepFace> face(size_t index) const
     {
         return m_faces[index];
     }
 
-    std::vector<Ref<BrepFace>>
-    Faces()
+    std::vector<Ref<BrepFace>> faces()
     {
         return m_faces;
     }
 
-    size_t
-    NbLoops() const
+    size_t nb_loops() const
     {
         return m_loops.size();
     }
 
-    Ref<BrepLoop>
-    Loop(
-        size_t index) const
+    Ref<BrepLoop> loop(size_t index) const
     {
         return m_loops[index];
     }
 
-    std::vector<Ref<BrepLoop>>
-    Loops()
+    std::vector<Ref<BrepLoop>> loops()
     {
         return m_loops;
     }
 
-    size_t
-    NbTrims() const
+    size_t nb_trims() const
     {
         return m_trims.size();
     }
 
-    Ref<BrepTrim>
-    Trim(
-        size_t index) const
+    Ref<BrepTrim> trim(size_t index) const
     {
         return m_trims[index];
     }
 
-    std::vector<Ref<BrepTrim>>
-    Trims()
+    std::vector<Ref<BrepTrim>> trims()
     {
         return m_trims;
     }
 
-    size_t
-    NbEdges() const
+    size_t nb_edges() const
     {
         return m_edges.size();
     }
 
-    Ref<BrepEdge>
-    Edge(
-        size_t index) const
+    Ref<BrepEdge> edge(size_t index) const
     {
         return m_edges[index];
     }
 
-    std::vector<Ref<BrepEdge>>
-    Edges()
+    std::vector<Ref<BrepEdge>> edges()
     {
         return m_edges;
     }
 
-    static Unique<Brep>
-    Load(
-        Model& model,
-        const Json& data)
-    {
-        auto result = New<Brep>();
+public:     // serialization
+    using Attributes = CadAttributes;
 
-        // Read Faces
+    static std::string type_name()
+    {
+        return "Brep";
+    }
+
+    static Unique<Brep> load(Model& model, const Json& data)
+    {
+        auto result = new_<Brep>();
+
+        // Read faces
         {
             const auto faces = data.at("Faces");
 
@@ -122,7 +106,7 @@ public:
             }
         }
 
-        // Read Loops
+        // Read loops
         {
             const auto loops = data.at("Loops");
 
@@ -134,7 +118,7 @@ public:
             }
         }
 
-        // Read Trims
+        // Read trims
         {
             const auto trims = data.at("Trims");
 
@@ -146,7 +130,7 @@ public:
             }
         }
 
-        // Read Edges
+        // Read edges
         {
             const auto edges = data.at("Edges");
 
@@ -161,15 +145,37 @@ public:
         return result;
     }
 
-    void
-    Save(
-        const Model& model,
-        Json& data) const
+    static void save(const Model& model, const Brep& data, Json& target)
     {
-        data["Faces"] = ToJson(m_faces);
-        data["Loops"] = ToJson(m_loops);
-        data["Trims"] = ToJson(m_trims);
-        data["Edges"] = ToJson(m_edges);
+        target["Faces"] = ToJson(data.m_faces);
+        target["Loops"] = ToJson(data.m_loops);
+        target["Trims"] = ToJson(data.m_trims);
+        target["Edges"] = ToJson(data.m_edges);
+    }
+
+public:     // python
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = Brep;
+
+        py::class_<Type>(m, "Brep")
+            .def("NbFaces", &Type::nb_faces)
+            .def("Face", &Type::face, "index"_a)
+            .def("faces", &Type::faces)
+            .def("NbLoops", &Type::nb_loops)
+            .def("Loop", &Type::loop, "index"_a)
+            .def("loops", &Type::loops)
+            .def("NbTrims", &Type::nb_trims)
+            .def("Trim", &Type::trim, "index"_a)
+            .def("trims", &Type::trims)
+            .def("NbEdges", &Type::nb_edges)
+            .def("Edge", &Type::edge, "index"_a)
+            .def("edges", &Type::edges)
+        ;
     }
 };
 

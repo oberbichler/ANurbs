@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Define.h"
+
 #include "Attributes.h"
 
 #include <memory>
@@ -16,7 +17,7 @@ class EntryBase
 public:
     virtual std::string Key() const = 0;
 
-    virtual std::string Type() const = 0;
+    virtual std::string type_name() const = 0;
 
     virtual bool IsEmpty() const = 0;
 
@@ -26,7 +27,7 @@ public:
 template <typename TData>
 class Entry : public EntryBase
 {
-    using AttributesType = AttributeTypeOf<TData>;
+    using AttributesType = typename TData::Attributes;
 
     std::string m_key;
     std::shared_ptr<TData> m_data;
@@ -64,8 +65,7 @@ public:
         m_data = value;
     }
 
-    std::shared_ptr<AttributesType>
-    Attributes() const
+    std::shared_ptr<AttributesType> Attributes() const
     {
         return m_attributes;
     }
@@ -76,10 +76,9 @@ public:
         return m_key;
     }
 
-    std::string
-    Type() const override
+    std::string type_name() const override
     {
-        return TypeStringOf<TData>();
+        return TData::type_name();
     }
 
     static Unique<Entry<TData>>
@@ -87,16 +86,16 @@ public:
         std::string key,
         std::shared_ptr<TData> data)
     {
-        Pointer<AttributesType> attributes = New<AttributesType>();
-        return New<Entry<TData>>(key, data, attributes);
+        Pointer<AttributesType> attributes = new_<AttributesType>();
+        return new_<Entry<TData>>(key, data, attributes);
     }
 
     static Unique<Entry<TData>>
     Create(
         std::shared_ptr<TData> data)
     {
-        Pointer<AttributesType> attributes = New<AttributesType>();
-        return New<Entry<TData>>(data, attributes);
+        Pointer<AttributesType> attributes = new_<AttributesType>();
+        return new_<Entry<TData>>(data, attributes);
     }
 
     bool

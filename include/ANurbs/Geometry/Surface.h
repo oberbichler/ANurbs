@@ -4,12 +4,21 @@
 
 #include "Interval.h"
 #include "NurbsSurfaceGeometry.h"
+#include "SurfaceBase.h"
+
+#include "../Model/Json.h"
+#include "../Model/Model.h"
+#include "../Model/Ref.h"
 
 namespace ANurbs {
 
 template <int TDimension, typename TRef=Pointer<NurbsSurfaceGeometry<TDimension>>>
 class Surface : public SurfaceBase<TDimension>
 {
+public:     // types
+    using Type = Surface<TDimension>;
+    using Vector = typename SurfaceBase<TDimension>::Vector;
+
 private:    // variables
     TRef m_surface_geometry;
     Interval m_domain_u;
@@ -26,6 +35,9 @@ public:     // constructors
         m_domain_v(domain_v)
     {
     }
+
+public:     // static methods
+    using SurfaceBase<TDimension>::dimension;
 
 public:     // methods
     TRef surface_geometry() const
@@ -106,9 +118,32 @@ public:     // methods
         return result;
     }
 
+public:     // serialization
+    using Attributes = CadAttributes;
+
+    static std::string type_name()
+    {
+        return "Surface" + std::to_string(dimension()) + "D";
+    }
+
+    static Unique<Type> load(Model& model, const Json& source)
+    {
+        const auto geometry = model.GetLazy<NurbsSurfaceGeometry<TDimension>>(
+            source.at("Geometry"));
+
+        auto result = new_<Type>(geometry);
+
+        return result;
+    }
+
+    static void save(const Model& model, const Type& data, Json& target)
+    {
+        target["Geometry"] = data.surface_geometry().Key();
+    }
+
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -119,14 +154,14 @@ public:     // python
         using Base = SurfaceBase<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = "Surface" + std::to_string(TDimension) + "D";
+        const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             .def(py::init<Ref<Geometry>>(), "geometry"_a)
             .def("Geometry", &Type::surface_geometry)
         ;
 
-        RegisterDataType<Type>(m, model, name);
+        // RegisterDataType<Type>(m, model, name);
     }
 };
 

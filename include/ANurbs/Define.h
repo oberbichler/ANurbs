@@ -3,6 +3,9 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+
 #include <memory>
 
 namespace ANurbs {
@@ -33,7 +36,7 @@ using Unique = std::unique_ptr<T>;
 
 template <typename T, typename... TArgs>
 Unique<T>
-New(
+new_(
     TArgs&&... args)
 {
     return Unique<T>(new T(std::forward<TArgs>(args)...));

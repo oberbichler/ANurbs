@@ -7,6 +7,10 @@
 #include "../Algorithm/KnotVector.h"
 #include "../Algorithm/NurbsSurfaceShapeFunction.h"
 
+#include "../Model/Json.h"
+#include "../Model/Model.h"
+#include "../Model/Ref.h"
+
 #include <stdexcept>
 #include <vector>
 
@@ -17,6 +21,7 @@ class NurbsSurfaceGeometry : public SurfaceBase<TDimension>
 {
 public:     // types
     using Type = NurbsSurfaceGeometry<TDimension>;
+    using Vector = typename SurfaceBase<TDimension>::Vector;
 
 private:    // variables
     int m_degree_u;
@@ -37,6 +42,9 @@ public:     // constructor
         m_weights(is_rational ? nb_poles_u * nb_poles_v : 0)
     {
     }
+
+public:     // static methods
+    using SurfaceBase<TDimension>::dimension;
 
 public:     // methods
     int to_single_index(const int index_u, const int index_v) const
@@ -106,7 +114,7 @@ public:     // methods
 
     Pointer<Type> clone()
     {
-        Pointer<Type> clone = New<Type>(
+        Pointer<Type> clone = new_<Type>(
             this->degree_u(), this->degree_v(), this->nb_poles_u(),
             this->nb_poles_v(), this->is_rational());
 
@@ -464,9 +472,70 @@ public:     // methods
         }
     }
 
+public:     // serialization
+    using Attributes = Attributes;
+
+    static std::string type_name()
+    {
+        return "NurbsSurfaceGeometry" + std::to_string(dimension()) + "D";
+    }
+
+    static Unique<Type> load(Model& model, const Json& source)
+    {
+        // const auto poles = source.at("Poles");
+        // const auto knotsU = source.at("KnotsU");
+        // const auto knotsV = source.at("KnotsV");
+        // const auto weights = source.value("Weights", std::vector<double>());
+        
+        // const int degreeU = source.at("DegreeU");
+        // const int degreeV = source.at("DegreeV");
+        // const int nbPolesU = source.at("NbPolesU");
+        // const int nbPolesV = source.at("NbPolesV");
+        // const bool isRational = !weights.empty();
+
+        // auto result = new_<Type>(degreeU, degreeV, nbPolesU, nbPolesV,
+        //     isRational);
+
+        // for (int i = 0; i < knotsU.size(); i++) {
+        //     result->SetKnotU(i, knotsU[i]);
+        // }
+
+        // for (int i = 0; i < knotsV.size(); i++) {
+        //     result->SetKnotV(i, knotsV[i]);
+        // }
+
+        // for (int i = 0; i < poles.size(); i++) {
+        //     result->SetPole(i, poles[i]);
+        // }
+
+        // if (isRational) {
+        //     for (int i = 0; i < weights.size(); i++) {
+        //         result->SetWeight(i, weights[i]);
+        //     }
+        // }
+
+        // return result;
+        return nullptr;
+    }
+
+    static void save(const Model& model, const Type& data, Json& target)
+    {
+    //     target["DegreeU"] = data.DegreeU();
+    //     target["DegreeV"] = data.DegreeV();
+    //     target["NbPolesU"] = data.NbPolesU();
+    //     target["NbPolesV"] = data.NbPolesV();
+    //     target["KnotsU"] = data.KnotsU();
+    //     target["KnotsV"] = data.KnotsV();
+    //     target["Poles"] = ToJson(data.Poles());
+
+    //     if (data.IsRational()) {
+    //         target["Weights"] = ToJson(data.Weights());
+    //     }
+    }
+
 public:     // python
-    template <typename TModule, typename TModel>
-    static void register_python(TModule& m, TModel& model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel& model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
@@ -474,8 +543,7 @@ public:     // python
         using Type = NurbsSurfaceGeometry<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = "NurbsSurfaceGeometry" +
-            std::to_string(TDimension) + "D";
+        const std::string name = Type::type_name();
 
         py::class_<Type, Holder>(m, name.c_str())
             .def(py::init<const int, const int, const int, const int,
@@ -527,7 +595,7 @@ public:     // python
             .def("Reparametrize", &Type::reparametrize, "domainU"_a, "domainV"_a)
         ;
 
-        RegisterDataType<Type>(m, model, name);
+        // RegisterDataType<Type>(m, model, name);
     }
 };
 

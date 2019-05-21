@@ -4,7 +4,7 @@
 
 #include "../Geometry/SurfaceBase.h"
 
-#include <nanoflann\nanoflann.hpp>
+#include <nanoflann/nanoflann.hpp>
 
 namespace ANurbs {
 
@@ -116,7 +116,7 @@ public:
             }
         }
 
-        m_index = New<KDTreeType>(3, m_point_cloud_adaptor,
+        m_index = new_<KDTreeType>(3, m_pointCloudAdaptor,
             nanoflann::KDTreeSingleIndexAdaptorParams(10));
 
         m_index->buildIndex();
@@ -335,8 +335,8 @@ public:
     }
 
 public:     // python
-    template <typename TModule>
-    static void register_python(TModule& m)
+
+    static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
