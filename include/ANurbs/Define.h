@@ -3,6 +3,9 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+
 #include <memory>
 
 namespace ANurbs {
