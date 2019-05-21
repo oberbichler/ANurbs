@@ -17,7 +17,7 @@ namespace ANurbs {
 
 Ref<Brep> BrepTrim::brep()
 {
-    return m_loop->face()->Brep();
+    return m_loop->face()->brep();
 }
 
 Pointer<Curve<2>> BrepTrim::curve_2d()

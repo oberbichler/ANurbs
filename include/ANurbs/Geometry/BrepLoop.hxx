@@ -12,7 +12,7 @@ namespace ANurbs {
 
 Ref<Brep> BrepLoop::brep()
 {
-    return m_face->Brep();
+    return m_face->brep();
 }
 
 Ref<BrepFace> BrepLoop::face()
