@@ -20,7 +20,7 @@ private:
         TModel& model,
         const Json& source)
     {
-        const auto type = GetTypeFromJson(source);
+        const auto type = type_name_from_json(source);
 
         const auto success = TypeRegistry<TModel>::Load(type, model, source);
 

@@ -33,7 +33,7 @@ struct TypeEntry : public TypeEntryBase<TModel>
         TModel& model,
         const Json& source) override
     {
-        const auto key = GetKeyFromJson(source);
+        const auto key = key_from_json(source);
 
         Pointer<TData> data = DataIO<TData>::Load(model, source);
 

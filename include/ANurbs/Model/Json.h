@@ -60,10 +60,7 @@ namespace nlohmann {
 namespace ANurbs {
 
 template <typename TData>
-void
-to_json(
-    nlohmann::json& json,
-    const Ref<TData>& ref)
+void to_json(nlohmann::json& json, const Ref<TData>& ref)
 {
     if (ref.Key().empty()) {
         throw std::runtime_error("Entity has no key");
@@ -72,10 +69,7 @@ to_json(
     json = ref.Key();
 }
 
-void
-from_json(
-    const nlohmann::json& json,
-    Interval& interval)
+void from_json(const nlohmann::json& json, Interval& interval)
 {
     assert(json.size() == 2);
 
@@ -85,10 +79,7 @@ from_json(
     interval = Interval(t0, t1);
 }
 
-void
-to_json(
-    nlohmann::json& json,
-    const Interval& interval)
+void to_json(nlohmann::json& json, const Interval& interval)
 {
     json.push_back(interval.t0());
     json.push_back(interval.t1());
@@ -102,9 +93,7 @@ using Json = nlohmann::basic_json<FiFoMap>;
 
 using ToJson = nlohmann::json;
 
-static std::string
-GetKeyFromJson(
-    const Json& source)
+static std::string key_from_json(const Json& source)
 {
     const auto it = source.find("Key");
 
@@ -115,9 +104,7 @@ GetKeyFromJson(
     return it.value();
 }
 
-static std::string
-GetTypeFromJson(
-    const Json& source)
+static std::string type_name_from_json(const Json& source)
 {
     const auto it = source.find("Type");
 
