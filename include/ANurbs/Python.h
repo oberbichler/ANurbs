@@ -1,9 +1,28 @@
 #pragma once
 
+#include "./src/Data/PointData.h"
+
+#include "./src/Data/CurveGeometry.h"
+#include "./src/Data/Curve.h"
+
+#include "./src/Data/SurfaceGeometry.h"
+#include "./src/Data/Surface.h"
+
+#include "./src/Data/Brep.h"
+#include "./src/Data/BrepFace.h"
+#include "./src/Data/BrepLoop.h"
+#include "./src/Data/BrepTrim.h"
+#include "./src/Data/BrepEdge.h"
+
+#include "./src/Data/Line.h"
+#include "./src/Data/Polyline.h"
+
+#include "./src/Data/TextDot.h"
+#include "./src/Data/Model.h"
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include <ANurbs/Data>
 #include <ANurbs/ANurbs.h>
 
 #include <functional>
@@ -458,15 +477,6 @@ RegisterData(
 
     // --- Geometry
     
-    { // Grid3D
-        using Vector = Vector<3>;
-
-        using Type = ANurbs::Grid<double>;
-
-        py::class_<Type>(m, "Vector")
-        ;
-    }
-
     { // Line
         RegisterLine<2>(m, model);
         RegisterLine<3>(m, model);
