@@ -20,9 +20,25 @@ Ref<Brep> BrepTrim::brep()
     return m_loop->face()->Brep();
 }
 
-Ref<BrepLoop> BrepTrim::loop()
+Pointer<Curve<2>> BrepTrim::curve_2d()
 {
-    return m_loop;
+    return new_<Curve<2>>(curve_geometry().Data(), domain());
+}
+
+Pointer<CurveOnSurface<3>> BrepTrim::curve_3d()
+{
+    return new_<CurveOnSurface<3>>(curve_geometry().Data(),
+        face()->Geometry().Data(), domain());
+}
+
+Ref<NurbsCurveGeometry<2>> BrepTrim::curve_geometry()
+{
+    return m_curve_geometry;
+}
+
+Interval BrepTrim::domain()
+{
+    return m_domain;
 }
 
 Ref<BrepEdge> BrepTrim::edge()
@@ -35,25 +51,9 @@ Ref<BrepFace> BrepTrim::face()
     return m_loop->face();
 }
 
-Ref<NurbsCurveGeometry<2>> BrepTrim::curve_geometry()
+Ref<BrepLoop> BrepTrim::loop()
 {
-    return m_curve_geometry;
-}
-
-Pointer<Curve<2>> BrepTrim::curve_2d()
-{
-    return new_<Curve<2>>(curve_geometry().Data(), domain());
-}
-
-Pointer<CurveOnSurface<3>> BrepTrim::curve_3d()
-{
-    return new_<CurveOnSurface<3>>(curve_geometry().Data(),
-        face()->Geometry().Data(), domain());
-}
-
-Interval BrepTrim::domain()
-{
-    return m_domain;
+    return m_loop;
 }
 
 } // namespace ANurbs
