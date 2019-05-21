@@ -7,6 +7,7 @@
 #include "../Algorithm/KnotVector.h"
 #include "../Algorithm/NurbsSurfaceShapeFunction.h"
 
+#include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"

@@ -2,7 +2,6 @@
 
 #include "../Define.h"
 
-#include "../Model/Define.h"
 #include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"

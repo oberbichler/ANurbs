@@ -6,6 +6,7 @@
 #include "Interval.h"
 #include "NurbsCurveGeometry.h"
 
+#include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"

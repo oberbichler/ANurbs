@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Define.h"
+
 #include "Json.h"
 
 #include <map>

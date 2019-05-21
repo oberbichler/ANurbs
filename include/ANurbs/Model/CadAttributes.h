@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Define.h"
+
 #include "Attributes.h"
 
 namespace ANurbs {
