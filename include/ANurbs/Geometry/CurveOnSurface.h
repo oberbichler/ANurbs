@@ -135,6 +135,12 @@ public:     // methods
         return result;
     }
 
+public:     // serialization
+    static std::string type_name()
+    {
+        return "CurveOnSurface" + std::to_string(dimension()) + "D";
+    }
+
 public:     // python
     template <typename TModule>
     static void register_python(TModule& m)
@@ -146,8 +152,7 @@ public:     // python
         using Base = CurveBase<TDimension>;
         using Handler = Pointer<Type>;
 
-        const std::string name = "CurveOnSurface" + std::to_string(TDimension) +
-            "D";
+        const std::string name = Type::type_name();
 
         py::class_<Type, Base, Handler>(m, name.c_str())
             .def(py::init<Pointer<CurveGeometry>, Pointer<SurfaceGeometry>,

@@ -81,6 +81,12 @@ public:     // methods
         return result;
     }
 
+public:     // serialization
+    static std::string type_name()
+    {
+        return "Curve" + std::to_string(dimension()) + "D";
+    }
+
 public:     // python
     template <typename TModule, typename TModel>
     static void register_python(TModule& m, TModel& model)
@@ -92,7 +98,7 @@ public:     // python
         using Holder = Pointer<Type>;
         using Base = CurveBase<TDimension>;
 
-        const std::string name = "Curve" + std::to_string(dimension()) + "D";
+        const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             .def(py::init<Ref<CurveGeometry>, Interval>(), "geometry"_a,
