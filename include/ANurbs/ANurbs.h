@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Define.h"
+
 #include "Algorithm/CurveSpanIntersection.h"
 #include "Algorithm/CurveTessellation.h"
 #include "Algorithm/IntegrationPoints.h"
@@ -11,7 +13,6 @@
 #include "Algorithm/PolygonIntegrationPoints.h"
 #include "Algorithm/PolygonTessellation.h"
 #include "Algorithm/TrimmedSurfaceClipping.h"
-#include "Define.h"
 #include "Geometry/Curve.h"
 #include "Geometry/CurveBase.h"
 #include "Geometry/CurveOnSurface.h"
