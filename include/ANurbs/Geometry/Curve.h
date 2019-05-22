@@ -107,7 +107,7 @@ public:     // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["Geometry"] = data.curve_geometry().Key();
+        target["Geometry"] = data.curve_geometry().key();
         target["Domain"] = ToJson(data.domain());
     }
 
@@ -130,7 +130,7 @@ public:     // python
             .def("curve_geometry", &Type::curve_geometry)
         ;
 
-        // RegisterDataType<Type>(m, model, name);
+        // Model::register_python_data_type<Type>(m, model);
     }
 };
 

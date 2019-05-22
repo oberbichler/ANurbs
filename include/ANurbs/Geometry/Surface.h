@@ -162,7 +162,7 @@ public:     // python
             .def("surface_geometry", &Type::surface_geometry)
         ;
 
-        // RegisterDataType<Type>(m, model, name);
+        // Model::register_python_data_type<Type>(m, model);
     }
 };
 
