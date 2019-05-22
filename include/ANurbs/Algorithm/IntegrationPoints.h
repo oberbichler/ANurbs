@@ -10,7 +10,7 @@
 namespace ANurbs {
 
 template <int TDimension>
-using IntegrationPoint = Vector<TDimension + 1>;
+using IntegrationPoint = tuple_of<TDimension + 1, double>;
 
 template <int TDimension>
 using IntegrationPointList = std::vector<IntegrationPoint<TDimension>>;
@@ -40,7 +40,7 @@ public:
         return s_xiao_gimbutas[degree - 1];
     }
 
-    static IntegrationPointList<1> compute(const size_t degree,
+    static IntegrationPointList<1> get(const size_t degree,
         const Interval& domain)
     {
         IntegrationPointList<1> integration_points(degree);
@@ -49,19 +49,19 @@ public:
 
         for (const auto& norm_point : gauss_legendre(degree)) {
             integration_points[i++] = IntegrationPoint<1>(
-                domain.parameter_at_normalized(norm_point[0]),
-                norm_point[1] * domain.length());
+                domain.parameter_at_normalized(std::get<0>(norm_point)),
+                std::get<1>(norm_point) * domain.length());
         }
 
         return integration_points;
     }
 
-    static IntegrationPointList<2>
-    compute(const size_t degree_u, const size_t degree_v,
-        const Interval& domain_u, const Interval& domain_v)
+    static IntegrationPointList<2> get(const size_t degree_u,
+        const size_t degree_v, const Interval& domain_u,
+        const Interval& domain_v)
     {
-        auto integration_points_u = compute(degree_u, domain_u);
-        auto integration_points_v = compute(degree_v, domain_v);
+        const auto integration_points_u = get(degree_u, domain_u);
+        const auto integration_points_v = get(degree_v, domain_v);
 
         IntegrationPointList<2> integration_points(degree_u * degree_v);
 
@@ -70,8 +70,8 @@ public:
         for (const auto& norm_point_u : integration_points_u) {
             for (const auto& norm_point_v : integration_points_v) {
                 integration_points[i++] = IntegrationPoint<2>(
-                    norm_point_u[0], norm_point_v[0],
-                    norm_point_u[1] * norm_point_v[1]);
+                    std::get<0>(norm_point_u), std::get<0>(norm_point_v),
+                    std::get<1>(norm_point_u) * std::get<1>(norm_point_v));
             }
         }
 
@@ -87,18 +87,15 @@ public:     // python
         
         using Type = IntegrationPoints;
 
-        py::class_<Type>(m, "IntegrationPoints")
-            // .def_static("compute", &Type::compute, "degree"_a, "domain"_a)
-            // .def_static("compute", (std::vector<IntegrationPoint2>
-            //     (*)(const size_t, const size_t, const Interval&,
-            //     const Interval&)) &Type::compute, "degreeU"_a,
-            //     "degreeV"_a, "domainU"_a, "domainV"_a)
-            // .def_static("compute", (std::vector<IntegrationPoint2>
-            //     (*)(const size_t, const size_t,
-            //     const std::vector<Interval>&,
-            //     const std::vector<Interval>&)) &Type::compute,
-            //     "degreeU"_a, "degreeV"_a, "domainsU"_a, "domainsV"_a)
-        ;
+        m.def("integration_points", [](int degree, Interval domain) {
+            return Type::get(degree, domain); }, "degree"_a, "domain"_a);
+        m.def("integration_points", [](int degree, Interval domain_u,
+            Interval domain_v) { return Type::get(degree, degree, domain_u,
+            domain_v); }, "degree"_a, "domain_u"_a, "domain"_a);
+        m.def("integration_points", [](int degree_u, int degree_v,
+            Interval domain_u, Interval domain_v) { return Type::get(degree_u,
+            degree_v, domain_u, domain_v); }, "degree_u"_a, "degree_v"_a,
+            "domain_u"_a, "domain_v"_a);
     }
 };
 
