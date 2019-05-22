@@ -35,3 +35,5 @@
 #include "Geometry/BrepFace.hxx"
 #include "Geometry/BrepLoop.hxx"
 #include "Geometry/BrepTrim.hxx"
+
+#include "Model/Model.h"
