@@ -292,6 +292,14 @@ RegisterData(
         IntegrationPoints::register_python(m);
     }
 
+    { // NurbsCurveShapeFunction
+        NurbsCurveShapeFunction::register_python(m);
+    }
+
+    { // NurbsSurfaceShapeFunction
+        NurbsSurfaceShapeFunction::register_python(m);
+    }
+
     { // PointOnCurveProjection
         PointOnCurveProjection<2>::register_python(m);
         PointOnCurveProjection<3>::register_python(m);

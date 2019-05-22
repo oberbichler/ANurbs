@@ -225,20 +225,68 @@ public:     // methods
         }
     }
 
-    template <typename TKnots>
-    void compute(const TKnots& knots, const double t)
+    void compute(const std::vector<double>& knots, const double t)
     {
         const int span = KnotVector::upper_span(degree(), knots, t);
 
         compute_at_span(knots, span, t);
     }
 
-    template <typename TKnots, typename TWeights>
-    void compute(const TKnots& knots, const TWeights& weights, const double t)
+    template <typename TWeights>
+    void compute(const std::vector<double>& knots, const TWeights& weights,
+        const double t)
     {
         const int span = KnotVector::upper_span(degree(), knots, t);
 
         compute_at_span(knots, span, weights, t);
+    }
+
+    static std::pair<std::vector<int>, MatrixXd> get(const int degree,
+        const int order, const std::vector<double>& knots, const double t)
+    {
+        NurbsCurveShapeFunction shape_function(degree, order);
+
+        shape_function.compute(knots, t);
+
+        const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
+
+        const Map<MatrixXd> values(shape_function.m_values.data(),
+            shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
+
+        return {nonzero_pole_indices, values};
+    }
+
+    template <typename TWeights>
+    static std::pair<std::vector<int>, MatrixXd> get(const int degree,
+        const int order, const std::vector<double>& knots,
+        const TWeights& weights, const double t)
+    {
+        NurbsCurveShapeFunction shape_function(degree, order);
+
+        shape_function.compute(knots, weights, t);
+        
+        const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
+        
+        const Map<MatrixXd> values(shape_function.m_values.data(),
+            shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
+        
+        return {nonzero_pole_indices, values};
+    }
+
+public:     // python
+    static void register_python(pybind11::module& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = NurbsCurveShapeFunction;
+        
+        m.def("shape_functions", [](const int degree, const int order,
+            const std::vector<double>& knots, const double t) {
+            return Type::get(degree, order, knots, t); }, "degree"_a, "order"_a,
+            "knots"_a, "t"_a);
+        m.def("shape_functions", &Type::get<VectorXd>, "degree"_a, "order"_a,
+            "knots"_a, "weights"_a, "t"_a);
     }
 };
 

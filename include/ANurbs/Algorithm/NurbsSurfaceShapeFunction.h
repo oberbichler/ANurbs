@@ -80,22 +80,22 @@ public:         // constructors
     {
     }
 
-    NurbsSurfaceShapeFunction(const int degreeU, const int degreeV,
+    NurbsSurfaceShapeFunction(const int degree_u, const int degree_v,
         const int order)
     {
-        resize(degreeU, degreeV, order);
+        resize(degree_u, degree_v, order);
     }
 
 public:         // methods
-    void resize(const int degreeU, const int degreeV, const int order)
+    void resize(const int degree_u, const int degree_v, const int order)
     {
-        const int nbShapes = nb_shapes(order);
-        const int nbNonzeroPoles = (degreeU + 1) * (degreeV + 1);
+        const int nb_shapes = this->nb_shapes(order);
+        const int nb_nonzero_poles = (degree_u + 1) * (degree_v + 1);
 
-        m_shape_u.resize(degreeU, order);
-        m_shape_v.resize(degreeV, order);
-        m_values.resize(nbShapes * nbNonzeroPoles);
-        m_weighted_sums.resize(nbShapes);
+        m_shape_u.resize(degree_u, order);
+        m_shape_v.resize(degree_v, order);
+        m_values.resize(nb_shapes * nb_nonzero_poles);
+        m_weighted_sums.resize(nb_shapes);
 
         m_order = order;
     }
@@ -205,10 +205,9 @@ public:         // methods
         return first_nonzero_pole_v() + degree_v();
     }
 
-    template <typename TKnots>
     void compute_at_span(
-        const TKnots& knots_u,
-        const TKnots& knots_v,
+        const std::vector<double>& knots_u,
+        const std::vector<double>& knots_v,
         const int span_u,
         const int span_v,
         const double u,
@@ -241,9 +240,8 @@ public:         // methods
         }
     }
 
-    template <typename TKnots>
-    void compute(const TKnots& knots_u, const TKnots& knots_v, const double u,
-        const double v)
+    void compute(const std::vector<double>& knots_u,
+        const std::vector<double>& knots_v, const double u, const double v)
     {
         const int span_u = KnotVector::lower_span(degree_u(), knots_u, u);
         const int span_v = KnotVector::lower_span(degree_v(), knots_v, v);
@@ -251,10 +249,10 @@ public:         // methods
         compute_at_span(knots_u, knots_v, span_u, span_v, u, v);
     }
 
-    template <typename TKnots, typename TWeights>
-    void compute_at_span(const TKnots& knots_u, const TKnots& knots_v,
-        const int span_u, const int span_v, const TWeights& weights,
-        const double u, const double v)
+    template <typename TWeights>
+    void compute_at_span(const std::vector<double>& knots_u,
+        const std::vector<double>& knots_v, const int span_u, const int span_v,
+        const TWeights& weights, const double u, const double v)
     {
         using Math::binom;
 
@@ -325,14 +323,69 @@ public:         // methods
         }
     }
 
-    template <typename TKnots, typename TWeights>
-    void compute(const TKnots& knots_u, const TKnots& knots_v,
-        const TWeights& weights, const double u, const double v)
+    template <typename TWeights>
+    void compute(const std::vector<double>& knots_u,
+        const std::vector<double>& knots_v, const TWeights& weights,
+        const double u, const double v)
     {
         const int span_u = KnotVector::lower_span(degree_u(), knots_u, u);
         const int span_v = KnotVector::lower_span(degree_v(), knots_v, v);
 
         compute_at_span(knots_u, knots_v, span_u, span_v, weights, u, v);
+    }
+
+    static std::pair<std::vector<std::pair<int, int>>, MatrixXd> get(
+        const int degree_u, const int degree_v, const int order,
+        const std::vector<double>& knots_u, const std::vector<double>& knots_v,
+        const double u, const double v)
+    {
+        NurbsSurfaceShapeFunction shape_function(degree_u, degree_v, order);
+
+        shape_function.compute(knots_u, knots_v, u, v);
+        
+        const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
+        
+        const Map<MatrixXd> values(shape_function.m_values.data(),
+            shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
+        
+        return {nonzero_pole_indices, values};
+    }
+
+    template <typename TWeights>
+    static std::pair<std::vector<std::pair<int, int>>, MatrixXd> get(
+        const int degree_u, const int degree_v, const int order,
+        const std::vector<double>& knots_u, const std::vector<double>& knots_v,
+        const TWeights& weights, const double u, const double v)
+    {
+        NurbsSurfaceShapeFunction shape_function(degree_u, degree_v, order);
+
+        shape_function.compute<TWeights>(knots_u, knots_v, weights, u, v);
+        
+        const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
+        
+        const Map<MatrixXd> values(shape_function.m_values.data(),
+            shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
+        
+        return {nonzero_pole_indices, values};
+    }
+
+public:     // python
+    static void register_python(pybind11::module& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = NurbsSurfaceShapeFunction;
+        
+        m.def("shape_functions", [](const int degree_u, const int degree_v,
+            const int order, const std::vector<double>& knots_u,
+            const std::vector<double>& knots_v, const double u, const double v)
+            { return Type::get(degree_u, degree_v, order, knots_u, knots_v,
+            u, v); }, "degree_u"_a, "degree_v"_a, "order"_a, "knots_u"_a,
+            "knots_v"_a, "u"_a, "v"_a);
+        m.def("shape_functions", &Type::get<MatrixXd>, "degree_u"_a,
+            "degree_v"_a, "order"_a, "knots_u"_a, "knots_v"_a, "weights"_a,
+            "u"_a, "v"_a);
     }
 };
 
