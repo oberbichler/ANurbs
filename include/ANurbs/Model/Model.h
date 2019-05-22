@@ -6,6 +6,7 @@
 #include "JsonReader.h"
 #include "JsonWriter.h"
 #include "Ref.h"
+#include "PythonDataType.h"
 
 #include <iostream>
 #include <unordered_map>
@@ -118,12 +119,12 @@ public:
         return Replace(index, data);
     }
 
-    void Remove(const size_t index)
+    void remove(const size_t index)
     {
         m_entryMap.erase(m_entryMap.begin() + index);
     }
 
-    void Remove(const std::string& key)
+    void remove(const std::string& key)
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -134,18 +135,18 @@ public:
         if (it != m_keyMap.end()) {
             const size_t index = std::get<1>(it->second);
             
-            Remove(index);
+            remove(index);
 
             m_keyMap.erase(it);
         }
     }
 
-    std::string GetType(size_t index) const
+    std::string get_type(size_t index) const
     {
         return m_entries.at(m_entryMap.at(index))->type_name();
     }
 
-    std::string GetType(const std::string& key) const
+    std::string get_type(const std::string& key) const
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -162,7 +163,7 @@ public:
         return m_entries.at(index)->type_name();
     }
 
-    std::string GetKey(size_t index) const
+    std::string get_key(size_t index) const
     {
         return m_entries.at(m_entryMap.at(index))->Key();
     }
@@ -177,12 +178,12 @@ public:
     }
 
     template <typename TData>
-    std::vector<Ref<TData>> GetByType() const
+    std::vector<Ref<TData>> of_type() const
     {
         std::vector<Ref<TData>> list;
 
-        for (size_t i = 0; i < NbEntries(); i++) {
-            if (GetType(i) != TData::type_name()) {
+        for (size_t i = 0; i < nb_entries(); i++) {
+            if (get_type(i) != TData::type_name()) {
                 continue;
             }
             list.push_back(Get<TData>(i));
@@ -192,7 +193,7 @@ public:
     }
 
     size_t
-    NbEntries() const
+    nb_entries() const
     {
         return m_entryMap.size();
     }
@@ -251,15 +252,77 @@ public:
         JsonWriter<Model>::save_file(*this, path);
     }
 
-    void AddArray(const std::string& content)
+    void add_array(const std::string& content)
     {
         JsonReader<Model>::load_array(*this, content);
     }
 
-    void AddObject(const std::string& content)
+    void add_object(const std::string& content)
     {
         JsonReader<Model>::load_object(*this, content);
     }
+
+public:     // python
+    static pybind11::class_<Model, Pointer<Model>> register_python(
+        pybind11::module& m)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        using Type = Model;
+        using Holder = Pointer<Type>;
+
+        return pybind11::class_<Type, Holder>(m, "Model")
+            .def(py::init<>())
+            .def("load", &Type::load, "path"_a)
+            .def("save", &Type::save, "path"_a)
+            .def("add_array", &Type::add_array, "content"_a)
+            .def("add_object", &Type::add_object, "content"_a)
+            .def("nb_entries", &Type::nb_entries)
+            .def("get_type", (std::string (Type::*)(const size_t) const)
+                &Type::get_type, "index"_a)
+            .def("get_type", (std::string (Type::*)(const std::string&) const)
+                &Type::get_type, "key"_a)
+            .def("get_key", &Type::get_key, "index"_a)
+            .def("get", &PythonDataTypeBase<Model>::by_key, "key"_a)
+            .def("get", &PythonDataTypeBase<Model>::by_index, "index"_a)
+            .def("of_type", &PythonDataTypeBase<Model>::by_type, "type"_a)
+            .def("remove", (void (Type::*)(const size_t))
+                &Type::remove, "index"_a)
+            .def("remove", (void (Type::*)(const std::string&))
+                &Type::remove, "key"_a)
+        ;
+    }
+
+    template <typename TData>
+    static void register_python_data_type(pybind11::module& m,
+        pybind11::class_<Model, Pointer<Model>>& model)
+    {
+        using namespace pybind11::literals;
+        namespace py = pybind11;
+
+        Model::Register<TData>();
+
+        Ref<TData>::register_python(m);
+
+        PythonDataTypeBase<Model>::s_types[TData::type_name()] =
+            new_<PythonDataType<Model, TData>>();
+
+        model.def("add", &PythonDataType<Model, TData>::add, "data"_a);
+
+        model.def("add", &PythonDataType<Model, TData>::add_with_key, "key"_a,
+            "data"_a);
+
+        model.def("add", [](ANurbs::Model& self, const Ref<TData>& ref) {
+            return PythonDataType<Model, TData>::add_with_key(self, ref.Key(),
+            ref.Data()); }, "ref"_a);
+        
+        model.def("replace", &PythonDataType<Model, TData>::replace, "index"_a,
+            "data"_a);
+
+        model.def("replace", &PythonDataType<Model, TData>::replace_with_key,
+            "key"_a, "data"_a);
+    };
 };
 
 } // namespace ANurbs
