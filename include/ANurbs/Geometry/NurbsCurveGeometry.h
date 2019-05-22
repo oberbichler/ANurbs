@@ -327,25 +327,18 @@ public:     // python
             // .def("Weights", &Type::weights)
             // .def("Clone", &Type::clone)
             // read-only properties
-            .def_property_readonly("dimension", [](Type&) {
-                return Type::dimension(); })
-            .def_property_readonly("degree", &Type::degree)
             .def_property_readonly("is_rational", &Type::is_rational)
-            .def_property_readonly("domain", &Type::domain)
             .def_property_readonly("nb_knots", &Type::nb_knots)
             .def_property_readonly("nb_poles", &Type::nb_poles)
             // methods
             .def("knot", &Type::knot, "index"_a)
             .def("knots", &Type::knots)
             .def("set_knot", &Type::set_knot, "index"_a, "value"_a)
-            .def("spans", &Type::spans)
             .def("set_pole", &Type::set_pole, "index"_a, "value"_a)
-            .def("weight", &Type::weight, "index"_a)
             .def("set_weight", &Type::set_weight, "index"_a, "value"_a)
-            .def("point_at", &Type::point_at, "t"_a)
-            .def("derivatives_at", &Type::derivatives_at, "t"_a, "order"_a)
             .def("shape_functions_at", &Type::shape_functions_at, "t"_a,
                 "order"_a)
+            .def("weight", &Type::weight, "index"_a)
         ;
 
         // RegisterDataType<Type>(m, model, name);

@@ -542,58 +542,55 @@ public:     // python
         namespace py = pybind11;
 
         using Type = NurbsSurfaceGeometry<TDimension>;
+        using Base = SurfaceBase<TDimension>;
         using Holder = Pointer<Type>;
 
         const std::string name = Type::type_name();
 
-        py::class_<Type, Holder>(m, name.c_str())
+        py::class_<Type, Base, Holder>(m, name.c_str())
+            // constructors
             .def(py::init<const int, const int, const int, const int,
-                const bool>(), "degreeU"_a, "degreeV"_a, "nbPolesU"_a,
-                "nbPolesV"_a, "isRational"_a=false)
-            .def("KnotsU", &Type::knots_u)
-            .def("KnotsV", &Type::knots_v)
+                const bool>(), "degree_u"_a, "degree_v"_a, "nb_poles_u"_a,
+                "nb_poles_v"_a, "is_rational"_a=false)
+            // read-only properties
+            .def_property_readonly("is_rational", &Type::is_rational)
+            .def_property_readonly("knots_u", &Type::knots_u)
+            .def_property_readonly("knots_v", &Type::knots_v)
+            .def_property_readonly("nb_knots_u", &Type::nb_knots_u)
+            .def_property_readonly("nb_knots_v", &Type::nb_knots_v)
+            .def_property_readonly("nb_poles", &Type::nb_poles)
+            .def_property_readonly("nb_poles_u", &Type::nb_poles_u)
+            .def_property_readonly("nb_poles_v", &Type::nb_poles_v)
+            // methods
             // .def("Poles", &Type::poles)
             // .def("Weights", &Type::weights)
-            .def("Clone", &Type::clone)
-            .def("DegreeU", &Type::degree_u)
-            .def("DegreeV", &Type::degree_v)
-            .def("IsRational", &Type::is_rational)
-            .def("NbKnotsU", &Type::nb_knots_u)
-            .def("NbKnotsV", &Type::nb_knots_v)
-            .def("KnotU", &Type::knot_u, "index"_a)
-            .def("KnotV", &Type::knot_v, "index"_a)
-            .def("DomainU", &Type::domain_u)
-            .def("DomainV", &Type::domain_v)
-            .def("SpansU", &Type::spans_u)
-            .def("SpansV", &Type::spans_v)
-            .def("SetKnotU", &Type::set_knot_u, "index"_a, "value"_a)
-            .def("SetKnotV", &Type::set_knot_v, "index"_a, "value"_a)
-            .def("NbPoles", &Type::nb_poles)
-            .def("NbPolesU", &Type::nb_poles_u)
-            .def("NbPolesV", &Type::nb_poles_v)
-            .def("Pole", (Vector (Type::*)(const int) const) &Type::pole,
+            .def("clone", &Type::clone)
+            .def("knot_u", &Type::knot_u, "index"_a)
+            .def("knot_v", &Type::knot_v, "index"_a)
+            .def("pole", (Vector (Type::*)(const int) const) &Type::pole,
                 "index"_a)
-            .def("SetPole", (void (Type::*)(const int, const Vector&))
-                &Type::set_pole, "index"_a, "value"_a)
-            .def("Pole", (Vector (Type::*)(const int, const int) const)
+            .def("pole", (Vector (Type::*)(const int, const int) const)
                 &Type::pole, "indexU"_a, "indexV"_a)
-            .def("SetPole", (void (Type::*)(const int, const int,
+            .def("set_knot_u", &Type::set_knot_u, "index"_a, "value"_a)
+            .def("set_knot_v", &Type::set_knot_v, "index"_a, "value"_a)
+            .def("set_pole", (void (Type::*)(const int, const Vector&))
+                &Type::set_pole, "index"_a, "value"_a)
+            .def("set_pole", (void (Type::*)(const int, const int,
                 const Vector&)) &Type::set_pole, "indexU"_a, "indexV"_a,
                 "value"_a)
-            .def("Weight", (double (Type::*)(const int) const) &Type::weight,
-                "index"_a)
-            .def("SetWeight", (void (Type::*)(const int, const double))
+            .def("set_weight", (void (Type::*)(const int, const double))
                 &Type::set_weight, "index"_a, "value"_a)
-            .def("Weight", (double (Type::*)(const int, const int) const)
-                &Type::weight, "indexU"_a, "indexV"_a)
-            .def("SetWeight", (void (Type::*)(const int, const int,
+            .def("set_weight", (void (Type::*)(const int, const int,
                 const double)) &Type::set_weight, "indexU"_a, "indexV"_a,
                 "value"_a)
-            .def("PointAt", &Type::point_at, "u"_a, "v"_a)
-            .def("DerivativesAt", &Type::derivatives_at, "u"_a, "v"_a, "order"_a)
-            .def("ShapeFunctionsAt", &Type::shape_functions_at, "u"_a, "v"_a,
+            .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a,
                 "order"_a)
-            .def("Reparametrize", &Type::reparametrize, "domainU"_a, "domainV"_a)
+            .def("spans_u", &Type::spans_u)
+            .def("spans_v", &Type::spans_v)
+            .def("weight", (double (Type::*)(const int) const) &Type::weight,
+                "index"_a)
+            .def("weight", (double (Type::*)(const int, const int) const)
+                &Type::weight, "indexU"_a, "indexV"_a)
         ;
 
         // RegisterDataType<Type>(m, model, name);
