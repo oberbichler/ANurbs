@@ -279,10 +279,10 @@ public:     // methods
 
     void set_weight(const int index, const double value)
     {
-        const int indexU = index / nb_poles_v();
-        const int indexV = index % nb_poles_v();
+        const int index_u = index / nb_poles_v();
+        const int index_v = index % nb_poles_v();
 
-        set_weight(indexU, indexV, value);
+        set_weight(index_u, index_v, value);
     }
 
     const std::vector<double>& weights() const
@@ -569,25 +569,25 @@ public:     // python
             .def("pole", (Vector (Type::*)(const int) const) &Type::pole,
                 "index"_a)
             .def("pole", (Vector (Type::*)(const int, const int) const)
-                &Type::pole, "indexU"_a, "indexV"_a)
+                &Type::pole, "index_u"_a, "index_v"_a)
             .def("set_knot_u", &Type::set_knot_u, "index"_a, "value"_a)
             .def("set_knot_v", &Type::set_knot_v, "index"_a, "value"_a)
             .def("set_pole", (void (Type::*)(const int, const Vector&))
                 &Type::set_pole, "index"_a, "value"_a)
             .def("set_pole", (void (Type::*)(const int, const int,
-                const Vector&)) &Type::set_pole, "indexU"_a, "indexV"_a,
+                const Vector&)) &Type::set_pole, "index_u"_a, "index_v"_a,
                 "value"_a)
             .def("set_weight", (void (Type::*)(const int, const double))
                 &Type::set_weight, "index"_a, "value"_a)
             .def("set_weight", (void (Type::*)(const int, const int,
-                const double)) &Type::set_weight, "indexU"_a, "indexV"_a,
+                const double)) &Type::set_weight, "index_u"_a, "index_v"_a,
                 "value"_a)
             .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a,
                 "order"_a)
             .def("weight", (double (Type::*)(const int) const) &Type::weight,
                 "index"_a)
             .def("weight", (double (Type::*)(const int, const int) const)
-                &Type::weight, "indexU"_a, "indexV"_a)
+                &Type::weight, "index_u"_a, "index_v"_a)
         ;
 
         Model::register_python_data_type<Type>(m, model);
