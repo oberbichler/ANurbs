@@ -118,16 +118,16 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        using Type = Curve<TDimension, Ref<NurbsCurveGeometry<TDimension>>>;
+        using Type = Curve<TDimension>;
         using Holder = Pointer<Type>;
         using Base = CurveBase<TDimension>;
 
         const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
-            .def(py::init<Ref<CurveGeometry>, Interval>(), "geometry"_a,
+            .def(py::init<Pointer<CurveGeometry>, Interval>(), "geometry"_a,
                 "domain"_a)
-            .def("Geometry", &Type::curve_geometry)
+            .def("curve_geometry", &Type::curve_geometry)
         ;
 
         // RegisterDataType<Type>(m, model, name);
