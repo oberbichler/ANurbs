@@ -593,7 +593,7 @@ public:     // python
                 &Type::weight, "indexU"_a, "indexV"_a)
         ;
 
-        // RegisterDataType<Type>(m, model, name);
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 
