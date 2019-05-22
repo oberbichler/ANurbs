@@ -10,8 +10,6 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/external_libraries/pybind11/include"
 )
 
-add_subdirectory(test)
-
 add_subdirectory(external_libraries/pybind11)
 
 add_definitions(
