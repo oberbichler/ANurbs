@@ -175,6 +175,70 @@ class TestNurbsCurveGeometry(unittest.TestCase):
              [-0.0044631241, 0.0251050729, 0.0092051934]],
         )
 
+    def test_nurbs_3d_by_lists(self):
+        geometry = an.NurbsCurveGeometry3D(
+            degree=4,
+            knots=[0, 0, 0, 0, 32.9731425998736, 65.9462851997473,
+                   98.9194277996209, 131.892570399495, 131.892570399495,
+                   131.892570399495, 131.892570399495],
+            poles=[[0, -25, -5], [-15, -15, 0], [5, -5, -3], [15, -15, 3],
+                   [25, 0, 6], [15, 15, 6], [-5, -5, -3], [-25, 15, 4]],
+            weights=[1, 1, 1, 2.5, 1, 1, 1, 1],
+        )
+
+        self.assertEqual(geometry.dimension, 3)
+        self.assertEqual(geometry.is_rational, True)
+
+        self.assertEqual(geometry.degree, 4)
+        self.assertEqual(geometry.nb_knots, 11)
+        self.assertEqual(geometry.nb_poles, 8)
+
+        self.assertEqual(geometry.domain.t0,   0             )
+        self.assertEqual(geometry.domain.t1, 131.892570399495)
+
+        # point_at
+
+        assert_array_almost_equal(
+            geometry.point_at(t=0.0),
+            [0, -25, -5],
+        )
+
+        assert_array_almost_equal(
+            geometry.point_at(t=65.9462851997),
+            [21.333333, -3.666667, 4.9],
+        )
+
+        assert_array_almost_equal(
+            geometry.point_at(t=131.892570399495),
+            [-25, 15, 4],
+        )
+
+        # derivarives_at
+
+        assert_array_almost_equal(
+            geometry.derivatives_at(t=0.0, order=3),
+            [[0, -25, -5],
+             [-1.81966277, 1.2131085134, 0.6065542567],
+             [0.2759310497, -0.0551862099, -0.0717420729],
+             [-0.0189682773, 0.0005578905, 0.005523116]],
+        )
+
+        assert_array_almost_equal(
+            geometry.derivatives_at(t=65.9462851997, order=3),
+            [[21.33333333, -3.66666667, 4.9],
+             [0.20218475, 0.33697459, 0.10109238],
+             [-0.0122636, 0.0153295, -0.00367908],
+             [-5.57890509e-04, -6.50872261e-04, 5.57890509e-05]],
+        )
+
+        assert_array_almost_equal(
+            geometry.derivatives_at(t=131.892570399495, order=3),
+            [[-25, 15, 4],
+             [-2.4262170267, 2.4262170267, 0.8491759593],
+             [-0.1103724199, 0.3311172597, 0.1269282829],
+             [-0.0044631241, 0.0251050729, 0.0092051934]],
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
