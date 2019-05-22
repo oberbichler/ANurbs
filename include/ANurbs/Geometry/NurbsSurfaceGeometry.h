@@ -483,55 +483,54 @@ public:     // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        // const auto poles = source.at("Poles");
-        // const auto knotsU = source.at("KnotsU");
-        // const auto knotsV = source.at("KnotsV");
-        // const auto weights = source.value("Weights", std::vector<double>());
+        const auto poles = source.at("Poles");
+        const auto knots_u = source.at("KnotsU");
+        const auto knots_v = source.at("KnotsV");
+        const auto weights = source.value("Weights", std::vector<double>());
         
-        // const int degreeU = source.at("DegreeU");
-        // const int degreeV = source.at("DegreeV");
-        // const int nbPolesU = source.at("NbPolesU");
-        // const int nbPolesV = source.at("NbPolesV");
-        // const bool isRational = !weights.empty();
+        const int degree_u = source.at("DegreeU");
+        const int degree_v = source.at("DegreeV");
+        const int nb_poles_u = source.at("NbPolesU");
+        const int nb_poles_v = source.at("NbPolesV");
+        const bool is_rational = !weights.empty();
 
-        // auto result = new_<Type>(degreeU, degreeV, nbPolesU, nbPolesV,
-        //     isRational);
+        auto result = new_<Type>(degree_u, degree_v, nb_poles_u, nb_poles_v,
+            is_rational);
 
-        // for (int i = 0; i < knotsU.size(); i++) {
-        //     result->SetKnotU(i, knotsU[i]);
-        // }
+        for (int i = 0; i < knots_u.size(); i++) {
+            result->set_knot_u(i, knots_u[i]);
+        }
 
-        // for (int i = 0; i < knotsV.size(); i++) {
-        //     result->SetKnotV(i, knotsV[i]);
-        // }
+        for (int i = 0; i < knots_v.size(); i++) {
+            result->set_knot_v(i, knots_v[i]);
+        }
 
-        // for (int i = 0; i < poles.size(); i++) {
-        //     result->SetPole(i, poles[i]);
-        // }
+        for (int i = 0; i < poles.size(); i++) {
+            result->set_pole(i, poles[i]);
+        }
 
-        // if (isRational) {
-        //     for (int i = 0; i < weights.size(); i++) {
-        //         result->SetWeight(i, weights[i]);
-        //     }
-        // }
+        if (is_rational) {
+            for (int i = 0; i < weights.size(); i++) {
+                result->set_weight(i, weights[i]);
+            }
+        }
 
-        // return result;
-        return nullptr;
+        return result;
     }
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-    //     target["DegreeU"] = data.DegreeU();
-    //     target["DegreeV"] = data.DegreeV();
-    //     target["NbPolesU"] = data.NbPolesU();
-    //     target["NbPolesV"] = data.NbPolesV();
-    //     target["KnotsU"] = data.KnotsU();
-    //     target["KnotsV"] = data.KnotsV();
-    //     target["Poles"] = ToJson(data.Poles());
+        target["DegreeU"] = data.degree_u();
+        target["DegreeV"] = data.degree_v();
+        target["NbPolesU"] = data.nb_poles_u();
+        target["NbPolesV"] = data.nb_poles_v();
+        target["KnotsU"] = data.knots_u();
+        target["KnotsV"] = data.knots_v();
+        target["Poles"] = ToJson(data.poles());
 
-    //     if (data.IsRational()) {
-    //         target["Weights"] = ToJson(data.Weights());
-    //     }
+        if (data.is_rational()) {
+            target["Weights"] = ToJson(data.weights());
+        }
     }
 
 public:     // python
