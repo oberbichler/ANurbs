@@ -85,12 +85,18 @@ public:
         const CurveBase<TDimension>& curve)
     {
         IntegrationPointList<1> result;
+
         for (const auto span : curve.spans()) {
+            if (span_v.length() < 1e-7) {
+                continue;
+            }
+
             for (const auto [t, weight] : get(degree, span)) {
                 const auto tangent = curve.derivatives_at(t, 1)[1];
                 result.emplace_back(t, weight * tangent.norm());
             }
         }
+
         return result;
     }
 
