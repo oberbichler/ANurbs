@@ -97,4 +97,20 @@ Vector<3> cross(const Vector<3> u, const Vector<3> v)
     return u.cross(v);
 }
 
+template <size_t I,typename T> 
+struct tuple_n
+{
+    template <typename... Args>
+    using type = typename tuple_n<I - 1, T>::template type<T, Args...>;
+};
+
+template <typename T> 
+struct tuple_n<0, T> {
+    template <typename... Args>
+    using type = std::tuple<Args...>;   
+};
+
+template <size_t I, typename T>
+using tuple_of = typename tuple_n<I, T>::template type<>;
+
 } // namespace ANurbs
