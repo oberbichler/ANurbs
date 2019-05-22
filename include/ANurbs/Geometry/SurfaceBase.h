@@ -62,6 +62,8 @@ public:     // python
                 return Type::dimension(); })
             .def_property_readonly("domain_u", &Type::domain_u)
             .def_property_readonly("domain_v", &Type::domain_v)
+            .def_property_readonly("spans_u", &Type::spans_u)
+            .def_property_readonly("spans_v", &Type::spans_v)
             // methods
             .def("point_at", &Type::point_at, "u"_a, "v"_a)
             .def("derivatives_at", &Type::derivatives_at, "u"_a, "v"_a,

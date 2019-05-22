@@ -584,8 +584,6 @@ public:     // python
                 "value"_a)
             .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a,
                 "order"_a)
-            .def("spans_u", &Type::spans_u)
-            .def("spans_v", &Type::spans_v)
             .def("weight", (double (Type::*)(const int) const) &Type::weight,
                 "index"_a)
             .def("weight", (double (Type::*)(const int, const int) const)
