@@ -3,6 +3,7 @@
 #include "../Define.h"
 
 #include "../Geometry/Interval.h"
+#include "../Geometry/CurveBase.h"
 
 #include <stdexcept>
 #include <vector>
@@ -78,6 +79,20 @@ public:
         return integration_points;
     }
 
+    template <int TDimension>
+    static IntegrationPointList<1> get(const size_t degree,
+        const CurveBase<TDimension>& curve)
+    {
+        IntegrationPointList<1> result;
+        for (const auto span : curve.spans()) {
+            for (const auto [t, weight] : get(degree, span)) {
+                const auto tangent = curve.derivatives_at(t, 1)[1];
+                result.emplace_back(t, weight * tangent.norm());
+            }
+        }
+        return result;
+    }
+
 public:     // python
 
     static void register_python(pybind11::module& m)
@@ -96,6 +111,10 @@ public:     // python
             Interval domain_u, Interval domain_v) { return Type::get(degree_u,
             degree_v, domain_u, domain_v); }, "degree_u"_a, "degree_v"_a,
             "domain_u"_a, "domain_v"_a);
+        m.def("integration_points", [](int degree, const CurveBase<2>& curve) {
+            return Type::get(degree, curve); }, "degree"_a, "curve"_a);
+        m.def("integration_points", [](int degree, const CurveBase<3>& curve) {
+            return Type::get(degree, curve); }, "degree"_a, "curve"_a);
     }
 };
 

@@ -73,6 +73,35 @@ class TestIntegrationPoints(unittest.TestCase):
              ( 0.5773502691896257,  0.7745966692414834, 0.5555555555555557)],
         )
 
+    def test_integration_points_curve_2d(self):
+        model = an.Model()
+
+        model.add_array(r"""[
+            {
+                "Key": "TestData",
+                "Type": "NurbsCurveGeometry2D",
+                "Degree": 1,
+                "NbPoles": 2,
+                "Knots": [-1, 0, 1],
+                "Poles": [[-1, 0], [0, 0], [2, 0]]
+            }
+        ]""")
+
+        curve = model.get(0).data
+
+        integration_points = an.integration_points(
+            degree=2,
+            curve=curve,
+        )
+
+        assert_array_almost_equal(
+            integration_points,
+            [(-0.788675, 0.5),
+             (-0.211325, 0.5),
+             ( 0.211325, 1.0),
+             ( 0.788675, 1.0)],
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
