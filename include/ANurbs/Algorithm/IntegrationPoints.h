@@ -2,8 +2,9 @@
 
 #include "../Define.h"
 
-#include "../Geometry/Interval.h"
 #include "../Geometry/CurveBase.h"
+#include "../Geometry/Interval.h"
+#include "../Geometry/SurfaceBase.h"
 
 #include <stdexcept>
 #include <vector>
@@ -93,6 +94,36 @@ public:
         return result;
     }
 
+    template <int TDimension>
+    static IntegrationPointList<2> get(const size_t degree,
+        const SurfaceBase<TDimension>& surface)
+    {
+        IntegrationPointList<2> result;
+
+        for (const auto span_u : surface.spans_u()) {
+            if (span_u.length() < 1e-7) {
+                continue;
+            }
+
+            for (const auto span_v : surface.spans_v()) {
+                if (span_v.length() < 1e-7) {
+                    continue;
+                }
+
+                const auto span_points = get(degree, degree, span_u, span_v);
+
+                for (const auto [u, v, weight] : span_points) {
+                    const auto derivatives = surface.derivatives_at(u, v, 1);
+                    const auto normal = cross(derivatives[1], derivatives[2]);
+
+                    result.emplace_back(u, v, weight * norm(normal));
+                }
+            }
+        }
+
+        return result;
+    }
+
 public:     // python
 
     static void register_python(pybind11::module& m)
@@ -115,6 +146,9 @@ public:     // python
             return Type::get(degree, curve); }, "degree"_a, "curve"_a);
         m.def("integration_points", [](int degree, const CurveBase<3>& curve) {
             return Type::get(degree, curve); }, "degree"_a, "curve"_a);
+        m.def("integration_points", [](int degree,
+            const SurfaceBase<3>& surface) { return Type::get(degree, surface);
+            }, "degree"_a, "surface"_a);
     }
 };
 
