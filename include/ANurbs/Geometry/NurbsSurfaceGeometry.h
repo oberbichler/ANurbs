@@ -264,7 +264,7 @@ public:     // methods
 
     const std::vector<Vector>& poles() const
     {
-        return poles;
+        return m_poles;
     }
 
     double weight(const int index) const
