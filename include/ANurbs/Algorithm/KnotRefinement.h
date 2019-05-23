@@ -41,7 +41,7 @@ public:     // static methods
         const int nb_knots_refined = nb_knots + nb_knots_to_insert + 2;
 
         Pointer<CurveGeometry> refined = new_<CurveGeometry>(degree,
-            nb_poles_refined, true); // FIXME: isRational
+            nb_poles_refined, true); // FIXME: check is_rational
 
         for (int i = 0; i < a + 1 - degree + 1; i++) {
             refined->set_pole(i, geometry.pole(i) * geometry.weight(i));
@@ -138,7 +138,7 @@ public:     // static methods
         const int nb_knots_refined = geometry.nb_knots_u() + 2 + nb_knots_to_insert;
 
         Pointer<SurfaceGeometry> refined = new_<SurfaceGeometry>(degree_u,
-            degree_v, nb_poles_refined, nb_poles_v, true); // FIXME: isRational
+            degree_v, nb_poles_refined, nb_poles_v, true); // FIXME: check is_rational
 
         for (int i = 0; i < a + 1 - degree_u + 1; i++) {
             for (int m = 0; m < geometry.nb_poles_v(); m++) {
@@ -251,7 +251,7 @@ public:     // static methods
         const int nb_knots_refined = nb_knots_v + 2 + nb_knots_to_insert;
 
         Pointer<SurfaceGeometry> refined = new_<SurfaceGeometry>(degree_u,
-            degree_v, nb_poles_u, nb_poles_refined, true); // FIXME: isRational
+            degree_v, nb_poles_u, nb_poles_refined, true); // FIXME: check is_rational
 
         for (int i = 0; i < a + 1 - degree_v + 1; i++) {
             for (int m = 0; m < geometry.nb_poles_u(); m++) {
