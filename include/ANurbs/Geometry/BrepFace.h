@@ -104,6 +104,8 @@ public:     // python
             .def("edges", &Type::edges)
             .def("surface_geometry", &Type::surface_geometry)
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 
