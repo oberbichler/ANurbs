@@ -124,6 +124,8 @@ public:     // python
             //         self.loop()->face()->Geometry().data(), self.Domain());
             // })
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 
