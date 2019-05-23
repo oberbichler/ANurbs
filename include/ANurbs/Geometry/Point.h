@@ -15,6 +15,7 @@ template <int TDimension>
 class Point
 {
 public:
+    using Type = Point<TDimension>;
     using Vector = Vector<TDimension>;
 
 private:
@@ -66,23 +67,20 @@ public:     // serialization
         return "Point" + std::to_string(TDimension) + "D";
     }
 
-    static Unique<Type>
-    load(
-        Model& model,
-        const Json& source)
+    static Unique<Type> load(Model& model, const Json& source)
     {
-        auto data = new_<Point<TDimension>>();
+        auto data = new_<Type>();
 
-        // data->m_location = source.at("Location");
-        // data->m_text = source.at("Text");
+        data->m_location = source.at("Location");
+        data->m_text = source.at("Text");
 
         return data;
     }
 
     static void save(const Model& model, const Point& data, Json& target)
     {
-        // target["Location"] = ToJson(m_location);
-        // target["Text"] = ToJson(m_text);
+        target["Location"] = ToJson(data.m_location);
+        target["Text"] = ToJson(data.m_text);
     }
 
 public:     // python
@@ -98,11 +96,16 @@ public:     // python
         const std::string name = Type::type_name();
 
         py::class_<Type, Holder>(m, name.c_str())
+            // constructors
             .def(py::init<const Vector&>(), "location"_a)
-            .def("location", &Type::location)
+            .def(py::init<const Vector&, const std::string&>(), "location"_a,
+                "text"_a)
+            // properties
+            .def_property("location", &Type::location, &Type::set_location)
+            .def_property("text", &Type::text, &Type::set_text)
         ;
-        
-        // RegisterDataType<Type>(m, model, name);
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 

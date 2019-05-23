@@ -15,48 +15,48 @@
 
 namespace ANurbs {
 
-Ref<Brep> BrepTrim::brep()
+Ref<Brep> BrepTrim::brep() const
 {
     return m_loop->face()->brep();
 }
 
-Pointer<Curve<2>> BrepTrim::curve_2d()
+Pointer<Curve<2>> BrepTrim::curve_2d() const
 {
     return new_<Curve<2>>(curve_geometry().data(), domain());
 }
 
-Pointer<CurveOnSurface<3>> BrepTrim::curve_3d()
+Pointer<CurveOnSurface<3>> BrepTrim::curve_3d() const
 {
     return new_<CurveOnSurface<3>>(curve_geometry().data(),
         face()->surface_geometry().data(), domain());
 }
 
-Ref<NurbsCurveGeometry<2>> BrepTrim::curve_geometry()
+Ref<NurbsCurveGeometry<2>> BrepTrim::curve_geometry() const
 {
     return m_curve_geometry;
 }
 
-Interval BrepTrim::domain()
+Interval BrepTrim::domain() const
 {
     return m_domain;
 }
 
-Ref<BrepEdge> BrepTrim::edge()
+Ref<BrepEdge> BrepTrim::edge() const
 {
     return m_edge;
 }
 
-Ref<BrepFace> BrepTrim::face()
+Ref<BrepFace> BrepTrim::face() const
 {
     return m_loop->face();
 }
 
-Ref<BrepLoop> BrepTrim::loop()
+Ref<BrepLoop> BrepTrim::loop() const
 {
     return m_loop;
 }
 
-Ref<NurbsSurfaceGeometry<3>> BrepTrim::surface_geometry()
+Ref<NurbsSurfaceGeometry<3>> BrepTrim::surface_geometry() const
 {
     return face()->surface_geometry();
 }

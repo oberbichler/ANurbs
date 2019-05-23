@@ -24,17 +24,17 @@ private:
     std::vector<Ref<BrepTrim>> m_trims;
 
 public:
-    Ref<Brep> brep();
+    Ref<Brep> brep() const;
 
-    Ref<BrepFace> face();
+    Ref<BrepFace> face() const;
 
-    size_t nb_trims();
+    size_t nb_trims() const;
 
-    Ref<BrepTrim> trim(size_t index);
+    Ref<BrepTrim> trim(size_t index) const;
 
-    std::vector<Ref<BrepTrim>> trims();
+    std::vector<Ref<BrepTrim>> trims() const;
 
-    std::vector<Ref<BrepEdge>> edges();
+    std::vector<Ref<BrepEdge>> edges() const;
 
 public:     // serialization
     using Attributes = Attributes;
@@ -56,7 +56,7 @@ public:     // serialization
 
         // Read trims
         {
-            const auto trims = data.at("trims");
+            const auto trims = data.at("Trims");
 
             result->m_trims.resize(trims.size());
 
@@ -83,15 +83,20 @@ public:     // python
         namespace py = pybind11;
 
         using Type = BrepLoop;
+        using Holder = Pointer<Type>;
 
-        py::class_<Type>(m, "BrepLoop")
-            .def("brep", &Type::brep)
-            .def("face", &Type::face)
-            .def("nb_trims", &Type::nb_trims)
+        py::class_<Type, Holder>(m, "BrepLoop")
+            // read-only properties
+            .def_property_readonly("brep", &Type::brep)
+            .def_property_readonly("edges", &Type::edges)
+            .def_property_readonly("face", &Type::face)
+            .def_property_readonly("nb_trims", &Type::nb_trims)
+            .def_property_readonly("trims", &Type::trims)
+            // methods
             .def("trim", &Type::trim, "index"_a)
-            .def("trims", &Type::trims)
-            .def("edges", &Type::edges)
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 

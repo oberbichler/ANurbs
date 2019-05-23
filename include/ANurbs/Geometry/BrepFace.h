@@ -26,19 +26,19 @@ private:
     Ref<NurbsSurfaceGeometry<3>> m_geometry;
 
 public:
-    Ref<ANurbs::Brep> brep();
+    Ref<ANurbs::Brep> brep() const;
 
-    size_t nb_loops();
+    size_t nb_loops() const;
 
-    Ref<BrepLoop> loop(size_t index);
+    Ref<BrepLoop> loop(size_t index) const;
 
-    std::vector<Ref<BrepEdge>> edges();
+    std::vector<Ref<BrepEdge>> edges() const;
 
-    std::vector<Ref<BrepTrim>> trims();
+    std::vector<Ref<BrepTrim>> trims() const;
 
-    std::vector<Ref<BrepLoop>> loops();
+    std::vector<Ref<BrepLoop>> loops() const;
     
-    Ref<NurbsSurfaceGeometry<3>> surface_geometry();
+    Ref<NurbsSurfaceGeometry<3>> surface_geometry() const;
 
 public:     // serialization
     using Attributes = Attributes;
@@ -60,7 +60,7 @@ public:     // serialization
 
         // Read loops
         {
-            const auto loops = data.at("loops");
+            const auto loops = data.at("Loops");
 
             result->m_loops.resize(loops.size());
 
@@ -94,16 +94,21 @@ public:     // python
         namespace py = pybind11;
 
         using Type = BrepFace;
+        using Holder = Pointer<Type>;
 
-        py::class_<Type>(m, "BrepFace")
-            .def("brep", &Type::brep)
-            .def("nb_loops", &Type::nb_loops)
+        py::class_<Type, Holder>(m, "BrepFace")
+            // read-only properties
+            .def_property_readonly("brep", &Type::brep)
+            .def_property_readonly("edges", &Type::edges)
+            .def_property_readonly("loops", &Type::loops)
+            .def_property_readonly("nb_loops", &Type::nb_loops)
+            .def_property_readonly("surface_geometry", &Type::surface_geometry)
+            .def_property_readonly("trims", &Type::trims)
+            // methods
             .def("loop", &Type::loop, "index"_a)
-            .def("loops", &Type::loops)
-            .def("trims", &Type::trims)
-            .def("edges", &Type::edges)
-            .def("surface_geometry", &Type::surface_geometry)
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 

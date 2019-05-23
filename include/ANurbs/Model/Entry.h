@@ -45,7 +45,7 @@ public:
     {
     }
 
-    std::shared_ptr<TData> data()
+    std::shared_ptr<TData> data() const
     {
         return m_data;
     }

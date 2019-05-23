@@ -21,6 +21,14 @@ PYBIND11_MODULE(ANurbs, m) {
 
     // --- Algorithm
 
+    { // BrepEdgeIntegrationPoints
+        BrepEdgeIntegrationPoints::register_python(m);
+    }
+
+    { // BrepFaceIntegrationPoints
+        BrepFaceIntegrationPoints::register_python(m);
+    }
+
     { // CurveSpanIntersection
         CurveSpanIntersection::register_python(m);
     }
@@ -49,6 +57,11 @@ PYBIND11_MODULE(ANurbs, m) {
 
     { // NurbsSurfaceShapeFunction
         NurbsSurfaceShapeFunction::register_python(m);
+    }
+
+    { // Point
+        Point<2>::register_python(m, model);
+        Point<3>::register_python(m, model);
     }
 
     { // PointOnCurveProjection

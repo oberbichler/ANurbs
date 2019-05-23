@@ -176,6 +176,8 @@ public:     // python
             .def("edge", &Type::edge, "index"_a)
             .def("edges", &Type::edges)
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 

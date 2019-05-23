@@ -2,6 +2,8 @@
 
 #include "Define.h"
 
+#include "Algorithm/BrepEdgeIntegrationPoints.h"
+#include "Algorithm/BrepFaceIntegrationPoints.h"
 #include "Algorithm/CurveSpanIntersection.h"
 #include "Algorithm/CurveTessellation.h"
 #include "Algorithm/IntegrationPoints.h"

@@ -10,32 +10,32 @@
 
 namespace ANurbs {
 
-Ref<Brep> BrepLoop::brep()
+Ref<Brep> BrepLoop::brep() const
 {
     return m_face->brep();
 }
 
-Ref<BrepFace> BrepLoop::face()
+Ref<BrepFace> BrepLoop::face() const
 {
     return m_face;
 }
 
-size_t BrepLoop::nb_trims()
+size_t BrepLoop::nb_trims() const
 {
     return m_trims.size();
 }
 
-Ref<BrepTrim> BrepLoop::trim(size_t index)
+Ref<BrepTrim> BrepLoop::trim(size_t index) const
 {
     return m_trims[index];
 }
 
-std::vector<Ref<BrepTrim>> BrepLoop::trims()
+std::vector<Ref<BrepTrim>> BrepLoop::trims() const
 {
     return m_trims;
 }
 
-std::vector<Ref<BrepEdge>> BrepLoop::edges()
+std::vector<Ref<BrepEdge>> BrepLoop::edges() const
 {
     std::vector<Ref<BrepEdge>> result(nb_trims());
 
