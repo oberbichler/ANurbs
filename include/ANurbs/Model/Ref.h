@@ -40,9 +40,10 @@ public:
         return m_entry->data();
     }
 
-    // Pointer<typename Entry<TData>::AttributeType> Attributes() const
+    // FIXME:
+    // Pointer<typename Entry<TData>::AttributeType> attributes() const
     // {
-    //     return m_entry->Attributes();
+    //     return m_entry->attributes();
     // }
 
     TData& operator*()
@@ -78,7 +79,7 @@ public:     // python
             .def_property_readonly("key", &Ref<TData>::key)
             .def_property_readonly("type", &Ref<TData>::type_name)
             .def_property_readonly("data", &Ref<TData>::data)
-            // .def("Attributes", &Ref<TData>::Attributes)
+            // FIXME: .def("attributes", &Ref<TData>::attributes)
         ;
     }
 };
