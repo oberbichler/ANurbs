@@ -2,7 +2,7 @@
 
 #include "../Define.h"
 
-#include "KnotVector.h"
+#include "Nurbs.h"
 #include "Math.h"
 #include "NurbsCurveShapeFunction.h"
 
@@ -243,8 +243,8 @@ public:         // methods
     void compute(const std::vector<double>& knots_u,
         const std::vector<double>& knots_v, const double u, const double v)
     {
-        const int span_u = KnotVector::lower_span(degree_u(), knots_u, u);
-        const int span_v = KnotVector::lower_span(degree_v(), knots_v, v);
+        const int span_u = Nurbs::lower_span(degree_u(), knots_u, u);
+        const int span_v = Nurbs::lower_span(degree_v(), knots_v, v);
 
         compute_at_span(knots_u, knots_v, span_u, span_v, u, v);
     }
@@ -328,8 +328,8 @@ public:         // methods
         const std::vector<double>& knots_v, const TWeights& weights,
         const double u, const double v)
     {
-        const int span_u = KnotVector::lower_span(degree_u(), knots_u, u);
-        const int span_v = KnotVector::lower_span(degree_v(), knots_v, v);
+        const int span_u = Nurbs::lower_span(degree_u(), knots_u, u);
+        const int span_v = Nurbs::lower_span(degree_v(), knots_v, v);
 
         compute_at_span(knots_u, knots_v, span_u, span_v, weights, u, v);
     }

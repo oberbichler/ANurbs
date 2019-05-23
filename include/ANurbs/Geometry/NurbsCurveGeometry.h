@@ -4,7 +4,7 @@
 
 #include "CurveBase.h"
 
-#include "../Algorithm/KnotVector.h"
+#include "../Algorithm/Nurbs.h"
 #include "../Algorithm/NurbsCurveShapeFunction.h"
 
 #include "../Model/CadAttributes.h"
@@ -32,7 +32,7 @@ private:    // variables
 public:     // constructor
     NurbsCurveGeometry(int degree, int nb_poles, bool is_rational)
     : m_degree(degree), m_poles(nb_poles), m_weights(is_rational ?
-    nb_poles : 0), m_knots(KnotVector::nb_knots(degree, nb_poles))
+    nb_poles : 0), m_knots(Nurbs::nb_knots(degree, nb_poles))
     {
         static_assert(TDimension > 0);
     }

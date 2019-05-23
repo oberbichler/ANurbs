@@ -81,8 +81,8 @@ public:     // methods
     {
         auto knots = m_surface_geometry->knots_u();
 
-        int first_span = KnotVector::upper_span(degree_u(), knots, domain_u().t0());
-        int last_span = KnotVector::lower_span(degree_u(), knots, domain_u().t1());
+        int first_span = Nurbs::upper_span(degree_u(), knots, domain_u().t0());
+        int last_span = Nurbs::lower_span(degree_u(), knots, domain_u().t1());
 
         int nb_spans = last_span - first_span + 1;
 
@@ -102,8 +102,8 @@ public:     // methods
     {
         auto knots = m_surface_geometry->knots_v();
 
-        int first_span = KnotVector::upper_span(degree_v(), knots, domain_v().t0());
-        int last_span = KnotVector::lower_span(degree_v(), knots, domain_v().t1());
+        int first_span = Nurbs::upper_span(degree_v(), knots, domain_v().t0());
+        int last_span = Nurbs::lower_span(degree_v(), knots, domain_v().t1());
 
         int nb_spans = last_span - first_span + 1;
 

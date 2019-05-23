@@ -1,7 +1,7 @@
 import unittest
 import ANurbs as an
 
-class TestKnotVector(unittest.TestCase):
+class TestNurbs(unittest.TestCase):
     def test_knot_vector(self):
         knots = [0, 0, 0, 1, 2, 2, 3, 3, 3]
 

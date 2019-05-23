@@ -68,9 +68,9 @@ public:     // methods
     {
         const auto knots = m_curve_geometry->knots();
 
-        const int first_span = KnotVector::upper_span(degree(), knots,
+        const int first_span = Nurbs::upper_span(degree(), knots,
             domain().t0());
-        const int last_span = KnotVector::lower_span(degree(), knots,
+        const int last_span = Nurbs::lower_span(degree(), knots,
             domain().t1());
 
         const int nb_spans = last_span - first_span + 1;

@@ -4,7 +4,7 @@
 
 #include "SurfaceBase.h"
 
-#include "../Algorithm/KnotVector.h"
+#include "../Algorithm/Nurbs.h"
 #include "../Algorithm/NurbsSurfaceShapeFunction.h"
 
 #include "../Model/CadAttributes.h"

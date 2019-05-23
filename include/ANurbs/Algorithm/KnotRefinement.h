@@ -2,7 +2,7 @@
 
 #include "../Define.h"
 
-#include "KnotVector.h"
+#include "Nurbs.h"
 
 #include "../Geometry/NurbsCurveGeometry.h"
 #include "../Geometry/NurbsSurfaceGeometry.h"
@@ -34,8 +34,8 @@ public:     // static methods
 
         const int nb_knots = geometry.nb_knots();
 
-        const int a = KnotVector::upper_span(degree, geometry.knots(), knots.front());
-        const int b = KnotVector::upper_span(degree, geometry.knots(), knots.back());
+        const int a = Nurbs::upper_span(degree, geometry.knots(), knots.front());
+        const int b = Nurbs::upper_span(degree, geometry.knots(), knots.back());
 
         const int nb_poles_refined = nb_poles + nb_knots_to_insert;
         const int nb_knots_refined = nb_knots + nb_knots_to_insert + 2;
@@ -129,9 +129,9 @@ public:     // static methods
         const int nb_knots_u = geometry.nb_knots_u();
         const int nb_knots_v = geometry.nb_knots_v();
 
-        const int a = KnotVector::upper_span(degree_u, geometry.knots_u(),
+        const int a = Nurbs::upper_span(degree_u, geometry.knots_u(),
             knotsU.front());
-        const int b = KnotVector::upper_span(degree_u, geometry.knots_u(),
+        const int b = Nurbs::upper_span(degree_u, geometry.knots_u(),
             knotsU.back());
 
         const int nb_poles_refined = nb_poles_u + nb_knots_to_insert;
@@ -242,9 +242,9 @@ public:     // static methods
         const int nb_knots_u = geometry.nb_knots_u();
         const int nb_knots_v = geometry.nb_knots_v();
 
-        const int a = KnotVector::upper_span(degree_v, geometry.knots_v(),
+        const int a = Nurbs::upper_span(degree_v, geometry.knots_v(),
             knotsV.front());
-        const int b = KnotVector::upper_span(degree_v, geometry.knots_v(),
+        const int b = Nurbs::upper_span(degree_v, geometry.knots_v(),
             knotsV.back());
 
         const int nb_poles_refined = nb_poles_v + nb_knots_to_insert;

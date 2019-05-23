@@ -30,10 +30,6 @@ PYBIND11_MODULE(ANurbs, m) {
         CurveTessellation<3>::register_python(m);
     }
 
-    { // KnotVector
-        ANurbs::KnotVector::register_python(m);
-    }
-
     { // KnotRefinement
         KnotRefinement<2>::register_python(m);
         KnotRefinement<3>::register_python(m);
@@ -41,6 +37,10 @@ PYBIND11_MODULE(ANurbs, m) {
 
     { // IntegrationPoints
         IntegrationPoints::register_python(m);
+    }
+
+    { // Nurbs
+        Nurbs::register_python(m);
     }
 
     { // NurbsCurveShapeFunction

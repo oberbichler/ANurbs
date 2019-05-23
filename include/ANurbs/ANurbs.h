@@ -6,6 +6,7 @@
 #include "Algorithm/CurveTessellation.h"
 #include "Algorithm/IntegrationPoints.h"
 #include "Algorithm/KnotRefinement.h"
+#include "Algorithm/Nurbs.h"
 #include "Algorithm/NurbsCurveShapeFunction.h"
 #include "Algorithm/NurbsSurfaceShapeFunction.h"
 #include "Algorithm/PointOnCurveProjection.h"

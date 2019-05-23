@@ -6,7 +6,7 @@
 
 namespace ANurbs {
 
-class KnotVector
+class Nurbs
 {
 public:     // static methods
     template <typename TKnots>
@@ -54,7 +54,7 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        using Type = KnotVector;
+        using Type = Nurbs;
 
         m.def("upper_span", &Type::upper_span<std::vector<double>>);
         m.def("lower_span", &Type::lower_span<std::vector<double>>);

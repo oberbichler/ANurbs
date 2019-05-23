@@ -2,7 +2,7 @@
 
 #include "../Define.h"
 
-#include "KnotVector.h"
+#include "Nurbs.h"
 #include "Math.h"
 
 #include <vector>
@@ -227,7 +227,7 @@ public:     // methods
 
     void compute(const std::vector<double>& knots, const double t)
     {
-        const int span = KnotVector::upper_span(degree(), knots, t);
+        const int span = Nurbs::upper_span(degree(), knots, t);
 
         compute_at_span(knots, span, t);
     }
@@ -236,7 +236,7 @@ public:     // methods
     void compute(const std::vector<double>& knots, const TWeights& weights,
         const double t)
     {
-        const int span = KnotVector::upper_span(degree(), knots, t);
+        const int span = Nurbs::upper_span(degree(), knots, t);
 
         compute_at_span(knots, span, weights, t);
     }
