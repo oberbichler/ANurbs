@@ -51,6 +51,11 @@ PYBIND11_MODULE(ANurbs, m) {
         NurbsSurfaceShapeFunction::register_python(m);
     }
 
+    { // Point
+        Point<2>::register_python(m, model);
+        Point<3>::register_python(m, model);
+    }
+
     { // PointOnCurveProjection
         PointOnCurveProjection<2>::register_python(m);
         PointOnCurveProjection<3>::register_python(m);
