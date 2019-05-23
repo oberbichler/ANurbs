@@ -58,7 +58,7 @@ Ref<BrepLoop> BrepTrim::loop()
 
 Ref<NurbsSurfaceGeometry<3>> BrepTrim::surface_geometry()
 {
-    return face()->Geometry();
+    return face()->surface_geometry();
 }
 
 } // namespace ANurbs
