@@ -52,9 +52,9 @@ private:        // methods
     {
         using namespace Math;
 
-        const int pole = Math::matrix_index(nb_nonzero_poles_u(),
+        const int pole = Math::single_index(nb_nonzero_poles_u(),
             nb_nonzero_poles_v(), poleU, poleV);
-        const int index = Math::matrix_index(nb_shapes(), nb_nonzero_poles(),
+        const int index = Math::single_index(nb_shapes(), nb_nonzero_poles(),
             derivative, pole);
 
         return index;
@@ -62,7 +62,7 @@ private:        // methods
 
     double& value(const int derivative, const int pole)
     {
-        const int index = Math::matrix_index(nb_shapes(), nb_nonzero_poles(),
+        const int index = Math::single_index(nb_shapes(), nb_nonzero_poles(),
             derivative, pole);
 
         return m_values[index];
@@ -141,7 +141,7 @@ public:         // methods
 
         for (int i = 0; i < nb_nonzero_poles_u(); i++) {
             for (int j = 0; j < nb_nonzero_poles_v(); j++) {
-                int poleIndex = Math::matrix_index(nb_nonzero_poles_u(),
+                int poleIndex = Math::single_index(nb_nonzero_poles_u(),
                     nb_nonzero_poles_v(), i, j);
 
                 int poleU = first_nonzero_pole_u() + i;
@@ -164,7 +164,7 @@ public:         // methods
 
     const double value(const int derivative, const int pole) const
     {
-        const int index = Math::matrix_index(nb_shapes(), nb_nonzero_poles(),
+        const int index = Math::single_index(nb_shapes(), nb_nonzero_poles(),
             derivative, pole);
 
         return m_values[index];

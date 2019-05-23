@@ -19,7 +19,7 @@ constexpr inline int binom(const int n, const int k) noexcept
     // clang-format on
 }
 
-constexpr inline int matrix_index(const int rows, const int cols, const int row,
+constexpr inline int single_index(const int rows, const int cols, const int row,
     const int col) noexcept
 {
     return row * cols + col;

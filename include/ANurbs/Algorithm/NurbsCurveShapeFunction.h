@@ -25,7 +25,7 @@ private:    // variables
 private:    // methods
     double& values(const int order, const int pole)
     {
-        const int index = Math::matrix_index(nb_shapes(), nb_nonzero_poles(),
+        const int index = Math::single_index(nb_shapes(), nb_nonzero_poles(),
             order, pole);
 
         return m_values[index];
@@ -33,7 +33,7 @@ private:    // methods
 
     double& ndu(const int i, const int j)
     {
-        const int index = Math::matrix_index(nb_shapes(), nb_nonzero_poles(), i, j);
+        const int index = Math::single_index(nb_shapes(), nb_nonzero_poles(), i, j);
 
         return m_ndu[index];
     }
@@ -96,7 +96,7 @@ public:     // methods
 
     double value(const int order, const int pole) const
     {
-        int index = Math::matrix_index(nb_shapes(), nb_nonzero_poles(),
+        int index = Math::single_index(nb_shapes(), nb_nonzero_poles(),
             order, pole);
 
         return m_values[index];

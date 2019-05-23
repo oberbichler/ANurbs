@@ -411,7 +411,7 @@ public:     // methods
 
         for (int i = 0; i < shape.nb_nonzero_poles_u(); i++) {
             for (int j = 0; j < shape.nb_nonzero_poles_v(); j++) {
-                int poleIndex = Math::matrix_index(nb_poles_u(), nb_poles_v(),
+                int poleIndex = Math::single_index(nb_poles_u(), nb_poles_v(),
                     shape.first_nonzero_pole_u() + i,
                     shape.first_nonzero_pole_v() + j);
 
