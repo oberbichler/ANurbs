@@ -29,7 +29,7 @@ private:    // variables
     std::vector<Vector> m_poles;
     std::vector<double> m_weights;
 
-public:     // constructor
+public:     // constructors
     NurbsCurveGeometry(int degree, int nb_poles, bool is_rational)
     : m_degree(degree), m_poles(nb_poles), m_weights(is_rational ?
     nb_poles : 0), m_knots(Nurbs::nb_knots(degree, nb_poles))
