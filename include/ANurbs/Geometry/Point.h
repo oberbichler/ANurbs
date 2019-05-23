@@ -14,17 +14,15 @@ namespace ANurbs {
 template <int TDimension>
 class Point
 {
-public:
+public:     // types
     using Type = Point<TDimension>;
     using Vector = Vector<TDimension>;
 
-private:
+private:    // variables
     Vector m_location;
     std::string m_text;
 
-public:
-    using Type = Point<TDimension>;
-
+public:     // constructors
     Point()
     {
     }
