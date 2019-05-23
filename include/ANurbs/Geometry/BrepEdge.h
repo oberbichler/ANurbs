@@ -78,10 +78,13 @@ public:     // python
         using Holder = Pointer<Type>;
 
         py::class_<Type, Holder>(m, "BrepEdge")
+            // read-only properties
+            .def_property_readonly("faces", &Type::faces)
+            .def_property_readonly("loops", &Type::loops)
+            .def_property_readonly("nb_trims", &Type::nb_trims)
+            .def_property_readonly("trims", &Type::trims)
+            // methods
             .def("trim", &Type::trim, "index"_a)
-            .def("trims", &Type::trims)
-            .def("faces", &Type::faces)
-            .def("loops", &Type::loops)
         ;
 
         Model::register_python_data_type<Type>(m, model);

@@ -97,11 +97,15 @@ public:     // python
         using Holder = Pointer<Type>;
 
         py::class_<Type, Holder>(m, "BrepFace")
+            // read-only properties
+            .def_property_readonly("brep", &Type::brep)
+            .def_property_readonly("edges", &Type::edges)
+            .def_property_readonly("loops", &Type::loops)
+            .def_property_readonly("nb_loops", &Type::nb_loops)
+            .def_property_readonly("surface_geometry", &Type::surface_geometry)
+            .def_property_readonly("trims", &Type::trims)
+            // methods
             .def("loop", &Type::loop, "index"_a)
-            .def("loops", &Type::loops)
-            .def("trims", &Type::trims)
-            .def("edges", &Type::edges)
-            .def("surface_geometry", &Type::surface_geometry)
         ;
 
         Model::register_python_data_type<Type>(m, model);
