@@ -64,16 +64,6 @@ private:
     }
 
 private:
-    TrimTypes& span_trim_type(int i, int j)
-    {
-        return m_span_trim_type[i * nb_spans_v() + j];
-    }
-
-    std::vector<Polygon>& span_polygons(int i, int j)
-    {
-        return m_span_polygons[i * nb_spans_v() + j];
-    }
-
     static inline bool is_rect(ClipperLib::Path rect, ClipperLib::Path contour,
         std::size_t a, std::size_t b, std::size_t c, std::size_t d)
     {
@@ -255,9 +245,19 @@ public:     // methods
         return m_spans_v[index];
     }
 
+    TrimTypes& span_trim_type(int i, int j)
+    {
+        return m_span_trim_type[i * nb_spans_v() + j];
+    }
+
     TrimTypes span_trim_type(int index_u, int index_v) const
     {
         return span_trim_type(index_u, index_v);
+    }
+
+    std::vector<Polygon>& span_polygons(int i, int j)
+    {
+        return m_span_polygons[i * nb_spans_v() + j];
     }
 
     const std::vector<Polygon>& span_polygons(int index_u, int index_v) const
