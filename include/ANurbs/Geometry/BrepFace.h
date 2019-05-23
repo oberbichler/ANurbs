@@ -26,19 +26,19 @@ private:
     Ref<NurbsSurfaceGeometry<3>> m_geometry;
 
 public:
-    Ref<ANurbs::Brep> brep();
+    Ref<ANurbs::Brep> brep() const;
 
-    size_t nb_loops();
+    size_t nb_loops() const;
 
-    Ref<BrepLoop> loop(size_t index);
+    Ref<BrepLoop> loop(size_t index) const;
 
-    std::vector<Ref<BrepEdge>> edges();
+    std::vector<Ref<BrepEdge>> edges() const;
 
-    std::vector<Ref<BrepTrim>> trims();
+    std::vector<Ref<BrepTrim>> trims() const;
 
-    std::vector<Ref<BrepLoop>> loops();
+    std::vector<Ref<BrepLoop>> loops() const;
     
-    Ref<NurbsSurfaceGeometry<3>> surface_geometry();
+    Ref<NurbsSurfaceGeometry<3>> surface_geometry() const;
 
 public:     // serialization
     using Attributes = Attributes;

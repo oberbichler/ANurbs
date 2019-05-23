@@ -24,17 +24,17 @@ private:
     std::vector<Ref<BrepTrim>> m_trims;
 
 public:
-    Ref<Brep> brep();
+    Ref<Brep> brep() const;
 
-    Ref<BrepFace> face();
+    Ref<BrepFace> face() const;
 
-    size_t nb_trims();
+    size_t nb_trims() const;
 
-    Ref<BrepTrim> trim(size_t index);
+    Ref<BrepTrim> trim(size_t index) const;
 
-    std::vector<Ref<BrepTrim>> trims();
+    std::vector<Ref<BrepTrim>> trims() const;
 
-    std::vector<Ref<BrepEdge>> edges();
+    std::vector<Ref<BrepEdge>> edges() const;
 
 public:     // serialization
     using Attributes = Attributes;

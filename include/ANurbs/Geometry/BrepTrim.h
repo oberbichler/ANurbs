@@ -31,23 +31,23 @@ private:
     Interval m_domain;
 
 public:
-    Ref<Brep> brep();
+    Ref<Brep> brep() const;
 
-    Ref<BrepLoop> loop();
+    Ref<BrepLoop> loop() const;
 
-    Ref<BrepEdge> edge();
+    Ref<BrepEdge> edge() const;
 
-    Ref<BrepFace> face();
+    Ref<BrepFace> face() const;
 
-    Ref<NurbsCurveGeometry<2>> curve_geometry();
+    Ref<NurbsCurveGeometry<2>> curve_geometry() const;
 
-    Pointer<Curve<2>> curve_2d();
+    Pointer<Curve<2>> curve_2d() const;
 
-    Pointer<CurveOnSurface<3>> curve_3d();
+    Pointer<CurveOnSurface<3>> curve_3d() const;
 
-    Interval domain();
+    Interval domain() const;
 
-    Ref<NurbsSurfaceGeometry<3>> surface_geometry();
+    Ref<NurbsSurfaceGeometry<3>> surface_geometry() const;
 
 public:     // serialization
     using Attributes = Attributes;

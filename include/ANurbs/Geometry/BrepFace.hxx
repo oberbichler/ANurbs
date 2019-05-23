@@ -11,32 +11,32 @@
 
 namespace ANurbs {
 
-Ref<ANurbs::Brep> BrepFace::brep()
+Ref<ANurbs::Brep> BrepFace::brep() const
 {
     return m_brep;
 }
 
-size_t BrepFace::nb_loops()
+size_t BrepFace::nb_loops() const
 {
     return m_loops.size();
 }
 
-Ref<BrepLoop> BrepFace::loop(size_t index)
+Ref<BrepLoop> BrepFace::loop(size_t index) const
 {
     return m_loops[index];
 }
 
-std::vector<Ref<BrepLoop>> BrepFace::loops()
+std::vector<Ref<BrepLoop>> BrepFace::loops() const
 {
     return m_loops;
 }
 
-Ref<NurbsSurfaceGeometry<3>> BrepFace::surface_geometry()
+Ref<NurbsSurfaceGeometry<3>> BrepFace::surface_geometry() const
 {
     return m_geometry;
 }
 
-std::vector<Ref<BrepEdge>> BrepFace::edges()
+std::vector<Ref<BrepEdge>> BrepFace::edges() const
 {
     std::vector<Ref<BrepEdge>> result;
     for (size_t i = 0; i < nb_loops(); i++) {
@@ -48,7 +48,7 @@ std::vector<Ref<BrepEdge>> BrepFace::edges()
     return result;
 }
 
-std::vector<Ref<BrepTrim>> BrepFace::trims()
+std::vector<Ref<BrepTrim>> BrepFace::trims() const
 {
     std::vector<Ref<BrepTrim>> result;
     for (size_t i = 0; i < nb_loops(); i++) {
