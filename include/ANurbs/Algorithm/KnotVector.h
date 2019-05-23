@@ -56,12 +56,12 @@ public:     // python
 
         using Type = KnotVector;
 
-        m.def("nurbs_upper_span", &Type::upper_span<std::vector<double>>);
-        m.def("nurbs_lower_span", &Type::lower_span<std::vector<double>>);
-        m.def("nurbs_degree", &Type::degree);
-        m.def("nurbs_nb_knots", &Type::nb_knots);
-        m.def("nurbs_nb_poles", &Type::nb_poles);
-        m.def("nurbs_nb_spans", &Type::nb_spans);
+        m.def("upper_span", &Type::upper_span<std::vector<double>>);
+        m.def("lower_span", &Type::lower_span<std::vector<double>>);
+        m.def("degree", &Type::degree);
+        m.def("nb_knots", &Type::nb_knots);
+        m.def("nb_poles", &Type::nb_poles);
+        m.def("nb_spans", &Type::nb_spans);
     }
 };
 

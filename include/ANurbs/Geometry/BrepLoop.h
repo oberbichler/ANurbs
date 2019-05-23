@@ -76,7 +76,8 @@ public:     // serialization
     }
 
 public:     // python
-    static void register_python(pybind11::module& m, pybind11::class_<Model, Pointer<Model>> model)
+    template <typename TModel>
+    static void register_python(pybind11::module& m, TModel model)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;

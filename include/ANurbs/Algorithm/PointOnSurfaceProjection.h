@@ -116,7 +116,7 @@ public:
             }
         }
 
-        m_index = new_<KDTreeType>(3, m_pointCloudAdaptor,
+        m_index = new_<KDTreeType>(3, m_point_cloud_adaptor,
             nanoflann::KDTreeSingleIndexAdaptorParams(10));
 
         m_index->buildIndex();

@@ -6,6 +6,7 @@
 #include "NurbsSurfaceGeometry.h"
 #include "SurfaceBase.h"
 
+#include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -150,18 +151,18 @@ public:     // python
 
         using Geometry = NurbsSurfaceGeometry<TDimension>;
 
-        using Type = Surface<TDimension, Ref<Geometry>>;
+        using Type = Surface<TDimension>;
         using Base = SurfaceBase<TDimension>;
         using Holder = Pointer<Type>;
 
         const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
-            .def(py::init<Ref<Geometry>>(), "geometry"_a)
-            .def("Geometry", &Type::surface_geometry)
+            .def(py::init<Pointer<Geometry>>(), "geometry"_a)
+            .def("surface_geometry", &Type::surface_geometry)
         ;
 
-        // RegisterDataType<Type>(m, model, name);
+        // Model::register_python_data_type<Type>(m, model);
     }
 };
 

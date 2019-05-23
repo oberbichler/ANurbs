@@ -6,6 +6,7 @@
 #include "Interval.h"
 #include "NurbsCurveGeometry.h"
 
+#include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -106,7 +107,7 @@ public:     // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["Geometry"] = data.curve_geometry().Key();
+        target["Geometry"] = data.curve_geometry().key();
         target["Domain"] = ToJson(data.domain());
     }
 
@@ -117,19 +118,19 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        using Type = Curve<TDimension, Ref<NurbsCurveGeometry<TDimension>>>;
+        using Type = Curve<TDimension>;
         using Holder = Pointer<Type>;
         using Base = CurveBase<TDimension>;
 
         const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
-            .def(py::init<Ref<CurveGeometry>, Interval>(), "geometry"_a,
+            .def(py::init<Pointer<CurveGeometry>, Interval>(), "geometry"_a,
                 "domain"_a)
-            .def("Geometry", &Type::curve_geometry)
+            .def("curve_geometry", &Type::curve_geometry)
         ;
 
-        // RegisterDataType<Type>(m, model, name);
+        // Model::register_python_data_type<Type>(m, model);
     }
 };
 

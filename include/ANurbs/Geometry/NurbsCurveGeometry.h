@@ -7,6 +7,7 @@
 #include "../Algorithm/KnotVector.h"
 #include "../Algorithm/NurbsCurveShapeFunction.h"
 
+#include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -25,7 +26,6 @@ public:     // types
 private:    // variables
     const int m_degree;
     std::vector<double> m_knots;
-    // Matrix<Dynamic, TDimension> m_poles;
     std::vector<Vector> m_poles;
     std::vector<double> m_weights;
 
@@ -36,6 +36,24 @@ public:     // constructor
     {
         static_assert(TDimension > 0);
     }
+
+    NurbsCurveGeometry(int degree, const std::vector<double>& knots,
+        const std::vector<Vector>& poles)
+    : m_degree(degree), m_knots(knots), m_poles(poles), m_weights()
+    {
+        static_assert(TDimension > 0);
+        // FIXME: check sizes
+    }
+
+    NurbsCurveGeometry(int degree, const std::vector<double>& knots,
+        const std::vector<Vector>& poles, const std::vector<double>& weights)
+    : m_degree(degree), m_knots(knots), m_poles(poles), m_weights(weights)
+    {
+        static_assert(TDimension > 0);
+        // FIXME: check sizes
+    }
+
+    // FIXME: constructor with Vector<TDimension + 1>
 
 public:     // static methods
     using CurveBase<TDimension>::dimension;
@@ -205,6 +223,11 @@ public:     // methods
     {
         return m_weights.at(i);
     }
+    
+    const std::vector<double>& weights() const
+    {
+        return m_weights;
+    }
 
 public:     // serialization
     static std::string type()
@@ -220,20 +243,20 @@ public:     // serialization
         const auto weights = source.value("Weights", std::vector<double>());
         
         const int degree = source.at("Degree");
-        const int nbPoles = static_cast<int>(poles.size());
-        const bool isRational = !weights.empty();
+        const int nb_poles = static_cast<int>(poles.size());
+        const bool is_rational = !weights.empty();
 
-        auto result = new_<Type>(degree, nbPoles, isRational);
+        auto result = new_<Type>(degree, nb_poles, is_rational);
 
         for (int i = 0; i < knots.size(); i++) {
             result->set_knot(i, knots[i]);
         }
 
-        for (int i = 0; i < nbPoles; i++) {
+        for (int i = 0; i < nb_poles; i++) {
             result->set_pole(i, poles[i]);
         }
 
-        if (isRational) {
+        if (is_rational) {
             for (int i = 0; i < weights.size(); i++) {
                 result->set_weight(i, weights[i]);
             }
@@ -265,44 +288,43 @@ public:     // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        // const auto poles = source.at("Poles");
-        // const auto knots = source.at("Knots");
-        // const auto weights = source.value("Weights", std::vector<double>());
+        const auto poles = source.at("Poles");
+        const auto knots = source.at("Knots");
+        const auto weights = source.value("Weights", std::vector<double>());
         
-        // const int degree = source.at("Degree");
-        // const int nbPoles = static_cast<int>(poles.size());
-        // const bool isRational = !weights.empty();
+        const int degree = source.at("Degree");
+        const int nb_poles = static_cast<int>(poles.size());
+        const bool is_rational = !weights.empty();
 
-        // auto result = new_<Type>(degree, nbPoles, isRational);
+        auto result = new_<Type>(degree, nb_poles, is_rational);
 
-        // for (int i = 0; i < knots.size(); i++) {
-        //     result->SetKnot(i, knots[i]);
-        // }
+        for (int i = 0; i < knots.size(); i++) {
+            result->set_knot(i, knots[i]);
+        }
 
-        // for (int i = 0; i < nbPoles; i++) {
-        //     result->SetPole(i, poles[i]);
-        // }
+        for (int i = 0; i < nb_poles; i++) {
+            result->set_pole(i, poles[i]);
+        }
 
-        // if (isRational) {
-        //     for (int i = 0; i < weights.size(); i++) {
-        //         result->SetWeight(i, weights[i]);
-        //     }
-        // }
+        if (is_rational) {
+            for (int i = 0; i < weights.size(); i++) {
+                result->set_weight(i, weights[i]);
+            }
+        }
 
-        // return result;
-        return nullptr;
+        return result;
     }
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        // target["Degree"] = data.degree();
-        // target["Knots"] = data.knots();
-        // target["NbPoles"] = data.nb_poles();
-        // target["Poles"] = ToJson(data.poles());
+        target["Degree"] = data.degree();
+        target["Knots"] = data.knots();
+        target["NbPoles"] = data.nb_poles();
+        target["Poles"] = ToJson(data.poles());
 
-        // if (data.IsRational()) {
-        //     target["Weights"] = data.weights();
-        // }
+        if (data.is_rational()) {
+            target["Weights"] = data.weights();
+        }
     }
 
 public:     // python
@@ -322,32 +344,30 @@ public:     // python
             // constructors
             .def(py::init<const int, const int, const bool>(), "degree"_a,
                 "nb_poles"_a, "is_rational"_a)
-            // .def("Poles", &Type::poles)
-            // .def("Weights", &Type::weights)
-            // .def("Clone", &Type::clone)
+            .def(py::init<const int, const std::vector<double>,
+                const std::vector<Vector>>(), "degree"_a, "knots"_a, "poles"_a)
+            .def(py::init<const int, const std::vector<double>,
+                const std::vector<Vector>, const std::vector<double>>(),
+                "degree"_a, "knots"_a, "poles"_a, "weights"_a)
             // read-only properties
-            .def_property_readonly("dimension", [](Type&) {
-                return Type::dimension(); })
-            .def_property_readonly("degree", &Type::degree)
             .def_property_readonly("is_rational", &Type::is_rational)
-            .def_property_readonly("domain", &Type::domain)
             .def_property_readonly("nb_knots", &Type::nb_knots)
             .def_property_readonly("nb_poles", &Type::nb_poles)
             // methods
             .def("knot", &Type::knot, "index"_a)
             .def("knots", &Type::knots)
+            .def("poles", &Type::poles)
             .def("set_knot", &Type::set_knot, "index"_a, "value"_a)
-            .def("spans", &Type::spans)
             .def("set_pole", &Type::set_pole, "index"_a, "value"_a)
-            .def("weight", &Type::weight, "index"_a)
             .def("set_weight", &Type::set_weight, "index"_a, "value"_a)
-            .def("point_at", &Type::point_at, "t"_a)
-            .def("derivatives_at", &Type::derivatives_at, "t"_a, "order"_a)
             .def("shape_functions_at", &Type::shape_functions_at, "t"_a,
                 "order"_a)
+            .def("weight", &Type::weight, "index"_a)
+            .def("weights", &Type::weights)
+            // .def("clone", &Type::clone)
         ;
 
-        // RegisterDataType<Type>(m, model, name);
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 

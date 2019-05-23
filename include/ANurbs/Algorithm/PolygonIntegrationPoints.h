@@ -15,26 +15,25 @@ namespace ANurbs {
 
 class PolygonIntegrationPoints
 {
-private:
-    IntegrationPointList<2> m_integrationPoints;
-    PolygonTessellation m_tessellation;
-
 public:
-    void Compute(const size_t degree, const Polygon& polygon)
+    static void get(const int degree, const Polygon& polygon)
     {
-        m_tessellation.compute(polygon);
+        IntegrationPointList<2> integration_points;
+        PolygonTessellation tessellation;
+
+        tessellation.compute(polygon);
 
         const auto& xiao_gimbutas = IntegrationPoints::xiao_gimbutas(degree);
 
-        const int nb_integration_points = m_tessellation.nb_triangles() *
+        const int nb_integration_points = tessellation.nb_triangles() *
             static_cast<int>(xiao_gimbutas.size());
 
-        m_integrationPoints.resize(nb_integration_points);
+        integration_points.resize(nb_integration_points);
 
         int j = 0;
 
-        for (int i = 0; i < m_tessellation.nb_triangles(); i++) {
-            const auto [a, b, c] = m_tessellation.triangle(i);
+        for (int i = 0; i < tessellation.nb_triangles(); i++) {
+            const auto [a, b, c] = tessellation.triangle(i);
 
             const Vector<2> vertex_a = polygon.vertex(a);
             const Vector<2> vertex_b = polygon.vertex(b);
@@ -46,27 +45,17 @@ public:
             const double area = 0.5 * norm(cross(ab, ac));
 
             for (const auto& norm_point : xiao_gimbutas) {
-                const auto uv = vertex_a * norm_point[0] + vertex_b *
-                    norm_point[1] + vertex_c * norm_point[2];
+                const auto uv = vertex_a * std::get<0>(norm_point) +
+                                vertex_b * std::get<1>(norm_point) +
+                                vertex_c * std::get<2>(norm_point);
 
-                m_integrationPoints[j] = IntegrationPoint<2>(uv[0], uv[1],
-                    area * norm_point[3]);
+                integration_points[j] = IntegrationPoint<2>(uv[0], uv[1],
+                    area * std::get<3>(norm_point));
             }
         }
     }
 
-    int nb_integration_points() const
-    {
-        return static_cast<int>(m_integrationPoints.size());
-    }
-
-    IntegrationPoint<2> integration_point(const int index) const
-    {
-        return m_integrationPoints[index];
-    }
-
 public:     // python
-
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -74,12 +63,8 @@ public:     // python
         
         using Type = PolygonIntegrationPoints;
 
-        py::class_<Type>(m, "PolygonIntegrationPoints")
-        //     .def(py::init<>())
-        //     .def("Compute", &Type::Compute, "degree"_a, "polygon"_a)
-        //     .def("nb_integration_points", &Type::nb_integration_points)
-        //     .def("IntegrationPoint", &Type::integration_point, "index"_a)
-        ;
+        m.def("integration_points", [](const int degree, const Polygon& polygon)
+            { return Type::get(degree, polygon); }, "degree"_a, "polygon"_a);
     }
 };
 

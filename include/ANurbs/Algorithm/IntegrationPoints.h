@@ -2,7 +2,9 @@
 
 #include "../Define.h"
 
+#include "../Geometry/CurveBase.h"
 #include "../Geometry/Interval.h"
+#include "../Geometry/SurfaceBase.h"
 
 #include <stdexcept>
 #include <vector>
@@ -10,7 +12,7 @@
 namespace ANurbs {
 
 template <int TDimension>
-using IntegrationPoint = Vector<TDimension + 1>;
+using IntegrationPoint = tuple_of<TDimension + 1, double>;
 
 template <int TDimension>
 using IntegrationPointList = std::vector<IntegrationPoint<TDimension>>;
@@ -40,7 +42,7 @@ public:
         return s_xiao_gimbutas[degree - 1];
     }
 
-    static IntegrationPointList<1> compute(const size_t degree,
+    static IntegrationPointList<1> get(const size_t degree,
         const Interval& domain)
     {
         IntegrationPointList<1> integration_points(degree);
@@ -49,19 +51,19 @@ public:
 
         for (const auto& norm_point : gauss_legendre(degree)) {
             integration_points[i++] = IntegrationPoint<1>(
-                domain.parameter_at_normalized(norm_point[0]),
-                norm_point[1] * domain.length());
+                domain.parameter_at_normalized(std::get<0>(norm_point)),
+                std::get<1>(norm_point) * domain.length());
         }
 
         return integration_points;
     }
 
-    static IntegrationPointList<2>
-    compute(const size_t degree_u, const size_t degree_v,
-        const Interval& domain_u, const Interval& domain_v)
+    static IntegrationPointList<2> get(const size_t degree_u,
+        const size_t degree_v, const Interval& domain_u,
+        const Interval& domain_v)
     {
-        auto integration_points_u = compute(degree_u, domain_u);
-        auto integration_points_v = compute(degree_v, domain_v);
+        const auto integration_points_u = get(degree_u, domain_u);
+        const auto integration_points_v = get(degree_v, domain_v);
 
         IntegrationPointList<2> integration_points(degree_u * degree_v);
 
@@ -70,12 +72,62 @@ public:
         for (const auto& norm_point_u : integration_points_u) {
             for (const auto& norm_point_v : integration_points_v) {
                 integration_points[i++] = IntegrationPoint<2>(
-                    norm_point_u[0], norm_point_v[0],
-                    norm_point_u[1] * norm_point_v[1]);
+                    std::get<0>(norm_point_u), std::get<0>(norm_point_v),
+                    std::get<1>(norm_point_u) * std::get<1>(norm_point_v));
             }
         }
 
         return integration_points;
+    }
+
+    template <int TDimension>
+    static IntegrationPointList<1> get(const size_t degree,
+        const CurveBase<TDimension>& curve)
+    {
+        IntegrationPointList<1> result;
+
+        for (const auto span : curve.spans()) {
+            if (span_v.length() < 1e-7) {
+                continue;
+            }
+
+            for (const auto [t, weight] : get(degree, span)) {
+                const auto tangent = curve.derivatives_at(t, 1)[1];
+                result.emplace_back(t, weight * tangent.norm());
+            }
+        }
+
+        return result;
+    }
+
+    template <int TDimension>
+    static IntegrationPointList<2> get(const size_t degree,
+        const SurfaceBase<TDimension>& surface)
+    {
+        IntegrationPointList<2> result;
+
+        for (const auto span_u : surface.spans_u()) {
+            if (span_u.length() < 1e-7) {
+                continue;
+            }
+
+            for (const auto span_v : surface.spans_v()) {
+                if (span_v.length() < 1e-7) {
+                    continue;
+                }
+
+                const auto span_points = get(degree, degree, span_u, span_v);
+
+                for (const auto [u, v, weight] : span_points) {
+                    const auto derivatives = surface.derivatives_at(u, v, 1);
+                    const auto normal = cross(derivatives[1], derivatives[2]);
+
+                    result.emplace_back(u, v, weight * norm(normal));
+                }
+            }
+        }
+
+        return result;
     }
 
 public:     // python
@@ -87,18 +139,22 @@ public:     // python
         
         using Type = IntegrationPoints;
 
-        py::class_<Type>(m, "IntegrationPoints")
-            // .def_static("compute", &Type::compute, "degree"_a, "domain"_a)
-            // .def_static("compute", (std::vector<IntegrationPoint2>
-            //     (*)(const size_t, const size_t, const Interval&,
-            //     const Interval&)) &Type::compute, "degreeU"_a,
-            //     "degreeV"_a, "domainU"_a, "domainV"_a)
-            // .def_static("compute", (std::vector<IntegrationPoint2>
-            //     (*)(const size_t, const size_t,
-            //     const std::vector<Interval>&,
-            //     const std::vector<Interval>&)) &Type::compute,
-            //     "degreeU"_a, "degreeV"_a, "domainsU"_a, "domainsV"_a)
-        ;
+        m.def("integration_points", [](int degree, Interval domain) {
+            return Type::get(degree, domain); }, "degree"_a, "domain"_a);
+        m.def("integration_points", [](int degree, Interval domain_u,
+            Interval domain_v) { return Type::get(degree, degree, domain_u,
+            domain_v); }, "degree"_a, "domain_u"_a, "domain"_a);
+        m.def("integration_points", [](int degree_u, int degree_v,
+            Interval domain_u, Interval domain_v) { return Type::get(degree_u,
+            degree_v, domain_u, domain_v); }, "degree_u"_a, "degree_v"_a,
+            "domain_u"_a, "domain_v"_a);
+        m.def("integration_points", [](int degree, const CurveBase<2>& curve) {
+            return Type::get(degree, curve); }, "degree"_a, "curve"_a);
+        m.def("integration_points", [](int degree, const CurveBase<3>& curve) {
+            return Type::get(degree, curve); }, "degree"_a, "curve"_a);
+        m.def("integration_points", [](int degree,
+            const SurfaceBase<3>& surface) { return Type::get(degree, surface);
+            }, "degree"_a, "surface"_a);
     }
 };
 

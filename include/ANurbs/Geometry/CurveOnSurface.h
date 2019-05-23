@@ -150,11 +150,11 @@ public:     // python
 
         using Type = CurveOnSurface<TDimension>;
         using Base = CurveBase<TDimension>;
-        using Handler = Pointer<Type>;
+        using Holder = Pointer<Type>;
 
         const std::string name = Type::type_name();
 
-        py::class_<Type, Base, Handler>(m, name.c_str())
+        py::class_<Type, Base, Holder>(m, name.c_str())
             .def(py::init<Pointer<CurveGeometry>, Pointer<SurfaceGeometry>,
                 Interval>(), "curve_geometry"_a, "surface_geometry"_a,
                 "domain"_a)

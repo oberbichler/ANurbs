@@ -163,17 +163,17 @@ public:     // python
         using Type = Brep;
 
         py::class_<Type>(m, "Brep")
-            .def("NbFaces", &Type::nb_faces)
-            .def("Face", &Type::face, "index"_a)
+            .def("nb_faces", &Type::nb_faces)
+            .def("face", &Type::face, "index"_a)
             .def("faces", &Type::faces)
-            .def("NbLoops", &Type::nb_loops)
-            .def("Loop", &Type::loop, "index"_a)
+            .def("nb_loops", &Type::nb_loops)
+            .def("loop", &Type::loop, "index"_a)
             .def("loops", &Type::loops)
-            .def("NbTrims", &Type::nb_trims)
-            .def("Trim", &Type::trim, "index"_a)
+            .def("nb_trims", &Type::nb_trims)
+            .def("trim", &Type::trim, "index"_a)
             .def("trims", &Type::trims)
-            .def("NbEdges", &Type::nb_edges)
-            .def("Edge", &Type::edge, "index"_a)
+            .def("nb_edges", &Type::nb_edges)
+            .def("edge", &Type::edge, "index"_a)
             .def("edges", &Type::edges)
         ;
     }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Define.h"
+#include "../Define.h"
 
 #include "Json.h"
 #include "TypeRegistry.h"
@@ -20,9 +20,9 @@ struct JsonWriter
 
         size_t write_count = 0;
 
-        for (size_t i = 0; i < model.NbEntries(); i++) {
-            const auto type = model.GetType(i);
-            const auto key = model.GetKey(i);
+        for (size_t i = 0; i < model.nb_entries(); i++) {
+            const auto type = model.get_type(i);
+            const auto key = model.get_key(i);
 
             Json data;
 

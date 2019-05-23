@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Define.h"
+
 #include "Attributes.h"
 
 namespace ANurbs {
@@ -72,7 +74,6 @@ public:
     }
 
 public:     // python
-
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;

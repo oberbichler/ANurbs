@@ -3,6 +3,8 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
+#include <nlohmann/json.hpp>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -35,9 +37,7 @@ template <typename T>
 using Unique = std::unique_ptr<T>;
 
 template <typename T, typename... TArgs>
-Unique<T>
-new_(
-    TArgs&&... args)
+Unique<T> new_(TArgs&&... args)
 {
     return Unique<T>(new T(std::forward<TArgs>(args)...));
 }
@@ -96,5 +96,21 @@ Vector<3> cross(const Vector<3> u, const Vector<3> v)
 {
     return u.cross(v);
 }
+
+template <size_t I,typename T> 
+struct tuple_n
+{
+    template <typename... Args>
+    using type = typename tuple_n<I - 1, T>::template type<T, Args...>;
+};
+
+template <typename T> 
+struct tuple_n<0, T> {
+    template <typename... Args>
+    using type = std::tuple<Args...>;   
+};
+
+template <size_t I, typename T>
+using tuple_of = typename tuple_n<I, T>::template type<>;
 
 } // namespace ANurbs

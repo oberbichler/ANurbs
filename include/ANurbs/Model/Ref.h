@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Define.h"
+#include "../Define.h"
 
 #include "Entry.h"
 
@@ -75,9 +75,9 @@ public:     // python
         const std::string name = std::string("Ref") + TData::type_name();
 
         py::class_<Ref<TData>>(m, name.c_str())
-            .def("Key", &Ref<TData>::Key)
-            .def("Type", &Ref<TData>::type_name)
-            .def("Data", &Ref<TData>::Data)
+            .def_property_readonly("key", &Ref<TData>::Key)
+            .def_property_readonly("type", &Ref<TData>::type_name)
+            .def_property_readonly("data", &Ref<TData>::Data)
             // .def("Attributes", &Ref<TData>::Attributes)
         ;
     }

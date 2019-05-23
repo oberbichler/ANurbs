@@ -55,14 +55,19 @@ public:     // python
             "D";
 
         py::class_<Type, Holder>(m, name.c_str())
-            .def("DegreeU", &Type::degree_u)
-            .def("DegreeV", &Type::degree_v)
-            .def("DomainU", &Type::domain_u)
-            .def("DomainV", &Type::domain_v)
-            .def("PointAt", &Type::point_at, "u"_a, "v"_a)
-            .def("DerivativesAt", &Type::derivatives_at, "u"_a, "v"_a, "order"_a)
-            .def("SpansU", &Type::spans_u)
-            .def("SpansV", &Type::spans_v)
+            // read-only property
+            .def_property_readonly("degree_u", &Type::degree_u)
+            .def_property_readonly("degree_v", &Type::degree_v)
+            .def_property_readonly("dimension", [](Type&) {
+                return Type::dimension(); })
+            .def_property_readonly("domain_u", &Type::domain_u)
+            .def_property_readonly("domain_v", &Type::domain_v)
+            .def_property_readonly("spans_u", &Type::spans_u)
+            .def_property_readonly("spans_v", &Type::spans_v)
+            // methods
+            .def("point_at", &Type::point_at, "u"_a, "v"_a)
+            .def("derivatives_at", &Type::derivatives_at, "u"_a, "v"_a,
+                "order"_a)
         ;
     }
 };

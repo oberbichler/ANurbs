@@ -26,15 +26,19 @@ private:
     Ref<NurbsSurfaceGeometry<3>> m_geometry;
 
 public:
-    Ref<ANurbs::Brep> Brep();
+    Ref<ANurbs::Brep> brep();
 
     size_t nb_loops();
 
     Ref<BrepLoop> loop(size_t index);
 
+    std::vector<Ref<BrepEdge>> edges();
+
+    std::vector<Ref<BrepTrim>> trims();
+
     std::vector<Ref<BrepLoop>> loops();
     
-    Ref<NurbsSurfaceGeometry<3>> Geometry();
+    Ref<NurbsSurfaceGeometry<3>> surface_geometry();
 
 public:     // serialization
     using Attributes = Attributes;
@@ -92,35 +96,13 @@ public:     // python
         using Type = BrepFace;
 
         py::class_<Type>(m, "BrepFace")
-            // .def("Brep", &Type::Brep)
-            // .def("NbLoops", &Type::nb_loops)
-            // .def("Loop", &Type::loop, "index"_a)
-            // .def("loops", &Type::loops)
-            // .def("trims", [](Type& self) -> std::vector<Ref<BrepTrim>> {
-            //     std::vector<Ref<BrepTrim>> trims;
-            //     for (size_t i = 0; i < self.nb_loops(); i++) {
-            //         auto loop = self.loop(i);
-            //         for (size_t j = 0; j < loop->nb_trims(); j++) {
-            //             trims.push_back(loop->trim(j));
-            //         }
-            //     }
-            //     return trims;
-            // })
-            // .def("edges", [](Type& self) -> std::vector<Ref<BrepEdge>> {
-            //     std::vector<Ref<BrepEdge>> edges;
-            //     for (size_t i = 0; i < self.nb_loops(); i++) {
-            //         auto loop = self.loop(i);
-            //         for (size_t j = 0; j < loop->nb_trims(); j++) {
-            //             edges.push_back(loop->trim(j)->edge());
-            //         }
-            //     }
-            //     return edges;
-            // })
-            // .def("Geometry", &Type::Geometry)
-            // .def("UntrimmedSurface", [](Type& self) {
-            //     return new_<Surface<NurbsSurfaceGeometry<Vector>>>(
-            //         self.Geometry().Data());
-            // })
+            .def("brep", &Type::brep)
+            .def("nb_loops", &Type::nb_loops)
+            .def("loop", &Type::loop, "index"_a)
+            .def("loops", &Type::loops)
+            .def("trims", &Type::trims)
+            .def("edges", &Type::edges)
+            .def("surface_geometry", &Type::surface_geometry)
         ;
     }
 };

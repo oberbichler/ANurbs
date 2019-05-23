@@ -46,11 +46,15 @@ public:     // python
             "D";
 
         py::class_<Type, Holder>(m, name.c_str())
-            .def("Degree", &Type::degree)
-            .def("Domain", &Type::domain)
-            .def("PointAt", &Type::point_at, "t"_a)
-            .def("DerivativesAt", &Type::derivatives_at, "t"_a, "order"_a)
-            .def("Spans", &Type::spans)
+            // read-only properties
+            .def_property_readonly("degree", &Type::degree)
+            .def_property_readonly("dimension", [](Type&) {
+                return Type::dimension(); })
+            .def_property_readonly("domain", &Type::domain)
+            .def_property_readonly("spans", &Type::spans)
+            // methods
+            .def("derivatives_at", &Type::derivatives_at, "t"_a, "order"_a)
+            .def("point_at", &Type::point_at, "t"_a)
         ;
     }
 };

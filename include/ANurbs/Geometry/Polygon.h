@@ -2,6 +2,8 @@
 
 #include "../Define.h"
 
+#include "../Model/CadAttributes.h"
+
 #include <vector>
 
 namespace ANurbs {
