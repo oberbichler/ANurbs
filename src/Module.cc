@@ -21,6 +21,10 @@ PYBIND11_MODULE(ANurbs, m) {
 
     // --- Algorithm
 
+    { // BrepFaceIntegrationPoints
+        BrepFaceIntegrationPoints::register_python(m);
+    }
+
     { // CurveSpanIntersection
         CurveSpanIntersection::register_python(m);
     }
