@@ -298,7 +298,8 @@ public:     // methods
         NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), 0);
 
         if (is_rational()) {
-            shape.compute(knots_u(), knots_v(), [&](int i, int j) -> double { return weight(i, j); }, u, v);
+            shape.compute(knots_u(), knots_v(), [&](int i, int j) {
+            return weight(i, j); }, u, v);
         } else {
             shape.compute(knots_u(), knots_v(), u, v);
         }
@@ -309,10 +310,10 @@ public:     // methods
 
         for (int i = 0; i <= degree_u(); i++) {
             for (int j = 0; j <= degree_v(); j++) {
-                int poleU = shape.first_nonzero_pole_u() + i;
-                int poleV = shape.first_nonzero_pole_v() + j;
+                int pole_u = shape.first_nonzero_pole_u() + i;
+                int pole_v = shape.first_nonzero_pole_v() + j;
 
-                TValue value = values(poleU, poleV) * shape(0, i, j);
+                TValue value = values(pole_u, pole_v) * shape(0, i, j);
 
                 if (i == 0 && j == 0) {
                     result = value;
@@ -342,17 +343,18 @@ public:     // methods
 
         // compute derivatives
 
-        int nbShapes = shape.nb_shapes(order);
+        const int nb_shapes = shape.nb_shapes(order);
 
-        std::vector<TValue> result(nbShapes);
+        std::vector<TValue> result(nb_shapes);
 
-        for (int k = 0; k < nbShapes; k++) {
+        for (int k = 0; k < nb_shapes; k++) {
             for (int i = 0; i <= degree_u(); i++) {
                 for (int j = 0; j <= degree_v(); j++) {
-                    int poleU = shape.first_nonzero_pole_u() + i;
-                    int poleV = shape.first_nonzero_pole_v() + j;
+                    const int pole_u = shape.first_nonzero_pole_u() + i;
+                    const int pole_v = shape.first_nonzero_pole_v() + j;
 
-                    TValue value = values(poleU, poleV) * shape(k, i, j);
+                    const TValue value =
+                        values(pole_u, pole_v) * shape(k, i, j);
 
                     if (i == 0 && j == 0) {
                         result[k] = value;
@@ -368,7 +370,7 @@ public:     // methods
 
     Vector point_at(const double u, const double v) const override
     {
-        auto poles = [&](int i, int j) -> Vector { return pole(i, j); };
+        auto poles = [&](int i, int j) { return pole(i, j); };
 
         return evaluate_at<Vector>(poles, u, v);
     }
@@ -376,7 +378,7 @@ public:     // methods
     std::vector<Vector> derivatives_at(const double u, const double v,
         const int order) const override
     {
-        auto poles = [&](int i, int j) -> Vector { return pole(i, j); };
+        auto poles = [&](int i, int j) { return pole(i, j); };
 
         return evaluate_at<Vector>(poles, u, v, order);
     }
