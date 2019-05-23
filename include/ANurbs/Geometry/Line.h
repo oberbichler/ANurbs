@@ -89,14 +89,14 @@ public:     // python
         const std::string name = Type::type_name();
 
         py::class_<Type, Holder>(m, name.c_str())
+            // constructors
             .def(py::init<const Vector&, const Vector&>(), "a"_a, "b"_a)
-            .def("a", &Type::a)
-            .def("set_a", &Type::set_a, "value"_a)
-            .def("b", &Type::b)
-            .def("set_b", &Type::set_b, "value"_a)
+            // properties
+            .def_property("a", &Type::a, &Type::set_a)
+            .def_property("b", &Type::b, &Type::set_b)
         ;
-        
-        // RegisterDataType<Type>(m, model, name);
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 
