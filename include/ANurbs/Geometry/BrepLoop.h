@@ -92,6 +92,8 @@ public:     // python
             .def("trims", &Type::trims)
             .def("edges", &Type::edges)
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 
