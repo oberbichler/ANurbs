@@ -64,16 +64,16 @@ public:     // serialization
     {
         auto result = new_<Line>();
 
-        // result->m_a = data.at("A");
-        // result->m_b = data.at("B");
+        result->m_a = data.at("A");
+        result->m_b = data.at("B");
 
         return result;
     }
 
     static void save(const Model& model, const Line& data, Json& target)
     {
-        // data["A"] = ToJson(m_a);
-        // data["B"] = ToJson(m_b);
+        target["A"] = ToJson(data.m_a);
+        target["B"] = ToJson(data.m_b);
     }
 
 public:     // python
