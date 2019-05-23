@@ -28,7 +28,7 @@ Pointer<Curve<2>> BrepTrim::curve_2d()
 Pointer<CurveOnSurface<3>> BrepTrim::curve_3d()
 {
     return new_<CurveOnSurface<3>>(curve_geometry().Data(),
-        face()->Geometry().Data(), domain());
+        surface_geometry().Data(), domain());
 }
 
 Ref<NurbsCurveGeometry<2>> BrepTrim::curve_geometry()
@@ -54,6 +54,11 @@ Ref<BrepFace> BrepTrim::face()
 Ref<BrepLoop> BrepTrim::loop()
 {
     return m_loop;
+}
+
+Ref<NurbsSurfaceGeometry<3>> BrepTrim::surface_geometry()
+{
+    return face()->Geometry();
 }
 
 } // namespace ANurbs

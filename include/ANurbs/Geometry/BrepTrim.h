@@ -47,6 +47,8 @@ public:
 
     Interval domain();
 
+    Ref<NurbsSurfaceGeometry<3>> surface_geometry();
+
 public:     // serialization
     using Attributes = Attributes;
 
