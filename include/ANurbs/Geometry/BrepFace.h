@@ -94,10 +94,9 @@ public:     // python
         namespace py = pybind11;
 
         using Type = BrepFace;
+        using Holder = Pointer<Type>;
 
-        py::class_<Type>(m, "BrepFace")
-            .def("brep", &Type::brep)
-            .def("nb_loops", &Type::nb_loops)
+        py::class_<Type, Holder>(m, "BrepFace")
             .def("loop", &Type::loop, "index"_a)
             .def("loops", &Type::loops)
             .def("trims", &Type::trims)

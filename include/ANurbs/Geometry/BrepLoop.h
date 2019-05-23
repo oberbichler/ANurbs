@@ -83,8 +83,9 @@ public:     // python
         namespace py = pybind11;
 
         using Type = BrepLoop;
+        using Holder = Pointer<Type>;
 
-        py::class_<Type>(m, "BrepLoop")
+        py::class_<Type, Holder>(m, "BrepLoop")
             // read-only properties
             .def_property_readonly("brep", &Type::brep)
             .def_property_readonly("edges", &Type::edges)

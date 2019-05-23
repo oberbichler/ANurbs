@@ -75,9 +75,9 @@ public:     // python
         namespace py = pybind11;
 
         using Type = BrepEdge;
+        using Holder = Pointer<Type>;
 
-        py::class_<Type>(m, "BrepEdge")
-            .def("nb_trims", &Type::nb_trims)
+        py::class_<Type, Holder>(m, "BrepEdge")
             .def("trim", &Type::trim, "index"_a)
             .def("trims", &Type::trims)
             .def("faces", &Type::faces)

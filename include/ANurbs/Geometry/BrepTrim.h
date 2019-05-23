@@ -107,8 +107,9 @@ public:     // python
         namespace py = pybind11;
 
         using Type = BrepTrim;
+        using Holder = Pointer<Type>;
 
-        py::class_<Type>(m, "BrepTrim")
+        py::class_<Type, Holder>(m, "BrepTrim")
             // read-only properties
             .def_property_readonly("brep", &Type::brep)
             .def_property_readonly("curve_2d", &Type::curve_2d)
