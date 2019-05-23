@@ -83,6 +83,8 @@ public:     // python
             .def("faces", &Type::faces)
             .def("loops", &Type::loops)
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 
