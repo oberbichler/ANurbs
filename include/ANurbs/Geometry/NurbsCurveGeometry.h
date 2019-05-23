@@ -230,55 +230,6 @@ public:     // methods
     }
 
 public:     // serialization
-    static std::string type()
-    {
-        return "NurbsCurveGeometry" + std::to_string(TDimension) + "D";
-    }
-
-    template <typename TModel, typename TSource>
-    static Unique<Type> load(TModel& model, const TSource& source)
-    {
-        const auto poles = source.at("Poles");
-        const auto knots = source.at("Knots");
-        const auto weights = source.value("Weights", std::vector<double>());
-        
-        const int degree = source.at("Degree");
-        const int nb_poles = static_cast<int>(poles.size());
-        const bool is_rational = !weights.empty();
-
-        auto result = new_<Type>(degree, nb_poles, is_rational);
-
-        for (int i = 0; i < knots.size(); i++) {
-            result->set_knot(i, knots[i]);
-        }
-
-        for (int i = 0; i < nb_poles; i++) {
-            result->set_pole(i, poles[i]);
-        }
-
-        if (is_rational) {
-            for (int i = 0; i < weights.size(); i++) {
-                result->set_weight(i, weights[i]);
-            }
-        }
-
-        return result;
-    }
-
-    template <typename TModel, typename TTarget>
-    static void save(const Type& data, const TModel& model, TTarget& target)
-    {
-        target["Degree"] = data.degree();
-        target["Knots"] = data.knots();
-        target["NbPoles"] = data.nb_poles();
-        target["Poles"] = ToJson(data.poles());
-
-        if (data.is_rational()) {
-            target["Weights"] = data.weights();
-        }
-    }
-
-public:     // serialization
     using Attributes = Attributes;
 
     static std::string type_name()
