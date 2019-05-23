@@ -266,7 +266,6 @@ public:     // methods
     }
 
 public:     // python
-
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
