@@ -21,6 +21,10 @@ PYBIND11_MODULE(ANurbs, m) {
 
     // --- Algorithm
 
+    { // BrepEdgeIntegrationPoints
+        BrepEdgeIntegrationPoints::register_python(m);
+    }
+
     { // BrepFaceIntegrationPoints
         BrepFaceIntegrationPoints::register_python(m);
     }
