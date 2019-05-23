@@ -37,18 +37,18 @@ private:    // types
 
             m_values.clear();
 
-            double nInf = std::numeric_limits<double>::lowest();
-            double pInf = std::numeric_limits<double>::max();
+            double n_inf = std::numeric_limits<double>::lowest();
+            double p_inf = std::numeric_limits<double>::max();
 
-            m_values.push_back(nInf);
+            m_values.push_back(n_inf);
 
-            for (double knot : knots) {
+            for (const double knot : knots) {
                 if (std::abs(m_values.back() - knot) > tolerance) {
                     m_values.push_back(knot);
                 }
             }
 
-            m_values.push_back(pInf);
+            m_values.push_back(p_inf);
 
             m_tolerance = tolerance;
         }
@@ -56,44 +56,44 @@ private:    // types
         void intersect(const CurveBase& curve, const ParameterPoint& a,
             const ParameterPoint& b, std::vector<double>& parameters)
         {
-            double tA = std::get<0>(a);
-            double valueA = value(std::get<1>(a));
+            double t_a = std::get<0>(a);
+            double value_a = value(std::get<1>(a));
 
-            double tB = std::get<0>(b);
-            double valueB = value(std::get<1>(b));
+            double t_b = std::get<0>(b);
+            double value_b = value(std::get<1>(b));
             
-            // make sure that valueA <= valueB
-            if (valueA > valueB) {
-                std::swap(valueA, valueB);
-                std::swap(tA, tB);
+            // make sure that value_a <= value_b
+            if (value_a > value_b) {
+                std::swap(value_a, value_b);
+                std::swap(t_a, t_b);
             }
             
             // index of the first intersect value
-            std::size_t indexA;
+            size_t index_a;
             {
                 auto it = std::lower_bound(std::begin(m_values),
-                    std::end(m_values), valueA - m_tolerance);
-                indexA = std::distance(std::begin(m_values), it);
+                    std::end(m_values), value_a - m_tolerance);
+                index_a = std::distance(std::begin(m_values), it);
             }
 
             // index of the first non intersect value
-            std::size_t indexB;
+            size_t index_b;
             {
                 auto it = std::upper_bound(std::begin(m_values),
-                    std::end(m_values), valueB + m_tolerance);
-                indexB = std::distance(std::begin(m_values), it);
+                    std::end(m_values), value_b + m_tolerance);
+                index_b = std::distance(std::begin(m_values), it);
             }
 
             // find intersections
-            for (std::size_t i = indexA; i < indexB; i++) {
+            for (size_t i = index_a; i < index_b; i++) {
                 double target = m_values[i];
             
-                double t = tA;
+                double t = t_a;
 
-                double delta = valueA - valueB;
+                double delta = value_a - value_b;
 
                 if (delta != 0) {
-                    t += (valueA - target) / delta * (tB - tA);
+                    t += (value_a - target) / delta * (t_b - t_a);
                 }
 
                 for (int j = 0; j < 100; j++) {
