@@ -87,7 +87,7 @@ public:
         IntegrationPointList<1> result;
 
         for (const auto span : curve.spans()) {
-            if (span_v.length() < 1e-7) {
+            if (span.length() < 1e-7) {
                 continue;
             }
 
