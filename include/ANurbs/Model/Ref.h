@@ -25,9 +25,9 @@ public:
     {
     }
 
-    std::string Key() const
+    std::string key() const
     {
-        return m_entry->Key();
+        return m_entry->key();
     }
 
     std::string type_name() const
@@ -35,9 +35,9 @@ public:
         return m_entry->type_name();
     }
 
-    Pointer<TData> Data() const
+    Pointer<TData> data() const
     {
-        return m_entry->Data();
+        return m_entry->data();
     }
 
     // Pointer<typename Entry<TData>::AttributeType> Attributes() const
@@ -47,20 +47,20 @@ public:
 
     TData& operator*()
     {
-        return *Data();
+        return *data();
     }
 
     const TData& operator*() const
     {
-        return *Data();
+        return *data();
     }
 
     Pointer<TData> operator->() const
     {
-        return Data();
+        return data();
     }
 
-    bool IsEmpty() const
+    bool is_empty() const
     {
         return m_entry == nullptr;
     }
@@ -75,9 +75,9 @@ public:     // python
         const std::string name = std::string("Ref") + TData::type_name();
 
         py::class_<Ref<TData>>(m, name.c_str())
-            .def_property_readonly("key", &Ref<TData>::Key)
+            .def_property_readonly("key", &Ref<TData>::key)
             .def_property_readonly("type", &Ref<TData>::type_name)
-            .def_property_readonly("data", &Ref<TData>::Data)
+            .def_property_readonly("data", &Ref<TData>::data)
             // .def("Attributes", &Ref<TData>::Attributes)
         ;
     }

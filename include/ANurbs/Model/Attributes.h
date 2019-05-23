@@ -36,37 +36,37 @@ public:
     }
 
 public:
-    bool HasTag(const std::string& name)
+    bool has_tag(const std::string& name)
     {
         return (m_tags.find(name) != m_tags.end());
     }
 
-    void AddTag(const std::string& name)
+    void add_tag(const std::string& name)
     {
         m_tags.insert(name);
     }
 
-    void RemoveTag(const std::string& name)
+    void remove_tag(const std::string& name)
     {
         m_tags.erase(name);
     }
 
-    bool HasUserString(const std::string& name)
+    bool has_user_string(const std::string& name)
     {
         return (m_userStrings.find(name) != m_userStrings.end());
     }
 
-    std::string UserString(const std::string& name)
+    std::string user_string(const std::string& name)
     {
         return m_userStrings.at(name);
     }
 
-    void SetUserString(const std::string& name, const std::string& value)
+    void set_user_string(const std::string& name, const std::string& value)
     {
         m_userStrings.insert({name, value});
     }
 
-    void RemoveUserString(const std::string& name)
+    void remove_user_string(const std::string& name)
     {
         m_userStrings.erase(name);
     }
@@ -80,13 +80,13 @@ public:     // python
         using Type = Attributes;
 
         py::class_<Type, Pointer<Type>>(m, "Attributes")
-            .def("HasTag", &Type::HasTag, "name"_a)
-            .def("AddTag", &Type::AddTag, "name"_a)
-            .def("RemoveTag", &Type::RemoveTag, "name"_a)
-            .def("HasUserString", &Type::HasUserString, "name"_a)
-            .def("UserString", &Type::UserString, "name"_a)
-            .def("SetUserString", &Type::SetUserString, "name"_a, "value"_a)
-            .def("RemoveUserString", &Type::RemoveUserString, "name"_a)
+            .def("add_tag", &Type::add_tag, "name"_a)
+            .def("has_tag", &Type::has_tag, "name"_a)
+            .def("has_user_string", &Type::has_user_string, "name"_a)
+            .def("remove_tag", &Type::remove_tag, "name"_a)
+            .def("remove_user_string", &Type::remove_user_string, "name"_a)
+            .def("set_user_string", &Type::set_user_string, "name"_a, "value"_a)
+            .def("user_string", &Type::user_string, "name"_a)
         ;
     }
 };

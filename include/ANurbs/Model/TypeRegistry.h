@@ -32,9 +32,9 @@ struct TypeEntry : public TypeEntryBase<TModel>
         Ref<TData> ref;
 
         if (key.empty()) {
-            ref = model.template Add<TData>(data);
+            ref = model.template add<TData>(data);
         } else {
-            ref = model.template Add<TData>(key, data);
+            ref = model.template add<TData>(key, data);
         }
 
         // ref.Attributes()->load(model, source);
@@ -44,9 +44,9 @@ struct TypeEntry : public TypeEntryBase<TModel>
 
     bool save(const TModel& model, const size_t index, Json& target) override
     {
-        const auto entry = model.template Get<TData>(index);
+        const auto entry = model.template get<TData>(index);
 
-        if (entry.IsEmpty() || entry.Data() == nullptr) {
+        if (entry.is_empty() || entry.data() == nullptr) {
             return false;
         }
 
@@ -63,12 +63,12 @@ struct TypeRegistry
     static std::map<std::string, Unique<TypeEntryBase<TModel>>> s_registry;
 
     template <typename TData>
-    static void Register(bool noException)
+    static void register_type(bool no_exception)
     {
         const std::string type = TData::type_name();
 
         if (s_registry.find(type) != s_registry.end()) {
-            if (noException) {
+            if (no_exception) {
                 return;
             }
             throw std::runtime_error("Entity already registered");

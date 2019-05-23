@@ -102,7 +102,7 @@ public:     // serialization
 
             for (size_t i = 0; i < faces.size(); i++) {
                 const std::string key = faces[i];
-                result->m_faces[i] = model.GetLazy<BrepFace>(key);
+                result->m_faces[i] = model.get_lazy<BrepFace>(key);
             }
         }
 
@@ -114,7 +114,7 @@ public:     // serialization
 
             for (size_t i = 0; i < loops.size(); i++) {
                 const std::string key = loops[i];
-                result->m_loops[i] = model.GetLazy<BrepLoop>(key);
+                result->m_loops[i] = model.get_lazy<BrepLoop>(key);
             }
         }
 
@@ -126,7 +126,7 @@ public:     // serialization
 
             for (size_t i = 0; i < trims.size(); i++) {
                 const std::string key = trims[i];
-                result->m_trims[i] = model.GetLazy<BrepTrim>(key);
+                result->m_trims[i] = model.get_lazy<BrepTrim>(key);
             }
         }
 
@@ -138,7 +138,7 @@ public:     // serialization
 
             for (size_t i = 0; i < edges.size(); i++) {
                 const std::string key = edges[i];
-                result->m_edges[i] = model.GetLazy<BrepEdge>(key);
+                result->m_edges[i] = model.get_lazy<BrepEdge>(key);
             }
         }
 

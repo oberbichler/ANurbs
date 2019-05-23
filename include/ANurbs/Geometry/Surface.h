@@ -129,7 +129,7 @@ public:     // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto geometry = model.GetLazy<NurbsSurfaceGeometry<TDimension>>(
+        const auto geometry = model.get_lazy<NurbsSurfaceGeometry<TDimension>>(
             source.at("Geometry"));
 
         auto result = new_<Type>(geometry);
@@ -139,7 +139,7 @@ public:     // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["Geometry"] = data.surface_geometry().Key();
+        target["Geometry"] = data.surface_geometry().key();
     }
 
 public:     // python

@@ -19,9 +19,9 @@ public:
     {
         Attributes::load(model, source);
 
-        m_layer = source.value("Layer", "");
-        m_color = source.value("Color", "");
-        m_arrowhead = source.value("Arrowhead", "");
+        m_layer = source.value("layer", "");
+        m_color = source.value("color", "");
+        m_arrowhead = source.value("arrowhead", "");
     }
 
     template <typename TModel, typename TTarget>
@@ -30,45 +30,45 @@ public:
         Attributes::save(model, target);
 
         if (!m_layer.empty()) {
-            target["Layer"] = m_layer;
+            target["layer"] = m_layer;
         }
         
         if (!m_color.empty()) {
-            target["Color"] = m_color;
+            target["color"] = m_color;
         }
         
         if (!m_arrowhead.empty()) {
-            target["Arrowhead"] = m_arrowhead;
+            target["arrowhead"] = m_arrowhead;
         }
     }
 
 public:
-    std::string Layer() const
+    std::string layer() const
     {
         return m_layer;
     }
 
-    void SetLayer(const std::string& value)
+    void set_layer(const std::string& value)
     {
         m_layer = value;
     }
 
-    std::string Color() const
+    std::string color() const
     {
         return m_color;
     }
 
-    void SetColor(const std::string& value)
+    void set_color(const std::string& value)
     {
         m_color = value;
     }
 
-    std::string Arrowhead() const
+    std::string arrowhead() const
     {
         return m_arrowhead;
     }
 
-    void SetArrowhead(const std::string& value)
+    void set_arrowhead(const std::string& value)
     {
         m_arrowhead = value;
     }
@@ -84,12 +84,12 @@ public:     // python
         using Holder = Pointer<Type>;
 
         py::class_<Type, Base, Holder>(m, "CadAttributes")
-            .def("Layer", &Type::Layer)
-            .def("SetLayer", &Type::SetLayer, "value"_a)
-            .def("Color", &Type::Color)
-            .def("SetColor", &Type::SetColor, "value"_a)
-            .def("Arrowhead", &Type::Arrowhead)
-            .def("SetArrowhead", &Type::SetArrowhead, "value"_a)
+            .def("arrowhead", &Type::arrowhead)
+            .def("color", &Type::color)
+            .def("layer", &Type::layer)
+            .def("set_arrowhead", &Type::set_arrowhead, "value"_a)
+            .def("set_color", &Type::set_color, "value"_a)
+            .def("set_layer", &Type::set_layer, "value"_a)
         ;
     }
 };

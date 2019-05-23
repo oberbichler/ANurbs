@@ -64,19 +64,19 @@ public:     // serialization
         // Read Loop
         {
             const std::string key = data.at("Loop");
-            result->m_loop = model.GetLazy<BrepLoop>(key);
+            result->m_loop = model.get_lazy<BrepLoop>(key);
         }
 
         // Read Edge
         if (data.find("Edge") != data.end()) {
             const std::string key = data.at("Edge");
-            result->m_edge = model.GetLazy<BrepEdge>(key);
+            result->m_edge = model.get_lazy<BrepEdge>(key);
         }
 
         // Read Geometry
         {
             const std::string key = data.at("Geometry");
-            result->m_curve_geometry = model.GetLazy<NurbsCurveGeometry<2>>(key);
+            result->m_curve_geometry = model.get_lazy<NurbsCurveGeometry<2>>(key);
         }
 
         // Read Domain
@@ -92,7 +92,7 @@ public:     // serialization
     static void save(const Model& model, const BrepTrim& data, Json& target)
     {
         target["Loop"] = ToJson(data.m_loop);
-        if (!data.m_edge.IsEmpty()) {
+        if (!data.m_edge.is_empty()) {
             target["Edge"] = ToJson(data.m_edge);
         }
         target["Geometry"] = ToJson(data.m_curve_geometry);
@@ -116,12 +116,12 @@ public:     // python
             .def("curve_geometry", &Type::curve_geometry)
             // .def("Curve2D", [](Type& self) {
             //     return new_<Curve<2>>(
-            //         self.Geometry().Data(), self.Domain());
+            //         self.Geometry().data(), self.Domain());
             // })
             // .def("Curve3D", [](Type& self) {
             //     return new_<CurveOnSurface<3>>(
-            //         self.Geometry().Data(),
-            //         self.loop()->face()->Geometry().Data(), self.Domain());
+            //         self.Geometry().data(),
+            //         self.loop()->face()->Geometry().data(), self.Domain());
             // })
         ;
     }

@@ -97,7 +97,7 @@ public:     // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto geometry = model.GetLazy<NurbsCurveGeometry<TDimension>>(
+        const auto geometry = model.get_lazy<NurbsCurveGeometry<TDimension>>(
             source.at("Geometry"));
 
         const Interval domain = source.at("Domain");

@@ -55,7 +55,7 @@ public:     // serialization
         // Read Brep
         {
             const std::string key = data.at("Brep");
-            result->m_brep = model.GetLazy<ANurbs::Brep>(key);
+            result->m_brep = model.get_lazy<ANurbs::Brep>(key);
         }
 
         // Read loops
@@ -66,14 +66,14 @@ public:     // serialization
 
             for (size_t i = 0; i < loops.size(); i++) {
                 const std::string key = loops[i];
-                result->m_loops[i] = model.GetLazy<BrepLoop>(key);
+                result->m_loops[i] = model.get_lazy<BrepLoop>(key);
             }
         }
 
         // Read Geometry
         {
             const std::string key = data.at("Geometry");
-            result->m_geometry = model.GetLazy<NurbsSurfaceGeometry<3>>(key);
+            result->m_geometry = model.get_lazy<NurbsSurfaceGeometry<3>>(key);
         }
 
         return result;

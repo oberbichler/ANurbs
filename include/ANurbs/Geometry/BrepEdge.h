@@ -55,7 +55,7 @@ public:     // serialization
 
             for (size_t i = 0; i < trims.size(); i++) {
                 const std::string key = trims[i];
-                result->m_trims[i] = model.GetLazy<BrepTrim>(key);
+                result->m_trims[i] = model.get_lazy<BrepTrim>(key);
             }
         }
 

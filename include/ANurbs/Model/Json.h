@@ -63,11 +63,11 @@ namespace ANurbs {
 template <typename TData>
 void to_json(nlohmann::json& json, const Ref<TData>& ref)
 {
-    if (ref.Key().empty()) {
+    if (ref.key().empty()) {
         throw std::runtime_error("Entity has no key");
     }
     
-    json = ref.Key();
+    json = ref.key();
 }
 
 void from_json(const nlohmann::json& json, Interval& interval)

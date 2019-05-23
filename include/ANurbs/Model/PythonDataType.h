@@ -47,13 +47,13 @@ struct PythonDataType : public PythonDataTypeBase<TModel>
     pybind11::object get(const TModel& model, const std::string& key)
         override
     {
-        return pybind11::cast(model.template Get<TData>(key));
+        return pybind11::cast(model.template get<TData>(key));
     }
 
     pybind11::object get(const TModel& model, const size_t index)
         override
     {
-        return pybind11::cast(model.template Get<TData>(index));
+        return pybind11::cast(model.template get<TData>(index));
     }
 
     pybind11::object of_type(const TModel& model) override
@@ -63,25 +63,25 @@ struct PythonDataType : public PythonDataTypeBase<TModel>
 
     static Ref<TData> add(TModel& self, Pointer<TData> data)
     {
-        return self.template Add<TData>(data);
+        return self.template add<TData>(data);
     }
 
     static Ref<TData> add_with_key(TModel& self, const std::string& key,
         Pointer<TData> data)
     {
-        return self.template Add<TData>(key, data);
+        return self.template add<TData>(key, data);
     }
 
     static Ref<TData> replace(TModel& self, const size_t index,
         Pointer<TData> data)
     {
-        return self.template Replace<TData>(index, data);
+        return self.template replace<TData>(index, data);
     }
 
     static Ref<TData> replace_with_key(TModel& self, const std::string& key,
         Pointer<TData> data)
     {
-        return self.template Replace<TData>(key, data);
+        return self.template replace<TData>(key, data);
     }
 };
 

@@ -22,13 +22,13 @@ Ref<Brep> BrepTrim::brep()
 
 Pointer<Curve<2>> BrepTrim::curve_2d()
 {
-    return new_<Curve<2>>(curve_geometry().Data(), domain());
+    return new_<Curve<2>>(curve_geometry().data(), domain());
 }
 
 Pointer<CurveOnSurface<3>> BrepTrim::curve_3d()
 {
-    return new_<CurveOnSurface<3>>(curve_geometry().Data(),
-        face()->surface_geometry().Data(), domain());
+    return new_<CurveOnSurface<3>>(curve_geometry().data(),
+        face()->surface_geometry().data(), domain());
 }
 
 Ref<NurbsCurveGeometry<2>> BrepTrim::curve_geometry()

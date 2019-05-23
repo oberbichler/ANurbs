@@ -20,34 +20,34 @@ namespace ANurbs {
 class Model
 {
     std::vector<Pointer<EntryBase>> m_entries;
-    std::vector<size_t> m_entryMap;
-    std::unordered_map<std::string, std::pair<size_t, size_t>> m_keyMap;
+    std::vector<size_t> m_entry_map;
+    std::unordered_map<std::string, std::pair<size_t, size_t>> m_key_map;
 
 public:
     template <typename TData>
-    static void Register(bool noException = false)
+    static void register_type(bool noException = false)
     {
-        TypeRegistry<Model>::Register<TData>(noException);
+        TypeRegistry<Model>::register_type<TData>(noException);
     }
 
     template <typename TData>
-    Ref<TData> Add(Pointer<TData> data)
+    Ref<TData> add(Pointer<TData> data)
     {
         if (data == nullptr) {
             throw std::invalid_argument("Data is null");
         }
 
-        Pointer<Entry<TData>> entry = Entry<TData>::Create(data);
+        Pointer<Entry<TData>> entry = Entry<TData>::create(data);
 
         m_entries.push_back(std::static_pointer_cast<EntryBase>(entry));
 
-        m_entryMap.push_back(m_entries.size() - 1);
+        m_entry_map.push_back(m_entries.size() - 1);
 
         return Ref<TData>(entry);
     }
 
     template <typename TData>
-    Ref<TData> Add(const std::string& key, Pointer<TData> data)
+    Ref<TData> add(const std::string& key, Pointer<TData> data)
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -58,39 +58,39 @@ public:
 
         Pointer<Entry<TData>> entry;
 
-        const auto it = m_keyMap.find(key);
+        const auto it = m_key_map.find(key);
 
-        if (it != m_keyMap.end()) {
+        if (it != m_key_map.end()) {
             const auto index = std::get<0>(it->second);
 
             entry = std::static_pointer_cast<Entry<TData>>(m_entries[index]);
 
-            if (!entry->IsEmpty()) {
+            if (!entry->is_empty()) {
                 throw std::runtime_error("Entry already exists");
             }
 
-            entry->SetData(data);
+            entry->set_data(data);
 
-            m_entryMap.push_back(index);
+            m_entry_map.push_back(index);
 
-            it->second = { index, m_entryMap.size() - 1 };
+            it->second = { index, m_entry_map.size() - 1 };
         } else {
             const auto index = m_entries.size();
 
-            entry = Entry<TData>::Create(key, data);
+            entry = Entry<TData>::create(key, data);
 
             m_entries.push_back(std::static_pointer_cast<EntryBase>(entry));
 
-            m_entryMap.push_back(index);
+            m_entry_map.push_back(index);
 
-            m_keyMap[key] = { index, m_entryMap.size() - 1 };
+            m_key_map[key] = { index, m_entry_map.size() - 1 };
         }
 
         return Ref<TData>(entry);
     }
 
     template <typename TData>
-    Ref<TData> Replace(size_t index, Pointer<TData> data)
+    Ref<TData> replace(size_t index, Pointer<TData> data)
     {
         if (data == nullptr) {
             throw std::invalid_argument("Data is null");
@@ -99,13 +99,13 @@ public:
         auto entry = std::static_pointer_cast<Entry<TData>>(
             m_entries.at(index));
         
-        entry->SetData(data);
+        entry->set_data(data);
 
         return Ref<TData>(entry);
     }
 
     template <typename TData>
-    Ref<TData> Replace(const std::string& key, Pointer<TData> data)
+    Ref<TData> replace(const std::string& key, Pointer<TData> data)
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
@@ -114,14 +114,14 @@ public:
             throw std::invalid_argument("Data is null");
         }
 
-        const size_t index = std::get<0>(m_keyMap.at(key));
+        const size_t index = std::get<0>(m_key_map.at(key));
 
-        return Replace(index, data);
+        return replace(index, data);
     }
 
     void remove(const size_t index)
     {
-        m_entryMap.erase(m_entryMap.begin() + index);
+        m_entry_map.erase(m_entry_map.begin() + index);
     }
 
     void remove(const std::string& key)
@@ -130,20 +130,20 @@ public:
             throw std::invalid_argument("Key is empty");
         }
 
-        auto it = m_keyMap.find(key);
+        auto it = m_key_map.find(key);
 
-        if (it != m_keyMap.end()) {
+        if (it != m_key_map.end()) {
             const size_t index = std::get<1>(it->second);
             
             remove(index);
 
-            m_keyMap.erase(it);
+            m_key_map.erase(it);
         }
     }
 
     std::string get_type(size_t index) const
     {
-        return m_entries.at(m_entryMap.at(index))->type_name();
+        return m_entries.at(m_entry_map.at(index))->type_name();
     }
 
     std::string get_type(const std::string& key) const
@@ -152,9 +152,9 @@ public:
             throw std::invalid_argument("Key is empty");
         }
 
-        const auto it = m_keyMap.find(key);
+        const auto it = m_key_map.find(key);
 
-        if (it == m_keyMap.end()) {
+        if (it == m_key_map.end()) {
             throw std::out_of_range("Entry does not exists");
         }
 
@@ -165,14 +165,14 @@ public:
 
     std::string get_key(size_t index) const
     {
-        return m_entries.at(m_entryMap.at(index))->Key();
+        return m_entries.at(m_entry_map.at(index))->key();
     }
 
     template <typename TData>
-    Ref<TData> Get(size_t index) const
+    Ref<TData> get(size_t index) const
     {
         const auto entry = std::static_pointer_cast<Entry<TData>>(
-            m_entries.at(m_entryMap.at(index)));
+            m_entries.at(m_entry_map.at(index)));
 
         return Ref<TData>(entry);
     }
@@ -186,28 +186,27 @@ public:
             if (get_type(i) != TData::type_name()) {
                 continue;
             }
-            list.push_back(Get<TData>(i));
+            list.push_back(get<TData>(i));
         }
 
         return list;
     }
 
-    size_t
-    nb_entries() const
+    size_t nb_entries() const
     {
-        return m_entryMap.size();
+        return m_entry_map.size();
     }
 
     template <typename TData>
-    Ref<TData> Get(std::string key) const
+    Ref<TData> get(std::string key) const
     {
         if (key.empty()) {
             throw std::invalid_argument("Key is empty");
         }
 
-        const auto it = m_keyMap.find(key);
+        const auto it = m_key_map.find(key);
 
-        if (it == m_keyMap.end()) {
+        if (it == m_key_map.end()) {
             throw std::out_of_range("Entry does not exists");
         }
 
@@ -218,17 +217,17 @@ public:
     }
 
     template <typename TData>
-    Ref<TData> GetLazy(std::string key)
+    Ref<TData> get_lazy(std::string key)
     {
         Pointer<Entry<TData>> entry;
 
-        const auto it = m_keyMap.find(key);
+        const auto it = m_key_map.find(key);
 
-        if (it == m_keyMap.end()) {
+        if (it == m_key_map.end()) {
             const auto index = m_entries.size();
-            entry = Entry<TData>::Create(key, nullptr);
+            entry = Entry<TData>::create(key, nullptr);
             m_entries.push_back(std::static_pointer_cast<EntryBase>(entry));
-            m_keyMap[key] = { index, 0 };
+            m_key_map[key] = { index, 0 };
         } else {
             entry = std::static_pointer_cast<Entry<TData>>(
                 m_entries[std::get<0>(it->second)]);
@@ -237,9 +236,9 @@ public:
         return Ref<TData>(entry);
     }
 
-    bool Contains(const std::string& key)
+    bool contains(const std::string& key)
     {
-        return m_keyMap.find(key) != m_keyMap.end();
+        return m_key_map.find(key) != m_key_map.end();
     }
 
     void load(const std::string& path)
@@ -301,7 +300,7 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        Model::Register<TData>();
+        Model::register_type<TData>();
 
         Ref<TData>::register_python(m);
 
@@ -314,8 +313,8 @@ public:     // python
             "data"_a);
 
         model.def("add", [](ANurbs::Model& self, const Ref<TData>& ref) {
-            return PythonDataType<Model, TData>::add_with_key(self, ref.Key(),
-            ref.Data()); }, "ref"_a);
+            return PythonDataType<Model, TData>::add_with_key(self, ref.key(),
+            ref.data()); }, "ref"_a);
         
         model.def("replace", &PythonDataType<Model, TData>::replace, "index"_a,
             "data"_a);

@@ -15,11 +15,11 @@ class Model;
 class EntryBase
 {
 public:
-    virtual std::string Key() const = 0;
+    virtual std::string key() const = 0;
 
     virtual std::string type_name() const = 0;
 
-    virtual bool IsEmpty() const = 0;
+    virtual bool is_empty() const = 0;
 
     virtual ~EntryBase() { }
 };
@@ -27,51 +27,40 @@ public:
 template <typename TData>
 class Entry : public EntryBase
 {
-    using AttributesType = typename TData::Attributes;
+    using Attributes = typename TData::Attributes;
 
     std::string m_key;
     std::shared_ptr<TData> m_data;
-    std::shared_ptr<AttributesType> m_attributes;
+    std::shared_ptr<Attributes> m_attributes;
 
 public:
-    Entry(
-        std::shared_ptr<TData> data,
-        std::shared_ptr<AttributesType> attributes)
-    : m_data(data)
-    , m_attributes(attributes)
+    Entry(std::shared_ptr<TData> data, std::shared_ptr<Attributes> attributes)
+        : m_data(data), m_attributes(attributes)
     {
     }
 
-    Entry(
-        const std::string& key,
-        std::shared_ptr<TData> data,
-        std::shared_ptr<AttributesType> attributes)
-    : m_key(key)
-    , m_data(data)
-    , m_attributes(attributes)
+    Entry(const std::string& key, std::shared_ptr<TData> data,
+        std::shared_ptr<Attributes> attributes)
+        : m_key(key), m_data(data), m_attributes(attributes)
     {
     }
 
-    std::shared_ptr<TData>
-    Data()
+    std::shared_ptr<TData> data()
     {
         return m_data;
     }
 
-    void
-    SetData(
-        std::shared_ptr<TData> value)
+    void set_data(std::shared_ptr<TData> value)
     {
         m_data = value;
     }
 
-    std::shared_ptr<AttributesType> Attributes() const
+    std::shared_ptr<Attributes> attributes() const
     {
         return m_attributes;
     }
 
-    std::string
-    Key() const override
+    std::string key() const override
     {
         return m_key;
     }
@@ -81,25 +70,20 @@ public:
         return TData::type_name();
     }
 
-    static Unique<Entry<TData>>
-    Create(
-        std::string key,
+    static Unique<Entry<TData>> create(std::string key,
         std::shared_ptr<TData> data)
     {
-        Pointer<AttributesType> attributes = new_<AttributesType>();
+        Pointer<Attributes> attributes = new_<Attributes>();
         return new_<Entry<TData>>(key, data, attributes);
     }
 
-    static Unique<Entry<TData>>
-    Create(
-        std::shared_ptr<TData> data)
+    static Unique<Entry<TData>> create(std::shared_ptr<TData> data)
     {
-        Pointer<AttributesType> attributes = new_<AttributesType>();
+        Pointer<Attributes> attributes = new_<Attributes>();
         return new_<Entry<TData>>(data, attributes);
     }
 
-    bool
-    IsEmpty() const override
+    bool is_empty() const override
     {
         return m_data == nullptr;
     }
