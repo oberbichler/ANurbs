@@ -41,7 +41,7 @@ namespace ANurbs {
 
 class PolygonTessellation
 {
-public:
+public:     // types
     using TriangleIndices = std::tuple<int, int, int>;
     using QuadIndices = std::tuple<int, int, int, int>;
 

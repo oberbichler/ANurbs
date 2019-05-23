@@ -25,11 +25,11 @@ enum TrimTypes
 
 class TrimmedSurfaceClipping
 {
-public:
+public:     // types
     using Vector = Vector<2>;
     using CurveBase = CurveBase<2>;
 
-private:
+private:    // variables
     ClipperLib::Paths m_paths;
     std::vector<TrimTypes> m_span_trim_type;
     std::vector<std::vector<Polygon>> m_span_polygons;
@@ -63,7 +63,7 @@ private:
         return point;
     }
 
-private:
+private:    // static methods
     static inline bool is_rect(ClipperLib::Path rect, ClipperLib::Path contour,
         std::size_t a, std::size_t b, std::size_t c, std::size_t d)
     {

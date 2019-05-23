@@ -12,7 +12,7 @@ namespace ANurbs {
 
 class NurbsSurfaceShapeFunction
 {
-private:        // variables
+private:    // variables
     int m_order;
     NurbsCurveShapeFunction m_shape_u;
     NurbsCurveShapeFunction m_shape_v;
@@ -21,7 +21,7 @@ private:        // variables
     int m_first_nonzero_pole_u;
     int m_first_nonzero_pole_v;
 
-public:         // static methods
+public:     // static methods
     static constexpr inline int nb_shapes(const int order) noexcept
     {
         return (1 + order) * (2 + order) / 2;
@@ -34,7 +34,7 @@ public:         // static methods
             derivative_v) / 2;
     }
 
-private:        // methods
+private:    // methods
     double& weighted_sum(const int index)
     {
         return m_weighted_sums[index];
@@ -75,7 +75,7 @@ private:        // methods
         return m_values[index];
     }
 
-public:         // constructors
+public:     // constructors
     NurbsSurfaceShapeFunction()
     {
     }
@@ -86,7 +86,7 @@ public:         // constructors
         resize(degree_u, degree_v, order);
     }
 
-public:         // methods
+public:     // methods
     void resize(const int degree_u, const int degree_v, const int order)
     {
         const int nb_shapes = this->nb_shapes(order);
