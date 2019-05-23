@@ -85,12 +85,14 @@ public:     // python
         using Type = BrepLoop;
 
         py::class_<Type>(m, "BrepLoop")
-            .def("brep", &Type::brep)
-            .def("face", &Type::face)
-            .def("nb_trims", &Type::nb_trims)
+            // read-only properties
+            .def_property_readonly("brep", &Type::brep)
+            .def_property_readonly("edges", &Type::edges)
+            .def_property_readonly("face", &Type::face)
+            .def_property_readonly("nb_trims", &Type::nb_trims)
+            .def_property_readonly("trims", &Type::trims)
+            // methods
             .def("trim", &Type::trim, "index"_a)
-            .def("trims", &Type::trims)
-            .def("edges", &Type::edges)
         ;
 
         Model::register_python_data_type<Type>(m, model);

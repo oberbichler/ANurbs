@@ -109,20 +109,15 @@ public:     // python
         using Type = BrepTrim;
 
         py::class_<Type>(m, "BrepTrim")
-            .def("brep", &Type::brep)
-            .def("loop", &Type::loop)
-            .def("edge", &Type::edge)
-            .def("face", &Type::face)
-            .def("curve_geometry", &Type::curve_geometry)
-            // .def("Curve2D", [](Type& self) {
-            //     return new_<Curve<2>>(
-            //         self.Geometry().data(), self.Domain());
-            // })
-            // .def("Curve3D", [](Type& self) {
-            //     return new_<CurveOnSurface<3>>(
-            //         self.Geometry().data(),
-            //         self.loop()->face()->Geometry().data(), self.Domain());
-            // })
+            // read-only properties
+            .def_property_readonly("brep", &Type::brep)
+            .def_property_readonly("curve_2d", &Type::curve_2d)
+            .def_property_readonly("curve_3d", &Type::curve_3d)
+            .def_property_readonly("curve_geometry", &Type::curve_geometry)
+            .def_property_readonly("edge", &Type::edge)
+            .def_property_readonly("face", &Type::face)
+            .def_property_readonly("loop", &Type::loop)
+            .def_property_readonly("surface_geometry", &Type::surface_geometry)
         ;
 
         Model::register_python_data_type<Type>(m, model);
