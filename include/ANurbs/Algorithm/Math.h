@@ -25,6 +25,14 @@ constexpr inline int single_index(const int rows, const int cols, const int row,
     return row * cols + col;
 }
 
+constexpr inline std::pair<int, int> double_index(const int rows,
+    const int cols, const int index) noexcept
+{
+    const int row = index / cols;
+    const int col = index % cols;
+    return {row, col};
+}
+
 template <typename TFunction>
 double romberg(TFunction f, double a, double b, int max_iter, double tolerance)
 {
