@@ -3,8 +3,6 @@
 #include "../Define.h"
 
 #include "IntegrationPoints.h"
-#include "TrimmedSurfaceClipping.h"
-#include "PolygonIntegrationPoints.h"
 #include "PointOnCurveProjection.h"
 
 #include "../Geometry/BrepEdge.h"
