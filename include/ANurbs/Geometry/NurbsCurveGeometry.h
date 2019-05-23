@@ -12,6 +12,7 @@
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
 
+#include <stdexcept>
 #include <vector>
 
 namespace ANurbs {
@@ -30,27 +31,38 @@ private:    // variables
     std::vector<double> m_weights;
 
 public:     // constructors
-    NurbsCurveGeometry(int degree, int nb_poles, bool is_rational)
-    : m_degree(degree), m_poles(nb_poles), m_weights(is_rational ?
-    nb_poles : 0), m_knots(Nurbs::nb_knots(degree, nb_poles))
+    NurbsCurveGeometry(const int degree, int nb_poles, bool is_rational)
+        : m_degree(degree), m_poles(nb_poles), m_weights(is_rational ?
+        nb_poles : 0), m_knots(Nurbs::nb_knots(degree, nb_poles))
     {
         static_assert(TDimension > 0);
     }
 
-    NurbsCurveGeometry(int degree, const std::vector<double>& knots,
+    NurbsCurveGeometry(const int degree, const std::vector<double>& knots,
         const std::vector<Vector>& poles)
-    : m_degree(degree), m_knots(knots), m_poles(poles), m_weights()
+        : m_degree(degree), m_knots(knots), m_poles(poles), m_weights()
     {
         static_assert(TDimension > 0);
-        // FIXME: check sizes
+
+        if (knots.size() != Nurbs::nb_knots(degree, poles.size())) {
+            throw std::runtime_error("Number of knots and poles do not match");
+        }
     }
 
-    NurbsCurveGeometry(int degree, const std::vector<double>& knots,
+    NurbsCurveGeometry(const int degree, const std::vector<double>& knots,
         const std::vector<Vector>& poles, const std::vector<double>& weights)
-    : m_degree(degree), m_knots(knots), m_poles(poles), m_weights(weights)
+        : m_degree(degree), m_knots(knots), m_poles(poles), m_weights(weights)
     {
         static_assert(TDimension > 0);
-        // FIXME: check sizes
+
+        if (knots.size() != Nurbs::nb_knots(degree, poles.size())) {
+            throw std::runtime_error("Number of knots and poles do not match");
+        }
+
+        if (weights.size() != poles.size()) {
+            throw std::runtime_error(
+                "Number of poles and weights do not match");
+        }
     }
 
     // FIXME: constructor with Vector<TDimension + 1>

@@ -239,6 +239,34 @@ class TestNurbsCurveGeometry(unittest.TestCase):
              [-0.0044631241, 0.0251050729, 0.0092051934]],
         )
 
+    def test_nurbs_3d_by_lists_throws(self):
+        # valid input
+        an.NurbsCurveGeometry3D(
+            degree=4,
+            knots=np.empty(8),
+            poles=np.empty((5, 3)),
+            weights=np.empty(5),
+        )
+
+        def invalid_knot_vector():
+            an.NurbsCurveGeometry3D(
+                degree=4,
+                knots=np.empty(5),
+                poles=np.empty((5, 3)),
+            )
+
+        self.assertRaises(Exception, invalid_knot_vector)
+
+        def invalid_weight_vector():
+            an.NurbsCurveGeometry3D(
+                degree=4,
+                knots=np.empty(8),
+                poles=np.empty((5, 3)),
+                weights=np.empty(6),
+            )
+
+        self.assertRaises(Exception, invalid_weight_vector)
+
 
 if __name__ == '__main__':
     unittest.main()
