@@ -56,7 +56,7 @@ public:     // serialization
 
         // Read trims
         {
-            const auto trims = data.at("trims");
+            const auto trims = data.at("Trims");
 
             result->m_trims.resize(trims.size());
 

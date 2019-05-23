@@ -60,7 +60,7 @@ public:     // serialization
 
         // Read loops
         {
-            const auto loops = data.at("loops");
+            const auto loops = data.at("Loops");
 
             result->m_loops.resize(loops.size());
 
