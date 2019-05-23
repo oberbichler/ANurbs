@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BrepLoop.h"
+
 #include "NurbsSurfaceGeometry.h"
 
 #include "../Model/Json.h"

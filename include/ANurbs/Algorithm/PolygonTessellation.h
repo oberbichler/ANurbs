@@ -4,8 +4,8 @@
 
 #include "TrimmedSurfaceClipping.h"
 
-#include "../Geometry/Polygon.h"
 #include "../Geometry/CurveBase.h"
+#include "../Geometry/Polygon.h"
 
 #include <mapbox/earcut.hpp>
 

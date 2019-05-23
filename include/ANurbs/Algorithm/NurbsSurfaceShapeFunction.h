@@ -2,8 +2,8 @@
 
 #include "../Define.h"
 
-#include "Nurbs.h"
 #include "Math.h"
+#include "Nurbs.h"
 #include "NurbsCurveShapeFunction.h"
 
 #include <vector>
