@@ -96,8 +96,13 @@ public:     // python
         const std::string name = Type::type_name();
 
         py::class_<Type, Holder>(m, name.c_str())
+            // constructors
             .def(py::init<const Vector&>(), "location"_a)
-            .def("location", &Type::location)
+            .def(py::init<const Vector&, const std::string&>(), "location"_a,
+                "text"_a)
+            // properties
+            .def_property("location", &Type::location, &Type::set_location)
+            .def_property("text", &Type::text, &Type::set_text)
         ;
 
         Model::register_python_data_type<Type>(m, model);
