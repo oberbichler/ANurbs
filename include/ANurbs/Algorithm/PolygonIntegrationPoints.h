@@ -16,7 +16,7 @@ namespace ANurbs {
 class PolygonIntegrationPoints
 {
 public:
-    static void get(const int degree, const Polygon& polygon)
+    static IntegrationPointList<2> get(const int degree, const Polygon& polygon)
     {
         IntegrationPointList<2> integration_points;
         PolygonTessellation tessellation;
@@ -49,10 +49,12 @@ public:
                                 vertex_b * std::get<1>(norm_point) +
                                 vertex_c * std::get<2>(norm_point);
 
-                integration_points[j] = IntegrationPoint<2>(uv[0], uv[1],
+                integration_points[j++] = IntegrationPoint<2>(uv[0], uv[1],
                     area * std::get<3>(norm_point));
             }
         }
+
+        return integration_points;
     }
 
 public:     // python
