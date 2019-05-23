@@ -25,15 +25,15 @@ private:    // variables
     std::vector<Ref<BrepTrim>> m_trims;
 
 public:     // methods
-    std::vector<Ref<BrepFace>> faces();
+    std::vector<Ref<BrepFace>> faces() const;
 
-    std::vector<Ref<BrepLoop>> loops();
+    std::vector<Ref<BrepLoop>> loops() const;
 
-    size_t nb_trims();
+    size_t nb_trims() const;
 
-    Ref<BrepTrim> trim(size_t index);
+    Ref<BrepTrim> trim(size_t index) const;
 
-    std::vector<Ref<BrepTrim>> trims();
+    std::vector<Ref<BrepTrim>> trims() const;
 
 public:     // serialization
     using Attributes = Attributes;
