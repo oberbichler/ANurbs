@@ -25,9 +25,9 @@ class Model
 
 public:
     template <typename TData>
-    static void register_type(bool noException = false)
+    static void register_type(bool no_exception = false)
     {
-        TypeRegistry<Model>::register_type<TData>(noException);
+        TypeRegistry<Model>::register_type<TData>(no_exception);
     }
 
     template <typename TData>
