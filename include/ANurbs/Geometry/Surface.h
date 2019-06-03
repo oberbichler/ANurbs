@@ -13,11 +13,12 @@
 
 namespace ANurbs {
 
-template <int TDimension, typename TRef=Pointer<NurbsSurfaceGeometry<TDimension>>>
+template <int TDimension, typename TRef=Ref<NurbsSurfaceGeometry<TDimension>>>
 class Surface : public SurfaceBase<TDimension>
 {
 public:     // types
-    using Type = Surface<TDimension>;
+    using Type = Surface<TDimension, TRef>;
+    using SurfaceGeometry = NurbsSurfaceGeometry<TDimension>;
     using Vector = typename SurfaceBase<TDimension>::Vector;
 
 private:    // variables
@@ -149,20 +150,18 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        using Geometry = NurbsSurfaceGeometry<TDimension>;
-
-        using Type = Surface<TDimension>;
+        using Type = Surface<TDimension, TRef>;
         using Base = SurfaceBase<TDimension>;
         using Holder = Pointer<Type>;
 
         const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
-            .def(py::init<Pointer<Geometry>>(), "geometry"_a)
+            .def(py::init<TRef>(), "geometry"_a)
             .def("surface_geometry", &Type::surface_geometry)
         ;
 
-        // Model::register_python_data_type<Type>(m, model);
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 

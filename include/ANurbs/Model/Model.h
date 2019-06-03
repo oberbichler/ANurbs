@@ -19,11 +19,22 @@ namespace ANurbs {
 
 class Model
 {
+private:    // variables
     std::vector<Pointer<EntryBase>> m_entries;
     std::vector<size_t> m_entry_map;
     std::unordered_map<std::string, std::pair<size_t, size_t>> m_key_map;
 
-public:
+public:     // static methods
+    static Unique<Model> from_file(const std::string& path)
+    {
+        auto model = new_<Model>();
+
+        JsonReader<Model>::load_file(*model, path);
+
+        return model;
+    }
+
+public:     // methods
     template <typename TData>
     static void register_type(bool no_exception = false)
     {
@@ -273,6 +284,9 @@ public:     // python
 
         return pybind11::class_<Type, Holder>(m, "Model")
             .def(py::init<>())
+            // static methods
+            .def_static("from_file", &Type::from_file)
+            // methods
             .def("load", &Type::load, "path"_a)
             .def("save", &Type::save, "path"_a)
             .def("add_array", &Type::add_array, "content"_a)
