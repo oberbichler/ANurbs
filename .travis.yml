@@ -19,11 +19,7 @@ before_install:
   conda create -q -n test-environment python=$CONDA
   source activate test-environment
 script:
-- mkdir build
-- cd build
-- cmake ..
-- cmake --build .
-- "./test/run_tests"
+- pip install .
 deploy:
   provider: pypi
   user: oberbichler
