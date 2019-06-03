@@ -1,14 +1,11 @@
 sudo: false
 language: cpp
-
 os:
-  - linux
-  - osx
-
+- linux
+- osx
 compiler:
-  - gcc
-  - clang
-
+- gcc
+- clang
 before_install:
 - |
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then OS=Linux-x86_64; else OS=MacOSX-x86_64; fi
@@ -21,10 +18,16 @@ before_install:
   conda install -q conda-build
   conda create -q -n test-environment python=$CONDA
   source activate test-environment
-
 script:
-  - mkdir build
-  - cd build
-  - cmake ..
-  - cmake --build .
-  - ./test/run_tests
+- mkdir build
+- cd build
+- cmake ..
+- cmake --build .
+- "./test/run_tests"
+deploy:
+  provider: pypi
+  user: oberbichler
+  password:
+    secure: cEvbyQL0FAeHwukoeA8rcGFpR2nIThdyyvABxSCN9Y1StH1xQTHwQUT1IcMabuKJVB11/uau3+1anSN1/TaTKCL+gKCnebeHACutoLgUKWj/GoCwSP7UHHeBins68KvvHFlT/OY1BiVbFWO8CzbKjHLD5RuBmVTFoqI5tpnIzOA10FtLnqVUUNFbUAe7GKORrsIxHWVUGJUNVCjaJDGpn3Zpl7b72ch6p8pHSLAJ/wfWKCxuCzmPqdkClqtBAlSO/zH8opAQtT3Z+vTkHd5bY9xEtMQ+JNb4uw88aXEf5C6dy5jo3li8hoKREIoapkh7JEonxOoh04sXqkQjtRU4y00csnJeFh5njlbVM+mJZUjseUO2IemW8Fv+R6nBPLEGpYJpNn8k+NJxOqDPVTeR85LIAe+AAL235Nwl6xk1ERVSdPKe97D7ykh2vjFqh9ymDKEXP8uY9VVcNE0VuHDLkuAhOm8ESV0L1Ls0FEQIwQkIziqCWNIdPhRuNcqZTUyvGGOetwx3hk520QzDqn61OU0oPoUaH8+eXv2iCnr3J6xTGL8geS9KKsh4PYzfi5VoKSYwGqbNTeyxYMpW6sOxYo5yGipGy0F1yZQMNI10MfQrpstm7OxZHYqRPTT5SDXQ57kV3QFlz60wvH+bVk6lwbMS3bZh/ZsqtzS0HxI/7lk=
+  on:
+    tags: true
