@@ -60,9 +60,9 @@ class CMakeBuild(build_ext):
 
 setup(
     name='ANurbs',
-    description='Automatic differentiation with dual numbers',
+    description='A simple Nurbs library',
     version=ANURBS_VERSION,
-    url='',
+    url='https://github.com/oberbichler/ANurbs',
     author='Thomas Oberbichler',
     author_email='thomas.oberbichler@gmail.com',
     ext_modules=[CMakeExtension('ANurbs')],
