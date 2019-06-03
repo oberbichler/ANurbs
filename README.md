@@ -4,6 +4,6 @@
 
 ## Installation
 
-```
+```bash
 pip install git+https://github.com/oberbichler/ANurbs
 ```
