@@ -302,19 +302,19 @@ public:     // python
                 "degree"_a, "knots"_a, "poles"_a, "weights"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
+            .def_property_readonly("knots", &Type::knots)
             .def_property_readonly("nb_knots", &Type::nb_knots)
             .def_property_readonly("nb_poles", &Type::nb_poles)
+            .def_property_readonly("poles", &Type::poles)
+            .def_property_readonly("weights", &Type::weights)
             // methods
             .def("knot", &Type::knot, "index"_a)
-            .def("knots", &Type::knots)
-            .def("poles", &Type::poles)
             .def("set_knot", &Type::set_knot, "index"_a, "value"_a)
             .def("set_pole", &Type::set_pole, "index"_a, "value"_a)
             .def("set_weight", &Type::set_weight, "index"_a, "value"_a)
             .def("shape_functions_at", &Type::shape_functions_at, "t"_a,
                 "order"_a)
             .def("weight", &Type::weight, "index"_a)
-            .def("weights", &Type::weights)
             // .def("clone", &Type::clone)
         ;
 
