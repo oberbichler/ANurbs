@@ -43,11 +43,11 @@ public:     // static methods
         for (const auto span_a : curve_3d_a->spans()) {
             const double t_a = span_a.t0();
 
-            const auto point = curve_3d_a->point_at(t_a);
+            const Vector point = curve_3d_a->point_at(t_a);
 
             projection_b.compute(point);
 
-            const auto t_b = projection_b.parameter();
+            const double t_b = projection_b.parameter();
 
             spans_on_curve_b.emplace_back(t_b);
         }

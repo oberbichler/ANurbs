@@ -2,8 +2,9 @@
 
 #include "../Define.h"
 
-#include "../Geometry/CurveBase.h"
 #include "CurveTessellation.h"
+
+#include "../Geometry/CurveBase.h"
 
 #include <array>
 #include <limits>

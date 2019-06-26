@@ -15,11 +15,12 @@
 
 namespace ANurbs {
 
-template <int TDimension, typename TRef = Pointer<NurbsCurveGeometry<TDimension>>>
+template <int TDimension,
+    typename TRef = Pointer<NurbsCurveGeometry<TDimension>>>
 struct Curve : public CurveBase<TDimension>
 {
 public:     // types
-    using Type = Curve<TDimension>;
+    using Type = Curve<TDimension, TRef>;
     using CurveGeometry = NurbsCurveGeometry<TDimension>;
     using Vector = typename CurveBase<TDimension>::Vector;
 
@@ -118,19 +119,18 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        using Type = Curve<TDimension>;
+        using Type = Curve<TDimension, TRef>;
         using Holder = Pointer<Type>;
         using Base = CurveBase<TDimension>;
 
         const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
-            .def(py::init<Pointer<CurveGeometry>, Interval>(), "geometry"_a,
-                "domain"_a)
+            .def(py::init<TRef, Interval>(), "geometry"_a, "domain"_a)
             .def("curve_geometry", &Type::curve_geometry)
         ;
 
-        // Model::register_python_data_type<Type>(m, model);
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 

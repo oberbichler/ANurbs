@@ -4,8 +4,8 @@
 
 #include "TrimmedSurfaceClipping.h"
 
-#include "../Geometry/Polygon.h"
 #include "../Geometry/CurveBase.h"
+#include "../Geometry/Polygon.h"
 
 #include <mapbox/earcut.hpp>
 
@@ -41,7 +41,7 @@ namespace ANurbs {
 
 class PolygonTessellation
 {
-public:
+public:     // types
     using TriangleIndices = std::tuple<int, int, int>;
     using QuadIndices = std::tuple<int, int, int, int>;
 

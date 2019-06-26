@@ -11,11 +11,11 @@ namespace ANurbs {
 template <int TDimension>
 class PointOnSurfaceProjection
 {
-public:
+public:     // types
     using Vector = Vector<TDimension>;
     using SurfaceBase = SurfaceBase<TDimension>;
 
-private:
+private:    // types
     struct ParameterPoint
     {
         double parameterU;
@@ -58,7 +58,7 @@ private:
         nanoflann::L2_Simple_Adaptor<double, PointCloudAdaptor>,
         PointCloudAdaptor, 3>;
 
-private:
+private:    // variables
     Pointer<SurfaceBase> m_surface;
     ParameterPoint m_closestPoint;
     std::vector<ParameterPoint> m_tessellation;
@@ -69,7 +69,7 @@ private:
     Unique<KDTreeType> m_index;
     const PointCloudAdaptor m_point_cloud_adaptor;
 
-public:
+public:     // constructors
     PointOnSurfaceProjection(Pointer<SurfaceBase> surface)
         : m_surface(surface), m_point_cloud_adaptor(m_tessellation)
     {

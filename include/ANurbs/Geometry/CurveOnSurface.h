@@ -11,7 +11,9 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <int TDimension,
+    typename TCurveRef = Pointer<NurbsCurveGeometry<2>>,
+    typename TSurfaceRef = Pointer<NurbsSurfaceGeometry<TDimension>>>
 class CurveOnSurface : public CurveBase<TDimension>
 {
 public:     // types
@@ -20,13 +22,13 @@ public:     // types
     using Vector = typename CurveBase<TDimension>::Vector;
 
 private:    // variables
-    Pointer<CurveGeometry> m_curve_geometry;
-    Pointer<SurfaceGeometry> m_surface_geometry;
+    TCurveRef m_curve_geometry;
+    TSurfaceRef m_surface_geometry;
     Interval m_domain;
 
 public:     // constructors
-    CurveOnSurface(Pointer<CurveGeometry> curve_geometry,
-        Pointer<SurfaceGeometry> surface_geometry, Interval domain)
+    CurveOnSurface(TCurveRef curve_geometry, TSurfaceRef surface_geometry,
+        Interval domain)
         : m_curve_geometry(curve_geometry),
         m_surface_geometry(surface_geometry), m_domain(domain)
     {
@@ -36,12 +38,12 @@ public:     // static methods
     using CurveBase<TDimension>::dimension;
 
 public:     // methods
-    Pointer<CurveGeometry> curve_geometry() const
+    TCurveRef curve_geometry() const
     {
         return m_curve_geometry;
     }
 
-    Pointer<SurfaceGeometry> surface_geometry() const
+    TSurfaceRef surface_geometry() const
     {
         return m_surface_geometry;
     }
@@ -113,7 +115,7 @@ public:     // methods
 
     std::vector<Interval> spans() const override
     {
-        Curve<2> curve(curve_geometry(), domain());
+        Curve<2, TCurveRef> curve(curve_geometry(), domain());
 
         const auto knots_u = surface_geometry()->knots_u();
         const auto knots_v = surface_geometry()->knots_v();
@@ -154,7 +156,7 @@ public:     // python
         const std::string name = Type::type_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
-            .def(py::init<Pointer<CurveGeometry>, Pointer<SurfaceGeometry>,
+            .def(py::init<TCurveRef, TSurfaceRef,
                 Interval>(), "curve_geometry"_a, "surface_geometry"_a,
                 "domain"_a)
         ;

@@ -127,8 +127,8 @@ PYBIND11_MODULE(ANurbs, m) {
     }
 
     { // Curve
-        Curve<2>::register_python(m, model);
-        Curve<3>::register_python(m, model);
+        Curve<2, Ref<NurbsCurveGeometry<2>>>::register_python(m, model);
+        Curve<3, Ref<NurbsCurveGeometry<3>>>::register_python(m, model);
     }
 
     { // Interval
@@ -151,8 +151,8 @@ PYBIND11_MODULE(ANurbs, m) {
     }
     
     { // Surface
-        Surface<2>::register_python(m, model);
-        Surface<3>::register_python(m, model);
+        Surface<2, Ref<NurbsSurfaceGeometry<2>>>::register_python(m, model);
+        Surface<3, Ref<NurbsSurfaceGeometry<3>>>::register_python(m, model);
     }
 
     { // CurveOnSurface

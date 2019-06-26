@@ -15,7 +15,7 @@ namespace ANurbs {
 
 class PolygonIntegrationPoints
 {
-public:
+public:     // static methods
     static IntegrationPointList<2> get(const int degree, const Polygon& polygon)
     {
         IntegrationPointList<2> integration_points;

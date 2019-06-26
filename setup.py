@@ -8,7 +8,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
-ANURBS_VERSION = '0.2.0'
+ANURBS_VERSION = '0.3.0'
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
@@ -60,9 +60,9 @@ class CMakeBuild(build_ext):
 
 setup(
     name='ANurbs',
-    description='Automatic differentiation with dual numbers',
+    description='A simple Nurbs library',
     version=ANURBS_VERSION,
-    url='',
+    url='https://github.com/oberbichler/ANurbs',
     author='Thomas Oberbichler',
     author_email='thomas.oberbichler@gmail.com',
     ext_modules=[CMakeExtension('ANurbs')],

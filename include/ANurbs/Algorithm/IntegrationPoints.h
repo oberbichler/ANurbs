@@ -19,11 +19,11 @@ using IntegrationPointList = std::vector<IntegrationPoint<TDimension>>;
 
 class IntegrationPoints
 {
-private:
+private:    // static variables
     static std::vector<std::vector<IntegrationPoint<1>>> s_gauss_legendre;
     static std::vector<std::vector<IntegrationPoint<3>>> s_xiao_gimbutas;
 
-public:
+public:     // static methods
     static IntegrationPointList<1>& gauss_legendre(const size_t degree)
     {
         if (degree < 1 || degree > s_gauss_legendre.size()) {
@@ -157,8 +157,7 @@ public:     // python
     }
 };
 
-std::vector<IntegrationPointList<1>>
-IntegrationPoints::s_gauss_legendre = {
+std::vector<IntegrationPointList<1>> IntegrationPoints::s_gauss_legendre = {
     {   // degree 1
         { 0.5000000000000000000, 1.0000000000000000000 },
     },
@@ -1536,8 +1535,7 @@ IntegrationPoints::s_gauss_legendre = {
     }
 };
 
-std::vector<IntegrationPointList<3>>
-IntegrationPoints::s_xiao_gimbutas = {
+std::vector<IntegrationPointList<3>> IntegrationPoints::s_xiao_gimbutas = {
     {   // degree 1
         {0.3333333333333333, 0.3333333333333333, 0.3333333333333333, 1.0},
     },
