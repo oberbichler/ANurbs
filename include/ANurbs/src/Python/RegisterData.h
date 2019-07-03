@@ -1191,6 +1191,18 @@ RegisterData(
         ;
     }
 
+    { // BrepFaceField
+        using Type = BrepFaceField;
+
+        RegisterDataTypeAndType<Type>(m, model, "BrepFaceField")
+            .def(py::init<int>(), "dimension"_a)
+            .def("Face", &Type::Face)
+            .def("SetFace", &Type::SetFace)
+            .def("Values", &Type::Values)
+            .def("SetValue", &Type::SetValue)
+        ;
+    }
+
     { // BrepLoop
         using Type = BrepLoop;
 
