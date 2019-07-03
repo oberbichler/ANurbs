@@ -323,12 +323,12 @@ public:     // python
 
         model.def("add", &PythonDataType<Model, TData>::add, "data"_a);
 
-        model.def("add", &PythonDataType<Model, TData>::add_with_key, "key"_a,
-            "data"_a);
+        // model.def("add", &PythonDataType<Model, TData>::add_with_key, "key"_a,
+        //     "data"_a);
 
-        model.def("add", [](ANurbs::Model& self, const Ref<TData>& ref) {
-            return PythonDataType<Model, TData>::add_with_key(self, ref.key(),
-            ref.data()); }, "ref"_a);
+        // model.def("add", [](ANurbs::Model& self, const Ref<TData>& ref) {
+        //     return PythonDataType<Model, TData>::add_with_key(self, ref.key(),
+        //     ref.data()); }, "ref"_a);
         
         model.def("replace", &PythonDataType<Model, TData>::replace, "index"_a,
             "data"_a);

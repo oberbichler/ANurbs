@@ -562,6 +562,8 @@ public:     // python
             .def_property_readonly("nb_poles", &Type::nb_poles)
             .def_property_readonly("nb_poles_u", &Type::nb_poles_u)
             .def_property_readonly("nb_poles_v", &Type::nb_poles_v)
+            .def_property_readonly("poles", &Type::poles)
+            .def_property_readonly("weights", &Type::weights)
             // methods
             // .def("Poles", &Type::poles)
             // .def("Weights", &Type::weights)
@@ -591,6 +593,8 @@ public:     // python
             .def("weight", (double (Type::*)(const int, const int) const)
                 &Type::weight, "index_u"_a, "index_v"_a)
         ;
+
+        m.def("add", [](Model& model, Holder data) { model.add<Type>(data); } );
 
         Model::register_python_data_type<Type>(m, model);
     }

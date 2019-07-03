@@ -163,6 +163,8 @@ PYBIND11_MODULE(ANurbs, m) {
         Polygon::register_python(m);
     }
 
+    m.def("test", [](Pointer<Line<3>> line) {return line;});
+
 
     // --- Model
 

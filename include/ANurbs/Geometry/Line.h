@@ -96,6 +96,8 @@ public:     // python
             .def_property("b", &Type::b, &Type::set_b)
         ;
 
+        m.def("add", [](Model& model, Holder data) { model.add<Type>(data); } );
+
         Model::register_python_data_type<Type>(m, model);
     }
 };
