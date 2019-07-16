@@ -66,8 +66,9 @@ public:     // python
         namespace py = pybind11;
 
         using Type = Brep;
+        using Holder = Pointer<Brep>;
 
-        py::class_<Type>(m, "Brep")
+        py::class_<Type, Holder>(m, "Brep")
             .def("nb_faces", &Type::nb_faces)
             .def("face", &Type::face, "index"_a)
             .def("faces", &Type::faces)
