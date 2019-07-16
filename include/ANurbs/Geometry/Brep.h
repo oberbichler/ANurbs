@@ -13,6 +13,11 @@
 
 namespace ANurbs {
 
+class BrepFace;
+class BrepLoop;
+class BrepTrim;
+class BrepEdge;
+
 class Brep
 {
 private:
