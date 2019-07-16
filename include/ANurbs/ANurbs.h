@@ -19,6 +19,7 @@
 #include "Geometry/Brep.h"
 #include "Geometry/BrepEdge.h"
 #include "Geometry/BrepFace.h"
+#include "Geometry/BrepFaceField.h"
 #include "Geometry/BrepLoop.h"
 #include "Geometry/BrepTrim.h"
 #include "Geometry/Curve.h"

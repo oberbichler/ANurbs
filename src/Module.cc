@@ -122,6 +122,14 @@ PYBIND11_MODULE(ANurbs, m) {
         BrepFace::register_python(m, model);
     }
 
+    { // BrepFaceField
+        BrepFaceField<1>::register_python(m, model);
+        BrepFaceField<2>::register_python(m, model);
+        BrepFaceField<3>::register_python(m, model);
+        BrepFaceField<4>::register_python(m, model);
+        BrepFaceField<5>::register_python(m, model);
+    }
+
     { // BrepLoop
         BrepLoop::register_python(m, model);
     }
