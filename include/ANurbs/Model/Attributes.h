@@ -90,6 +90,9 @@ public:     // serialization
         m_tags = source.value("Tags", std::set<std::string>());
         m_userStrings = source.value("UserStrings",
             std::map<std::string, std::string>());
+        m_layer = source.value("Layer", "");
+        m_color = source.value("Color", "");
+        m_arrowhead = source.value("Arrowhead", "");
     }
 
     template <typename TModel, typename TTarget>
@@ -101,6 +104,18 @@ public:     // serialization
 
         if (m_userStrings.size() != 0) {
             target["UserStrings"] = m_userStrings;
+        }
+
+        if (!m_layer.empty()) {
+            target["Layer"] = m_layer;
+        }
+        
+        if (!m_color.empty()) {
+            target["Color"] = m_color;
+        }
+        
+        if (!m_arrowhead.empty()) {
+            target["Arrowhead"] = m_arrowhead;
         }
     }
 
