@@ -187,8 +187,8 @@ private:    // static methods
             return {t1, b};
         }
 
-        double t = t0 + (t1 - t0) * do2ptr / l;
-        Vector closestPoint = o + r * do2ptr;
+        double t = t0 + (t1 - t0) * do2ptr;
+        Vector closestPoint = o + dif * do2ptr;
 
         return {t, closestPoint};
     }
