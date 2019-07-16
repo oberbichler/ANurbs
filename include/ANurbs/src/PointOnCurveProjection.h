@@ -215,8 +215,8 @@ private:
             return {t1, b};
         }
 
-        ScalarType t = t0 + (t1 - t0) * do2ptr / l;
-        VectorType closestPoint = o + r * do2ptr;
+        ScalarType t = t0 + (t1 - t0) * do2ptr;
+        VectorType closestPoint = o + dif * do2ptr;
 
         return {t, closestPoint};
     }
