@@ -37,7 +37,7 @@ struct TypeEntry : public TypeEntryBase<TModel>
             ref = model.template add<TData>(key, data);
         }
 
-        // ref.Attributes()->load(model, source);
+        ref.attributes()->load(model, source);
 
         return true;
     };
@@ -51,7 +51,7 @@ struct TypeEntry : public TypeEntryBase<TModel>
         }
 
         TData::save(model, *entry, target);
-        // entry.Attributes()->save(model, target);
+        entry.attributes()->save(model, target);
 
         return true;
     };
