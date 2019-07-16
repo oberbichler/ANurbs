@@ -58,6 +58,16 @@ public:     // methods
     }
 
     template <typename TData>
+    Ref<TData> add(Pointer<TData> data, const std::string& attributes)
+    {
+        const auto ref = add(data);
+
+        ref.attributes()->load(*this, Json::parse(attributes));
+
+        return ref;
+    }
+
+    template <typename TData>
     Ref<TData> add(const std::string& key, Pointer<TData> data)
     {
         if (key.empty()) {

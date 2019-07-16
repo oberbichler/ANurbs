@@ -66,6 +66,12 @@ struct PythonDataType : public PythonDataTypeBase<TModel>
         return self.template add<TData>(data);
     }
 
+    static Ref<TData> add_with_attributes(TModel& self, Pointer<TData> data,
+        const std::string& attributes)
+    {
+        return self.template add<TData>(data, attributes);
+    }
+
     static Ref<TData> add_with_key(TModel& self, const std::string& key,
         Pointer<TData> data)
     {
