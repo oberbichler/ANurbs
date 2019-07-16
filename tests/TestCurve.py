@@ -32,7 +32,10 @@ class TestCurve(unittest.TestCase):
         curve_geometry.set_pole(6, [- 5, - 5, - 3])
         curve_geometry.set_pole(7, [-25,  15,   4])
 
-        curve = an.Curve3D(curve_geometry, curve_geometry.domain)
+        model = an.Model()
+        curve_geometry_ptr = model.add(curve_geometry)
+
+        curve = an.Curve3D(curve_geometry_ptr, curve_geometry.domain)
 
         # point_at
 

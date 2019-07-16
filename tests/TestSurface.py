@@ -36,7 +36,10 @@ class TestNurbsSurfaceGeometry(unittest.TestCase):
         surface_geometry.set_pole(3, 1, [  5.0,   4.0, -1.0         ])
         surface_geometry.set_pole(3, 2, [  5.0,  11.0,  0.7649815786])
 
-        surface = an.Surface3D(surface_geometry)
+        model = an.Model()
+        surface_geometry_ptr = model.add(surface_geometry)
+
+        surface = an.Surface3D(surface_geometry_ptr)
 
         # point_at
 
