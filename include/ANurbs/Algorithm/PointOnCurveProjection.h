@@ -167,17 +167,17 @@ private:    // static methods
     static ParameterPoint project_to_line(const Vector& point, const Vector& a,
         const Vector& b, const double& t0, const double& t1)
     {
-        Vector dif = b - a;
-        double l = squared_norm(dif);
+        const Vector dif = b - a;
+        const double l = squared_norm(dif);
 
         if (l < 1e-14) {
             return {t0, a};
         }
 
-        Vector o = a;
-        Vector r = dif * (1.0 / l);
-        Vector o2pt = point - o;
-        double do2ptr = dot(o2pt, r);
+        const Vector o = a;
+        const Vector r = dif * (1.0 / l);
+        const Vector o2pt = point - o;
+        const double do2ptr = dot(o2pt, r);
 
         if (do2ptr < 0) {
             return {t0, a};
@@ -187,8 +187,8 @@ private:    // static methods
             return {t1, b};
         }
 
-        double t = t0 + (t1 - t0) * do2ptr;
-        Vector closestPoint = o + dif * do2ptr;
+        const double t = t0 + (t1 - t0) * do2ptr;
+        const Vector closestPoint = o + dif * do2ptr;
 
         return {t, closestPoint};
     }
