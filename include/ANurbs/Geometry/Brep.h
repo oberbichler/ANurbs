@@ -20,143 +20,43 @@ class BrepEdge;
 
 class Brep
 {
-private:
+private:    // variables
     std::vector<Ref<BrepFace>> m_faces;
     std::vector<Ref<BrepLoop>> m_loops;
     std::vector<Ref<BrepTrim>> m_trims;
     std::vector<Ref<BrepEdge>> m_edges;
 
-public:
-    size_t nb_faces() const
-    {
-        return m_faces.size();
-    }
+public:     // methods
+    size_t nb_faces() const;
 
-    Ref<BrepFace> face(size_t index) const
-    {
-        return m_faces[index];
-    }
+    Ref<BrepFace> face(size_t index) const;
 
-    std::vector<Ref<BrepFace>> faces()
-    {
-        return m_faces;
-    }
+    std::vector<Ref<BrepFace>> faces();
 
-    size_t nb_loops() const
-    {
-        return m_loops.size();
-    }
+    size_t nb_loops() const;
 
-    Ref<BrepLoop> loop(size_t index) const
-    {
-        return m_loops[index];
-    }
+    Ref<BrepLoop> loop(size_t index) const;
 
-    std::vector<Ref<BrepLoop>> loops()
-    {
-        return m_loops;
-    }
+    std::vector<Ref<BrepLoop>> loops();
 
-    size_t nb_trims() const
-    {
-        return m_trims.size();
-    }
+    size_t nb_trims() const;
 
-    Ref<BrepTrim> trim(size_t index) const
-    {
-        return m_trims[index];
-    }
+    Ref<BrepTrim> trim(size_t index) const;
 
-    std::vector<Ref<BrepTrim>> trims()
-    {
-        return m_trims;
-    }
+    std::vector<Ref<BrepTrim>> trims();
 
-    size_t nb_edges() const
-    {
-        return m_edges.size();
-    }
+    size_t nb_edges() const;
 
-    Ref<BrepEdge> edge(size_t index) const
-    {
-        return m_edges[index];
-    }
+    Ref<BrepEdge> edge(size_t index) const;
 
-    std::vector<Ref<BrepEdge>> edges()
-    {
-        return m_edges;
-    }
+    std::vector<Ref<BrepEdge>> edges();
 
 public:     // serialization
-    using Attributes = CadAttributes;
+    static std::string type_name();
 
-    static std::string type_name()
-    {
-        return "Brep";
-    }
+    static Unique<Brep> load(Model& model, const Json& data);
 
-    static Unique<Brep> load(Model& model, const Json& data)
-    {
-        auto result = new_<Brep>();
-
-        // Read faces
-        {
-            const auto faces = data.at("Faces");
-
-            result->m_faces.resize(faces.size());
-
-            for (size_t i = 0; i < faces.size(); i++) {
-                const std::string key = faces[i];
-                result->m_faces[i] = model.get_lazy<BrepFace>(key);
-            }
-        }
-
-        // Read loops
-        {
-            const auto loops = data.at("Loops");
-
-            result->m_loops.resize(loops.size());
-
-            for (size_t i = 0; i < loops.size(); i++) {
-                const std::string key = loops[i];
-                result->m_loops[i] = model.get_lazy<BrepLoop>(key);
-            }
-        }
-
-        // Read trims
-        {
-            const auto trims = data.at("Trims");
-
-            result->m_trims.resize(trims.size());
-
-            for (size_t i = 0; i < trims.size(); i++) {
-                const std::string key = trims[i];
-                result->m_trims[i] = model.get_lazy<BrepTrim>(key);
-            }
-        }
-
-        // Read edges
-        {
-            const auto edges = data.at("Edges");
-
-            result->m_edges.resize(edges.size());
-
-            for (size_t i = 0; i < edges.size(); i++) {
-                const std::string key = edges[i];
-                result->m_edges[i] = model.get_lazy<BrepEdge>(key);
-            }
-        }
-
-        return result;
-    }
-
-    static void save(const Model& model, const Brep& data, Json& target)
-    {
-        target["Faces"] = ToJson(data.m_faces);
-        target["Loops"] = ToJson(data.m_loops);
-        target["Trims"] = ToJson(data.m_trims);
-        target["Edges"] = ToJson(data.m_edges);
-    }
+    static void save(const Model& model, const Brep& data, Json& target);
 
 public:     // python
     template <typename TModel>
