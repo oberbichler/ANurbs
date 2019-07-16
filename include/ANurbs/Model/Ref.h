@@ -40,7 +40,6 @@ public:
         return m_entry->data();
     }
 
-    // FIXME:
     Pointer<Attributes> attributes() const
     {
         return m_entry->attributes();
