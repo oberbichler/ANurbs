@@ -324,7 +324,7 @@ public:
     /// Constructs a new exception from the current Python error indicator, if any.  The current
     /// Python error indicator will be cleared.
     error_already_set() : std::runtime_error(detail::error_string()) {
-        PyErr_Fetch(&type.ptr(), &value.ptr(), &trace.ptr());
+        PyErr_Fetch(&m_type.ptr(), &m_value.ptr(), &m_trace.ptr());
     }
 
     error_already_set(const error_already_set &) = default;
@@ -335,7 +335,7 @@ public:
     /// Give the currently-held error back to Python, if any.  If there is currently a Python error
     /// already set it is cleared first.  After this call, the current object no longer stores the
     /// error variables (but the `.what()` string is still available).
-    void restore() { PyErr_Restore(type.release().ptr(), value.release().ptr(), trace.release().ptr()); }
+    void restore() { PyErr_Restore(m_type.release().ptr(), m_value.release().ptr(), m_trace.release().ptr()); }
 
     // Does nothing; provided for backwards compatibility.
     PYBIND11_DEPRECATED("Use of error_already_set.clear() is deprecated")
@@ -344,10 +344,14 @@ public:
     /// Check if the currently trapped error type matches the given Python exception class (or a
     /// subclass thereof).  May also be passed a tuple to search for any exception class matches in
     /// the given tuple.
-    bool matches(handle ex) const { return PyErr_GivenExceptionMatches(ex.ptr(), type.ptr()); }
+    bool matches(handle exc) const { return PyErr_GivenExceptionMatches(m_type.ptr(), exc.ptr()); }
+
+    const object& type() const { return m_type; }
+    const object& value() const { return m_value; }
+    const object& trace() const { return m_trace; }
 
 private:
-    object type, value, trace;
+    object m_type, m_value, m_trace;
 };
 
 /** \defgroup python_builtins _
@@ -386,6 +390,14 @@ inline bool hasattr(handle obj, handle name) {
 
 inline bool hasattr(handle obj, const char *name) {
     return PyObject_HasAttrString(obj.ptr(), name) == 1;
+}
+
+inline void delattr(handle obj, handle name) {
+    if (PyObject_DelAttr(obj.ptr(), name.ptr()) != 0) { throw error_already_set(); }
+}
+
+inline void delattr(handle obj, const char *name) {
+    if (PyObject_DelAttrString(obj.ptr(), name) != 0) { throw error_already_set(); }
 }
 
 inline object getattr(handle obj, handle name) {
@@ -458,7 +470,6 @@ template <typename T, enable_if_t<!is_pyobject<T>::value, int> = 0>
 object object_or_cast(T &&o);
 // Match a PyObject*, which we want to convert directly to handle via its converting constructor
 inline handle object_or_cast(PyObject *ptr) { return ptr; }
-
 
 template <typename Policy>
 class accessor : public object_api<accessor<Policy>> {
@@ -697,7 +708,7 @@ protected:
 
 private:
     handle obj;
-    PyObject *key, *value;
+    PyObject *key = nullptr, *value = nullptr;
     ssize_t pos = -1;
 };
 NAMESPACE_END(iterator_policies)
@@ -730,6 +741,8 @@ inline bool PyEllipsis_Check(PyObject *o) { return o == Py_Ellipsis; }
 #endif
 
 inline bool PyUnicode_Check_Permissive(PyObject *o) { return PyUnicode_Check(o) || PYBIND11_BYTES_CHECK(o); }
+
+inline bool PyStaticMethod_Check(PyObject *o) { return o->ob_type == &PyStaticMethod_Type; }
 
 class kwargs_proxy : public handle {
 public:
@@ -1120,6 +1133,13 @@ public:
                                     (ssize_t *) stop, (ssize_t *) step,
                                     (ssize_t *) slicelength) == 0;
     }
+    bool compute(ssize_t length, ssize_t *start, ssize_t *stop, ssize_t *step,
+      ssize_t *slicelength) const {
+      return PySlice_GetIndicesEx((PYBIND11_SLICE_OBJECT *) m_ptr,
+          length, start,
+          stop, step,
+          slicelength) == 0;
+    }
 };
 
 class capsule : public object {
@@ -1270,6 +1290,11 @@ public:
     bool is_cpp_function() const { return (bool) cpp_function(); }
 };
 
+class staticmethod : public object {
+public:
+    PYBIND11_OBJECT_CVT(staticmethod, object, detail::PyStaticMethod_Check, PyStaticMethod_New)
+};
+
 class buffer : public object {
 public:
     PYBIND11_OBJECT_DEFAULT(buffer, object, PyObject_CheckBuffer)
@@ -1325,6 +1350,21 @@ inline size_t len(handle h) {
     ssize_t result = PyObject_Length(h.ptr());
     if (result < 0)
         pybind11_fail("Unable to compute length of object");
+    return (size_t) result;
+}
+
+inline size_t len_hint(handle h) {
+#if PY_VERSION_HEX >= 0x03040000
+    ssize_t result = PyObject_LengthHint(h.ptr(), 0);
+#else
+    ssize_t result = PyObject_Length(h.ptr());
+#endif
+    if (result < 0) {
+        // Sometimes a length can't be determined at all (eg generators)
+        // In which case simply return 0
+        PyErr_Clear();
+        return 0;
+    }
     return (size_t) result;
 }
 

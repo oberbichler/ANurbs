@@ -59,6 +59,7 @@ set(PYBIND11_TEST_FILES
   test_stl.cpp
   test_stl_binders.cpp
   test_tagbased_polymorphic.cpp
+  test_union.cpp
   test_virtual_functions.cpp
 )
 
@@ -125,14 +126,14 @@ find_package(Boost 1.56)
 function(pybind11_enable_warnings target_name)
   if(MSVC)
     target_compile_options(${target_name} PRIVATE /W4)
-  else()
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Intel|Clang)")
       target_compile_options(${target_name} PRIVATE -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated)
   endif()
 
   if(PYBIND11_WERROR)
     if(MSVC)
       target_compile_options(${target_name} PRIVATE /WX)
-    else()
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Intel|Clang)")
       target_compile_options(${target_name} PRIVATE -Werror)
     endif()
   endif()
