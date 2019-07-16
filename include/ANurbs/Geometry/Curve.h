@@ -6,7 +6,6 @@
 #include "Interval.h"
 #include "NurbsCurveGeometry.h"
 
-#include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -89,8 +88,6 @@ public:     // methods
     }
 
 public:     // serialization
-    using Attributes = CadAttributes;
-
     static std::string type_name()
     {
         return "Curve" + std::to_string(dimension()) + "D";

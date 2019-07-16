@@ -1,10 +1,9 @@
 #pragma once
 
-#include "BrepTrim.h"
-
-#include "BrepEdge.h"
+#include "Brep.h"
 #include "BrepFace.h"
 #include "BrepLoop.h"
+#include "BrepEdge.h"
 #include "Curve.h"
 #include "CurveOnSurface.h"
 #include "NurbsCurveGeometry.h"
@@ -50,54 +49,11 @@ public:
     Ref<NurbsSurfaceGeometry<3>> surface_geometry() const;
 
 public:     // serialization
-    using Attributes = Attributes;
+    static std::string type_name();
 
-    static std::string type_name()
-    {
-        return "BrepTrim";
-    }
+    static Unique<BrepTrim> load(Model& model, const Json& data);
 
-    static Unique<BrepTrim> load(Model& model, const Json& data)
-    {
-        auto result = new_<BrepTrim>();
-
-        // Read Loop
-        {
-            const std::string key = data.at("Loop");
-            result->m_loop = model.get_lazy<BrepLoop>(key);
-        }
-
-        // Read Edge
-        if (data.find("Edge") != data.end()) {
-            const std::string key = data.at("Edge");
-            result->m_edge = model.get_lazy<BrepEdge>(key);
-        }
-
-        // Read Geometry
-        {
-            const std::string key = data.at("Geometry");
-            result->m_curve_geometry = model.get_lazy<NurbsCurveGeometry<2>>(key);
-        }
-
-        // Read Domain
-        if (data.find("Domain") != data.end()) {
-            result->m_domain = data.at("Domain");
-        } else {
-            result->m_domain = result->m_curve_geometry->domain();
-        }
-
-        return result;
-    }
-
-    static void save(const Model& model, const BrepTrim& data, Json& target)
-    {
-        target["Loop"] = ToJson(data.m_loop);
-        if (!data.m_edge.is_empty()) {
-            target["Edge"] = ToJson(data.m_edge);
-        }
-        target["Geometry"] = ToJson(data.m_curve_geometry);
-        target["Domain"] = ToJson(data.m_domain);
-    }
+    static void save(const Model& model, const BrepTrim& data, Json& target);
 
 public:     // python
     template <typename TModel>

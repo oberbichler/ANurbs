@@ -2,7 +2,6 @@
 
 #include "../Define.h"
 
-#include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -58,8 +57,6 @@ public:     // constructors
     }
 
 public:     // serialization
-    using Attributes = CadAttributes;
-
     static std::string type_name()
     {
         return "Point" + std::to_string(TDimension) + "D";

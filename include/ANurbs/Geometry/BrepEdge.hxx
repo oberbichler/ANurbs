@@ -45,4 +45,35 @@ std::vector<Ref<BrepLoop>> BrepEdge::loops() const
     return result;
 }
 
+// serialization
+
+std::string BrepEdge::type_name()
+{
+    return "BrepEdge";
+}
+
+Unique<BrepEdge> BrepEdge::load(Model& model, const Json& data)
+{
+    auto result = new_<BrepEdge>();
+
+    // Read trims
+    {
+        const auto trims = data.at("Trims");
+
+        result->m_trims.resize(trims.size());
+
+        for (size_t i = 0; i < trims.size(); i++) {
+            const std::string key = trims[i];
+            result->m_trims[i] = model.get_lazy<BrepTrim>(key);
+        }
+    }
+
+    return result;
+}
+
+void BrepEdge::save(const Model& model, const BrepEdge& data, Json& target)
+{
+    target["Trims"] = ToJson(data.m_trims);
+}
+
 } // namespace ANurbs

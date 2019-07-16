@@ -7,7 +7,6 @@
 #include "../Algorithm/Nurbs.h"
 #include "../Algorithm/NurbsSurfaceShapeFunction.h"
 
-#include "../Model/CadAttributes.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -476,8 +475,6 @@ public:     // methods
     }
 
 public:     // serialization
-    using Attributes = Attributes;
-
     static std::string type_name()
     {
         return "NurbsSurfaceGeometry" + std::to_string(dimension()) + "D";

@@ -14,7 +14,7 @@ class Model;
 
 class EntryBase
 {
-public:
+public:     // methods
     virtual std::string key() const = 0;
 
     virtual std::string type_name() const = 0;
@@ -27,13 +27,12 @@ public:
 template <typename TData>
 class Entry : public EntryBase
 {
-    using Attributes = typename TData::Attributes;
-
+private:    // variables
     std::string m_key;
     std::shared_ptr<TData> m_data;
     std::shared_ptr<Attributes> m_attributes;
 
-public:
+public:     // constructors
     Entry(std::shared_ptr<TData> data, std::shared_ptr<Attributes> attributes)
         : m_data(data), m_attributes(attributes)
     {
@@ -45,6 +44,7 @@ public:
     {
     }
 
+public:     // methods
     std::shared_ptr<TData> data() const
     {
         return m_data;

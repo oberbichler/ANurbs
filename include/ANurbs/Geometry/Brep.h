@@ -1,9 +1,9 @@
 #pragma once
 
+#include "BrepEdge.h"
 #include "BrepFace.h"
 #include "BrepLoop.h"
 #include "BrepTrim.h"
-#include "BrepEdge.h"
 
 #include "../Model/Json.h"
 #include "../Model/Model.h"

@@ -46,4 +46,42 @@ std::vector<Ref<BrepEdge>> BrepLoop::edges() const
     return result;
 }
 
+// serialization
+
+std::string BrepLoop::type_name()
+{
+    return "BrepLoop";
+}
+
+Unique<BrepLoop> BrepLoop::load(Model& model, const Json& data)
+{
+    auto result = new_<BrepLoop>();
+
+    // Read Face
+    {
+        const std::string key = data.at("Face");
+        result->m_face = model.get_lazy<BrepFace>(key);
+    }
+
+    // Read trims
+    {
+        const auto trims = data.at("Trims");
+
+        result->m_trims.resize(trims.size());
+
+        for (size_t i = 0; i < trims.size(); i++) {
+            const std::string key = trims[i];
+            result->m_trims[i] = model.get_lazy<BrepTrim>(key);
+        }
+    }
+
+    return result;
+}
+
+void BrepLoop::save(const Model& model, const BrepLoop& data, Json& target)
+{
+    target["Face"] = ToJson(data.m_face);
+    target["Trims"] = ToJson(data.m_trims);
+}
+
 } // namespace ANurbs

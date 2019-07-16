@@ -2,7 +2,7 @@
 
 #include "../Define.h"
 
-#include "../Model/CadAttributes.h"
+#include "../Model/Attributes.h"
 
 #include <vector>
 

@@ -1,13 +1,14 @@
 #pragma once
 
-#include "BrepEdge.h"
+#include "Brep.h"
 #include "BrepLoop.h"
 #include "BrepTrim.h"
+#include "BrepEdge.h"
 #include "NurbsSurfaceGeometry.h"
 
 #include "../Model/Json.h"
-#include "../Model/Ref.h"
 #include "../Model/Model.h"
+#include "../Model/Ref.h"
 
 #include <vector>
 
@@ -41,50 +42,11 @@ public:
     Ref<NurbsSurfaceGeometry<3>> surface_geometry() const;
 
 public:     // serialization
-    using Attributes = Attributes;
+    static std::string type_name();
 
-    static std::string type_name()
-    {
-        return "BrepFace";
-    }
+    static Unique<BrepFace> load(Model& model, const Json& data);
 
-    static Unique<BrepFace> load(Model& model, const Json& data)
-    {
-        auto result = new_<BrepFace>();
-
-        // Read Brep
-        {
-            const std::string key = data.at("Brep");
-            result->m_brep = model.get_lazy<ANurbs::Brep>(key);
-        }
-
-        // Read loops
-        {
-            const auto loops = data.at("Loops");
-
-            result->m_loops.resize(loops.size());
-
-            for (size_t i = 0; i < loops.size(); i++) {
-                const std::string key = loops[i];
-                result->m_loops[i] = model.get_lazy<BrepLoop>(key);
-            }
-        }
-
-        // Read Geometry
-        {
-            const std::string key = data.at("Geometry");
-            result->m_geometry = model.get_lazy<NurbsSurfaceGeometry<3>>(key);
-        }
-
-        return result;
-    }
-
-    static void save(const Model& model, const BrepFace& data, Json& target)
-    {
-        target["Brep"] = ToJson(data.m_brep);
-        target["Loops"] = ToJson(data.m_loops);
-        target["Geometry"] = ToJson(data.m_geometry);
-    }
+    static void save(const Model& model, const BrepFace& data, Json& target);
 
 public:     // python
     template <typename TModel>

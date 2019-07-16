@@ -2,6 +2,7 @@
 
 #include "../Define.h"
 
+#include "Brep.h"
 #include "BrepFace.h"
 #include "BrepLoop.h"
 #include "BrepTrim.h"
@@ -36,36 +37,11 @@ public:     // methods
     std::vector<Ref<BrepTrim>> trims() const;
 
 public:     // serialization
-    using Attributes = Attributes;
+    static std::string type_name();
 
-    static std::string type_name()
-    {
-        return "BrepEdge";
-    }
+    static Unique<BrepEdge> load(Model& model, const Json& data);
 
-    static Unique<BrepEdge> load(Model& model, const Json& data)
-    {
-        auto result = new_<BrepEdge>();
-
-        // Read trims
-        {
-            const auto trims = data.at("Trims");
-
-            result->m_trims.resize(trims.size());
-
-            for (size_t i = 0; i < trims.size(); i++) {
-                const std::string key = trims[i];
-                result->m_trims[i] = model.get_lazy<BrepTrim>(key);
-            }
-        }
-
-        return result;
-    }
-
-    static void save(const Model& model, const BrepEdge& data, Json& target)
-    {
-        target["Trims"] = ToJson(data.m_trims);
-    }
+    static void save(const Model& model, const BrepEdge& data, Json& target);
 
 public:     // python
     template <typename TModel>

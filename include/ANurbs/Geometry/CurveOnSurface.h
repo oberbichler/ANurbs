@@ -123,7 +123,7 @@ public:     // methods
         const auto intersection =
             CurveSpanIntersection::compute(curve, knots_u, knots_v, 1e-4, true);
 
-        const int nb_spans = intersection.size() - 1;
+        const int nb_spans = static_cast<int>(intersection.size() - 1);
 
         std::vector<Interval> result(nb_spans);
 

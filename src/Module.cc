@@ -18,6 +18,10 @@ PYBIND11_MODULE(ANurbs, m) {
 
     auto model = Model::register_python(m);
 
+    { // Attributes
+        Attributes::register_python(m);
+    }
+
 
     // --- Algorithm
 
@@ -164,15 +168,4 @@ PYBIND11_MODULE(ANurbs, m) {
     }
 
     m.def("test", [](Pointer<Line<3>> line) {return line;});
-
-
-    // --- Model
-
-    { // Attributes
-        Attributes::register_python(m);
-    }
-
-    { // CadAttributes
-        CadAttributes::register_python(m);
-    }
 }

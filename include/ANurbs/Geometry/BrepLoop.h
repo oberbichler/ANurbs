@@ -1,8 +1,9 @@
 #pragma once
 
-#include "BrepEdge.h"
+#include "Brep.h"
 #include "BrepFace.h"
 #include "BrepTrim.h"
+#include "BrepEdge.h"
 
 #include "../Model/Json.h"
 #include "../Model/Ref.h"
@@ -37,43 +38,11 @@ public:
     std::vector<Ref<BrepEdge>> edges() const;
 
 public:     // serialization
-    using Attributes = Attributes;
+    static std::string type_name();
 
-    static std::string type_name()
-    {
-        return "BrepLoop";
-    }
+    static Unique<BrepLoop> load(Model& model, const Json& data);
 
-    static Unique<BrepLoop> load(Model& model, const Json& data)
-    {
-        auto result = new_<BrepLoop>();
-
-        // Read Face
-        {
-            const std::string key = data.at("Face");
-            result->m_face = model.get_lazy<BrepFace>(key);
-        }
-
-        // Read trims
-        {
-            const auto trims = data.at("Trims");
-
-            result->m_trims.resize(trims.size());
-
-            for (size_t i = 0; i < trims.size(); i++) {
-                const std::string key = trims[i];
-                result->m_trims[i] = model.get_lazy<BrepTrim>(key);
-            }
-        }
-
-        return result;
-    }
-
-    static void save(const Model& model, const BrepLoop& data, Json& target)
-    {
-        target["Face"] = ToJson(data.m_face);
-        target["Trims"] = ToJson(data.m_trims);
-    }
+    static void save(const Model& model, const BrepLoop& data, Json& target);
 
 public:     // python
     template <typename TModel>
