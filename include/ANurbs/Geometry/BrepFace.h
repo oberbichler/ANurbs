@@ -58,7 +58,9 @@ public:     // python
         using Type = BrepFace;
         using Holder = Pointer<Type>;
 
-        py::class_<Type, Holder>(m, "BrepFace")
+        const std::string name = Type::type_name();
+
+        py::class_<Type, Holder>(m, name.c_str())
             // read-only properties
             .def_property_readonly("brep", &Type::brep)
             .def_property_readonly("edges", &Type::edges)

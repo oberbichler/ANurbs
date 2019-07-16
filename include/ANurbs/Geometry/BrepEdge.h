@@ -53,7 +53,9 @@ public:     // python
         using Type = BrepEdge;
         using Holder = Pointer<Type>;
 
-        py::class_<Type, Holder>(m, "BrepEdge")
+        const std::string name = Type::type_name();
+
+        py::class_<Type, Holder>(m, name.c_str())
             // read-only properties
             .def_property_readonly("faces", &Type::faces)
             .def_property_readonly("loops", &Type::loops)

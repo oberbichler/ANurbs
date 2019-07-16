@@ -65,7 +65,9 @@ public:     // python
         using Type = BrepTrim;
         using Holder = Pointer<Type>;
 
-        py::class_<Type, Holder>(m, "BrepTrim")
+        const std::string name = Type::type_name();
+
+        py::class_<Type, Holder>(m, name.c_str())
             // read-only properties
             .def_property_readonly("brep", &Type::brep)
             .def_property_readonly("curve_2d", &Type::curve_2d)
