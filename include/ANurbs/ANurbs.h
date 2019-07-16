@@ -34,6 +34,7 @@
 #include "Geometry/Surface.h"
 #include "Geometry/SurfaceBase.h"
 
+#include "Geometry/Brep.hxx"
 #include "Geometry/BrepEdge.hxx"
 #include "Geometry/BrepFace.hxx"
 #include "Geometry/BrepLoop.hxx"
