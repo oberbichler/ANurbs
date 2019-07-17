@@ -94,9 +94,17 @@ public:     // methods
         return value(order, pole);
     }
 
+    double& value(const int order, const int pole)
+    {
+        const int index = Math::single_index(nb_shapes(), nb_nonzero_poles(),
+            order, pole);
+
+        return m_values[index];
+    }
+
     double value(const int order, const int pole) const
     {
-        int index = Math::single_index(nb_shapes(), nb_nonzero_poles(),
+        const int index = Math::single_index(nb_shapes(), nb_nonzero_poles(),
             order, pole);
 
         return m_values[index];
@@ -205,23 +213,37 @@ public:     // methods
     void compute_at_span(const TKnots& knots, const int span,
         const TWeights& weights, const double t)
     {
+        using Math::binom;
+
         // compute B-Spline shape
 
         compute_at_span(knots, span, t);
 
         // compute weighted sum
 
-        double weightedSum {0};
+        std::vector<double> weighted_sums(nb_shapes());
 
-        for (int i = 0; i < nb_nonzero_poles(); i++) {
-            m_values[i] *= weights(i);
-            weightedSum += m_values[i];
+        for (int k = 0; k < nb_shapes(); k++) {
+            weighted_sums[k] = 0;
+
+            for (int i = 0; i < nb_nonzero_poles(); i++) {
+                value(k, i) *= weights(m_first_nonzero_pole + i);
+                weighted_sums[k] += value(k, i);
+            }
         }
 
-        // apply weights
+        for (int k = 0; k < nb_shapes(); k++) {
+            for (int i = 1; i <= k; i++) {
+                const double a = binom(k, i) * weighted_sums[i];
 
-        for (int i = 0; i < nb_nonzero_poles(); i++) {
-            m_values[i] /= weightedSum;
+                for (int p = 0; p < nb_nonzero_poles(); p++) {
+                    value(k, p) -= a * value(k - i, p);
+                }
+            }
+
+            for (int p = 0; p < nb_nonzero_poles(); p++) {
+                value(k, p) /= weighted_sums[0];
+            }
         }
     }
 
