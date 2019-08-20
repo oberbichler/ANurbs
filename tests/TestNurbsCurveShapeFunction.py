@@ -62,8 +62,8 @@ class TestNurbsCurveShapeFunction(unittest.TestCase):
         assert_array_almost_equal(
             shape_functions,
             [[ 0.20,  0.60,  0.20],
-             [-0.50,  0.00,  0.50],
-             [ 0.50, -1.00,  0.50]]
+             [-0.40,  0.00,  0.40],
+             [ 0.48, -0.96,  0.48]]
         )
 
     def test_line_2d(self):
