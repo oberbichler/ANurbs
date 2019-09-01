@@ -12,7 +12,7 @@
 
 namespace ANurbs {
 
-template <int TDimension, typename TRef=Ref<NurbsSurfaceGeometry<TDimension>>>
+template <Index TDimension, typename TRef=Ref<NurbsSurfaceGeometry<TDimension>>>
 class Surface : public SurfaceBase<TDimension>
 {
 public:     // types
@@ -46,12 +46,12 @@ public:     // methods
         return m_surface_geometry;
     }
 
-    int degree_u() const override
+    Index degree_u() const override
     {
         return m_surface_geometry->degree_u();
     }
 
-    int degree_v() const override
+    Index degree_v() const override
     {
         return m_surface_geometry->degree_v();
     }
@@ -72,7 +72,7 @@ public:     // methods
     }
 
     std::vector<Vector> derivatives_at(const double u, const double v,
-        const int order) const override
+        const Index order) const override
     {
         return m_surface_geometry->derivatives_at(u, v, order);
     }
@@ -81,14 +81,14 @@ public:     // methods
     {
         auto knots = m_surface_geometry->knots_u();
 
-        int first_span = Nurbs::upper_span(degree_u(), knots, domain_u().t0());
-        int last_span = Nurbs::lower_span(degree_u(), knots, domain_u().t1());
+        Index first_span = Nurbs::upper_span(degree_u(), knots, domain_u().t0());
+        Index last_span = Nurbs::lower_span(degree_u(), knots, domain_u().t1());
 
-        int nb_spans = last_span - first_span + 1;
+        Index nb_spans = last_span - first_span + 1;
 
         std::vector<Interval> result(nb_spans);
 
-        for (int i = 0; i < nb_spans; i++) {
+        for (Index i = 0; i < nb_spans; i++) {
             double u0 = surface_geometry()->knot_u(first_span + i);
             double u1 = surface_geometry()->knot_u(first_span + i + 1);
 
@@ -102,14 +102,14 @@ public:     // methods
     {
         auto knots = m_surface_geometry->knots_v();
 
-        int first_span = Nurbs::upper_span(degree_v(), knots, domain_v().t0());
-        int last_span = Nurbs::lower_span(degree_v(), knots, domain_v().t1());
+        Index first_span = Nurbs::upper_span(degree_v(), knots, domain_v().t0());
+        Index last_span = Nurbs::lower_span(degree_v(), knots, domain_v().t1());
 
-        int nb_spans = last_span - first_span + 1;
+        Index nb_spans = last_span - first_span + 1;
 
         std::vector<Interval> result(nb_spans);
 
-        for (int i = 0; i < nb_spans; i++) {
+        for (Index i = 0; i < nb_spans; i++) {
             double v0 = surface_geometry()->knot_v(first_span + i);
             double v1 = surface_geometry()->knot_v(first_span + i + 1);
 

@@ -12,7 +12,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 class PointOnCurveProjection
 {
 public:     // types
@@ -85,7 +85,7 @@ public:     // methods
 
         double closest_sqr_distance = std::numeric_limits<double>::max();
 
-        for (int i = 1; i < m_tessellation.size(); i++) {
+        for (Index i = 1; i < m_tessellation.size(); i++) {
             const auto [t0, point0] = m_tessellation[i - 1];
             const auto [t1, point1] = m_tessellation[i];
 
@@ -105,11 +105,11 @@ public:     // methods
 
         // newton-raphson
 
-        const int max_iter = 5;
+        const Index max_iter = 5;
         const double eps1 = tolerance();
         const double eps2 = tolerance() * 5;
 
-        for (int i = 0; i < max_iter; i++) {
+        for (Index i = 0; i < max_iter; i++) {
             auto f = Curve()->derivatives_at(closestParameter, 2);
 
             Vector dif = f[0] - sample;

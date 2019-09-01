@@ -22,7 +22,7 @@ public:     // types
 private:    // types
     struct Axis
     {
-        int m_index;
+        Index m_index;
         std::vector<double> m_values;
         double m_tolerance;
 
@@ -31,7 +31,7 @@ private:    // types
             return point[m_index];
         }
 
-        void initialize(const int axis, const std::vector<double>& knots,
+        void initialize(const Index axis, const std::vector<double>& knots,
             double tolerance)
         {
             m_index = axis;
@@ -97,7 +97,7 @@ private:    // types
                     t += (value_a - target) / delta * (t_b - t_a);
                 }
 
-                for (int j = 0; j < 100; j++) {
+                for (Index j = 0; j < 100; j++) {
                     auto c = curve.derivatives_at(t, 1);
 
                     double f = value(c[0]) - target;
@@ -172,7 +172,7 @@ public:     // static methods
 
         // check line segments
 
-        for (int i = 1; i < tessellation.size(); i++) {
+        for (Index i = 1; i < tessellation.size(); i++) {
             const auto a = tessellation[i - 1];
             const auto b = tessellation[i];
 

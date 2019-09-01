@@ -14,7 +14,7 @@
 
 namespace ANurbs {
 
-template <int TDimension,
+template <Index TDimension,
     typename TRef = Pointer<NurbsCurveGeometry<TDimension>>>
 struct Curve : public CurveBase<TDimension>
 {
@@ -43,12 +43,12 @@ public:     // methods
         return m_curve_geometry;
     }
 
-    int degree() const override
+    Index degree() const override
     {
         return m_curve_geometry->degree();
     }
 
-    std::vector<Vector> derivatives_at(const double t, const int order)
+    std::vector<Vector> derivatives_at(const double t, const Index order)
         const override
     {
         return m_curve_geometry->derivatives_at(t, order);
@@ -68,16 +68,16 @@ public:     // methods
     {
         const auto knots = m_curve_geometry->knots();
 
-        const int first_span = Nurbs::upper_span(degree(), knots,
+        const Index first_span = Nurbs::upper_span(degree(), knots,
             domain().t0());
-        const int last_span = Nurbs::lower_span(degree(), knots,
+        const Index last_span = Nurbs::lower_span(degree(), knots,
             domain().t1());
 
-        const int nb_spans = last_span - first_span + 1;
+        const Index nb_spans = last_span - first_span + 1;
 
         std::vector<Interval> result(nb_spans);
 
-        for (int i = 0; i < nb_spans; i++) {
+        for (Index i = 0; i < nb_spans; i++) {
             double t0 = m_curve_geometry->knot(first_span + i);
             double t1 = m_curve_geometry->knot(first_span + i + 1);
 

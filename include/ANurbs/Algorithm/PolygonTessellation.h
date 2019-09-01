@@ -42,12 +42,12 @@ namespace ANurbs {
 class PolygonTessellation
 {
 public:     // types
-    using TriangleIndices = std::tuple<int, int, int>;
-    using QuadIndices = std::tuple<int, int, int, int>;
+    using TriangleIndices = std::tuple<Index, Index, Index>;
+    using QuadIndices = std::tuple<Index, Index, Index, Index>;
 
 private:    // variables
-    std::vector<int> m_triangles;
-    std::vector<int> m_quads;
+    std::vector<Index> m_triangles;
+    std::vector<Index> m_quads;
 
 public:     // constructors
     PolygonTessellation()
@@ -73,34 +73,34 @@ public:     // methods
 
         // FIXME: Check for quad
 
-        m_triangles = mapbox::earcut<int>(contours);
+        m_triangles = mapbox::earcut<Index>(contours);
     }
 
-    int nb_triangles() const
+    Index nb_triangles() const
     {
-        return static_cast<int>(m_triangles.size() / 3);
+        return static_cast<Index>(m_triangles.size() / 3);
     }
 
-    TriangleIndices triangle(int index) const
+    TriangleIndices triangle(Index index) const
     {
-        const int a = m_triangles.at(index * 3 + 0);
-        const int b = m_triangles.at(index * 3 + 1);
-        const int c = m_triangles.at(index * 3 + 2);
+        const Index a = m_triangles.at(index * 3 + 0);
+        const Index b = m_triangles.at(index * 3 + 1);
+        const Index c = m_triangles.at(index * 3 + 2);
 
         return {a, b, c};
     }
 
-    int nb_quads() const
+    Index nb_quads() const
     {
-        return static_cast<int>(m_quads.size() / 4);
+        return static_cast<Index>(m_quads.size() / 4);
     }
 
-    QuadIndices quad(int index) const
+    QuadIndices quad(Index index) const
     {
-        const int a = m_quads.at(index * 4 + 0);
-        const int b = m_quads.at(index * 4 + 1);
-        const int c = m_quads.at(index * 4 + 2);
-        const int d = m_quads.at(index * 4 + 3);
+        const Index a = m_quads.at(index * 4 + 0);
+        const Index b = m_quads.at(index * 4 + 1);
+        const Index c = m_quads.at(index * 4 + 2);
+        const Index d = m_quads.at(index * 4 + 3);
 
         return {a, b, c, d};
     }

@@ -12,7 +12,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 class BrepFaceField
 {
 public:     // types
@@ -28,7 +28,7 @@ public:     // constructors
     { }
 
 public:     // methods
-    static constexpr int dimension()
+    static constexpr Index dimension()
     {
         return TDimension;
     }
@@ -43,12 +43,12 @@ public:     // methods
         return m_values;
     }
 
-    Vector value(int index) const
+    Vector value(Index index) const
     {
         return m_values[index];
     }
 
-    void set_value(int index, const Vector& value)
+    void set_value(Index index, const Vector& value)
     {
         m_values[index] = value;
     }

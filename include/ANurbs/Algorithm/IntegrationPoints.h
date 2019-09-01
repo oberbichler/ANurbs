@@ -11,10 +11,10 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 using IntegrationPoint = tuple_of<TDimension + 1, double>;
 
-template <int TDimension>
+template <Index TDimension>
 using IntegrationPointList = std::vector<IntegrationPoint<TDimension>>;
 
 class IntegrationPoints
@@ -47,7 +47,7 @@ public:     // static methods
     {
         IntegrationPointList<1> integration_points(degree);
 
-        int i = 0;
+        Index i = 0;
 
         for (const auto& norm_point : gauss_legendre(degree)) {
             integration_points[i++] = IntegrationPoint<1>(
@@ -67,7 +67,7 @@ public:     // static methods
 
         IntegrationPointList<2> integration_points(degree_u * degree_v);
 
-        int i = 0;
+        Index i = 0;
 
         for (const auto& norm_point_u : integration_points_u) {
             for (const auto& norm_point_v : integration_points_v) {
@@ -80,7 +80,7 @@ public:     // static methods
         return integration_points;
     }
 
-    template <int TDimension>
+    template <Index TDimension>
     static IntegrationPointList<1> get(const size_t degree,
         const CurveBase<TDimension>& curve)
     {
@@ -100,7 +100,7 @@ public:     // static methods
         return result;
     }
 
-    template <int TDimension>
+    template <Index TDimension>
     static IntegrationPointList<2> get(const size_t degree,
         const SurfaceBase<TDimension>& surface)
     {
@@ -138,20 +138,20 @@ public:     // python
         
         using Type = IntegrationPoints;
 
-        m.def("integration_points", [](int degree, Interval domain) {
+        m.def("integration_points", [](Index degree, Interval domain) {
             return Type::get(degree, domain); }, "degree"_a, "domain"_a);
-        m.def("integration_points", [](int degree, Interval domain_u,
+        m.def("integration_points", [](Index degree, Interval domain_u,
             Interval domain_v) { return Type::get(degree, degree, domain_u,
             domain_v); }, "degree"_a, "domain_u"_a, "domain"_a);
-        m.def("integration_points", [](int degree_u, int degree_v,
+        m.def("integration_points", [](Index degree_u, Index degree_v,
             Interval domain_u, Interval domain_v) { return Type::get(degree_u,
             degree_v, domain_u, domain_v); }, "degree_u"_a, "degree_v"_a,
             "domain_u"_a, "domain_v"_a);
-        m.def("integration_points", [](int degree, const CurveBase<2>& curve) {
+        m.def("integration_points", [](Index degree, const CurveBase<2>& curve) {
             return Type::get(degree, curve); }, "degree"_a, "curve"_a);
-        m.def("integration_points", [](int degree, const CurveBase<3>& curve) {
+        m.def("integration_points", [](Index degree, const CurveBase<3>& curve) {
             return Type::get(degree, curve); }, "degree"_a, "curve"_a);
-        m.def("integration_points", [](int degree,
+        m.def("integration_points", [](Index degree,
             const SurfaceBase<3>& surface) { return Type::get(degree, surface);
             }, "degree"_a, "surface"_a);
     }

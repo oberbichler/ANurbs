@@ -8,7 +8,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 class PointOnSurfaceProjection
 {
 public:     // types
@@ -64,8 +64,8 @@ private:    // variables
     std::vector<ParameterPoint> m_tessellation;
     double m_tolerance;
     double m_distance;
-    int m_grid_u;
-    int m_grid_v;
+    Index m_grid_u;
+    Index m_grid_v;
     Unique<KDTreeType> m_index;
     const PointCloudAdaptor m_point_cloud_adaptor;
 
@@ -80,9 +80,9 @@ public:     // constructors
                 continue;
             }
 
-            const int n = surface->degree_u() + 1;
+            const Index n = surface->degree_u() + 1;
 
-            for (int i = 0; i < n; i++) {
+            for (Index i = 0; i < n; i++) {
                 const double u = span.parameter_at_normalized(1.0 / n * i);
                 us.push_back(u);
             }
@@ -97,9 +97,9 @@ public:     // constructors
                 continue;
             }
 
-            const int n = surface->degree_v() + 1;
+            const Index n = surface->degree_v() + 1;
 
-            for (int i = 0; i < n; i++) {
+            for (Index i = 0; i < n; i++) {
                 const double v = span.parameter_at_normalized(1.0 / n * i);
                 vs.push_back(v);
             }
@@ -121,8 +121,8 @@ public:     // constructors
 
         m_index->buildIndex();
 
-        m_grid_u = static_cast<int>(us.size()) - 1;
-        m_grid_v = static_cast<int>(vs.size()) - 1;
+        m_grid_u = static_cast<Index>(us.size()) - 1;
+        m_grid_v = static_cast<Index>(vs.size()) - 1;
     }
 
     Pointer<SurfaceBase> surface() const
@@ -232,13 +232,13 @@ public:     // constructors
 
     std::vector<double> bounding_box() const
     {
-        const int dimension = TDimension;
+        const Index dimension = TDimension;
 
         std::vector<double> values(dimension * 2);
 
         const auto& boundingBox = m_index->root_bbox;
 
-        for (int axis = 0; axis < dimension; axis++) {
+        for (Index axis = 0; axis < dimension; axis++) {
             values[axis] = boundingBox[axis].low;
             values[dimension + axis] = boundingBox[axis].high;
         }
@@ -251,7 +251,7 @@ public:     // constructors
         double cu = u;
         double cv = v;
 
-        int maxits = 5;
+        Index maxits = 5;
         double eps1 = 0.00001;
         double eps2 = 0.000005;
         
@@ -260,7 +260,7 @@ public:     // constructors
         double minv = m_surface->domain_v().t0();
         double maxv = m_surface->domain_v().t1();
 
-        for (int i = 0; i < maxits; i++) {
+        for (Index i = 0; i < maxits; i++) {
             const auto s = m_surface->derivatives_at(cu, cv, 2);
 
             const Vector dif = s[0] - point;

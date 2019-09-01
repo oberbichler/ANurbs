@@ -10,7 +10,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 class Line
 {
 public:

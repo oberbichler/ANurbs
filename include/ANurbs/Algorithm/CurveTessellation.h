@@ -6,7 +6,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 class CurveTessellation
 {
 public:     // types
@@ -59,7 +59,7 @@ public:     // static methods
 
         // compute polyline
 
-        const int n = curve.degree() * 2 + 1;
+        const Index n = curve.degree() * 2 + 1;
 
         while (true) {
             const auto [t_a, point_a] = sample_points.back();
@@ -77,7 +77,7 @@ public:     // static methods
                 double max_distance {0};
                 ParameterPoint max_point;
 
-                for (int i = 1; i <= n; i++) {
+                for (Index i = 1; i <= n; i++) {
                     const double t = Interval::parameter_at_normalized(t_a, t_b,
                         i / double(n + 1));
                     const Vector point = curve.point_at(

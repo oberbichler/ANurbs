@@ -72,7 +72,7 @@ public:     // static methods
         integration_points_a.reserve(nb_integration_points);
         integration_points_b.reserve(nb_integration_points);
 
-        for (int i = 1; i < spans_on_curve_b.size(); i++) {
+        for (Index i = 1; i < spans_on_curve_b.size(); i++) {
             const auto t0_b = spans_on_curve_b[i - 1];
             const auto t1_b = spans_on_curve_b[i];
 

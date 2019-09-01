@@ -6,7 +6,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 class CurveBase
 {
 public:     // types
@@ -15,13 +15,13 @@ public:     // types
     virtual ~CurveBase() = default;
 
 public:     // static methods
-    static constexpr int dimension()
+    static constexpr Index dimension()
     {
         return TDimension;
     }
 
 public:     // methods
-    virtual int degree() const = 0;
+    virtual Index degree() const = 0;
 
     virtual Interval domain() const = 0;
 
@@ -29,7 +29,7 @@ public:     // methods
 
     virtual Vector point_at(const double t) const = 0;
 
-    virtual std::vector<Vector> derivatives_at(const double t, const int order)
+    virtual std::vector<Vector> derivatives_at(const double t, const Index order)
         const = 0;
 
 public:     // python

@@ -11,7 +11,7 @@
 
 namespace ANurbs {
 
-template <int TDimension,
+template <Index TDimension,
     typename TCurveRef = Pointer<NurbsCurveGeometry<2>>,
     typename TSurfaceRef = Pointer<NurbsSurfaceGeometry<TDimension>>>
 class CurveOnSurface : public CurveBase<TDimension>
@@ -48,7 +48,7 @@ public:     // methods
         return m_surface_geometry;
     }
 
-    int degree() const override
+    Index degree() const override
     {
         return std::max({m_curve_geometry->degree(),
             m_surface_geometry->degree_u(), m_surface_geometry->degree_v()});
@@ -68,7 +68,7 @@ public:     // methods
         return point;
     }
 
-    std::vector<Vector> derivatives_at(const double t, const int order)
+    std::vector<Vector> derivatives_at(const double t, const Index order)
         const override
     {
         // derivatives of base geometries
@@ -86,13 +86,13 @@ public:     // methods
 
         std::vector<Vector> derivatives(order + 1);
 
-        std::function<Vector(int, int, int)> c;
+        std::function<Vector(Index, Index, Index)> c;
 
-        c = [&](int order, int i, int j) -> Vector {
+        c = [&](Index order, Index i, Index j) -> Vector {
             if (order > 0) {
                 Vector result = Vector::Zero();
 
-                for (int a = 1; a <= order; a++) {
+                for (Index a = 1; a <= order; a++) {
                     result += (
                         c(order - a, i + 1, j) * curve_derivatives[a][0] +
                         c(order - a, i, j + 1) * curve_derivatives[a][1]
@@ -101,12 +101,12 @@ public:     // methods
 
                 return result;
             } else {
-                const int index = NurbsSurfaceShapeFunction::shape_index(i, j);
+                const Index index = NurbsSurfaceShapeFunction::shape_index(i, j);
                 return surface_derivatives[index];
             }
         };
 
-        for (int i = 0; i <= order; i++) {
+        for (Index i = 0; i <= order; i++) {
             derivatives[i] = c(i, 0, 0);
         }
 
@@ -123,11 +123,11 @@ public:     // methods
         const auto intersection =
             CurveSpanIntersection::compute(curve, knots_u, knots_v, 1e-4, true);
 
-        const int nb_spans = static_cast<int>(intersection.size() - 1);
+        const Index nb_spans = static_cast<Index>(intersection.size() - 1);
 
         std::vector<Interval> result(nb_spans);
 
-        for (int i = 0; i < nb_spans; i++) {
+        for (Index i = 0; i < nb_spans; i++) {
             double t0 = intersection[i];
             double t1 = intersection[i + 1];
 

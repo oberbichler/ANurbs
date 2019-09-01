@@ -10,7 +10,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 class Polyline
 {
 public:     // types
@@ -25,7 +25,7 @@ public:     // constructors
     {
     }
     
-    Polyline(const int nbPoints) : m_points(nbPoints)
+    Polyline(const Index nbPoints) : m_points(nbPoints)
     {
     }
 
@@ -87,7 +87,7 @@ public:     // python
         const std::string name = Type::type_name();
 
         py::class_<Type, Holder>(m, name.c_str())
-            .def(py::init<int>(), "nbPoints"_a)
+            .def(py::init<Index>(), "nbPoints"_a)
             .def("nb_points", &Type::nb_points)
             .def("point", &Type::point, "index"_a)
             .def("set_point", &Type::set_point, "index"_a, "value"_a)

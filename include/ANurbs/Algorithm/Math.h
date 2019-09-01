@@ -7,7 +7,7 @@
 
 namespace ANurbs::Math {
 
-constexpr inline int binom(const int n, const int k) noexcept
+constexpr inline Index binom(const Index n, const Index k) noexcept
 {
     // clang-format off
     return (k > n               ) ? 0           :  // out of range
@@ -19,22 +19,22 @@ constexpr inline int binom(const int n, const int k) noexcept
     // clang-format on
 }
 
-constexpr inline int single_index(const int rows, const int cols, const int row,
-    const int col) noexcept
+constexpr inline Index single_index(const Index rows, const Index cols, const Index row,
+    const Index col) noexcept
 {
     return row * cols + col;
 }
 
-constexpr inline std::pair<int, int> double_index(const int rows,
-    const int cols, const int index) noexcept
+constexpr inline std::pair<Index, Index> double_index(const Index rows,
+    const Index cols, const Index index) noexcept
 {
-    const int row = index / cols;
-    const int col = index % cols;
+    const Index row = index / cols;
+    const Index col = index % cols;
     return {row, col};
 }
 
 template <typename TFunction>
-double romberg(TFunction f, double a, double b, int max_iter, double tolerance)
+double romberg(TFunction f, double a, double b, Index max_iter, double tolerance)
 {
     std::vector<double> r1(max_iter);
     std::vector<double> r2(max_iter);
@@ -46,20 +46,20 @@ double romberg(TFunction f, double a, double b, int max_iter, double tolerance)
 
     Rp[0] = (f(a) + f(b)) * h * 0.5; // first trapezoidal step
 
-    for (int i = 1; i < max_iter; ++i) {
+    for (Index i = 1; i < max_iter; ++i) {
         h /= 2.0;
 
         double c = 0;
 
-        int ep = 1 << (i - 1); // 2^(n-1)
+        Index ep = 1 << (i - 1); // 2^(n-1)
 
-        for (int j = 1; j <= ep; ++j) {
+        for (Index j = 1; j <= ep; ++j) {
             c += f(a + (2 * j - 1) * h);
         }
 
         Rc[0] = h * c + 0.5 * Rp[0]; // R(i,0)
 
-        for (int j = 1; j <= i; ++j) {
+        for (Index j = 1; j <= i; ++j) {
             double n_k = std::pow(4, j);
             Rc[j] = (n_k * Rc[j - 1] - Rp[j - 1]) / (n_k - 1); // compute R(i,j)
         }

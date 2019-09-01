@@ -16,7 +16,7 @@ namespace ANurbs {
 class PolygonIntegrationPoints
 {
 public:     // static methods
-    static IntegrationPointList<2> get(const int degree, const Polygon& polygon)
+    static IntegrationPointList<2> get(const Index degree, const Polygon& polygon)
     {
         IntegrationPointList<2> integration_points;
         PolygonTessellation tessellation;
@@ -25,14 +25,14 @@ public:     // static methods
 
         const auto& xiao_gimbutas = IntegrationPoints::xiao_gimbutas(degree);
 
-        const int nb_integration_points = tessellation.nb_triangles() *
-            static_cast<int>(xiao_gimbutas.size());
+        const Index nb_integration_points = tessellation.nb_triangles() *
+            static_cast<Index>(xiao_gimbutas.size());
 
         integration_points.resize(nb_integration_points);
 
-        int j = 0;
+        Index j = 0;
 
-        for (int i = 0; i < tessellation.nb_triangles(); i++) {
+        for (Index i = 0; i < tessellation.nb_triangles(); i++) {
             const auto [a, b, c] = tessellation.triangle(i);
 
             const Vector<2> vertex_a = polygon.vertex(a);
@@ -65,7 +65,7 @@ public:     // python
         
         using Type = PolygonIntegrationPoints;
 
-        m.def("integration_points", [](const int degree, const Polygon& polygon)
+        m.def("integration_points", [](const Index degree, const Polygon& polygon)
             { return Type::get(degree, polygon); }, "degree"_a, "polygon"_a);
     }
 };

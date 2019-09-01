@@ -19,21 +19,21 @@ public:     // variables
     std::vector<Path> inner_paths;
 
 public:     // methods
-    int nb_loops() const
+    Index nb_loops() const
     {
-        return static_cast<int>(inner_paths.size()) + 1;
+        return static_cast<Index>(inner_paths.size()) + 1;
     }
 
-    int nb_vertices_of_loop(const int index) const
+    Index nb_vertices_of_loop(const Index index) const
     {
         if (index == 0) {
-            return static_cast<int>(outer_path.size());
+            return static_cast<Index>(outer_path.size());
         } else {
-            return static_cast<int>(inner_paths[index - 1].size());
+            return static_cast<Index>(inner_paths[index - 1].size());
         }
     }
 
-    Vector vertex_of_loop(int loopIndex, int vertexIndex) const
+    Vector vertex_of_loop(Index loopIndex, Index vertexIndex) const
     {
         if (loopIndex == 0) {
             return outer_path[vertexIndex];
@@ -42,18 +42,18 @@ public:     // methods
         }
     }
 
-    int nb_vertices() const
+    Index nb_vertices() const
     {
-        int nbVertices = static_cast<int>(outer_path.size());
+        Index nbVertices = static_cast<Index>(outer_path.size());
 
         for (const auto& path : inner_paths) {
-            nbVertices += static_cast<int>(path.size());
+            nbVertices += static_cast<Index>(path.size());
         }
 
         return nbVertices;
     }
 
-    Vector vertex(int index) const
+    Vector vertex(Index index) const
     {
         if (index < outer_path.size()) {
             return outer_path[index];
