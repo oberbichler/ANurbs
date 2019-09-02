@@ -47,8 +47,8 @@ private:    // variables
     {
         ClipperLib::IntPoint int_pt;
 
-        int_pt.X = (int)(x / m_scale);
-        int_pt.Y = (int)(y / m_scale);
+        int_pt.X = (Index)(x / m_scale);
+        int_pt.Y = (Index)(y / m_scale);
 
         return int_pt;
     }
@@ -89,7 +89,7 @@ private:    // static methods
                is_rect(a, b, 2, 1, 0, 3);
     }
 
-    void compute_span(const int index_u, const int index_v,
+    void compute_span(const Index index_u, const Index index_v,
         const Interval span_u, const Interval span_v)
     {
         ClipperLib::Paths clip(1);
@@ -192,7 +192,7 @@ public:     // methods
         const auto tessellation =
             CurveTessellation<2>::compute(curve, m_tolerance);
 
-        for (int i = 0; i < tessellation.size(); i++) {
+        for (Index i = 0; i < tessellation.size(); i++) {
             auto pt = to_int_pt(tessellation[i].second);
 
             if (i == 0 && path.size() > 0 && path.back() == pt) {
@@ -203,7 +203,7 @@ public:     // methods
         }
     }
 
-    template <int TDimension>
+    template <Index TDimension>
     void compute(NurbsSurfaceGeometry<TDimension>& surface)
     {
         compute(surface.SpansU(), surface.SpansV());
@@ -218,49 +218,49 @@ public:     // methods
         m_span_trim_type.resize(nb_spans_u() * nb_spans_v());
         m_span_polygons.resize(nb_spans_u() * nb_spans_v());
 
-        for (int v = 0; v < nb_spans_v(); v++) {
-            for (int u = 0; u < nb_spans_u(); u++) {
+        for (Index v = 0; v < nb_spans_v(); v++) {
+            for (Index u = 0; u < nb_spans_u(); u++) {
                 compute_span(u, v, span_u(u), span_v(v));
             }
         }
     }
 
-    int nb_spans_u() const
+    Index nb_spans_u() const
     {
-        return static_cast<int>(m_spans_u.size());
+        return static_cast<Index>(m_spans_u.size());
     }
 
-    int nb_spans_v() const
+    Index nb_spans_v() const
     {
-        return static_cast<int>(m_spans_v.size());
+        return static_cast<Index>(m_spans_v.size());
     }
 
-    Interval span_u(const int index) const
+    Interval span_u(const Index index) const
     {
         return m_spans_u[index];
     }
 
-    Interval span_v(const int index) const
+    Interval span_v(const Index index) const
     {
         return m_spans_v[index];
     }
 
-    TrimTypes& span_trim_type(int i, int j)
+    TrimTypes& span_trim_type(Index i, Index j)
     {
         return m_span_trim_type[i * nb_spans_v() + j];
     }
 
-    TrimTypes span_trim_type(int index_u, int index_v) const
+    TrimTypes span_trim_type(Index index_u, Index index_v) const
     {
         return span_trim_type(index_u, index_v);
     }
 
-    std::vector<Polygon>& span_polygons(int i, int j)
+    std::vector<Polygon>& span_polygons(Index i, Index j)
     {
         return m_span_polygons[i * nb_spans_v() + j];
     }
 
-    const std::vector<Polygon>& span_polygons(int index_u, int index_v) const
+    const std::vector<Polygon>& span_polygons(Index index_u, Index index_v) const
     {
         return span_polygons(index_u, index_v);
     }

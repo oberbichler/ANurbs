@@ -16,7 +16,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 struct NurbsCurveGeometry : public CurveBase<TDimension>
 {
 public:     // types
@@ -24,20 +24,20 @@ public:     // types
     using Vector = typename CurveBase<TDimension>::Vector;
 
 private:    // variables
-    const int m_degree;
+    const Index m_degree;
     std::vector<double> m_knots;
     std::vector<Vector> m_poles;
     std::vector<double> m_weights;
 
 public:     // constructors
-    NurbsCurveGeometry(const int degree, int nb_poles, bool is_rational)
+    NurbsCurveGeometry(const Index degree, Index nb_poles, bool is_rational)
         : m_degree(degree), m_poles(nb_poles), m_weights(is_rational ?
         nb_poles : 0), m_knots(Nurbs::nb_knots(degree, nb_poles))
     {
         static_assert(TDimension > 0);
     }
 
-    NurbsCurveGeometry(const int degree, const std::vector<double>& knots,
+    NurbsCurveGeometry(const Index degree, const std::vector<double>& knots,
         const std::vector<Vector>& poles)
         : m_degree(degree), m_knots(knots), m_poles(poles), m_weights()
     {
@@ -48,7 +48,7 @@ public:     // constructors
         }
     }
 
-    NurbsCurveGeometry(const int degree, const std::vector<double>& knots,
+    NurbsCurveGeometry(const Index degree, const std::vector<double>& knots,
         const std::vector<Vector>& poles, const std::vector<double>& weights)
         : m_degree(degree), m_knots(knots), m_poles(poles), m_weights(weights)
     {
@@ -70,12 +70,12 @@ public:     // static methods
     using CurveBase<TDimension>::dimension;
 
 public:     // methods
-    int degree() const override
+    Index degree() const override
     {
         return m_degree;
     }
     
-    std::vector<Vector> derivatives_at(const double t, const int order)
+    std::vector<Vector> derivatives_at(const double t, const Index order)
         const override
     {
         NurbsCurveShapeFunction shape_function;
@@ -83,16 +83,16 @@ public:     // methods
         shape_function.resize(m_degree, order);
 
         if (m_weights.size() > 0) {
-            shape_function.compute(m_knots, [&](int i) { return weight(i); }, t);
+            shape_function.compute(m_knots, [&](Index i) { return weight(i); }, t);
         } else {
             shape_function.compute(m_knots, t);
         }
 
         std::vector<Vector> derivatives(shape_function.nb_shapes());
 
-        for (int order = 0; order < shape_function.nb_shapes(); order++) {
-            for (int i = 0; i < shape_function.nb_nonzero_poles(); i++) {
-                int index = shape_function.first_nonzero_pole() + i;
+        for (Index order = 0; order < shape_function.nb_shapes(); order++) {
+            for (Index i = 0; i < shape_function.nb_nonzero_poles(); i++) {
+                Index index = shape_function.first_nonzero_pole() + i;
 
                 if (i == 0) {
                     derivatives[order] = pole(index) * shape_function(order, i);
@@ -115,7 +115,7 @@ public:     // methods
         return m_weights.size() != 0;
     }
 
-    double knot(int i) const
+    double knot(Index i) const
     {
         return m_knots[i];
     }
@@ -125,14 +125,14 @@ public:     // methods
         return m_knots;
     }
 
-    int nb_knots() const
+    Index nb_knots() const
     {
-        return static_cast<int>(m_knots.size());
+        return static_cast<Index>(m_knots.size());
     }
 
-    int nb_poles() const
+    Index nb_poles() const
     {
-        return static_cast<int>(m_poles.size());
+        return static_cast<Index>(m_poles.size());
     }
 
     Vector point_at(const double t) const override
@@ -142,15 +142,15 @@ public:     // methods
         shape_function.resize(m_degree, 0);
 
         if (m_weights.size() > 0) {
-            shape_function.compute(m_knots, [&](int i) { return weight(i); }, t);
+            shape_function.compute(m_knots, [&](Index i) { return weight(i); }, t);
         } else {
             shape_function.compute(m_knots, t);
         }
 
         Vector point;
 
-        for (int i = 0; i < shape_function.nb_nonzero_poles(); i++) {
-            const int index = shape_function.first_nonzero_pole() + i;
+        for (Index i = 0; i < shape_function.nb_nonzero_poles(); i++) {
+            const Index index = shape_function.first_nonzero_pole() + i;
 
             if (i == 0) {
                 point = pole(index) * shape_function(0, i);
@@ -162,7 +162,7 @@ public:     // methods
         return point;
     }
 
-    Vector pole(int i) const
+    Vector pole(Index i) const
     {
         return m_poles.at(i);
     }
@@ -172,28 +172,28 @@ public:     // methods
         return m_poles;
     }
     
-    void set_knot(int i, double value)
+    void set_knot(Index i, double value)
     {
         m_knots[i] = value;
     }
     
-    void set_pole(int i, Vector value)
+    void set_pole(Index i, Vector value)
     {
         m_poles.at(i) = value;
     }
     
-    void set_weight(int i, double value)
+    void set_weight(Index i, double value)
     {
         m_weights.at(i) = value;
     }
 
-    std::pair<std::vector<int>, MatrixXd> shape_functions_at(const double t,
-        const int order) const
+    std::pair<std::vector<Index>, MatrixXd> shape_functions_at(const double t,
+        const Index order) const
     {
         NurbsCurveShapeFunction shape_function(degree(), order);
 
         if (is_rational()) {
-            shape_function.compute(knots(), [&](int i) {
+            shape_function.compute(knots(), [&](Index i) {
                 return weight(i); }, t);
         } else {
             shape_function.compute(knots(), t);
@@ -202,8 +202,8 @@ public:     // methods
         MatrixXd values(shape_function.nb_shapes(),
             shape_function.nb_nonzero_poles());
 
-        for (int i = 0; i < shape_function.nb_shapes(); i++) {
-            for (int j = 0; j < shape_function.nb_nonzero_poles(); j++) {
+        for (Index i = 0; i < shape_function.nb_shapes(); i++) {
+            for (Index j = 0; j < shape_function.nb_nonzero_poles(); j++) {
                 values(i, j) = shape_function(i, j);
             }
         }
@@ -213,14 +213,14 @@ public:     // methods
 
     std::vector<Interval> spans() const override
     {
-        const int first_span = degree() - 1;
-        const int last_span = nb_knots() - degree() - 1;
+        const Index first_span = degree() - 1;
+        const Index last_span = nb_knots() - degree() - 1;
 
-        const int nb_spans = last_span - first_span + 1;
+        const Index nb_spans = last_span - first_span + 1;
 
         std::vector<Interval> result(nb_spans);
 
-        for (int i = 0; i < nb_spans; i++) {
+        for (Index i = 0; i < nb_spans; i++) {
             const double t0 = knot(first_span + i);
             const double t1 = knot(first_span + i + 1);
 
@@ -230,7 +230,7 @@ public:     // methods
         return result;
     }
     
-    double weight(int i) const
+    double weight(Index i) const
     {
         return m_weights.at(i);
     }
@@ -252,22 +252,22 @@ public:     // serialization
         const auto knots = source.at("Knots");
         const auto weights = source.value("Weights", std::vector<double>());
         
-        const int degree = source.at("Degree");
-        const int nb_poles = static_cast<int>(poles.size());
+        const Index degree = source.at("Degree");
+        const Index nb_poles = static_cast<Index>(poles.size());
         const bool is_rational = !weights.empty();
 
         auto result = new_<Type>(degree, nb_poles, is_rational);
 
-        for (int i = 0; i < knots.size(); i++) {
+        for (Index i = 0; i < knots.size(); i++) {
             result->set_knot(i, knots[i]);
         }
 
-        for (int i = 0; i < nb_poles; i++) {
+        for (Index i = 0; i < nb_poles; i++) {
             result->set_pole(i, poles[i]);
         }
 
         if (is_rational) {
-            for (int i = 0; i < weights.size(); i++) {
+            for (Index i = 0; i < weights.size(); i++) {
                 result->set_weight(i, weights[i]);
             }
         }
@@ -302,11 +302,11 @@ public:     // python
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
-            .def(py::init<const int, const int, const bool>(), "degree"_a,
+            .def(py::init<const Index, const Index, const bool>(), "degree"_a,
                 "nb_poles"_a, "is_rational"_a)
-            .def(py::init<const int, const std::vector<double>,
+            .def(py::init<const Index, const std::vector<double>,
                 const std::vector<Vector>>(), "degree"_a, "knots"_a, "poles"_a)
-            .def(py::init<const int, const std::vector<double>,
+            .def(py::init<const Index, const std::vector<double>,
                 const std::vector<Vector>, const std::vector<double>>(),
                 "degree"_a, "knots"_a, "poles"_a, "weights"_a)
             // read-only properties

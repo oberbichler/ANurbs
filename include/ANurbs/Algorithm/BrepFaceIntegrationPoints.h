@@ -41,8 +41,8 @@ public:     // static methods
 
         const auto degree = std::max(degree_u, degree_v) + 1;
 
-        for (int i = 0; i < clipper.nb_spans_u(); i++) {
-            for (int j = 0; j < clipper.nb_spans_v(); j++) {
+        for (Index i = 0; i < clipper.nb_spans_u(); i++) {
+            for (Index j = 0; j < clipper.nb_spans_v(); j++) {
                 if (clipper.span_trim_type(i, j) == TrimTypes::Empty) {
                     continue;
                 }

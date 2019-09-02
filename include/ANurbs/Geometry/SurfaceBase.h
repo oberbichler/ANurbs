@@ -8,7 +8,7 @@
 
 namespace ANurbs {
 
-template <int TDimension>
+template <Index TDimension>
 class SurfaceBase
 {
 public:     // types
@@ -18,15 +18,15 @@ public:     // constructors
     virtual ~SurfaceBase() { }
 
 public:     // static methods
-    static constexpr int dimension()
+    static constexpr Index dimension()
     {
         return TDimension;
     }
 
 public:     // methods
-    virtual int degree_u() const = 0;
+    virtual Index degree_u() const = 0;
 
-    virtual int degree_v() const = 0;
+    virtual Index degree_v() const = 0;
 
     virtual Interval domain_u() const = 0;
 
@@ -35,7 +35,7 @@ public:     // methods
     virtual Vector point_at(const double u, const double v) const = 0;
 
     virtual std::vector<Vector> derivatives_at(const double u, const double v,
-        const int order) const = 0;
+        const Index order) const = 0;
 
     virtual std::vector<Interval> spans_u() const = 0;
 

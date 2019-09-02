@@ -12,6 +12,8 @@
 
 namespace ANurbs {
 
+using Index = std::ptrdiff_t;
+
 const int Dynamic = Eigen::Dynamic;
 
 template <int TSize>

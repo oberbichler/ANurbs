@@ -10,39 +10,39 @@ class Nurbs
 {
 public:     // static methods
     template <typename TKnots>
-    static int upper_span(const int degree, const TKnots& knots,
+    static Index upper_span(const Index degree, const TKnots& knots,
         const double& t)
     {
         auto span = std::upper_bound(std::begin(knots) + degree, std::end(knots)
             - degree, t) - std::begin(knots) - 1;
-        return static_cast<int>(span);
+        return static_cast<Index>(span);
     }
 
     template <typename TKnots>
-    static int lower_span(const int degree, const TKnots& knots,
+    static Index lower_span(const Index degree, const TKnots& knots,
         const double& t)
     {
         auto span = std::lower_bound(std::begin(knots) + degree, std::end(knots)
             - degree, t) - std::begin(knots) - 1;
-        return static_cast<int>(span);
+        return static_cast<Index>(span);
     }
 
-    static int degree(const int nb_knots, const int nb_poles)
+    static Index degree(const Index nb_knots, const Index nb_poles)
     {
         return nb_knots - nb_poles + 1;
     }
 
-    static int nb_knots(const int degree, const int nb_poles)
+    static Index nb_knots(const Index degree, const Index nb_poles)
     {
         return nb_poles + degree - 1;
     }
 
-    static int nb_poles(const int degree, const int nb_knots)
+    static Index nb_poles(const Index degree, const Index nb_knots)
     {
         return nb_knots - degree + 1;
     }
 
-    static int nb_spans(const int degree, const int nb_knots)
+    static Index nb_spans(const Index degree, const Index nb_knots)
     {
         return nb_knots - 2 * degree + 1;
     }
