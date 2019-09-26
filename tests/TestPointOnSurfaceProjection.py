@@ -1,6 +1,5 @@
 import unittest
 import ANurbs as an
-import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 import os
 
@@ -10,7 +9,7 @@ class TestPointOnSurfaceProjection(unittest.TestCase):
         model.load(f'{os.path.dirname(__file__)}/data/point_on_surface_projection.amodel')
 
         surface = model.of_type('NurbsSurfaceGeometry3D')[0].data
-        
+
         projection = an.PointOnSurfaceProjection3D(surface)
 
         test_data = [
