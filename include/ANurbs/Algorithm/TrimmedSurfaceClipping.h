@@ -192,10 +192,10 @@ public:     // methods
         const auto tessellation =
             CurveTessellation<2>::compute(curve, m_tolerance);
 
-        for (Index i = 0; i < tessellation.size(); i++) {
+        for (Index i = 0; i < length(tessellation); i++) {
             auto pt = to_int_pt(tessellation[i].second);
 
-            if (i == 0 && path.size() > 0 && path.back() == pt) {
+            if (i == 0 && length(path) > 0 && path.back() == pt) {
                 continue;
             }
 

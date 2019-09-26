@@ -67,7 +67,7 @@ public:     // static methods
 
             points.emplace_back(domain.parameter_at_normalized(t_a), point_a);
 
-            if (sample_points.size() == 0) {
+            if (sample_points.empty()) {
                 break;
             }
 

@@ -66,13 +66,13 @@ public:     // static methods
             surface_3d_a->degree_v(), surface_3d_b->degree_u(),
             surface_3d_b->degree_v()}) + 1;
         
-        const auto nb_integration_points = (spans_on_curve_b.size() - 1) *
+        const auto nb_integration_points = (length(spans_on_curve_b) - 1) *
             (degree + 1);
 
         integration_points_a.reserve(nb_integration_points);
         integration_points_b.reserve(nb_integration_points);
 
-        for (Index i = 1; i < spans_on_curve_b.size(); i++) {
+        for (Index i = 1; i < length(spans_on_curve_b); i++) {
             const auto t0_b = spans_on_curve_b[i - 1];
             const auto t1_b = spans_on_curve_b[i];
 
