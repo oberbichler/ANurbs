@@ -117,13 +117,13 @@ class TestPointOnSurfaceProjection(unittest.TestCase):
         ]
 
         for expected_uv in test_data:
-            point = surface.point_at(*expected_uv)
+            expected_point = surface.point_at(*expected_uv)
 
-            projection.compute(point)
+            success, u, v, point = projection.get(expected_point)
 
-            actual_uv = [projection.parameter_u, projection.parameter_v]
-
-            assert_almost_equal(actual_uv, expected_uv)
+            self.assertTrue(success)
+            assert_almost_equal([u, v], expected_uv)
+            assert_almost_equal(point, expected_point)
 
 
 if __name__ == '__main__':
