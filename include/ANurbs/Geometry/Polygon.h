@@ -55,18 +55,18 @@ public:     // methods
 
     Vector vertex(Index index) const
     {
-        if (index < outer_path.size()) {
+        if (index < length(outer_path)) {
             return outer_path[index];
         }
 
-        std::size_t offset = outer_path.size();
+        Index offset = length(outer_path);
 
         for (const auto& path : inner_paths) {
-            if (index < offset + path.size()) {
+            if (index < offset + length(path)) {
                 return path[index - offset];
             }
 
-            offset += path.size();
+            offset += length(path);
         }
 
         throw std::exception();

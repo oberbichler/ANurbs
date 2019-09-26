@@ -172,7 +172,7 @@ public:     // static methods
 
         // check line segments
 
-        for (Index i = 1; i < tessellation.size(); i++) {
+        for (Index i = 1; i < length(tessellation); i++) {
             const auto a = tessellation[i - 1];
             const auto b = tessellation[i];
 

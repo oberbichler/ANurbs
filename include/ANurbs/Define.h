@@ -14,6 +14,12 @@ namespace ANurbs {
 
 using Index = std::ptrdiff_t;
 
+template <typename T>
+inline Index length(const T& container) noexcept
+{
+    return static_cast<Index>(std::size(container));
+}
+
 const int Dynamic = Eigen::Dynamic;
 
 template <int TSize>

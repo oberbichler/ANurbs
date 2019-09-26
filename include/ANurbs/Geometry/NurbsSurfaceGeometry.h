@@ -496,20 +496,20 @@ public:     // serialization
         auto result = new_<Type>(degree_u, degree_v, nb_poles_u, nb_poles_v,
             is_rational);
 
-        for (Index i = 0; i < knots_u.size(); i++) {
+        for (Index i = 0; i < length(knots_u); i++) {
             result->set_knot_u(i, knots_u[i]);
         }
 
-        for (Index i = 0; i < knots_v.size(); i++) {
+        for (Index i = 0; i < length(knots_v); i++) {
             result->set_knot_v(i, knots_v[i]);
         }
 
-        for (Index i = 0; i < poles.size(); i++) {
+        for (Index i = 0; i < length(poles); i++) {
             result->set_pole(i, poles[i]);
         }
 
         if (is_rational) {
-            for (Index i = 0; i < weights.size(); i++) {
+            for (Index i = 0; i < length(weights); i++) {
                 result->set_weight(i, weights[i]);
             }
         }

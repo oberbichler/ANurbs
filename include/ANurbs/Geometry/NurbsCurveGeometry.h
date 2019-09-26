@@ -253,12 +253,12 @@ public:     // serialization
         const auto weights = source.value("Weights", std::vector<double>());
         
         const Index degree = source.at("Degree");
-        const Index nb_poles = static_cast<Index>(poles.size());
+        const Index nb_poles = length(poles);
         const bool is_rational = !weights.empty();
 
         auto result = new_<Type>(degree, nb_poles, is_rational);
 
-        for (Index i = 0; i < knots.size(); i++) {
+        for (Index i = 0; i < length(knots); i++) {
             result->set_knot(i, knots[i]);
         }
 
@@ -267,7 +267,7 @@ public:     // serialization
         }
 
         if (is_rational) {
-            for (Index i = 0; i < weights.size(); i++) {
+            for (Index i = 0; i < length(weights); i++) {
                 result->set_weight(i, weights[i]);
             }
         }

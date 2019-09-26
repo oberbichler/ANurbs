@@ -12,15 +12,16 @@ template <Index TDimension>
 class PointOnSurfaceProjection
 {
 public:     // types
-    using Vector = Vector<TDimension>;
+    using VectorNd = Vector<TDimension>;
     using SurfaceBase = SurfaceBase<TDimension>;
+    using ProjectionResult = std::tuple<bool, double, double, VectorNd>;
 
 private:    // types
     struct ParameterPoint
     {
-        double parameterU;
-        double parameterV;
-        Vector point;
+        double parameter_u;
+        double parameter_v;
+        VectorNd point;
     };
 
     struct PointCloudAdaptor
@@ -60,10 +61,8 @@ private:    // types
 
 private:    // variables
     Pointer<SurfaceBase> m_surface;
-    ParameterPoint m_closestPoint;
     std::vector<ParameterPoint> m_tessellation;
     double m_tolerance;
-    double m_distance;
     Index m_grid_u;
     Index m_grid_v;
     Unique<KDTreeType> m_index;
@@ -107,7 +106,7 @@ public:     // constructors
 
         vs.push_back(surface->domain_v().t1());
 
-        m_tessellation.reserve(us.size() * vs.size());
+        m_tessellation.reserve(length(us) * length(vs));
 
         for (const auto u : us) {
             for (const auto v : vs) {
@@ -121,8 +120,8 @@ public:     // constructors
 
         m_index->buildIndex();
 
-        m_grid_u = static_cast<Index>(us.size()) - 1;
-        m_grid_v = static_cast<Index>(vs.size()) - 1;
+        m_grid_u = length(us) - 1;
+        m_grid_v = length(vs) - 1;
     }
 
     Pointer<SurfaceBase> surface() const
@@ -140,94 +139,74 @@ public:     // constructors
         m_tolerance = value;
     }
 
-    double parameter_u() const
+    ProjectionResult get(const VectorNd& sample)
     {
-        return m_closestPoint.parameterU;
-    }
-
-    double parameter_v() const
-    {
-        return m_closestPoint.parameterV;
-    }
-
-    Vector point() const
-    {
-        return m_closestPoint.point;
-    }
-
-    double distance() const
-    {
-        return m_distance;
-    }
-
-    void compute(const Vector& sample)
-    {
-        size_t minIndex;
-        double minDistance;
+        size_t min_index;
+        double min_distance;
 
         nanoflann::KNNResultSet<double> resultSet(1);
-        resultSet.init(&minIndex, &minDistance);
+        resultSet.init(&min_index, &min_distance);
         m_index->findNeighbors(resultSet, &sample[0],
             nanoflann::SearchParams(10));
 
         // ---
 
-        const size_t p = minIndex % (m_grid_v + 1);
-        const size_t o = minIndex / (m_grid_v + 1);
+        const size_t p = min_index % (m_grid_v + 1);
+        const size_t o = min_index / (m_grid_v + 1);
 
-        m_closestPoint = m_tessellation[minIndex];
+        ParameterPoint closest_point = m_tessellation[min_index];
 
         if (o != m_grid_u && p != m_grid_v) {
-            const auto pt = triangle_projection(sample, minIndex, minIndex + 1, minIndex + m_grid_v + 1);
+            const auto pt = triangle_projection(sample, min_index, min_index + 1, min_index + m_grid_v + 1);
 
-            const Vector v = sample - pt.point;
+            const VectorNd v = sample - pt.point;
             const auto distance = squared_norm(v);
 
-            if (distance < minDistance) {
-                m_closestPoint = pt;
-                minDistance = distance;
+            if (distance < min_distance) {
+                closest_point = pt;
+                min_distance = distance;
             }
         }
 
         if (o != m_grid_u && p != 0) {
-            const auto pt = triangle_projection(sample, minIndex, minIndex - 1, minIndex + m_grid_v + 1);
+            const auto pt = triangle_projection(sample, min_index, min_index - 1, min_index + m_grid_v + 1);
 
-            const Vector v = sample - pt.point;
+            const VectorNd v = sample - pt.point;
             const auto distance = squared_norm(v);
 
-            if (distance < minDistance) {
-                m_closestPoint = pt;
-                minDistance = distance;
+            if (distance < min_distance) {
+                closest_point = pt;
+                min_distance = distance;
             }
         }
 
         if (o != 0 && p != m_grid_v) {
-            const auto pt = triangle_projection(sample, minIndex, minIndex + 1, minIndex - m_grid_v - 1);
+            const auto pt = triangle_projection(sample, min_index, min_index + 1, min_index - m_grid_v - 1);
 
-            const Vector v = sample - pt.point;
+            const VectorNd v = sample - pt.point;
             const auto distance = squared_norm(v);
 
-            if (distance < minDistance) {
-                m_closestPoint = pt;
-                minDistance = distance;
+            if (distance < min_distance) {
+                closest_point = pt;
+                min_distance = distance;
             }
         }
 
         if (o != 0 && p != 0) {
-            const auto pt = triangle_projection(sample, minIndex, minIndex - 1, minIndex - m_grid_v - 1);
+            const auto pt = triangle_projection(sample, min_index, min_index - 1, min_index - m_grid_v - 1);
 
-            const Vector v = sample - pt.point;
+            const VectorNd v = sample - pt.point;
             const auto distance = squared_norm(v);
 
-            if (distance < minDistance) {
-                m_closestPoint = pt;
-                minDistance = distance;
+            if (distance < min_distance) {
+                closest_point = pt;
+                min_distance = distance;
             }
         }
 
         // ---
 
-        m_closestPoint = newton(sample, m_closestPoint.parameterU, m_closestPoint.parameterV);
+        return newton(sample, closest_point.parameter_u, closest_point.parameter_v);
     }
 
     std::vector<double> bounding_box() const
@@ -246,92 +225,74 @@ public:     // constructors
         return values;
     }
 
-    ParameterPoint newton(const Vector point, const double u, const double v)
+    ProjectionResult newton(const VectorNd point, const double u, const double v)
     {
-        double cu = u;
-        double cv = v;
+        Vector<2> x(u, v);
 
-        Index maxits = 5;
-        double eps1 = 0.00001;
-        double eps2 = 0.000005;
-        
-        double minu = m_surface->domain_u().t0();
-        double maxu = m_surface->domain_u().t1();
-        double minv = m_surface->domain_v().t0();
-        double maxv = m_surface->domain_v().t1();
+        const Index maxiter = 5;
+        const double ftol = 1e-8;
+        const double gtol = 1e-8;
+        bool success = false;
 
-        for (Index i = 0; i < maxits; i++) {
-            const auto s = m_surface->derivatives_at(cu, cv, 2);
+        std::vector<VectorNd> s;
 
-            const Vector dif = s[0] - point;
+        for (Index i = 0; i < maxiter; i++) {
+            s = m_surface->derivatives_at(x[0], x[1], 2);
 
-            const double c1v = norm(dif);
-            
-            if (c1v < eps1) {
-                return {cu, cv, s[0]};
+            const VectorNd r = point - s[0];
+    
+            if (r.squaredNorm() < std::pow(ftol, 2)) {
+                success = true;
+                break;
             }
 
-            double s1_l = norm(s[1]);
-            double s2_l = norm(s[2]);
-            
-            double c2an = std::abs(dot(s[1], dif));
-            double c2ad = s1_l * c1v;
+            const Vector<2> g(-s[1].dot(r), -s[2].dot(r));
 
-            double c2bn = std::abs(dot(s[2], dif));
-            double c2bd = s2_l * c1v;
-
-            double c2av = c2an / c2ad;
-            double c2bv = c2bn / c2bd;
-
-            if (c2av < eps2 && c2bv < eps2) {
-                return {cu, cv, s[0]};
+            if (g.squaredNorm() < std::pow(gtol, 2)) {
+                success = true;
+                break;
             }
-            
-            double f = dot(s[1], dif);
-            double g = dot(s[2], dif);
 
-            double J00 = dot(s[1], s[1]) + dot(s[3], dif);
-            double J01 = dot(s[1], s[2]) + dot(s[4], dif);
-            double J11 = dot(s[2], s[2]) + dot(s[5], dif);
+            const double h_uu = s[1].dot(s[1]) - s[3].dot(r);
+            const double h_vv = s[2].dot(s[2]) - s[5].dot(r);
+            const double h_uv = s[1].dot(s[2]) - s[4].dot(r);
 
-            double det = J00 * J11 - J01 * J01;
-            
-            double du = (g * J01 - f * J11) / det;
-            double dv = (f * J01 - g * J00) / det;
-            
-            cu += du;
-            cv += dv;
+            const double det = h_uu * h_vv - h_uv * h_uv;
+
+            const double du = (g[1] * h_uv - g[0] * h_vv) / det;
+            const double dv = (g[0] * h_uv - g[1] * h_uu) / det;
+
+            x += Vector<2>(du, dv);
         }
 
-        return {cu, cv, m_surface->point_at(cu, cv)};
+        return {success, x[0], x[1], s[0]};
     }
 
-    ParameterPoint triangle_projection(const Vector point,
+    ParameterPoint triangle_projection(const VectorNd point,
         const size_t& index_a, const size_t& index_b, const size_t& index_c)
     {
         const auto a = m_tessellation[index_a];
         const auto b = m_tessellation[index_b];
         const auto c = m_tessellation[index_c];
 
-        const Vector u = b.point - a.point;
-        const Vector v = c.point - a.point;
-        const Vector n = cross(u, v);
-        const Vector w = point - a.point;
+        const VectorNd u = b.point - a.point;
+        const VectorNd v = c.point - a.point;
+        const VectorNd n = cross(u, v);
+        const VectorNd w = point - a.point;
 
         const double gam = dot(cross(u, w), n) / squared_norm(n);
         const double bet = dot(cross(w, v), n) / squared_norm(n);
         const double alp = 1.0 - gam - bet;
 
-        ParameterPoint cp;
+        const double parameter_u = alp * a.parameter_u + bet * b.parameter_u +
+            gam * c.parameter_u;
+        const double parameter_v = alp * a.parameter_v + bet * b.parameter_v +
+            gam * c.parameter_v;
 
-        cp.parameterU = alp * a.parameterU + bet * b.parameterU +
-            gam * c.parameterU;
-        cp.parameterV = alp * a.parameterV + bet * b.parameterV +
-            gam * c.parameterV;
+        const VectorNd closest_point =
+            m_surface->point_at(parameter_u, parameter_v);
 
-        cp.point = m_surface->point_at(cp.parameterU, cp.parameterV);
-
-        return cp;
+        return {parameter_u, parameter_v, closest_point};
     }
 
 public:     // python
@@ -347,13 +308,12 @@ public:     // python
             std::to_string(TDimension) + "D";
 
         py::class_<Type, Handler>(m, name.c_str())
+            // constructors
             .def(py::init<Pointer<SurfaceBase>>(), "surface"_a)
-            .def("compute", &Type::compute, "point"_a)
-            .def("parameter_u", &Type::parameter_u)
-            .def("parameter_v", &Type::parameter_v)
-            .def("point", &Type::point)
-            .def("distance", &Type::distance)
-            .def("bounding_box", &Type::bounding_box)
+            // methods
+            .def("get", &Type::get, "point"_a)
+            // read-only properties
+            .def_property_readonly("bounding_box", &Type::bounding_box)
         ;
     }
 };

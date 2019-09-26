@@ -85,7 +85,7 @@ public:     // methods
 
         double closest_sqr_distance = std::numeric_limits<double>::max();
 
-        for (Index i = 1; i < m_tessellation.size(); i++) {
+        for (Index i = 1; i < length(m_tessellation); i++) {
             const auto [t0, point0] = m_tessellation[i - 1];
             const auto [t1, point1] = m_tessellation[i];
 
