@@ -26,8 +26,7 @@ enum TrimTypes
 class TrimmedSurfaceClipping
 {
 public:     // types
-    using Vector = Vector<2>;
-    using CurveBase = CurveBase<2>;
+    using Vector = linear_algebra::Vector<2>;
 
 private:    // variables
     ClipperLib::Paths m_paths;
@@ -185,7 +184,7 @@ public:     // methods
         ClipperLib::CleanPolygon(m_paths.back());
     }
 
-    void add_curve(CurveBase& curve)
+    void add_curve(CurveBase<2>& curve)
     {
         ClipperLib::Path& path = m_paths.back();
 

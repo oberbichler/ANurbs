@@ -16,20 +16,20 @@ template <Index TDimension>
 class PointOnCurveProjection
 {
 public:     // types
-    using CurveBase = CurveBase<TDimension>;
-    using Vector = Vector<TDimension>;
+    using CurveBaseD = CurveBase<TDimension>;
+    using Vector = linear_algebra::Vector<TDimension>;
     using ParameterPoint = std::pair<double, Vector>;
 
 private:    // variables
     std::vector<std::pair<double, Vector>> m_tessellation;
-    Pointer<CurveBase> m_curve;
+    Pointer<CurveBaseD> m_curve;
     double m_tessellation_flatness;
     double m_tolerance;
     double m_parameter;
     Vector m_point;
 
 public:     // constructors
-    PointOnCurveProjection(Pointer<CurveBase> curve, const double& tolerance)
+    PointOnCurveProjection(Pointer<CurveBaseD> curve, const double& tolerance)
         : m_tessellation(), m_curve(curve), m_tessellation_flatness(1e-3),
         m_tolerance(tolerance)
     {
@@ -39,7 +39,7 @@ public:     // constructors
     }
 
 public:     // methods
-    Pointer<CurveBase> Curve() const
+    Pointer<CurveBaseD> Curve() const
     {
         return m_curve;
     }
@@ -206,7 +206,7 @@ public:     // python
             + "D";
 
         py::class_<Type, Handler>(m, name.c_str())
-            .def(py::init<Pointer<CurveBase>, double>(), "curve"_a,
+            .def(py::init<Pointer<CurveBaseD>, double>(), "curve"_a,
                 "tolerance"_a)
             .def("compute", &Type::compute, "point"_a)
             .def("parameter", &Type::parameter)

@@ -20,23 +20,25 @@ inline Index length(const T& container) noexcept
     return static_cast<Index>(std::size(container));
 }
 
-const int Dynamic = Eigen::Dynamic;
+namespace linear_algebra {
+    const int Dynamic = Eigen::Dynamic;
 
-template <int TSize>
-using Vector = Eigen::Matrix<double, 1, TSize>;
+    template <int TSize = Dynamic>
+    using Vector = Eigen::Matrix<double, 1, TSize>;
 
-using VectorXd = Eigen::Matrix<double, 1, Dynamic>;
+    using VectorXd = Eigen::Matrix<double, 1, Dynamic>;
 
-template <int TRows, int TCols>
-using Matrix = Eigen::Matrix<double, TRows, TCols>;
+    template <int TRows = Dynamic, int TCols = Dynamic>
+    using Matrix = Eigen::Matrix<double, TRows, TCols>;
 
-using MatrixXd = Eigen::Matrix<double, Dynamic, Dynamic>;
+    using MatrixXd = Eigen::Matrix<double, Dynamic, Dynamic>;
 
-template <typename T>
-using Map = Eigen::Map<T>;
+    template <typename T>
+    using Map = Eigen::Map<T>;
 
-// template <typename T>
-// using Ref = Eigen::Ref<T>;
+    template <typename T>
+    using Ref = Eigen::Ref<T>;
+}
 
 template <typename T>
 using Pointer = std::shared_ptr<T>;
@@ -55,12 +57,12 @@ double dot(const double& u, const double& v)
     return u * v;
 }
 
-double dot(const Vector<2>& u, const Vector<2>& v)
+double dot(const linear_algebra::Vector<2>& u, const linear_algebra::Vector<2>& v)
 {
     return u.dot(v);
 }
 
-double dot(const Vector<3>& u, const Vector<3>& v)
+double dot(const linear_algebra::Vector<3>& u, const linear_algebra::Vector<3>& v)
 {
     return u.dot(v);
 }
@@ -70,12 +72,12 @@ double squared_norm(const double& value)
     return std::abs(value) * std::abs(value);
 }
 
-double squared_norm(const Vector<2>& vector)
+double squared_norm(const linear_algebra::Vector<2>& vector)
 {
     return vector.squaredNorm();
 }
 
-double squared_norm(const Vector<3>& vector)
+double squared_norm(const linear_algebra::Vector<3>& vector)
 {
     return vector.squaredNorm();
 }
@@ -85,22 +87,22 @@ double norm(const double& value)
     return std::abs(value);
 }
 
-double norm(const Vector<2>& vector)
+double norm(const linear_algebra::Vector<2>& vector)
 {
     return vector.norm();
 }
 
-double norm(const Vector<3>& vector)
+double norm(const linear_algebra::Vector<3>& vector)
 {
     return vector.norm();
 }
 
-double cross(const Vector<2> u, const Vector<2> v)
+double cross(const linear_algebra::Vector<2> u, const linear_algebra::Vector<2> v)
 {
     return v(0) * u(1) - v(1) * u(0);
 }
 
-Vector<3> cross(const Vector<3> u, const Vector<3> v)
+linear_algebra::Vector<3> cross(const linear_algebra::Vector<3> u, const linear_algebra::Vector<3> v)
 {
     return u.cross(v);
 }

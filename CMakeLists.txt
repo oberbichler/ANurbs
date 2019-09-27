@@ -22,4 +22,8 @@ pybind11_add_module(ANurbs ${SOURCES}
     "${PROJECT_SOURCE_DIR}/external_libraries/ClipperLib/clipper.cpp"
 )
 
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    target_compile_options(ANurbs PUBLIC -fsized-deallocation)
+endif()
+
 install(TARGETS ANurbs DESTINATION bin)

@@ -60,7 +60,7 @@ public:     // methods
         m_triangles.clear();
         m_quads.clear();
 
-        using Path = std::vector<Vector<2>>;
+        using Path = std::vector<linear_algebra::Vector<2>>;
         using Paths = std::vector<Path>;
 
         Paths contours;

@@ -12,7 +12,7 @@ template <Index TDimension>
 class SurfaceBase
 {
 public:     // types
-    using Vector = Vector<TDimension>;
+    using Vector = linear_algebra::Vector<TDimension>;
 
 public:     // constructors
     virtual ~SurfaceBase() { }

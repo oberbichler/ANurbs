@@ -18,6 +18,8 @@ class PolygonIntegrationPoints
 public:     // static methods
     static IntegrationPointList<2> get(const Index degree, const Polygon& polygon)
     {
+        using Vector2d = linear_algebra::Vector<2>;
+
         IntegrationPointList<2> integration_points;
         PolygonTessellation tessellation;
 
@@ -35,12 +37,12 @@ public:     // static methods
         for (Index i = 0; i < tessellation.nb_triangles(); i++) {
             const auto [a, b, c] = tessellation.triangle(i);
 
-            const Vector<2> vertex_a = polygon.vertex(a);
-            const Vector<2> vertex_b = polygon.vertex(b);
-            const Vector<2> vertex_c = polygon.vertex(c);
+            const Vector2d vertex_a = polygon.vertex(a);
+            const Vector2d vertex_b = polygon.vertex(b);
+            const Vector2d vertex_c = polygon.vertex(c);
 
-            const Vector<2> ab = vertex_b - vertex_a;
-            const Vector<2> ac = vertex_c - vertex_a;
+            const Vector2d ab = vertex_b - vertex_a;
+            const Vector2d ac = vertex_c - vertex_a;
 
             const double area = 0.5 * norm(cross(ab, ac));
 
