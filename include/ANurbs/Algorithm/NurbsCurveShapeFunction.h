@@ -263,7 +263,7 @@ public:     // methods
         compute_at_span(knots, span, weights, t);
     }
 
-    static std::pair<std::vector<Index>, MatrixXd> get(const Index degree,
+    static std::pair<std::vector<Index>, linear_algebra::MatrixXd> get(const Index degree,
         const Index order, const std::vector<double>& knots, const double t)
     {
         NurbsCurveShapeFunction shape_function(degree, order);
@@ -272,14 +272,14 @@ public:     // methods
 
         const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
 
-        const Map<MatrixXd> values(shape_function.m_values.data(),
+        const linear_algebra::Map<linear_algebra::MatrixXd> values(shape_function.m_values.data(),
             shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
 
         return {nonzero_pole_indices, values};
     }
 
     template <typename TWeights>
-    static std::pair<std::vector<Index>, MatrixXd> get(const Index degree,
+    static std::pair<std::vector<Index>, linear_algebra::MatrixXd> get(const Index degree,
         const Index order, const std::vector<double>& knots,
         const TWeights& weights, const double t)
     {
@@ -289,7 +289,7 @@ public:     // methods
         
         const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
         
-        const Map<MatrixXd> values(shape_function.m_values.data(),
+        const linear_algebra::Map<linear_algebra::MatrixXd> values(shape_function.m_values.data(),
             shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
         
         return {nonzero_pole_indices, values};
@@ -307,7 +307,7 @@ public:     // python
             const std::vector<double>& knots, const double t) {
             return Type::get(degree, order, knots, t); }, "degree"_a, "order"_a,
             "knots"_a, "t"_a);
-        m.def("shape_functions", &Type::get<VectorXd>, "degree"_a, "order"_a,
+        m.def("shape_functions", &Type::get<linear_algebra::VectorXd>, "degree"_a, "order"_a,
             "knots"_a, "weights"_a, "t"_a);
     }
 };

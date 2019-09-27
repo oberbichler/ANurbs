@@ -10,8 +10,8 @@ template <Index TDimension>
 class CurveTessellation
 {
 public:     // types
-    using CurveBase = CurveBase<TDimension>;
-    using Vector = Vector<TDimension>;
+    using CurveBaseD = CurveBase<TDimension>;
+    using Vector = linear_algebra::Vector<TDimension>;
     using ParameterPoint = std::pair<double, Vector>;
 
 private:    // static methods
@@ -25,7 +25,7 @@ private:    // static methods
     }
 
 public:     // static methods
-    static std::vector<ParameterPoint> compute(const CurveBase& curve,
+    static std::vector<ParameterPoint> compute(const CurveBaseD& curve,
         const double tolerance)
     {
         const Interval domain = curve.domain();

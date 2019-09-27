@@ -14,7 +14,7 @@ template <Index TDimension>
 class Line
 {
 public:
-    using Vector = Vector<TDimension>;
+    using Vector = linear_algebra::Vector<TDimension>;
 
 private:
     Vector m_a;

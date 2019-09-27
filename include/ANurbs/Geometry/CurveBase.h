@@ -10,7 +10,7 @@ template <Index TDimension>
 class CurveBase
 {
 public:     // types
-    using Vector = Vector<TDimension>;
+    using Vector = linear_algebra::Vector<TDimension>;
 
     virtual ~CurveBase() = default;
 

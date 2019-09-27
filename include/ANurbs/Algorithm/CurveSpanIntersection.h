@@ -15,8 +15,7 @@ namespace ANurbs {
 class CurveSpanIntersection
 {
 public:     // types
-    using CurveBase = CurveBase<2>;
-    using Vector = Vector<2>;
+    using Vector = linear_algebra::Vector<2>;
     using ParameterPoint = std::pair<double, Vector>;
 
 private:    // types
@@ -54,7 +53,7 @@ private:    // types
             m_tolerance = tolerance;
         }
 
-        void intersect(const CurveBase& curve, const ParameterPoint& a,
+        void intersect(const CurveBase<2>& curve, const ParameterPoint& a,
             const ParameterPoint& b, std::vector<double>& parameters)
         {
             double t_a = std::get<0>(a);
@@ -140,7 +139,7 @@ private:    // static methods
     }
 
 public:     // static methods
-    static std::vector<double> compute(const CurveBase& curve,
+    static std::vector<double> compute(const CurveBase<2>& curve,
         const std::vector<double>& knots_u, const std::vector<double>& knots_v,
         const double tolerance, const bool include_curve_knots)
     {

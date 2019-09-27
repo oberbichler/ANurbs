@@ -187,7 +187,7 @@ public:     // methods
         m_weights.at(i) = value;
     }
 
-    std::pair<std::vector<Index>, MatrixXd> shape_functions_at(const double t,
+    std::pair<std::vector<Index>, linear_algebra::MatrixXd> shape_functions_at(const double t,
         const Index order) const
     {
         NurbsCurveShapeFunction shape_function(degree(), order);
@@ -199,7 +199,7 @@ public:     // methods
             shape_function.compute(knots(), t);
         }
 
-        MatrixXd values(shape_function.nb_shapes(),
+        linear_algebra::MatrixXd values(shape_function.nb_shapes(),
             shape_function.nb_nonzero_poles());
 
         for (Index i = 0; i < shape_function.nb_shapes(); i++) {

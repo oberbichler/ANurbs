@@ -334,7 +334,7 @@ public:     // methods
         compute_at_span(knots_u, knots_v, span_u, span_v, weights, u, v);
     }
 
-    static std::pair<std::vector<std::pair<Index, Index>>, MatrixXd> get(
+    static std::pair<std::vector<std::pair<Index, Index>>, linear_algebra::MatrixXd> get(
         const Index degree_u, const Index degree_v, const Index order,
         const std::vector<double>& knots_u, const std::vector<double>& knots_v,
         const double u, const double v)
@@ -345,14 +345,14 @@ public:     // methods
         
         const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
         
-        const Map<MatrixXd> values(shape_function.m_values.data(),
+        const linear_algebra::Map<linear_algebra::MatrixXd> values(shape_function.m_values.data(),
             shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
         
         return {nonzero_pole_indices, values};
     }
 
     template <typename TWeights>
-    static std::pair<std::vector<std::pair<Index, Index>>, MatrixXd> get(
+    static std::pair<std::vector<std::pair<Index, Index>>, linear_algebra::MatrixXd> get(
         const Index degree_u, const Index degree_v, const Index order,
         const std::vector<double>& knots_u, const std::vector<double>& knots_v,
         const TWeights& weights, const double u, const double v)
@@ -363,7 +363,7 @@ public:     // methods
         
         const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
         
-        const Map<MatrixXd> values(shape_function.m_values.data(),
+        const linear_algebra::Map<linear_algebra::MatrixXd> values(shape_function.m_values.data(),
             shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
         
         return {nonzero_pole_indices, values};
@@ -383,7 +383,7 @@ public:     // python
             { return Type::get(degree_u, degree_v, order, knots_u, knots_v,
             u, v); }, "degree_u"_a, "degree_v"_a, "order"_a, "knots_u"_a,
             "knots_v"_a, "u"_a, "v"_a);
-        m.def("shape_functions", &Type::get<MatrixXd>, "degree_u"_a,
+        m.def("shape_functions", &Type::get<linear_algebra::MatrixXd>, "degree_u"_a,
             "degree_v"_a, "order"_a, "knots_u"_a, "knots_v"_a, "weights"_a,
             "u"_a, "v"_a);
     }

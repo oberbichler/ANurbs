@@ -15,7 +15,7 @@ class Polyline
 {
 public:     // types
     using Type = Polyline<TDimension>;
-    using Vector = Vector<TDimension>;
+    using Vector = linear_algebra::Vector<TDimension>;
 
 private:    // variables
     std::vector<Vector> m_points;
