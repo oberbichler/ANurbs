@@ -4,10 +4,6 @@ project(ANurbs)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    target_compile_options(pybind11 INTERFACE -fsized-deallocation)
-endif()
-
 include_directories(
     "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/external_libraries"
@@ -25,5 +21,9 @@ pybind11_add_module(ANurbs ${SOURCES}
     "${PROJECT_SOURCE_DIR}/src/Module.cc"
     "${PROJECT_SOURCE_DIR}/external_libraries/ClipperLib/clipper.cpp"
 )
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    target_compile_options(ANurbs PUBLIC -fsized-deallocation)
+endif()
 
 install(TARGETS ANurbs DESTINATION bin)
