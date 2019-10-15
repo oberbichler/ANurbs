@@ -110,6 +110,11 @@ PYBIND11_MODULE(ANurbs, m) {
 
     // --- Geometry
 
+    { // Box
+        Box<2>::register_python(m, model);
+        Box<3>::register_python(m, model);
+    }
+
     { // Brep
         Brep::register_python(m, model);
     }

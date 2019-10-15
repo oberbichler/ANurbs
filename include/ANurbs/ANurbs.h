@@ -17,6 +17,7 @@
 #include "Algorithm/PolygonIntegrationPoints.h"
 #include "Algorithm/PolygonTessellation.h"
 #include "Algorithm/TrimmedSurfaceClipping.h"
+#include "Geometry/Box.h"
 #include "Geometry/Brep.h"
 #include "Geometry/BrepEdge.h"
 #include "Geometry/BrepFace.h"
