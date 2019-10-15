@@ -108,7 +108,7 @@ private:    // methods
             size_t s = 0;
 
             for (Index j = 0; j < TDimension; j++) {
-                s += bit(p[j], i) * (1 << j);
+                s += bit(p[j], i) << j;
             }
 
             const size_t l = t(ve, vd, s);
@@ -133,7 +133,7 @@ private:    // methods
             size_t w = 0;
 
             for (Index j = 0; j < TDimension; j++) {
-                w += bit(h, i * TDimension + j) * (1 << j);
+                w += bit(h, i * TDimension + j) << j;
             }
 
             const size_t l = inverse_t(ve, vd, gc(w));
