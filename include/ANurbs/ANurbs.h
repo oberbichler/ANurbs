@@ -6,6 +6,7 @@
 #include "Algorithm/BrepFaceIntegrationPoints.h"
 #include "Algorithm/CurveSpanIntersection.h"
 #include "Algorithm/CurveTessellation.h"
+#include "Algorithm/HilbertCurve.h"
 #include "Algorithm/IntegrationPoints.h"
 #include "Algorithm/KnotRefinement.h"
 #include "Algorithm/Nurbs.h"
