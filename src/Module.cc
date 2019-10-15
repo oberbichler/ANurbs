@@ -42,6 +42,11 @@ PYBIND11_MODULE(ANurbs, m) {
         CurveTessellation<3>::register_python(m);
     }
 
+    { // HilbertCurve
+        HilbertCurve<2>::register_python(m);
+        HilbertCurve<3>::register_python(m);
+    }
+
     { // KnotRefinement
         KnotRefinement<2>::register_python(m);
         KnotRefinement<3>::register_python(m);
@@ -178,12 +183,6 @@ PYBIND11_MODULE(ANurbs, m) {
 
     { // Polygon
         Polygon::register_python(m);
-    }
-
-
-    { // HilbertCurve
-        HilbertCurve<2>::register_python(m);
-        HilbertCurve<3>::register_python(m);
     }
 
     m.def("test", [](Pointer<Line<3>> line) {return line;});
