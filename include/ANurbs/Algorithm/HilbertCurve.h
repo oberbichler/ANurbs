@@ -47,7 +47,7 @@ private:    // methods
 
     static size_t bit(const size_t x, const size_t i) noexcept
     {
-        return (x & (1 << i)) >> i;
+        return x >> i & 1;
     }
 
     static size_t gc(const size_t i) noexcept
