@@ -25,14 +25,14 @@ private:    // methods
         return result;
     }
 
-    static size_t rotl(const size_t x, const Index d) noexcept
+    static size_t rol(const size_t x, const Index d) noexcept
     {
         const Index c = d % TDimension >= 0 ? d % TDimension
                                             : d % TDimension + TDimension;
         return (x << c | x >> (TDimension - c)) & ((1 << TDimension) - 1);
     }
 
-    static size_t rotr(const size_t x, const Index d) noexcept
+    static size_t ror(const size_t x, const Index d) noexcept
     {
         const Index c = d % TDimension >= 0 ? d % TDimension
                                             : d % TDimension + TDimension;
@@ -85,12 +85,12 @@ private:    // methods
 
     static size_t t(const size_t e, const Index d, const size_t b) noexcept
     {
-        return rotr(b ^ e, d + 1);
+        return ror(b ^ e, d + 1);
     }
 
     static size_t inverse_t(const size_t e, const Index d, const size_t b) noexcept
     {
-        return t(rotr(e, d + 1), TDimension - d - 2, b);
+        return t(ror(e, d + 1), TDimension - d - 2, b);
     }
 
     static size_t project(const size_t m, const VectorU p) noexcept
@@ -109,7 +109,7 @@ private:    // methods
             const size_t l = t(ve, vd, s);
             const size_t w = inverse_gc(l);
 
-            ve = ve ^ (rotl(e(w), vd + 1));
+            ve = ve ^ (rol(e(w), vd + 1));
             vd = (vd + d(w) + 1) % TDimension;
             h = (h << TDimension) | w;
         }
@@ -137,7 +137,7 @@ private:    // methods
                 p[j] += bit(l, j) << i;
             }
 
-            ve = ve ^ rotl(e(w), vd + 1);
+            ve = ve ^ rol(e(w), vd + 1);
             vd = (vd + d(w) + 1) % TDimension;
         }
 
@@ -196,8 +196,8 @@ public:     // python
             .def_static("_gc", &Type::gc)
             .def_static("_inverse_gc", &Type::inverse_gc)
             .def_static("_inverse_t", &Type::inverse_t)
-            .def_static("_rotl", &Type::rotl)
-            .def_static("_rotr", &Type::rotr)
+            .def_static("_rol", &Type::rol)
+            .def_static("_ror", &Type::ror)
             .def_static("_t", &Type::t)
             .def_static("_evaluate", &Type::evaluate)
             .def_static("_project", &Type::project)

@@ -7,109 +7,109 @@ class TestHilbertCurve(unittest.TestCase):
     def test_rotl_2d(self):
         b = lambda bin_str: int(bin_str, 2)
 
-        actual = an.HilbertCurve2D._rotl(b('01'), 0)
+        actual = an.HilbertCurve2D._rol(b('01'), 0)
         self.assertEqual(actual, b('01'))
 
-        actual = an.HilbertCurve2D._rotl(b('01'), 1)
+        actual = an.HilbertCurve2D._rol(b('01'), 1)
         self.assertEqual(actual, b('10'))
 
-        actual = an.HilbertCurve2D._rotl(b('01'), 2)
+        actual = an.HilbertCurve2D._rol(b('01'), 2)
         self.assertEqual(actual, b('01'))
 
-        actual = an.HilbertCurve2D._rotl(b('01'), 3)
+        actual = an.HilbertCurve2D._rol(b('01'), 3)
         self.assertEqual(actual, b('10'))
 
-        actual = an.HilbertCurve2D._rotl(b('01'), -1)
+        actual = an.HilbertCurve2D._rol(b('01'), -1)
         self.assertEqual(actual, b('10'))
 
-        actual = an.HilbertCurve2D._rotl(b('01'), -2)
+        actual = an.HilbertCurve2D._rol(b('01'), -2)
         self.assertEqual(actual, b('01'))
 
-        actual = an.HilbertCurve2D._rotl(b('01'), -3)
+        actual = an.HilbertCurve2D._rol(b('01'), -3)
         self.assertEqual(actual, b('10'))
 
     def test_rotl_3d(self):
         b = lambda bin_str: int(bin_str, 2)
 
-        actual = an.HilbertCurve3D._rotl(b('001'), 0)
+        actual = an.HilbertCurve3D._rol(b('001'), 0)
         self.assertEqual(actual, b('001'))
 
-        actual = an.HilbertCurve3D._rotl(b('001'), 1)
+        actual = an.HilbertCurve3D._rol(b('001'), 1)
         self.assertEqual(actual, b('010'))
 
-        actual = an.HilbertCurve3D._rotl(b('001'), 2)
+        actual = an.HilbertCurve3D._rol(b('001'), 2)
         self.assertEqual(actual, b('100'))
 
-        actual = an.HilbertCurve3D._rotl(b('001'), 3)
+        actual = an.HilbertCurve3D._rol(b('001'), 3)
         self.assertEqual(actual, b('001'))
 
-        actual = an.HilbertCurve3D._rotl(b('001'), 4)
+        actual = an.HilbertCurve3D._rol(b('001'), 4)
         self.assertEqual(actual, b('010'))
 
-        actual = an.HilbertCurve3D._rotl(b('001'), -1)
+        actual = an.HilbertCurve3D._rol(b('001'), -1)
         self.assertEqual(actual, b('100'))
 
-        actual = an.HilbertCurve3D._rotl(b('001'), -2)
+        actual = an.HilbertCurve3D._rol(b('001'), -2)
         self.assertEqual(actual, b('010'))
 
-        actual = an.HilbertCurve3D._rotl(b('001'), -3)
+        actual = an.HilbertCurve3D._rol(b('001'), -3)
         self.assertEqual(actual, b('001'))
 
-        actual = an.HilbertCurve3D._rotl(b('001'), -4)
+        actual = an.HilbertCurve3D._rol(b('001'), -4)
         self.assertEqual(actual, b('100'))
 
     def test_rotr_2d(self):
         b = lambda bin_str: int(bin_str, 2)
 
-        actual = an.HilbertCurve2D._rotr(b('01'), 0)
+        actual = an.HilbertCurve2D._ror(b('01'), 0)
         self.assertEqual(actual, b('01'))
 
-        actual = an.HilbertCurve2D._rotr(b('01'), -1)
+        actual = an.HilbertCurve2D._ror(b('01'), -1)
         self.assertEqual(actual, b('10'))
 
-        actual = an.HilbertCurve2D._rotr(b('01'), -2)
+        actual = an.HilbertCurve2D._ror(b('01'), -2)
         self.assertEqual(actual, b('01'))
 
-        actual = an.HilbertCurve2D._rotr(b('01'), -3)
+        actual = an.HilbertCurve2D._ror(b('01'), -3)
         self.assertEqual(actual, b('10'))
 
-        actual = an.HilbertCurve2D._rotr(b('01'), 1)
+        actual = an.HilbertCurve2D._ror(b('01'), 1)
         self.assertEqual(actual, b('10'))
 
-        actual = an.HilbertCurve2D._rotr(b('01'), 2)
+        actual = an.HilbertCurve2D._ror(b('01'), 2)
         self.assertEqual(actual, b('01'))
 
-        actual = an.HilbertCurve2D._rotr(b('01'), 3)
+        actual = an.HilbertCurve2D._ror(b('01'), 3)
         self.assertEqual(actual, b('10'))
 
     def test_rotr_3d(self):
         b = lambda bin_str: int(bin_str, 2)
 
-        actual = an.HilbertCurve3D._rotr(b('001'), 0)
+        actual = an.HilbertCurve3D._ror(b('001'), 0)
         self.assertEqual(actual, b('001'))
 
-        actual = an.HilbertCurve3D._rotr(b('001'), -1)
+        actual = an.HilbertCurve3D._ror(b('001'), -1)
         self.assertEqual(actual, b('010'))
 
-        actual = an.HilbertCurve3D._rotr(b('001'), -2)
+        actual = an.HilbertCurve3D._ror(b('001'), -2)
         self.assertEqual(actual, b('100'))
 
-        actual = an.HilbertCurve3D._rotr(b('001'), -3)
+        actual = an.HilbertCurve3D._ror(b('001'), -3)
         self.assertEqual(actual, b('001'))
 
-        actual = an.HilbertCurve3D._rotr(b('001'), -4)
+        actual = an.HilbertCurve3D._ror(b('001'), -4)
         self.assertEqual(actual, b('010'))
 
-        actual = an.HilbertCurve3D._rotr(b('001'), 1)
+        actual = an.HilbertCurve3D._ror(b('001'), 1)
         self.assertEqual(actual, b('100'))
 
-        actual = an.HilbertCurve3D._rotr(b('001'), 2)
+        actual = an.HilbertCurve3D._ror(b('001'), 2)
         self.assertEqual(actual, b('010'))
 
-        actual = an.HilbertCurve3D._rotr(b('001'), 3)
+        actual = an.HilbertCurve3D._ror(b('001'), 3)
         self.assertEqual(actual, b('001'))
 
-        actual = an.HilbertCurve3D._rotr(b('001'), 4)
+        actual = an.HilbertCurve3D._ror(b('001'), 4)
         self.assertEqual(actual, b('100'))
 
     def bit(self, hilbert_curve):
