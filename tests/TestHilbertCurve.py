@@ -406,7 +406,7 @@ class TestHilbertCurve(unittest.TestCase):
             (3, 0),
         ]
 
-        actual = [an.HilbertCurve2D._evaluate(2, i) for i in range(16)]
+        actual = [an.HilbertCurve2D.point_at(2, i) for i in range(16)]
 
         assert_array_equal(actual, expected)
 
@@ -478,32 +478,32 @@ class TestHilbertCurve(unittest.TestCase):
             (3, 0, 0),
         ]
 
-        actual = [an.HilbertCurve3D._evaluate(2, i) for i in range(64)]
+        actual = [an.HilbertCurve3D.point_at(2, i) for i in range(64)]
 
         assert_array_equal(actual, expected)
 
     def test_project_2d(self):
         for i in range(16):
-            p = an.HilbertCurve2D._evaluate(2, i)
-            h = an.HilbertCurve2D._project(2, p)
+            p = an.HilbertCurve2D.point_at(2, i)
+            h = an.HilbertCurve2D.index_at(2, p)
             self.assertEqual(h, i)
 
     def test_project_3d(self):
         for i in range(64):
-            p = an.HilbertCurve3D._evaluate(2, i)
-            h = an.HilbertCurve3D._project(2, p)
+            p = an.HilbertCurve3D.point_at(2, i)
+            h = an.HilbertCurve3D.index_at(2, p)
             self.assertEqual(h, i)
 
     def test_end_point_2d(self):
         n = 2
         for m in range(32):
-            p = an.HilbertCurve2D._evaluate(m, 2**(n * m) - 1)
+            p = an.HilbertCurve2D.point_at(m, 2**(n * m) - 1)
             assert_array_equal(p, [2**m - 1, 0])
 
     def test_end_point_3d(self):
         n = 3
         for m in range(22):
-            p = an.HilbertCurve3D._evaluate(m, 2**(n * m) - 1)
+            p = an.HilbertCurve3D.point_at(m, 2**(n * m) - 1)
             assert_array_equal(p, [2**m - 1, 0, 0])
 
 if __name__ == '__main__':

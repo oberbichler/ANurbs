@@ -93,8 +93,11 @@ private:    // methods
         return t(ror(e, d + 1), TDimension - d - 2, b);
     }
 
-    static size_t project(const size_t m, const VectorU p) noexcept
+public:     // static methods
+    static size_t index_at(const size_t m, const VectorU p) noexcept
     {
+        // FIXME: check m
+
         size_t h = 0;
         size_t ve = 0;
         size_t vd = 0;
@@ -117,8 +120,10 @@ private:    // methods
         return h;
     }
 
-    static VectorU evaluate(const size_t m, const size_t h) noexcept
+    static VectorU point_at(const size_t m, const size_t h) noexcept
     {
+        // FIXME: check m
+
         size_t ve = 0;
         size_t vd = 0;
 
@@ -166,8 +171,9 @@ public:     // python
             .def_static("_rol", &Type::rol)
             .def_static("_ror", &Type::ror)
             .def_static("_t", &Type::t)
-            .def_static("_evaluate", &Type::evaluate)
-            .def_static("_project", &Type::project)
+            // static methods
+            .def_static("index_at", &Type::index_at)
+            .def_static("point_at", &Type::point_at)
         ;
     }
 };
