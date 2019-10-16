@@ -120,6 +120,12 @@ public:     // static methods
         return h;
     }
 
+    static size_t index_at(const VectorU p) noexcept
+    {
+        const size_t m = 8 * sizeof(size_t) / TDimension;
+        return index_at(m, p);
+    }
+
     static VectorU point_at(const size_t m, const size_t h) noexcept
     {
         // FIXME: check m
@@ -149,6 +155,12 @@ public:     // static methods
         return p;
     }
 
+    static VectorU point_at(const size_t h) noexcept
+    {
+        const size_t m = 8 * sizeof(size_t) / TDimension;
+        return point_at(m, h);
+    }
+
 public:     // python
     static void register_python(pybind11::module& m)
     {
@@ -172,8 +184,10 @@ public:     // python
             .def_static("_ror", &Type::ror)
             .def_static("_t", &Type::t)
             // static methods
-            .def_static("index_at", &Type::index_at)
-            .def_static("point_at", &Type::point_at)
+            .def_static("index_at",
+                py::overload_cast<size_t, VectorU>(&Type::index_at))
+            .def_static("point_at",
+                py::overload_cast<size_t, size_t>(&Type::point_at))
         ;
     }
 };
