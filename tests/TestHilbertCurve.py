@@ -496,7 +496,7 @@ class TestHilbertCurve(unittest.TestCase):
 
     def test_end_point_2d(self):
         n = 2
-        for m in range(32):
+        for m in range(33):
             p = an.HilbertCurve2D.point_at(m, 2**(n * m) - 1)
             assert_array_equal(p, [2**m - 1, 0])
 
