@@ -144,39 +144,6 @@ private:    // methods
         return p;
     }
 
-private:    // variables
-    Vector m_min;
-    Vector m_max;
-    size_t m_m = 4 * sizeof(size_t) / TDimension;   // TODO: Use full range
-
-public:     // constructor
-    HilbertCurve(const Vector a, const Vector b)
-    {
-        for (Index i = 0; i < TDimension; i++) {
-            if (a[i] < b[i]) {
-                m_min[i] = a[i];
-                m_max[i] = b[i];
-            } else {
-                m_min[i] = b[i];
-                m_max[i] = a[i];
-            }
-        }
-    }
-
-public:     // methods
-    Vector point_at(const size_t h) const
-    {
-        VectorU p = evaluate(m_m, h);
-
-        Vector result;
-
-        for (Index i = 0; i < TDimension; i++) {
-            result[i] = m_min[i] + p[i] * (m_max[i] - m_min[i]) / (1 << m_m);
-        }
-
-        return result;
-    }
-
 public:     // python
     static void register_python(pybind11::module& m)
     {
@@ -201,9 +168,6 @@ public:     // python
             .def_static("_t", &Type::t)
             .def_static("_evaluate", &Type::evaluate)
             .def_static("_project", &Type::project)
-            // constructor
-            .def(py::init<Vector, Vector>())
-            .def("point_at", &Type::point_at)
         ;
     }
 };
