@@ -27,22 +27,16 @@ private:    // methods
 
     static size_t rotl(const size_t x, const Index d) noexcept
     {
-        std::bitset<TDimension> bits(x);
-
         const Index c = d % TDimension >= 0 ? d % TDimension
                                             : d % TDimension + TDimension;
-
-        return (bits << c | bits >> (TDimension - c)).to_ulong();
+        return (x << c | x >> (TDimension - c)) & ((1 << TDimension) - 1);
     }
 
     static size_t rotr(const size_t x, const Index d) noexcept
     {
-        std::bitset<TDimension> bits(x);
-
         const Index c = d % TDimension >= 0 ? d % TDimension
                                             : d % TDimension + TDimension;
-
-        return (bits >> c | bits << (TDimension - c)).to_ulong();
+        return (x >> c | x << (TDimension - c)) & ((1 << TDimension) - 1);
     }
 
     static size_t bit(const size_t x, const size_t i) noexcept
