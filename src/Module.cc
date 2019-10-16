@@ -1,6 +1,7 @@
 #include <ANurbs/ANurbs.h>
 
 #include <pybind11/eigen.h>
+#include <pybind11/functional.h>
 #include <pybind11/stl_bind.h>
 
 PYBIND11_MODULE(ANurbs, m) {
@@ -93,6 +94,11 @@ PYBIND11_MODULE(ANurbs, m) {
 
     { // PolygonTessellation
         PolygonTessellation::register_python(m);
+    }
+
+    { // RTree
+        RTree<2>::register_python(m);
+        RTree<3>::register_python(m);
     }
 
     { // TrimmedSurfaceClipping

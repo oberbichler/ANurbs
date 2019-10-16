@@ -122,8 +122,18 @@ public:     // static methods
 
     static size_t index_at(const VectorU p) noexcept
     {
-        const size_t m = 8 * sizeof(size_t) / TDimension;
+        const size_t m = max_m();
         return index_at(m, p);
+    }
+
+    static constexpr size_t max_axis_size() noexcept
+    {
+        return (size_t)1 << max_m();
+    }
+
+    static constexpr size_t max_m() noexcept
+    {
+        return 8 * sizeof(size_t) / TDimension;
     }
 
     static VectorU point_at(const size_t m, const size_t h) noexcept
@@ -157,7 +167,7 @@ public:     // static methods
 
     static VectorU point_at(const size_t h) noexcept
     {
-        const size_t m = 8 * sizeof(size_t) / TDimension;
+        const size_t m = max_m();
         return point_at(m, h);
     }
 

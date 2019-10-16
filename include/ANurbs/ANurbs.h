@@ -16,6 +16,7 @@
 #include "Algorithm/PointOnSurfaceProjection.h"
 #include "Algorithm/PolygonIntegrationPoints.h"
 #include "Algorithm/PolygonTessellation.h"
+#include "Algorithm/RTree.h"
 #include "Algorithm/TrimmedSurfaceClipping.h"
 #include "Geometry/Box.h"
 #include "Geometry/Brep.h"
