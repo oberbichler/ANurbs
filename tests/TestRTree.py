@@ -129,7 +129,7 @@ class TestRTree(unittest.TestCase):
 
         assert_array_equal(np.sort(ids), [6, 29, 31, 75])
 
-    def test_example_3d(self):
+    def create_tree_3d(self):
         data = [[(-28, -35, -20), (-17, -27,  -7)],
                 [(-53, -55,  59), (-49, -47,  79)],
                 [( 22, -19,  55), ( 35,  -4,  58)],
@@ -237,7 +237,12 @@ class TestRTree(unittest.TestCase):
             index.add(box_a, box_b)
 
         index.finish()
-        
+
+        return index
+
+    def test_create_3d(self):
+        index = self.create_tree_3d()
+
         assert_equal(index.nb_items, 100)
         assert_equal(index.node_size, 16)
         assert_equal(len(index.indices), 108)
@@ -250,9 +255,19 @@ class TestRTree(unittest.TestCase):
         assert_equal(index._boxes_min[-1], [-67, -82, -47])
         assert_equal(index._boxes_max[-1], [ 55,  28,  79])
 
+    def test_search_3d(self):
+        index = self.create_tree_3d()
+
         ids = index.search([-24, -52, -11], [24, -12,  37], None)
 
         assert_array_equal(np.sort(ids), [0, 14, 17, 21, 33, 38, 39, 41, 45, 52, 55, 58, 65, 83, 90, 94])
+
+    def test_search_ray_intersection_3d(self):
+        index = self.create_tree_3d()
+
+        ids = index.search_ray_intersection([33, -26, -22], [-82, -13, 60], None)
+
+        assert_array_equal(np.sort(ids), [38, 63, 81])
 
 if __name__ == '__main__':
     unittest.main()
