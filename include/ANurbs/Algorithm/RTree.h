@@ -101,7 +101,8 @@ private:    // methods
         sort(values, j + 1, right);
     }
 
-    void swap(std::vector<size_t>& values, const Index i, const Index j) {
+    void swap(std::vector<size_t>& values, const Index i, const Index j)
+    {
         std::swap(values[i], values[j]);
         std::swap(m_indices[i], m_indices[j]);
         std::swap(m_boxes_min[i], m_boxes_min[j]);
