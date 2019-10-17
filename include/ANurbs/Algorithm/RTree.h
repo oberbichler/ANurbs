@@ -16,6 +16,7 @@ template <Index TDimension>
 class RTree
 {
 private:    // types
+    using Callback = std::function<bool(Index)>;
     using Vector = linear_algebra::Vector<TDimension>;
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
     using Type = RTree<TDimension>;
@@ -48,6 +49,83 @@ private:    // types
                     return false;
                 }
             }
+            return true;
+        }
+    };
+
+    struct IntersectsRay
+    {
+        Vector m_origin;
+        Vector m_direction;
+
+        IntersectsRay(const Vector m_origin, const Vector direction)
+        : m_origin(m_origin), m_direction(direction)
+        {
+        }
+
+        bool operator()(const Vector node_min, const Vector node_max) const noexcept
+        {
+            // based on Fast Ray-Box Intersection
+            // by Andrew Woo
+            // from "Graphics Gems", Academic Press, 1990
+
+            bool inside = true;
+            VectorU quadrant = VectorU::Zero(); // FIXME: choose other type...
+            int whichPlane = 0;
+            Vector maxT = Vector::Zero();
+            Vector candidatePlane = Vector::Zero();
+            Vector coord = Vector::Zero();
+
+            for (Index i = 0; i < TDimension; i++) {
+                if (m_origin[i] < node_min[i]) {
+                    quadrant[i] = -1;
+                    candidatePlane[i] = node_min[i];
+                    inside = false;
+                } else if (m_origin[i] > node_max[i]) {
+                    quadrant[i] = 1;
+                    candidatePlane[i] = node_max[i];
+                    inside = false;
+                } else {
+                    quadrant[i] = 0;
+                }
+            }
+
+            if (inside) {
+                coord = m_origin;
+                return true;
+            }
+
+            for (Index i = 0; i < TDimension; i++) {
+                if (quadrant[i] != 0 && m_direction[i] != 0) {
+                    maxT[i] = (candidatePlane[i] - m_origin[i]) / m_direction[i];
+                } else {
+                    maxT[i] = -1;
+                }
+            }
+
+            whichPlane = 0;
+            
+            for (Index i = 1; i < TDimension; i++) {
+                if (maxT[whichPlane] < maxT[i]) {
+                    whichPlane = i;
+                }
+            }
+
+            if (maxT[whichPlane] < 0) {
+                return false;
+            }
+
+            for (Index i = 0; i < TDimension; i++) {
+                if (whichPlane != i) {
+                    coord[i] = m_origin[i] + maxT[whichPlane] * m_direction[i];
+                    if (coord[i] < node_min[i] or coord[i] > node_max[i]) {
+                        return false;
+                    }
+                } else {
+                    coord[i] = candidatePlane[i];
+                }
+            }
+
             return true;
         }
     };
@@ -287,13 +365,12 @@ public:     // methods
         return m_node_size;
     }
 
-    std::vector<Index> search(const Vector box_a, const Vector box_b, std::function<bool(Index)> callback)
+    template <typename TCheck>
+    std::vector<Index> search_for(const TCheck& check, Callback callback)
     {
         if (m_position != length(m_indices)) {
             throw std::runtime_error("Data not yet indexed - call RTree::finish().");
         }
-
-        ContainsBox check(box_a, box_b); // FIXME: make this more general
 
         Index node_index = length(m_indices) - 1;
         Index level = length(m_level_bounds) - 1;
@@ -337,6 +414,18 @@ public:     // methods
         return results;
     }
 
+    std::vector<Index> search(const Vector box_a, const Vector box_b, Callback callback)
+    {
+        ContainsBox check(box_a, box_b);
+        return search_for<ContainsBox>(check, callback);
+    }
+
+    std::vector<Index> search_ray_intersection(const Vector origin, const Vector direction, Callback callback)
+    {
+        IntersectsRay check(origin, direction);
+        return search_for<IntersectsRay>(check, callback);
+    }
+
 public:     // serialization
     static std::string type_name()
     {
@@ -366,8 +455,8 @@ public:     // python
             // methods
             .def("add", &Type::add, "box_a"_a, "box_b"_a)
             .def("finish", &Type::finish)
-            .def("search", &Type::search, "box_a"_a, "box_b"_a,
-                "callback"_a=py::none())
+            .def("search", &Type::search, "box_a"_a, "box_b"_a, "callback"_a=py::none())
+            .def("search_ray_intersection", &Type::search_ray_intersection, "origin"_a, "direction"_a, "callback"_a=py::none())
         ;
     }
 };
