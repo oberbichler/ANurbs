@@ -9,6 +9,12 @@ namespace ANurbs {
 template <Index TDimension>
 class HilbertCurve
 {
+    // Sources:
+    //
+    // - Compact Hilbert indices: Space-filling curves for domains with unequal side lengths
+    //   by Chris H. Hamilton and Andrew Rau-Chaplin
+    //
+
 private:    // types
     using Vector = linear_algebra::Vector<TDimension>;
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;

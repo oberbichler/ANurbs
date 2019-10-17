@@ -15,6 +15,12 @@ namespace ANurbs {
 template <Index TDimension>
 class RTree
 {
+    // Sources:
+    // 
+    // - 'Flatbush'
+    //    by Vladimir Agafonkin
+    //    https://github.com/mourner/flatbush
+
 private:    // types
     using Callback = std::function<bool(Index)>;
     using Vector = linear_algebra::Vector<TDimension>;
