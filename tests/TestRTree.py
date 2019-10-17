@@ -112,7 +112,7 @@ class TestRTree(unittest.TestCase):
             index.add(box_a, box_b)
 
         index.finish()
-        
+
         assert_equal(index.nb_items, 100)
         assert_equal(index.node_size, 16)
         assert_equal(len(index.indices), 108)
