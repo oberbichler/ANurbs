@@ -45,7 +45,7 @@ public:     // constructor
         }
 
         m_nb_items = nb_items;
-        m_node_size = std::min<Index>(std::max<Index>(node_size, 2), (1 << 16) - 1); // FIXME:
+        m_node_size = std::min<Index>(std::max<Index>(node_size, 2), ((size_t)1 << (4 * sizeof(size_t))) - 1);
 
         Index n = nb_items;
         Index nb_nodes = n;
