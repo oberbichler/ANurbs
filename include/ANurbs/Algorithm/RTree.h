@@ -20,6 +20,38 @@ private:    // types
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
     using Type = RTree<TDimension>;
 
+    struct ContainsBox
+    {
+        Vector m_box_min;
+        Vector m_box_max;
+
+        ContainsBox(const Vector box_a, const Vector box_b)
+        {
+            for (Index i = 0; i < TDimension; i++) {
+                if (box_a[i] < box_b[i]) {
+                    m_box_min[i] = box_a[i];
+                    m_box_max[i] = box_b[i];
+                } else {
+                    m_box_min[i] = box_b[i];
+                    m_box_max[i] = box_a[i];
+                }
+            }
+        }
+
+        bool operator()(const Vector node_min, const Vector node_max) const noexcept
+        {
+            for (Index i = 0; i < TDimension; i++) {
+                if (m_box_max[i] < node_min[i]) {
+                    return false;
+                }
+                if (m_box_min[i] > node_max[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    };
+
 private:    // variables
     Index m_nb_items;
     Index m_node_size;
@@ -261,18 +293,7 @@ public:     // methods
             throw std::runtime_error("Data not yet indexed - call RTree::finish().");
         }
 
-        Vector box_min;
-        Vector box_max;
-
-        for (Index i = 0; i < dimension(); i++) {
-            if (box_a[i] < box_b[i]) {
-                box_min[i] = box_a[i];
-                box_max[i] = box_b[i];
-            } else {
-                box_min[i] = box_b[i];
-                box_max[i] = box_a[i];
-            }
-        }
+        ContainsBox check(box_a, box_b); // FIXME: make this more general
 
         Index node_index = length(m_indices) - 1;
         Index level = length(m_level_bounds) - 1;
@@ -288,11 +309,7 @@ public:     // methods
                 const Vector node_min = m_boxes_min[pos];
                 const Vector node_max = m_boxes_max[pos];
 
-                if ((box_max - node_min).minCoeff() < 0) {
-                    continue;
-                }
-
-                if ((box_min - node_max).maxCoeff() > 0) {
+                if (!check(node_min, node_max)) {
                     continue;
                 }
 
