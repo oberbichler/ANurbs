@@ -423,13 +423,13 @@ public:     // methods
     std::vector<Index> search(const Vector box_a, const Vector box_b, Callback callback)
     {
         ContainsBox check(box_a, box_b);
-        return search_for<ContainsBox>(check, callback);
+        return search_for(check, callback);
     }
 
     std::vector<Index> search_ray_intersection(const Vector origin, const Vector direction, Callback callback)
     {
         IntersectsRay check(origin, direction);
-        return search_for<IntersectsRay>(check, callback);
+        return search_for(check, callback);
     }
 
 public:     // serialization
