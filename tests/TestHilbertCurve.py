@@ -3,7 +3,7 @@ import ANurbs as an
 from numpy.testing import assert_array_almost_equal, assert_array_equal
 
 class TestHilbertCurve(unittest.TestCase):
-    def test_rotl_2d(self):
+    def test_rol_2d(self):
         b = lambda bin_str: int(bin_str, 2)
 
         actual = an.HilbertCurve2D._rol(b('01'), 0)
@@ -27,7 +27,7 @@ class TestHilbertCurve(unittest.TestCase):
         actual = an.HilbertCurve2D._rol(b('01'), -3)
         self.assertEqual(actual, b('10'))
 
-    def test_rotl_3d(self):
+    def test_rol_3d(self):
         b = lambda bin_str: int(bin_str, 2)
 
         actual = an.HilbertCurve3D._rol(b('001'), 0)
@@ -57,7 +57,7 @@ class TestHilbertCurve(unittest.TestCase):
         actual = an.HilbertCurve3D._rol(b('001'), -4)
         self.assertEqual(actual, b('100'))
 
-    def test_rotr_2d(self):
+    def test_ror_2d(self):
         b = lambda bin_str: int(bin_str, 2)
 
         actual = an.HilbertCurve2D._ror(b('01'), 0)
@@ -81,7 +81,7 @@ class TestHilbertCurve(unittest.TestCase):
         actual = an.HilbertCurve2D._ror(b('01'), 3)
         self.assertEqual(actual, b('10'))
 
-    def test_rotr_3d(self):
+    def test_ror_3d(self):
         b = lambda bin_str: int(bin_str, 2)
 
         actual = an.HilbertCurve3D._ror(b('001'), 0)
