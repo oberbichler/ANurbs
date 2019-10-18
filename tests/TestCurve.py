@@ -1,10 +1,10 @@
 import unittest
 import ANurbs as an
-import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 
 class TestCurve(unittest.TestCase):
-    def test_bspline_3d(self):
+    @staticmethod
+    def test_bspline_3d():
         curve_geometry = an.NurbsCurveGeometry3D(
             degree=4,
             nb_poles=8,

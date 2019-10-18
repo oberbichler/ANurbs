@@ -1,10 +1,10 @@
 import unittest
 import ANurbs as an
-import numpy as np
-from numpy.testing import assert_array_almost_equal, assert_almost_equal
+from numpy.testing import assert_array_almost_equal
 
 class TestNurbsCurveShapeFunction(unittest.TestCase):
-    def test_without_weights(self):
+    @staticmethod
+    def test_without_weights():
         nonzero_pole_indices, shape_functions = an.shape_functions(
             degree=2,
             order=2,
@@ -24,7 +24,8 @@ class TestNurbsCurveShapeFunction(unittest.TestCase):
              [ 0.50, -1.00, 0.50]]
         )
 
-    def test_with_equal_weights(self):
+    @staticmethod
+    def test_with_equal_weights():
         nonzero_pole_indices, shape_functions = an.shape_functions(
             degree=2,
             order=2,
@@ -45,7 +46,8 @@ class TestNurbsCurveShapeFunction(unittest.TestCase):
              [ 0.50, -1.00, 0.50]]
         )
 
-    def test_with_weights(self):
+    @staticmethod
+    def test_with_weights():
         nonzero_pole_indices, shape_functions = an.shape_functions(
             degree=2,
             order=2,
@@ -66,7 +68,8 @@ class TestNurbsCurveShapeFunction(unittest.TestCase):
              [ 0.48, -0.96,  0.48]]
         )
 
-    def test_line_2d(self):
+    @staticmethod
+    def test_line_2d():
         nonzero_pole_indices, shape_functions = an.shape_functions(
             degree=1,
             order=1,

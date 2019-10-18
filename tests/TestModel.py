@@ -1,7 +1,5 @@
 import unittest
 import ANurbs as an
-import numpy as np
-from numpy.testing import assert_array_almost_equal, assert_almost_equal
 
 class TestModel(unittest.TestCase):
     def test_load_array(self):
