@@ -27,12 +27,13 @@ private:    // types
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
     using Type = RTree<TDimension>;
 
+    template <bool TIntersection=true>
     struct ContainsBox
     {
         Vector m_box_min;
         Vector m_box_max;
 
-        ContainsBox(const Vector box_a, const Vector box_b)
+        ContainsBox(const Vector box_a, const Vector box_b) noexcept
         {
             for (Index i = 0; i < TDimension; i++) {
                 if (box_a[i] < box_b[i]) {
@@ -47,12 +48,23 @@ private:    // types
 
         bool operator()(const Vector node_min, const Vector node_max) const noexcept
         {
-            for (Index i = 0; i < TDimension; i++) {
-                if (m_box_max[i] < node_min[i]) {
-                    return false;
+            if (TIntersection) {
+                for (Index i = 0; i < TDimension; i++) {
+                    if (m_box_max[i] < node_min[i]) {
+                        return false;
+                    }
+                    if (m_box_min[i] > node_max[i]) {
+                        return false;
+                    }
                 }
-                if (m_box_min[i] > node_max[i]) {
-                    return false;
+            } else {
+                for (Index i = 0; i < TDimension; i++) {
+                    if (m_box_min[i] < node_min[i]) {
+                        return false;
+                    }
+                    if (m_box_max[i] > node_max[i]) {
+                        return false;
+                    }
                 }
             }
             return true;
@@ -64,7 +76,7 @@ private:    // types
         Vector m_origin;
         Vector m_direction;
 
-        IntersectsRay(const Vector origin, const Vector direction)
+        IntersectsRay(const Vector origin, const Vector direction) noexcept
         : m_origin(origin), m_direction(direction)
         {
         }
@@ -422,7 +434,7 @@ public:     // methods
 
     std::vector<Index> search(const Vector box_a, const Vector box_b, Callback callback)
     {
-        ContainsBox check(box_a, box_b);
+        ContainsBox<true> check(box_a, box_b);
         return search_for(check, callback);
     }
 
