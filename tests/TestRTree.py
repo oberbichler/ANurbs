@@ -134,14 +134,14 @@ class TestRTree(unittest.TestCase):
     def test_search_2d(self):
         index = TestRTree.create_tree_2d()
 
-        ids = index.search(box_a=[40, 40], box_b=[60, 60])
+        ids = index.within_box(box_a=[40, 40], box_b=[60, 60])
 
         assert_array_equal(np.sort(ids), [6, 29, 31, 75])
 
     def test_search_ray_intersection_2d(self):
         index = TestRTree.create_tree_2d()
 
-        ids = index.search_ray_intersection(origin=[14, 32], direction=[76, 53])
+        ids = index.hit_by_ray(origin=[14, 32], direction=[76, 53])
 
         assert_array_equal(np.sort(ids), [23, 31, 68, 80, 81, 99])
 
@@ -275,14 +275,14 @@ class TestRTree(unittest.TestCase):
     def test_search_3d(self):
         index = TestRTree.create_tree_3d()
 
-        ids = index.search(box_a=[-24, -52, -11], box_b=[24, -12,  37])
+        ids = index.within_box(box_a=[-24, -52, -11], box_b=[24, -12,  37])
 
         assert_array_equal(np.sort(ids), [0, 14, 17, 21, 33, 38, 39, 41, 45, 52, 55, 58, 65, 83, 90, 94])
 
     def test_search_ray_intersection_3d(self):
         index = TestRTree.create_tree_3d()
 
-        ids = index.search_ray_intersection(origin=[33, -26, -22], direction=[-82, -13, 60])
+        ids = index.hit_by_ray(origin=[33, -26, -22], direction=[-82, -13, 60])
 
         assert_array_equal(np.sort(ids), [38, 63, 81])
 

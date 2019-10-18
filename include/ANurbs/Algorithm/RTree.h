@@ -27,12 +27,12 @@ private:    // types
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
     using Type = RTree<TDimension>;
 
-    struct ContainsBox
+    struct WithinBox
     {
         Vector m_box_min;
         Vector m_box_max;
 
-        ContainsBox(const Vector box_a, const Vector box_b) noexcept
+        WithinBox(const Vector box_a, const Vector box_b) noexcept
         {
             for (Index i = 0; i < TDimension; i++) {
                 if (box_a[i] < box_b[i]) {
@@ -45,13 +45,13 @@ private:    // types
             }
         }
 
-        bool operator()(const Vector node_min, const Vector node_max) const noexcept
+        bool operator()(const Vector box_min, const Vector box_max) const noexcept
         {
             for (Index i = 0; i < TDimension; i++) {
-                if (m_box_max[i] < node_min[i]) {
+                if (m_box_max[i] < box_min[i]) {
                     return false;
                 }
-                if (m_box_min[i] > node_max[i]) {
+                if (m_box_min[i] > box_max[i]) {
                     return false;
                 }
             }
@@ -59,17 +59,17 @@ private:    // types
         }
     };
 
-    struct IntersectsRay
+    struct HitByRay
     {
         Vector m_origin;
         Vector m_direction;
 
-        IntersectsRay(const Vector origin, const Vector direction) noexcept
+        HitByRay(const Vector origin, const Vector direction) noexcept
         : m_origin(origin), m_direction(direction)
         {
         }
 
-        bool operator()(const Vector node_min, const Vector node_max) const noexcept
+        bool operator()(const Vector box_min, const Vector box_max) const noexcept
         {
             // based on Fast Ray-Box Intersection
             // by Andrew Woo
@@ -83,13 +83,13 @@ private:    // types
             Vector coordinate = Vector::Zero();
 
             for (Index i = 0; i < TDimension; i++) {
-                if (m_origin[i] < node_min[i]) {
+                if (m_origin[i] < box_min[i]) {
                     quadrant[i] = -1;
-                    candidate_plane[i] = node_min[i];
+                    candidate_plane[i] = box_min[i];
                     inside = false;
-                } else if (m_origin[i] > node_max[i]) {
+                } else if (m_origin[i] > box_max[i]) {
                     quadrant[i] = 1;
-                    candidate_plane[i] = node_max[i];
+                    candidate_plane[i] = box_max[i];
                     inside = false;
                 } else {
                     quadrant[i] = 0;
@@ -124,7 +124,7 @@ private:    // types
             for (Index i = 0; i < TDimension; i++) {
                 if (which_plane != i) {
                     coordinate[i] = m_origin[i] + max_t[which_plane] * m_direction[i];
-                    if (coordinate[i] < node_min[i] or coordinate[i] > node_max[i]) {
+                    if (coordinate[i] < box_min[i] || coordinate[i] > box_max[i]) {
                         return false;
                     }
                 } else {
@@ -372,7 +372,7 @@ public:     // methods
     }
 
     template <typename TCheck>
-    std::vector<Index> search_for(const TCheck& check, Callback callback)
+    std::vector<Index> search(const TCheck& check, Callback callback)
     {
         if (m_position != length(m_indices)) {
             throw std::runtime_error("Data not yet indexed - call RTree::finish().");
@@ -420,16 +420,16 @@ public:     // methods
         return results;
     }
 
-    std::vector<Index> search(const Vector box_a, const Vector box_b, Callback callback)
+    std::vector<Index> within_box(const Vector box_a, const Vector box_b, Callback callback)
 {
-        ContainsBox check(box_a, box_b);
-        return search_for(check, callback);
+        WithinBox check(box_a, box_b);
+        return search(check, callback);
     }
 
-    std::vector<Index> search_ray_intersection(const Vector origin, const Vector direction, Callback callback)
+    std::vector<Index> hit_by_ray(const Vector origin, const Vector direction, Callback callback)
     {
-        IntersectsRay check(origin, direction);
-        return search_for(check, callback);
+        HitByRay check(origin, direction);
+        return search(check, callback);
     }
 
 public:     // serialization
@@ -461,8 +461,8 @@ public:     // python
             // methods
             .def("add", &Type::add, "box_a"_a, "box_b"_a)
             .def("finish", &Type::finish)
-            .def("search", &Type::search, "box_a"_a, "box_b"_a, "callback"_a=py::none())
-            .def("search_ray_intersection", &Type::search_ray_intersection, "origin"_a, "direction"_a, "callback"_a=py::none())
+            .def("within_box", &Type::within_box, "box_a"_a, "box_b"_a, "callback"_a=py::none())
+            .def("hit_by_ray", &Type::hit_by_ray, "origin"_a, "direction"_a, "callback"_a=py::none())
         ;
     }
 };
