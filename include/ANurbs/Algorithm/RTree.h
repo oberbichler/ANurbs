@@ -64,8 +64,8 @@ private:    // types
         Vector m_origin;
         Vector m_direction;
 
-        IntersectsRay(const Vector m_origin, const Vector direction)
-        : m_origin(m_origin), m_direction(direction)
+        IntersectsRay(const Vector origin, const Vector direction)
+        : m_origin(origin), m_direction(direction)
         {
         }
 
