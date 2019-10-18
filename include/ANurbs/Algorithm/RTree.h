@@ -89,19 +89,19 @@ private:    // types
 
             bool inside = true;
             VectorU quadrant = VectorU::Zero(); // FIXME: choose other type...
-            int whichPlane = 0;
-            Vector maxT = Vector::Zero();
-            Vector candidatePlane = Vector::Zero();
-            Vector coord = Vector::Zero();
+            int which_plane = 0;
+            Vector max_t = Vector::Zero();
+            Vector candidate_plane = Vector::Zero();
+            Vector coordinate = Vector::Zero();
 
             for (Index i = 0; i < TDimension; i++) {
                 if (m_origin[i] < node_min[i]) {
                     quadrant[i] = -1;
-                    candidatePlane[i] = node_min[i];
+                    candidate_plane[i] = node_min[i];
                     inside = false;
                 } else if (m_origin[i] > node_max[i]) {
                     quadrant[i] = 1;
-                    candidatePlane[i] = node_max[i];
+                    candidate_plane[i] = node_max[i];
                     inside = false;
                 } else {
                     quadrant[i] = 0;
@@ -109,38 +109,38 @@ private:    // types
             }
 
             if (inside) {
-                coord = m_origin;
+                coordinate = m_origin;
                 return true;
             }
 
             for (Index i = 0; i < TDimension; i++) {
                 if (quadrant[i] != 0 && m_direction[i] != 0) {
-                    maxT[i] = (candidatePlane[i] - m_origin[i]) / m_direction[i];
+                    max_t[i] = (candidate_plane[i] - m_origin[i]) / m_direction[i];
                 } else {
-                    maxT[i] = -1;
+                    max_t[i] = -1;
                 }
             }
 
-            whichPlane = 0;
+            which_plane = 0;
             
             for (Index i = 1; i < TDimension; i++) {
-                if (maxT[whichPlane] < maxT[i]) {
-                    whichPlane = i;
+                if (max_t[which_plane] < max_t[i]) {
+                    which_plane = i;
                 }
             }
 
-            if (maxT[whichPlane] < 0) {
+            if (max_t[which_plane] < 0) {
                 return false;
             }
 
             for (Index i = 0; i < TDimension; i++) {
-                if (whichPlane != i) {
-                    coord[i] = m_origin[i] + maxT[whichPlane] * m_direction[i];
-                    if (coord[i] < node_min[i] or coord[i] > node_max[i]) {
+                if (which_plane != i) {
+                    coordinate[i] = m_origin[i] + max_t[which_plane] * m_direction[i];
+                    if (coordinate[i] < node_min[i] or coordinate[i] > node_max[i]) {
                         return false;
                     }
                 } else {
-                    coord[i] = candidatePlane[i];
+                    coordinate[i] = candidate_plane[i];
                 }
             }
 
