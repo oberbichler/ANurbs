@@ -27,7 +27,6 @@ private:    // types
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
     using Type = RTree<TDimension>;
 
-    template <bool TIntersection=true>
     struct ContainsBox
     {
         Vector m_box_min;
@@ -48,23 +47,12 @@ private:    // types
 
         bool operator()(const Vector node_min, const Vector node_max) const noexcept
         {
-            if (TIntersection) {
-                for (Index i = 0; i < TDimension; i++) {
-                    if (m_box_max[i] < node_min[i]) {
-                        return false;
-                    }
-                    if (m_box_min[i] > node_max[i]) {
-                        return false;
-                    }
+            for (Index i = 0; i < TDimension; i++) {
+                if (m_box_max[i] < node_min[i]) {
+                    return false;
                 }
-            } else {
-                for (Index i = 0; i < TDimension; i++) {
-                    if (m_box_min[i] < node_min[i]) {
-                        return false;
-                    }
-                    if (m_box_max[i] > node_max[i]) {
-                        return false;
-                    }
+                if (m_box_min[i] > node_max[i]) {
+                    return false;
                 }
             }
             return true;
@@ -432,15 +420,10 @@ public:     // methods
         return results;
     }
 
-    std::vector<Index> search(const Vector box_a, const Vector box_b, bool intersection, Callback callback)
-    {
-        if (intersection) {
-            ContainsBox<true> check(box_a, box_b);
-            return search_for(check, callback);
-        } else {
-            ContainsBox<false> check(box_a, box_b);
-            return search_for(check, callback);
-        }
+    std::vector<Index> search(const Vector box_a, const Vector box_b, Callback callback)
+{
+        ContainsBox check(box_a, box_b);
+        return search_for(check, callback);
     }
 
     std::vector<Index> search_ray_intersection(const Vector origin, const Vector direction, Callback callback)
@@ -478,7 +461,7 @@ public:     // python
             // methods
             .def("add", &Type::add, "box_a"_a, "box_b"_a)
             .def("finish", &Type::finish)
-            .def("search", &Type::search, "box_a"_a, "box_b"_a, "intersection"_a=true, "callback"_a=py::none())
+            .def("search", &Type::search, "box_a"_a, "box_b"_a, "callback"_a=py::none())
             .def("search_ray_intersection", &Type::search_ray_intersection, "origin"_a, "direction"_a, "callback"_a=py::none())
         ;
     }
