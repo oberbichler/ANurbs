@@ -1,10 +1,10 @@
 import unittest
 import ANurbs as an
-import numpy as np
-from numpy.testing import assert_array_almost_equal, assert_almost_equal
+from numpy.testing import assert_array_almost_equal
 
 class TestNurbsSurfaceGeometry(unittest.TestCase):
-    def test_bspline_3d(self):
+    @staticmethod
+    def test_bspline_3d():
         surface_geometry = an.NurbsSurfaceGeometry3D(
             degree_u=2,
             degree_v=1,

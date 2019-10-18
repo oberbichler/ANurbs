@@ -1,6 +1,7 @@
 #include <ANurbs/ANurbs.h>
 
 #include <pybind11/eigen.h>
+#include <pybind11/functional.h>
 #include <pybind11/stl_bind.h>
 
 PYBIND11_MODULE(ANurbs, m) {
@@ -42,6 +43,11 @@ PYBIND11_MODULE(ANurbs, m) {
         CurveTessellation<3>::register_python(m);
     }
 
+    { // HilbertCurve
+        HilbertCurve<2>::register_python(m);
+        HilbertCurve<3>::register_python(m);
+    }
+
     { // KnotRefinement
         KnotRefinement<2>::register_python(m);
         KnotRefinement<3>::register_python(m);
@@ -63,11 +69,6 @@ PYBIND11_MODULE(ANurbs, m) {
         NurbsSurfaceShapeFunction::register_python(m);
     }
 
-    { // Point
-        Point<2>::register_python(m, model);
-        Point<3>::register_python(m, model);
-    }
-
     { // PointOnCurveProjection
         PointOnCurveProjection<2>::register_python(m);
         PointOnCurveProjection<3>::register_python(m);
@@ -81,13 +82,13 @@ PYBIND11_MODULE(ANurbs, m) {
         PolygonIntegrationPoints::register_python(m);
     }
 
-    { // Polyline
-        Polyline<2>::register_python(m, model);
-        Polyline<3>::register_python(m, model);
-    }
-
     { // PolygonTessellation
         PolygonTessellation::register_python(m);
+    }
+
+    { // RTree
+        RTree<2>::register_python(m);
+        RTree<3>::register_python(m);
     }
 
     { // TrimmedSurfaceClipping
@@ -101,14 +102,19 @@ PYBIND11_MODULE(ANurbs, m) {
         CurveBase<2>::register_python(m);
         CurveBase<3>::register_python(m);
     }
-    
-    { // NurbsCurveGeometry
-        NurbsCurveGeometry<2>::register_python(m, model);
-        NurbsCurveGeometry<3>::register_python(m, model);
+
+    { // SurfaceBase
+        SurfaceBase<2>::register_python(m);
+        SurfaceBase<3>::register_python(m);
     }
 
 
     // --- Geometry
+
+    { // Box
+        Box<2>::register_python(m, model);
+        Box<3>::register_python(m, model);
+    }
 
     { // Brep
         Brep::register_python(m, model);
@@ -143,36 +149,46 @@ PYBIND11_MODULE(ANurbs, m) {
         Curve<3, Ref<NurbsCurveGeometry<3>>>::register_python(m, model);
     }
 
-    { // Interval
-        Interval::register_python(m, model);
-    }
-    
-    { // Line
-        Line<2>::register_python(m, model);
-        Line<3>::register_python(m, model);
-    }
-    
-    { // SurfaceBase
-        SurfaceBase<2>::register_python(m);
-        SurfaceBase<3>::register_python(m);
-    }
-    
-    { // NurbsSurfaceGeometry
-        NurbsSurfaceGeometry<2>::register_python(m, model);
-        NurbsSurfaceGeometry<3>::register_python(m, model);
-    }
-    
-    { // Surface
-        Surface<2, Ref<NurbsSurfaceGeometry<2>>>::register_python(m, model);
-        Surface<3, Ref<NurbsSurfaceGeometry<3>>>::register_python(m, model);
-    }
-
     { // CurveOnSurface
         CurveOnSurface<3>::register_python(m);
     }
 
+    { // Interval
+        Interval::register_python(m, model);
+    }
+
+    { // Line
+        Line<2>::register_python(m, model);
+        Line<3>::register_python(m, model);
+    }
+
+    { // NurbsCurveGeometry
+        NurbsCurveGeometry<2>::register_python(m, model);
+        NurbsCurveGeometry<3>::register_python(m, model);
+    }
+
+    { // NurbsSurfaceGeometry
+        NurbsSurfaceGeometry<2>::register_python(m, model);
+        NurbsSurfaceGeometry<3>::register_python(m, model);
+    }
+
+    { // Point
+        Point<2>::register_python(m, model);
+        Point<3>::register_python(m, model);
+    }
+
     { // Polygon
         Polygon::register_python(m);
+    }
+
+    { // Polyline
+        Polyline<2>::register_python(m, model);
+        Polyline<3>::register_python(m, model);
+    }
+
+    { // Surface
+        Surface<2, Ref<NurbsSurfaceGeometry<2>>>::register_python(m, model);
+        Surface<3, Ref<NurbsSurfaceGeometry<3>>>::register_python(m, model);
     }
 
     m.def("test", [](Pointer<Line<3>> line) {return line;});
