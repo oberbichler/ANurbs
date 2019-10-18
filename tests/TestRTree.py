@@ -4,7 +4,8 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_equal, assert_array_equal
 
 class TestRTree(unittest.TestCase):
-    def test_example_2d(self):
+    @staticmethod
+    def create_tree_2d():
         data = [[( 8, 62), (11, 66)],
                 [(57, 17), (57, 19)],
                 [(76, 26), (79, 29)],
@@ -113,6 +114,11 @@ class TestRTree(unittest.TestCase):
 
         index.finish()
 
+        return index
+
+    def test_create_2d(self):
+        index = TestRTree.create_tree_2d()
+
         assert_equal(index.nb_items, 100)
         assert_equal(index.node_size, 16)
         assert_equal(len(index.indices), 108)
@@ -125,11 +131,22 @@ class TestRTree(unittest.TestCase):
         assert_equal(index._boxes_min[-1], [0, 1])
         assert_equal(index._boxes_max[-1], [96, 95])
 
+    def test_search_2d(self):
+        index = TestRTree.create_tree_2d()
+
         ids = index.search([40, 40], [60, 60], None)
 
         assert_array_equal(np.sort(ids), [6, 29, 31, 75])
 
-    def create_tree_3d(self):
+    def test_search_ray_intersection_2d(self):
+        index = TestRTree.create_tree_2d()
+
+        ids = index.search_ray_intersection([14, 32], [76, 53], None)
+
+        assert_array_equal(np.sort(ids), [23, 31, 68, 80, 81, 99])
+
+    @staticmethod
+    def create_tree_3d():
         data = [[(-28, -35, -20), (-17, -27,  -7)],
                 [(-53, -55,  59), (-49, -47,  79)],
                 [( 22, -19,  55), ( 35,  -4,  58)],
@@ -241,7 +258,7 @@ class TestRTree(unittest.TestCase):
         return index
 
     def test_create_3d(self):
-        index = self.create_tree_3d()
+        index = TestRTree.create_tree_3d()
 
         assert_equal(index.nb_items, 100)
         assert_equal(index.node_size, 16)
@@ -256,14 +273,14 @@ class TestRTree(unittest.TestCase):
         assert_equal(index._boxes_max[-1], [ 55,  28,  79])
 
     def test_search_3d(self):
-        index = self.create_tree_3d()
+        index = TestRTree.create_tree_3d()
 
         ids = index.search([-24, -52, -11], [24, -12,  37], None)
 
         assert_array_equal(np.sort(ids), [0, 14, 17, 21, 33, 38, 39, 41, 45, 52, 55, 58, 65, 83, 90, 94])
 
     def test_search_ray_intersection_3d(self):
-        index = self.create_tree_3d()
+        index = TestRTree.create_tree_3d()
 
         ids = index.search_ray_intersection([33, -26, -22], [-82, -13, 60], None)
 
