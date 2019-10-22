@@ -29,6 +29,11 @@ public:     // constructors
     {
     }
 
+    Polyline(const std::vector<Vector> points)
+    : m_points(points)
+    {
+    }
+
 public:     // methods
     size_t nb_points() const
     {
@@ -87,7 +92,8 @@ public:     // python
         const std::string name = Type::type_name();
 
         py::class_<Type, Holder>(m, name.c_str())
-            .def(py::init<Index>(), "nbPoints"_a)
+            .def(py::init<Index>(), "nb_points"_a)
+            .def(py::init<std::vector<Vector>>(), "points"_a)
             .def("nb_points", &Type::nb_points)
             .def("point", &Type::point, "index"_a)
             .def("set_point", &Type::set_point, "index"_a, "value"_a)
