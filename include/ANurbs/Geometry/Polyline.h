@@ -92,6 +92,8 @@ public:     // python
             .def("point", &Type::point, "index"_a)
             .def("set_point", &Type::set_point, "index"_a, "value"_a)
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 
