@@ -24,7 +24,7 @@ public:     // constructors
     Polyline()
     {
     }
-    
+
     Polyline(const Index nbPoints) : m_points(nbPoints)
     {
     }
@@ -35,9 +35,9 @@ public:     // constructors
     }
 
 public:     // methods
-    size_t nb_points() const
+    Index nb_points() const
     {
-        return m_points.size();
+        return length(m_points);
     }
 
     Vector point(const size_t index) const
@@ -66,7 +66,7 @@ public:     // serialization
 
             result->m_points.resize(points.size());
 
-            for (size_t i = 0; i < points.size(); i++) {
+            for (Index i = 0; i < length(points); i++) {
                 result->m_points[i] = points[i];
             }
         }
