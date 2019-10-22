@@ -86,7 +86,6 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        using Type = Polyline<TDimension>;
         using Holder = ANurbs::Pointer<Type>;
 
         const std::string name = Type::type_name();
