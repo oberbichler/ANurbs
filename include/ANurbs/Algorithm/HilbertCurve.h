@@ -2,8 +2,6 @@
 
 #include "../Define.h"
 
-#include <bitset>
-
 namespace ANurbs {
 
 template <Index TDimension>
