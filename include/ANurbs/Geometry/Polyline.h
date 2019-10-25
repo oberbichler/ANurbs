@@ -24,15 +24,20 @@ public:     // constructors
     Polyline()
     {
     }
-    
+
     Polyline(const Index nbPoints) : m_points(nbPoints)
     {
     }
 
-public:     // methods
-    size_t nb_points() const
+    Polyline(const std::vector<Vector> points)
+    : m_points(points)
     {
-        return m_points.size();
+    }
+
+public:     // methods
+    Index nb_points() const
+    {
+        return length(m_points);
     }
 
     Vector point(const size_t index) const
@@ -61,7 +66,7 @@ public:     // serialization
 
             result->m_points.resize(points.size());
 
-            for (size_t i = 0; i < points.size(); i++) {
+            for (Index i = 0; i < length(points); i++) {
                 result->m_points[i] = points[i];
             }
         }
@@ -81,17 +86,19 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        using Type = Polyline<TDimension>;
         using Holder = ANurbs::Pointer<Type>;
 
         const std::string name = Type::type_name();
 
         py::class_<Type, Holder>(m, name.c_str())
-            .def(py::init<Index>(), "nbPoints"_a)
+            .def(py::init<Index>(), "nb_points"_a)
+            .def(py::init<std::vector<Vector>>(), "points"_a)
             .def("nb_points", &Type::nb_points)
             .def("point", &Type::point, "index"_a)
             .def("set_point", &Type::set_point, "index"_a, "value"_a)
         ;
+
+        Model::register_python_data_type<Type>(m, model);
     }
 };
 
