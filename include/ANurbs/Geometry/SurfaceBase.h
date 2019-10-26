@@ -43,7 +43,8 @@ public:     // methods
 
         const auto a = derivatives_at(u, v, 1);
 
-        const Vector normal = a[1].cross(a[2]);
+        Vector normal = a[1].cross(a[2]);
+        normal /= normal.norm();
 
         return normal;
     }
