@@ -116,7 +116,7 @@ class TestHilbertCurve(unittest.TestCase):
         assert_equal(actual, b('100'))
 
     @staticmethod
-    def bit(, hilbert_curve):
+    def bit(hilbert_curve):
         bits = '01001'
 
         for i in range(5):
@@ -523,6 +523,14 @@ class TestHilbertCurve(unittest.TestCase):
         for m in range(22):
             p = an.HilbertCurve3D.point_at(m, 2**(n * m) - 1)
             assert_array_equal(p, [2**m - 1, 0, 0])
+
+    # def test_project(self):
+    #     m = 5
+    #     with open('test.txt', 'w') as f:
+    #         for i in range(2**(3*m)):
+    #             x, y = an.HilbertCurve2D.point_at(m, i)
+    #             f.write(f'{x} {y} 0\n')
+
 
 if __name__ == '__main__':
     unittest.main()
