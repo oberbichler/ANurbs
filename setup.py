@@ -67,8 +67,5 @@ setup(
     author_email='thomas.oberbichler@gmail.com',
     ext_modules=[CMakeExtension('ANurbs')],
     cmdclass=dict(build_ext=CMakeBuild),
-    install_requires=['cmake', 'numpy'],
-    test_suite='nose.collector',
-    tests_require=['nose'],
     zip_safe=False,
 )

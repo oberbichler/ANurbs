@@ -3,8 +3,7 @@ import ANurbs as an
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 
 class TestNurbsCurveGeometry(unittest.TestCase):
-    @staticmethod
-    def test_curve_on_surface_3d():
+    def test_curve_on_surface_3d(self):
         curve = an.NurbsCurveGeometry2D(
             degree=2,
             nb_poles=3,
