@@ -116,7 +116,7 @@ class TestHilbertCurve(unittest.TestCase):
         assert_equal(actual, b('100'))
 
     @staticmethod
-    def bit(self, hilbert_curve):
+    def bit(hilbert_curve):
         bits = '01001'
 
         for i in range(5):
