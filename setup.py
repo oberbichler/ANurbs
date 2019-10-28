@@ -67,6 +67,5 @@ setup(
     author_email='thomas.oberbichler@gmail.com',
     ext_modules=[CMakeExtension('ANurbs')],
     cmdclass=dict(build_ext=CMakeBuild),
-    tests_require=['numpy'],
     zip_safe=False,
 )
