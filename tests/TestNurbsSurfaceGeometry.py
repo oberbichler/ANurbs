@@ -74,6 +74,66 @@ class TestNurbsSurfaceGeometry(unittest.TestCase):
             [0.2613127124, -0.3275832699, 0.9079674375],
         )
 
+    def test_bspline_3d_pole_constructor(self):
+        surface = an.NurbsSurfaceGeometry3D(
+            degree_u=2,
+            degree_v=1,
+            knots_u=[0.0, 0.0, 7.5, 15.0, 15.0],
+            knots_v=[0.0, 10.0, 20.0],
+            poles=[
+                [-10.0, -5.0, -1.0],
+                [-12.0, 3.0, 3.0],
+                [-9.0, 11.0, -0.0701928417],
+                [-5.0, -3.0, 1.0],
+                [-6.0, 4.0, -2.0],
+                [-5.0, 7.0, 0.9298071583],
+                [0.0, -4.0, -1.0],
+                [1.0, 6.0, 5.0],
+                [0.0, 13.0, -0.2350184214],
+                [4.0, -2.0, 0.0],
+                [5.0, 4.0, -1.0],
+                [5.0, 11.0, 0.7649815786],
+            ],
+        )
+
+        self.assertEqual(surface.dimension, 3)
+
+        self.assertEqual(surface.degree_u, 2)
+        self.assertEqual(surface.degree_v, 1)
+
+        self.assertEqual(surface.nb_knots_u, 5)
+        self.assertEqual(surface.nb_knots_v, 3)
+
+        self.assertEqual(surface.nb_poles_u, 4)
+        self.assertEqual(surface.nb_poles_v, 3)
+        self.assertEqual(surface.nb_poles, 12)
+
+        # point_at
+
+        assert_array_almost_equal(
+            surface.point_at(u=12, v=5),
+            [1.46, 0.96, 0.9],
+        )
+
+        # derivarives_at
+
+        assert_array_almost_equal(
+            surface.derivatives_at(u=12, v=5, order=2),
+            [[1.46, 0.96, 0.9],
+             [0.96, 0.0266666667, -0.2666666667],
+             [0.084, 0.832, 0.276],
+             [0.0355555556, -0.0088888889, -0.1333333333],
+             [0.0106666667, -0.048, -0.064],
+             [0, 0, 0]],
+        )
+
+        # normal_at
+
+        assert_array_almost_equal(
+            surface.normal_at(u=12, v=5),
+            [0.2613127124, -0.3275832699, 0.9079674375],
+        )
+
     def test_nurbs_3d(self):
         surface = an.NurbsSurfaceGeometry3D(
             degree_u=2,

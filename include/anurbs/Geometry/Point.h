@@ -75,7 +75,10 @@ public:     // serialization
     static void save(const Model& model, const Point& data, Json& target)
     {
         target["Location"] = ToJson(data.m_location);
-        target["Text"] = ToJson(data.m_text);
+
+        if (!data.m_text.empty()) {
+            target["Text"] = ToJson(data.m_text);
+        }
     }
 
 public:     // python
