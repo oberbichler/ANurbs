@@ -1,10 +1,10 @@
-#include <ANurbs/ANurbs.h>
+#include <anurbs/ANurbs.h>
 
 #include <pybind11/eigen.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl_bind.h>
 
-PYBIND11_MODULE(ANurbs, m) {
+PYBIND11_MODULE(anurbs, m) {
     m.doc() = "A simple NURBS library for Python";
     m.attr("__author__") = "Thomas Oberbichler";
     m.attr("__copyright__") = "Copyright (c) 2018-2019, Thomas Oberbichler";
@@ -12,7 +12,7 @@ PYBIND11_MODULE(ANurbs, m) {
     m.attr("__email__") = "thomas.oberbichler@gmail.com";
     m.attr("__status__") = "Development";
 
-    using namespace ANurbs;
+    using namespace anurbs;
 
 
     // --- Model
