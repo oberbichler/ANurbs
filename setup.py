@@ -59,13 +59,13 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
 setup(
-    name='ANurbs',
+    name='anurbs',
     description='A simple Nurbs library',
     version=ANURBS_VERSION,
-    url='https://github.com/oberbichler/ANurbs',
+    url='https://github.com/oberbichler/anurbs',
     author='Thomas Oberbichler',
     author_email='thomas.oberbichler@gmail.com',
-    ext_modules=[CMakeExtension('ANurbs')],
+    ext_modules=[CMakeExtension('anurbs')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
 )

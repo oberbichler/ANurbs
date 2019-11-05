@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class Polyline
@@ -86,7 +86,7 @@ public:     // python
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        using Holder = ANurbs::Pointer<Type>;
+        using Holder = anurbs::Pointer<Type>;
 
         const std::string name = Type::type_name();
 
@@ -102,4 +102,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

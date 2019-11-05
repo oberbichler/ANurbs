@@ -9,7 +9,7 @@
 #include <string>
 #include <type_traits>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <typename TData>
 class Ref
@@ -82,4 +82,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

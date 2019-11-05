@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class KnotRefinement
@@ -361,4 +361,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

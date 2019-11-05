@@ -2,7 +2,7 @@
 
 #include "../Define.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class HilbertCurve
@@ -206,4 +206,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

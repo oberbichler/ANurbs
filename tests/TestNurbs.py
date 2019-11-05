@@ -1,5 +1,5 @@
 import unittest
-import ANurbs as an
+import anurbs as an
 
 class TestNurbs(unittest.TestCase):
     def test_knot_vector(self):

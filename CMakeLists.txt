@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(ANurbs)
+project(anurbs)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,13 +17,13 @@ add_definitions(
     -DANURBS_VERSION="${ANURBS_VERSION}"
 )
 
-pybind11_add_module(ANurbs ${SOURCES}
+pybind11_add_module(anurbs ${SOURCES}
     "${PROJECT_SOURCE_DIR}/src/Module.cc"
     "${PROJECT_SOURCE_DIR}/external_libraries/ClipperLib/clipper.cpp"
 )
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    target_compile_options(ANurbs PUBLIC -fsized-deallocation)
+    target_compile_options(anurbs PUBLIC -fsized-deallocation)
 endif()
 
-install(TARGETS ANurbs DESTINATION bin)
+install(TARGETS anurbs DESTINATION bin)

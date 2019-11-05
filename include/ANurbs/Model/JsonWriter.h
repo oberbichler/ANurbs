@@ -8,7 +8,7 @@
 
 #include <stdexcept>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <typename TModel>
 struct JsonWriter
@@ -67,4 +67,4 @@ struct JsonWriter
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

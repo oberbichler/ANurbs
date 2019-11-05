@@ -6,7 +6,7 @@
 #include <string>
 #include <map>
 
-namespace ANurbs {
+namespace anurbs {
 
 class Attributes
 {
@@ -146,4 +146,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

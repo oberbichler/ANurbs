@@ -13,7 +13,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 Ref<Brep> BrepTrim::brep() const
 {
@@ -110,4 +110,4 @@ void BrepTrim::save(const Model& model, const BrepTrim& data, Json& target)
     target["Domain"] = ToJson(data.m_domain);
 }
 
-} // namespace ANurbs
+} // namespace anurbs

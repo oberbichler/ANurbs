@@ -10,7 +10,7 @@
 
 #include <memory>
 
-namespace ANurbs {
+namespace anurbs {
 
 using Index = std::ptrdiff_t;
 
@@ -123,4 +123,4 @@ struct tuple_n<0, T> {
 template <size_t I, typename T>
 using tuple_of = typename tuple_n<I, T>::template type<>;
 
-} // namespace ANurbs
+} // namespace anurbs

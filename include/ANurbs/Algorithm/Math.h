@@ -5,7 +5,7 @@
 #include <cmath>
 #include <vector>
 
-namespace ANurbs::Math {
+namespace anurbs::Math {
 
 constexpr inline Index binom(const Index n, const Index k) noexcept
 {
@@ -78,4 +78,4 @@ double romberg(TFunction f, double a, double b, Index max_iter, double tolerance
     return Rp[max_iter - 1];
 }
 
-} // namespace ANurbs::Math
+} // namespace anurbs::Math

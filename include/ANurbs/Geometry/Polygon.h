@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 struct Polygon
 {
@@ -92,4 +92,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

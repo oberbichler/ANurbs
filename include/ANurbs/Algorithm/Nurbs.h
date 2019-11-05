@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-namespace ANurbs {
+namespace anurbs {
 
 class Nurbs
 {
@@ -64,4 +64,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

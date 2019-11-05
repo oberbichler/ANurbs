@@ -10,7 +10,7 @@
 #include <limits>
 #include <utility>
 
-namespace ANurbs {
+namespace anurbs {
 
 class CurveSpanIntersection
 {
@@ -198,4 +198,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

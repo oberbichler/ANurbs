@@ -11,7 +11,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 size_t Brep::nb_faces() const
 {
@@ -141,4 +141,4 @@ void Brep::save(const Model& model, const Brep& data, Json& target)
     target["Edges"] = ToJson(data.m_edges);
 }
 
-} // namespace ANurbs
+} // namespace anurbs

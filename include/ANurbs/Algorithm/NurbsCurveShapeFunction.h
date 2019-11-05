@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 class NurbsCurveShapeFunction
 {
@@ -312,4 +312,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

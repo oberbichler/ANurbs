@@ -9,7 +9,7 @@
 #include <stdexcept>
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 using IntegrationPoint = tuple_of<TDimension + 1, double>;
@@ -9690,4 +9690,4 @@ std::vector<IntegrationPointList<3>> IntegrationPoints::s_xiao_gimbutas = {
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

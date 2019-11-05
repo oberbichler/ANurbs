@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 class PolygonIntegrationPoints
 {
@@ -72,4 +72,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

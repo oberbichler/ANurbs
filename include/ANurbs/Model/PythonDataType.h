@@ -2,7 +2,7 @@
 
 #include "../Define.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 template <typename TModel>
 struct PythonDataTypeBase
@@ -91,4 +91,4 @@ struct PythonDataType : public PythonDataTypeBase<TModel>
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

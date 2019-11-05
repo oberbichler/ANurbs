@@ -9,7 +9,7 @@
 #include <fstream>
 #include <stdexcept>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <typename TModel>
 class JsonReader
@@ -63,4 +63,4 @@ public:
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

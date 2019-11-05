@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class Line
@@ -81,7 +81,7 @@ public:     // python
         namespace py = pybind11;
 
         using Type = Line<TDimension>;
-        using Holder = ANurbs::Pointer<Type>;
+        using Holder = anurbs::Pointer<Type>;
 
         const std::string name = Type::type_name();
 
@@ -99,4 +99,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

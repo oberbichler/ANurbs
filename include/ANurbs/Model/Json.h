@@ -14,10 +14,10 @@
 
 namespace nlohmann {
     template <>
-    struct adl_serializer<ANurbs::linear_algebra::Vector<2>>
+    struct adl_serializer<anurbs::linear_algebra::Vector<2>>
     {
         template <typename TJson>
-        static void to_json(TJson& json, const ANurbs::linear_algebra::Vector<2>& point)
+        static void to_json(TJson& json, const anurbs::linear_algebra::Vector<2>& point)
         {
             for (int i = 0; i < point.size(); i++) {
                 json.push_back(point[i]);
@@ -25,7 +25,7 @@ namespace nlohmann {
         }
 
         template <typename TJson>
-        static void from_json(const TJson& json, ANurbs::linear_algebra::Vector<2>& point)
+        static void from_json(const TJson& json, anurbs::linear_algebra::Vector<2>& point)
         {
             assert(json.size() == point.size());
 
@@ -36,10 +36,10 @@ namespace nlohmann {
     };
 
     template <>
-    struct adl_serializer<ANurbs::linear_algebra::Vector<3>> {
+    struct adl_serializer<anurbs::linear_algebra::Vector<3>> {
         template <typename TJson>
         static void
-        to_json(TJson& json, const ANurbs::linear_algebra::Vector<3>& point)
+        to_json(TJson& json, const anurbs::linear_algebra::Vector<3>& point)
         {
             for (int i = 0; i < point.size(); i++) {
                 json.push_back(point[i]);
@@ -47,7 +47,7 @@ namespace nlohmann {
         }
 
         template <typename TJson>
-        static void from_json(const TJson& json, ANurbs::linear_algebra::Vector<3>& point)
+        static void from_json(const TJson& json, anurbs::linear_algebra::Vector<3>& point)
         {
             assert(json.size() == point.size());
 
@@ -58,7 +58,7 @@ namespace nlohmann {
     };
 }
 
-namespace ANurbs {
+namespace anurbs {
 
 template <typename TData>
 void to_json(nlohmann::json& json, const Ref<TData>& ref)
@@ -116,4 +116,4 @@ static std::string type_name_from_json(const Json& source)
     return it.value();
 }
 
-} // namespace ANurbs
+} // namespace anurbs

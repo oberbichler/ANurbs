@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 class NurbsSurfaceShapeFunction
 {
@@ -389,4 +389,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

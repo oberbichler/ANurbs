@@ -1,5 +1,5 @@
 import unittest
-import ANurbs as an
+import anurbs as an
 from numpy.testing import assert_array_almost_equal
 
 class TestCurveSpanIntersection(unittest.TestCase):

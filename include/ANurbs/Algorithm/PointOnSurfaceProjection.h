@@ -6,7 +6,7 @@
 
 #include <nanoflann/nanoflann.hpp>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class PointOnSurfaceProjection
@@ -320,4 +320,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

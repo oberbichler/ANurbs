@@ -10,9 +10,9 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
-Ref<ANurbs::Brep> BrepFace::brep() const
+Ref<anurbs::Brep> BrepFace::brep() const
 {
     return m_brep;
 }
@@ -75,7 +75,7 @@ Unique<BrepFace> BrepFace::load(Model& model, const Json& data)
     // Read Brep
     {
         const std::string key = data.at("Brep");
-        result->m_brep = model.get_lazy<ANurbs::Brep>(key);
+        result->m_brep = model.get_lazy<anurbs::Brep>(key);
     }
 
     // Read loops
@@ -106,4 +106,4 @@ void BrepFace::save(const Model& model, const BrepFace& data, Json& target)
     target["Geometry"] = ToJson(data.m_geometry);
 }
 
-} // namespace ANurbs
+} // namespace anurbs

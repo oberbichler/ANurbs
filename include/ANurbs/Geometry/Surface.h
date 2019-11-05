@@ -10,7 +10,7 @@
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension, typename TRef=Ref<NurbsSurfaceGeometry<TDimension>>>
 class Surface : public SurfaceBase<TDimension>
@@ -162,4 +162,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

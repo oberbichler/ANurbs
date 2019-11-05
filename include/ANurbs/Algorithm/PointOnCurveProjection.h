@@ -10,7 +10,7 @@
 
 #include <utility>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class PointOnCurveProjection
@@ -215,4 +215,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

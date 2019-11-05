@@ -14,7 +14,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 enum TrimTypes
 {
@@ -286,8 +286,8 @@ public:     // python
             .def("end_loop", &Type::end_loop)
             .def("add_curve", &Type::add_curve, "curve"_a)
             .def("compute", (void (Type::*)(
-                const std::vector<ANurbs::Interval>&,
-                const std::vector<ANurbs::Interval>&)) &Type::compute,
+                const std::vector<anurbs::Interval>&,
+                const std::vector<anurbs::Interval>&)) &Type::compute,
                 "knotsU"_a, "knotsV"_a)
             .def("nb_spans_u", &Type::nb_spans_u)
             .def("nb_spans_v", &Type::nb_spans_v)
@@ -299,4 +299,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

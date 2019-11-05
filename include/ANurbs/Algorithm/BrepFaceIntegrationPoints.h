@@ -8,7 +8,7 @@
 
 #include "../Geometry/BrepFace.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 class BrepFaceIntegrationPoints
 {
@@ -96,4 +96,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

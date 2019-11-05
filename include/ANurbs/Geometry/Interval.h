@@ -5,7 +5,7 @@
 #include <limits>
 #include <sstream>
 
-namespace ANurbs {
+namespace anurbs {
 
 class Interval
 {
@@ -163,4 +163,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

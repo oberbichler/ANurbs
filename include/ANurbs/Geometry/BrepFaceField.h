@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class BrepFaceField
@@ -114,4 +114,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

@@ -9,7 +9,7 @@
 
 #include "../Algorithm/CurveSpanIntersection.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension,
     typename TCurveRef = Pointer<NurbsCurveGeometry<2>>,
@@ -163,4 +163,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

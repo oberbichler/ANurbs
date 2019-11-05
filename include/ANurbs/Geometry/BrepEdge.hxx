@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 class BrepTrim;
 
@@ -76,4 +76,4 @@ void BrepEdge::save(const Model& model, const BrepEdge& data, Json& target)
     target["Trims"] = ToJson(data.m_trims);
 }
 
-} // namespace ANurbs
+} // namespace anurbs

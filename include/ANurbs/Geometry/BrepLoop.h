@@ -11,7 +11,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 class Brep;
 class BrepEdge;
@@ -71,4 +71,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

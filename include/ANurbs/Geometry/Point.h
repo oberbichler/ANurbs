@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class Point
@@ -86,7 +86,7 @@ public:     // python
         namespace py = pybind11;
 
         using Type = Point<TDimension>;
-        using Holder = ANurbs::Pointer<Type>;
+        using Holder = anurbs::Pointer<Type>;
 
         const std::string name = Type::type_name();
 
@@ -104,4 +104,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

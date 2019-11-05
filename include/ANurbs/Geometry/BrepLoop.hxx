@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 Ref<Brep> BrepLoop::brep() const
 {
@@ -84,4 +84,4 @@ void BrepLoop::save(const Model& model, const BrepLoop& data, Json& target)
     target["Trims"] = ToJson(data.m_trims);
 }
 
-} // namespace ANurbs
+} // namespace anurbs

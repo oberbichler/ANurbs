@@ -7,7 +7,7 @@
 
 #include "../Geometry/BrepEdge.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 class BrepEdgeIntegrationPoints
 {
@@ -116,4 +116,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

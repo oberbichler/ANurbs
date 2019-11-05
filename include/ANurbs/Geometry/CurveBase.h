@@ -4,7 +4,7 @@
 
 #include "Interval.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class CurveBase
@@ -58,4 +58,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

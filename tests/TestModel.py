@@ -1,5 +1,5 @@
 import unittest
-import ANurbs as an
+import anurbs as an
 
 class TestModel(unittest.TestCase):
     def test_load_array(self):

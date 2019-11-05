@@ -8,7 +8,7 @@
 #include <string>
 #include <stdexcept>
 
-namespace ANurbs {
+namespace anurbs {
 
 class Model;
 

@@ -4,7 +4,7 @@
 
 #include "../Geometry/CurveBase.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class CurveTessellation
@@ -115,4 +115,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

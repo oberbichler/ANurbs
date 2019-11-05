@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class SurfaceBase
@@ -87,4 +87,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

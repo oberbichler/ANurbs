@@ -37,7 +37,7 @@ struct nth<1, TVector> {
 } // namespace util
 } // namespace mapbox
 
-namespace ANurbs {
+namespace anurbs {
 
 class PolygonTessellation
 {
@@ -124,4 +124,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

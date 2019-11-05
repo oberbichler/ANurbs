@@ -7,7 +7,7 @@
 #include <map>
 #include <stdexcept>
 
-namespace ANurbs {
+namespace anurbs {
 
 template <typename TModel>
 struct TypeEntryBase
@@ -106,4 +106,4 @@ template <typename TModel>
 std::map<std::string, Unique<TypeEntryBase<TModel>>>
     TypeRegistry<TModel>::s_registry;
 
-} // namespace ANurbs
+} // namespace anurbs

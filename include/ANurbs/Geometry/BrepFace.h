@@ -12,7 +12,7 @@
 
 #include <vector>
 
-namespace ANurbs {
+namespace anurbs {
 
 class Brep;
 class BrepEdge;
@@ -22,12 +22,12 @@ class BrepTrim;
 class BrepFace
 {
 private:
-    Ref<ANurbs::Brep> m_brep;
+    Ref<anurbs::Brep> m_brep;
     std::vector<Ref<BrepLoop>> m_loops;
     Ref<NurbsSurfaceGeometry<3>> m_geometry;
 
 public:
-    Ref<ANurbs::Brep> brep() const;
+    Ref<anurbs::Brep> brep() const;
 
     size_t nb_loops() const;
 
@@ -76,4 +76,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

@@ -2,7 +2,7 @@
 
 #include "../Define.h"
 
-namespace ANurbs {
+namespace anurbs {
 
 template <Index TDimension>
 class Box
@@ -91,4 +91,4 @@ public:     // python
     }
 };
 
-} // namespace ANurbs
+} // namespace anurbs

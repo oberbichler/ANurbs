@@ -1,5 +1,5 @@
 import unittest
-import ANurbs as an
+import anurbs as an
 import numpy as np
 from numpy.testing import assert_equal, assert_array_equal
 
