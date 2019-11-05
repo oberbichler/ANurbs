@@ -58,10 +58,18 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
+
+directory = os.path.abspath(os.path.dirname(__file__))
+
+with open(os.path.join(directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(
     name='anurbs',
     description='A simple Nurbs library',
     version=ANURBS_VERSION,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/oberbichler/anurbs',
     author='Thomas Oberbichler',
     author_email='thomas.oberbichler@gmail.com',
