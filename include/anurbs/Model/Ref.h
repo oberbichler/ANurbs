@@ -14,9 +14,13 @@ namespace anurbs {
 template <typename TData>
 class Ref
 {
+private:    // types
+    using Type = Ref<TData>;
+
+private:    // variables
     Pointer<Entry<TData>> m_entry;
 
-public:
+public:     // constructors
     Ref()
     {
     }
@@ -25,6 +29,7 @@ public:
     {
     }
 
+public:     // methods
     std::string key() const
     {
         return m_entry->key();
@@ -73,11 +78,12 @@ public:     // python
 
         const std::string name = std::string("Ref") + TData::type_name();
 
-        py::class_<Ref<TData>>(m, name.c_str())
-            .def_property_readonly("key", &Ref<TData>::key)
-            .def_property_readonly("type", &Ref<TData>::type_name)
-            .def_property_readonly("data", &Ref<TData>::data)
-            .def_property_readonly("attributes", &Ref<TData>::attributes)
+        py::class_<Type>(m, name.c_str())
+            // read-only properties
+            .def_property_readonly("key", &Type::key)
+            .def_property_readonly("type", &Type::type_name)
+            .def_property_readonly("data", &Type::data)
+            .def_property_readonly("attributes", &Type::attributes)
         ;
     }
 };
