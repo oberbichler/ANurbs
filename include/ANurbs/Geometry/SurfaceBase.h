@@ -37,6 +37,18 @@ public:     // methods
     virtual std::vector<Vector> derivatives_at(const double u, const double v,
         const Index order) const = 0;
 
+    Vector normal_at(const double u, const double v) const
+    {
+        static_assert(dimension() == 3);
+
+        const auto a = derivatives_at(u, v, 1);
+
+        Vector normal = a[1].cross(a[2]);
+        normal /= normal.norm();
+
+        return normal;
+    }
+
     virtual std::vector<Interval> spans_u() const = 0;
 
     virtual std::vector<Interval> spans_v() const = 0;
@@ -53,7 +65,7 @@ public:     // python
         const std::string name = "SurfaceBase" + std::to_string(TDimension) +
             "D";
 
-        py::class_<Type, Holder>(m, name.c_str())
+        auto py_class = py::class_<Type, Holder>(m, name.c_str())
             // read-only property
             .def_property_readonly("degree_u", &Type::degree_u)
             .def_property_readonly("degree_v", &Type::degree_v)
@@ -68,6 +80,10 @@ public:     // python
             .def("derivatives_at", &Type::derivatives_at, "u"_a, "v"_a,
                 "order"_a)
         ;
+
+        if constexpr(dimension() == 3) {
+            py_class.def("normal_at", &Type::normal_at, "u"_a, "v"_a);
+        }
     }
 };
 

@@ -67,6 +67,13 @@ class TestNurbsSurfaceGeometry(unittest.TestCase):
              [0, 0, 0]],
         )
 
+        # normal_at
+
+        assert_array_almost_equal(
+            surface.normal_at(u=12, v=5),
+            [0.2613127124, -0.3275832699, 0.9079674375],
+        )
+
     def test_nurbs_3d(self):
         surface = an.NurbsSurfaceGeometry3D(
             degree_u=2,
@@ -143,6 +150,12 @@ class TestNurbsSurfaceGeometry(unittest.TestCase):
              [ 9.6724e-6   , -0.0185065524, -0.0051940864]],
         )
 
+        # normal_at
+
+        assert_array_almost_equal(
+            surface.normal_at(u=12, v=5),
+            [0.1022371052, -0.2687554542, 0.9577672369],
+        )
 
 if __name__ == '__main__':
     unittest.main()
