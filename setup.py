@@ -8,7 +8,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
-ANURBS_VERSION = '0.5.0'
+ANURBS_VERSION = '0.5.1'
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
@@ -68,9 +68,7 @@ setup(
     name='anurbs',
     description='A simple Nurbs library',
     version=ANURBS_VERSION,
-    long_description=long_description,
-    long_description_content_type='text/markdown',
-    url='https://github.com/oberbichler/anurbs',
+    url='https://github.com/oberbichler/ANurbs',
     author='Thomas Oberbichler',
     author_email='thomas.oberbichler@gmail.com',
     ext_modules=[CMakeExtension('anurbs')],
