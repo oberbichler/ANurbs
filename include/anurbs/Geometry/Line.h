@@ -51,6 +51,33 @@ public:
         m_b = value;
     }
 
+    static std::pair<double, Vector> closest_point(const Vector& point, const Vector& line_a, const Vector& line_b,
+        bool is_infinite=false)
+    {
+        const Vector v = line_b - line_a;
+        const double l = v.squaredNorm();
+
+        if (l < 1e-14) {
+            return {0.0, line_a};
+        }
+
+        const Vector o = line_a;
+        const Vector r = v * (1.0 / l);
+        const double t = (point - o).dot(r);
+
+        if (!is_infinite && t < 0) {
+            return {0.0, line_a};
+        }
+        
+        if (!is_infinite && t > 1) {
+            return {1.0, line_b};
+        }
+
+        const Vector closest_point = line_a + t * (line_b - line_a);
+
+        return {t, closest_point};
+    }
+
 public:     // serialization
     static std::string type_name()
     {
@@ -88,6 +115,8 @@ public:     // python
         py::class_<Type, Holder>(m, name.c_str())
             // constructors
             .def(py::init<const Vector&, const Vector&>(), "a"_a, "b"_a)
+            // static methods
+            .def_static("closest_point", &Type::closest_point, "point"_a, "line_a"_a, "line_b"_a, "is_infinite"_a=false)
             // properties
             .def_property("a", &Type::a, &Type::set_a)
             .def_property("b", &Type::b, &Type::set_b)
