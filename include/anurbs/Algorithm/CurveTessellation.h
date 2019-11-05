@@ -25,8 +25,7 @@ private:    // static methods
     }
 
 public:     // static methods
-    static std::vector<ParameterPoint> compute(const CurveBaseD& curve,
-        const double tolerance)
+    static std::pair<std::vector<double>, std::vector<Vector>> compute(const CurveBaseD& curve, const double tolerance)
     {
         const Interval domain = curve.domain();
 
@@ -48,8 +47,7 @@ public:     // static methods
             sample_points.emplace_back(t, point);
         }
 
-        sample_points.emplace_back(1.0,
-            curve.point_at(domain.parameter_at_normalized(1.0)));
+        sample_points.emplace_back(1.0, curve.point_at(domain.parameter_at_normalized(1.0)));
 
         std::sort(std::begin(sample_points), std::end(sample_points),
             [](auto const &lhs, auto const &rhs) {
@@ -78,13 +76,11 @@ public:     // static methods
                 ParameterPoint max_point;
 
                 for (Index i = 1; i <= n; i++) {
-                    const double t = Interval::parameter_at_normalized(t_a, t_b,
-                        i / double(n + 1));
+                    const double t = Interval::parameter_at_normalized(t_a, t_b, i / double(n + 1));
                     const Vector point = curve.point_at(
                         domain.parameter_at_normalized(t));
 
-                    const double distance = distance_to_line(point, point_a,
-                        point_b);
+                    const double distance = distance_to_line(point, point_a, point_b);
 
                     if (distance > max_distance) {
                         max_distance = distance;
@@ -100,7 +96,15 @@ public:     // static methods
             }
         }
 
-        return points;
+        std::vector<double> parameters(points.size());
+        std::vector<Vector> locations(points.size());
+
+        for (Index i = 0; i < length(points); i++) {
+            parameters[i] = std::get<0>(points[i]);
+            locations[i] = std::get<1>(points[i]);
+        }
+
+        return {parameters, locations};
     }
 
 public:     // python
