@@ -1,4 +1,4 @@
-#include <anurbs/anurbs.h>
+#include <anurbs/ANurbs.h>
 
 #include <pybind11/eigen.h>
 #include <pybind11/functional.h>
