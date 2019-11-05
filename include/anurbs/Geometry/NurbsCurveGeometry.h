@@ -22,6 +22,7 @@ struct NurbsCurveGeometry : public CurveBase<TDimension>
 public:     // types
     using Type = NurbsCurveGeometry<TDimension>;
     using Vector = typename CurveBase<TDimension>::Vector;
+    using ControlPoint = std::pair<Vector, double>;
 
 private:    // variables
     const Index m_degree;
@@ -30,41 +31,75 @@ private:    // variables
     std::vector<double> m_weights;
 
 public:     // constructors
-    NurbsCurveGeometry(const Index degree, Index nb_poles, bool is_rational)
-        : m_degree(degree), m_poles(nb_poles), m_weights(is_rational ?
-        nb_poles : 0), m_knots(Nurbs::nb_knots(degree, nb_poles))
+    NurbsCurveGeometry(
+        const Index degree,
+        Index nb_poles,
+        bool is_rational)
+    : m_degree(degree)
+    , m_poles(nb_poles)
+    , m_weights(is_rational ? nb_poles : 0)
+    , m_knots(Nurbs::nb_knots(degree, nb_poles))
     {
         static_assert(TDimension > 0);
     }
 
-    NurbsCurveGeometry(const Index degree, const std::vector<double>& knots,
+    NurbsCurveGeometry(
+        const Index degree,
+        const std::vector<double>& knots,
         const std::vector<Vector>& poles)
-        : m_degree(degree), m_knots(knots), m_poles(poles), m_weights()
+    : m_degree(degree)
+    , m_knots(knots)
+    , m_poles(poles)
+    , m_weights(0)
     {
         static_assert(TDimension > 0);
 
-        if (knots.size() != Nurbs::nb_knots(degree, poles.size())) {
+        if (length(knots) != Nurbs::nb_knots(degree, length(poles))) {
             throw std::runtime_error("Number of knots and poles do not match");
         }
     }
 
-    NurbsCurveGeometry(const Index degree, const std::vector<double>& knots,
-        const std::vector<Vector>& poles, const std::vector<double>& weights)
-        : m_degree(degree), m_knots(knots), m_poles(poles), m_weights(weights)
+    NurbsCurveGeometry(
+        const Index degree,
+        const std::vector<double>& knots,
+        const std::vector<Vector>& poles,
+        const std::vector<double>& weights)
+    : m_degree(degree)
+    , m_knots(knots)
+    , m_poles(poles)
+    , m_weights(weights)
     {
         static_assert(TDimension > 0);
 
-        if (knots.size() != Nurbs::nb_knots(degree, poles.size())) {
+        if (length(knots) != Nurbs::nb_knots(degree, length(poles))) {
             throw std::runtime_error("Number of knots and poles do not match");
         }
 
-        if (weights.size() != poles.size()) {
-            throw std::runtime_error(
-                "Number of poles and weights do not match");
+        if (length(weights) != length(poles)) {
+            throw std::runtime_error("Number of weights and poles do not match");
         }
     }
 
-    // FIXME: constructor with Vector<TDimension + 1>
+    NurbsCurveGeometry(
+        const Index degree,
+        const std::vector<double>& knots,
+        const std::vector<ControlPoint>& control_points)
+    : m_degree(degree)
+    , m_knots(knots)
+    , m_poles(length(control_points))
+    , m_weights(length(control_points))
+    {
+        static_assert(TDimension > 0);
+
+        if (length(knots) != Nurbs::nb_knots(degree, length(control_points))) {
+            throw std::runtime_error("Number of knots and control points do not match");
+        }
+
+        for (Index i = 0; i < length(control_points); i++) {
+            m_poles[i] = std::get<0>(control_points[i]);
+            m_weights[i] = std::get<1>(control_points[i]);
+        }
+    }
 
 public:     // static methods
     using CurveBase<TDimension>::dimension;
@@ -309,6 +344,8 @@ public:     // python
             .def(py::init<const Index, const std::vector<double>,
                 const std::vector<Vector>, const std::vector<double>>(),
                 "degree"_a, "knots"_a, "poles"_a, "weights"_a)
+            .def(py::init<const Index, const std::vector<double>,
+                const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
             .def_property_readonly("knots", &Type::knots)
