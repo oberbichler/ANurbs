@@ -188,11 +188,10 @@ public:     // methods
     {
         ClipperLib::Path& path = m_paths.back();
 
-        const auto tessellation =
-            CurveTessellation<2>::compute(curve, m_tolerance);
+        const auto [ts, points] = CurveTessellation<2>::compute(curve, m_tolerance);
 
-        for (Index i = 0; i < length(tessellation); i++) {
-            auto pt = to_int_pt(tessellation[i].second);
+        for (Index i = 0; i < length(points); i++) {
+            auto pt = to_int_pt(points[i]);
 
             if (i == 0 && length(path) > 0 && path.back() == pt) {
                 continue;

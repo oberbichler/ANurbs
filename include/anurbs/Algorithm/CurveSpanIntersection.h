@@ -147,8 +147,7 @@ public:     // static methods
 
         // approximate curve with a polyline
 
-        const auto tessellation =
-            CurveTessellation<2>::compute(curve, tolerance);
+        const auto [ts, points] = CurveTessellation<2>::compute(curve, tolerance);
 
         // initialize axes
 
@@ -160,7 +159,7 @@ public:     // static methods
         // add curve knots
 
         if (include_curve_knots) {
-            double t0 = tessellation[0].first;
+            double t0 = ts[0];
 
             intersection_parameters.push_back(t0);
 
@@ -171,9 +170,9 @@ public:     // static methods
 
         // check line segments
 
-        for (Index i = 1; i < length(tessellation); i++) {
-            const auto a = tessellation[i - 1];
-            const auto b = tessellation[i];
+        for (Index i = 1; i < length(points); i++) {
+            const ParameterPoint a = {ts[i - 1], points[i - 1]};
+            const ParameterPoint b = {ts[i], points[i]};
 
             for (auto& axis : axes) {
                 axis.intersect(curve, a, b, intersection_parameters);

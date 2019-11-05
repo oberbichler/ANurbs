@@ -21,11 +21,9 @@ class TestCurveTessellation(unittest.TestCase):
         curve.set_pole(2, [2.0, -1.0])
         curve.set_pole(3, [3.0, -1.0])
 
-        tessellation = an.tessellate(curve, tolerance=1e-2)
+        ts, points = an.tessellate(curve, tolerance=1e-2)
 
-        self.assertEqual(len(tessellation), 17)
-
-        points = [point for _, point in tessellation]
+        self.assertEqual(len(ts), 17)
 
         assert_array_almost_equal(
             points,
@@ -66,11 +64,9 @@ class TestCurveTessellation(unittest.TestCase):
         curve.set_pole(2, [2.0, -1.0,  0.0])
         curve.set_pole(3, [3.0, -1.0,  0.0])
 
-        tessellation = an.tessellate(curve, tolerance=1e-2)
+        ts, points = an.tessellate(curve, tolerance=1e-2)
 
-        self.assertEqual(len(tessellation), 20)
-
-        points = [point for _, point in tessellation]
+        self.assertEqual(len(ts), 20)
 
         assert_array_almost_equal(
             points,
