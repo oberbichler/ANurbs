@@ -79,6 +79,18 @@ public:     // python
         const std::string name = std::string("Ref") + TData::type_name();
 
         py::class_<Type>(m, name.c_str())
+            // methods
+            .def("__len__", [](const Type& self) { return 2; })
+            .def("__getitem__", [](const Type& self, const int i) -> py::object {
+                switch (i) {
+                case 0:
+                    return py::cast(self.key());
+                case 1:
+                    return py::cast(self.data());
+                default:
+                    throw py::index_error();
+                }
+            })
             // read-only properties
             .def_property_readonly("key", &Type::key)
             .def_property_readonly("type", &Type::type_name)
