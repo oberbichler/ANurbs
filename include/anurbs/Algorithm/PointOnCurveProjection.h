@@ -21,7 +21,7 @@ public:     // types
     using ParameterPoint = std::pair<double, Vector>;
 
 private:    // variables
-    std::vector<std::pair<double, Vector>> m_tessellation;
+    std::pair<std::vector<double>, std::vector<Vector>> m_tessellation;
     Pointer<CurveBaseD> m_curve;
     double m_tessellation_flatness;
     double m_tolerance;
@@ -85,9 +85,13 @@ public:     // methods
 
         double closest_sqr_distance = std::numeric_limits<double>::max();
 
-        for (Index i = 1; i < length(m_tessellation); i++) {
-            const auto [t0, point0] = m_tessellation[i - 1];
-            const auto [t1, point1] = m_tessellation[i];
+        const auto& [ts, points] = m_tessellation;
+
+        for (Index i = 1; i < length(ts); i++) {
+            const auto t0 = ts[i - 1];
+            const auto point0 = points[i - 1];
+            const auto t1 = ts[i];
+            const auto point1 = points[i];
 
             const auto [t, point] =
                 project_to_line(sample, point0, point1, t0, t1);
