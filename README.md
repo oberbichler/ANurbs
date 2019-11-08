@@ -7,7 +7,7 @@ A simple NURBS library for _Isogeometric B-Rep Analysis_ (_IBRA_)
 ## Installation
 
 ```
-pip install ANurbs
+pip install anurbs
 ```
 
 ## Reference
