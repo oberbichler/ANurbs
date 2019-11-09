@@ -5,7 +5,6 @@
 #include "RTree.h"
 #include "../Geometry/Line.h"
 
-#include <limits>
 #include <tuple>
 #include <vector>
 
@@ -56,7 +55,7 @@ public:     // methods
 
         const auto indices = m_rtree.within_box(box_a, box_b);
 
-        double closest_distance = std::numeric_limits<double>::infinity();
+        double closest_distance = Infinity;
         double closest_parameter;
         Index closest_index;
 

@@ -7,7 +7,6 @@
 #include "../Geometry/CurveBase.h"
 
 #include <array>
-#include <limits>
 #include <utility>
 
 namespace anurbs {
@@ -37,10 +36,7 @@ private:    // types
 
             m_values.clear();
 
-            double n_inf = std::numeric_limits<double>::lowest();
-            double p_inf = std::numeric_limits<double>::max();
-
-            m_values.push_back(n_inf);
+            m_values.push_back(-Infinity);
 
             for (const double knot : knots) {
                 if (std::abs(m_values.back() - knot) > tolerance) {
@@ -48,7 +44,7 @@ private:    // types
                 }
             }
 
-            m_values.push_back(p_inf);
+            m_values.push_back(Infinity);
 
             m_tolerance = tolerance;
         }
