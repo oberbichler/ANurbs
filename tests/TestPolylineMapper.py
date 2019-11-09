@@ -3,7 +3,8 @@ import anurbs as an
 from numpy.testing import assert_equal
 
 class TestPolylineMapper(unittest.TestCase):
-    def test_map_2d(self):
+    @staticmethod
+    def test_map_2d():
         polyline = [[0, 0], [1, 1], [2, 0]]
 
         mapper = an.PolylineMapper2D(polyline)
