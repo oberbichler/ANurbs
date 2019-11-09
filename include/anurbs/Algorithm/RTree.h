@@ -154,7 +154,7 @@ public:     // static methods
     }
 
 public:     // constructor
-    RTree(const Index nb_items, const Index node_size)
+    RTree(const Index nb_items, const Index node_size=16)
     {
         if (nb_items < 0) {
             throw std::invalid_argument("nb_items");
