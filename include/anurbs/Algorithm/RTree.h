@@ -420,7 +420,7 @@ public:     // methods
         return results;
     }
 
-    std::vector<Index> within_box(const Vector box_a, const Vector box_b, Callback callback)
+    std::vector<Index> within_box(const Vector box_a, const Vector box_b, Callback callback=nullptr)
 {
         WithinBox check(box_a, box_b);
         return search(check, callback);
