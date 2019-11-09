@@ -6,7 +6,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <limits>
 #include <stdexcept>
 #include <vector>
 
@@ -154,7 +153,7 @@ public:     // static methods
     }
 
 public:     // constructor
-    RTree(const Index nb_items, const Index node_size)
+    RTree(const Index nb_items, const Index node_size=16)
     {
         if (nb_items < 0) {
             throw std::invalid_argument("nb_items");
@@ -175,8 +174,8 @@ public:     // constructor
         } while (n > 1);
 
         for (Index i = 0; i < TDimension; i++) {
-            m_min[i] = std::numeric_limits<double>::infinity();
-            m_max[i] = -std::numeric_limits<double>::infinity();
+            m_min[i] = Infinity;
+            m_max[i] = -Infinity;
         }
 
         m_position = 0;
@@ -315,8 +314,8 @@ public:     // methods
                 Vector node_max;
 
                 for (Index j = 0; j < TDimension; j++) {
-                    node_min[j] = std::numeric_limits<double>::infinity();
-                    node_max[j] = -std::numeric_limits<double>::infinity();
+                    node_min[j] = Infinity;
+                    node_max[j] = -Infinity;
                 }
 
                 Index node_index = pos;
@@ -420,7 +419,7 @@ public:     // methods
         return results;
     }
 
-    std::vector<Index> within_box(const Vector box_a, const Vector box_b, Callback callback)
+    std::vector<Index> within_box(const Vector box_a, const Vector box_b, Callback callback=nullptr)
 {
         WithinBox check(box_a, box_b);
         return search(check, callback);

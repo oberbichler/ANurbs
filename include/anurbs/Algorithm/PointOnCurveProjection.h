@@ -83,7 +83,7 @@ public:     // methods
         double closestParameter;
         Vector closestPoint;
 
-        double closest_sqr_distance = std::numeric_limits<double>::max();
+        double closest_sqr_distance = Infinity;
 
         const auto& [ts, points] = m_tessellation;
 

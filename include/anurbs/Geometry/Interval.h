@@ -2,7 +2,6 @@
 
 #include "../Define.h"
 
-#include <limits>
 #include <sstream>
 
 namespace anurbs {
@@ -14,8 +13,7 @@ private:    // variables
     double m_t1;
 
 public:     // constructor
-    Interval() : m_t0(std::numeric_limits<double>::quiet_NaN()),
-        m_t1(std::numeric_limits<double>::quiet_NaN())
+    Interval() : m_t0(QuietNaN), m_t1(QuietNaN)
     {
     }
 

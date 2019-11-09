@@ -78,6 +78,11 @@ PYBIND11_MODULE(anurbs, m) {
         PointOnSurfaceProjection<3>::register_python(m);
     }
 
+    { // PolylineMapper
+        PolylineMapper<2>::register_python(m);
+        PolylineMapper<3>::register_python(m);
+    }
+
     { // PolygonIntegrationPoints
         PolygonIntegrationPoints::register_python(m);
     }
