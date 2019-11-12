@@ -22,6 +22,7 @@ class NurbsSurfaceGeometry : public SurfaceBase<TDimension>
 public:     // types
     using Type = NurbsSurfaceGeometry<TDimension>;
     using Vector = typename SurfaceBase<TDimension>::Vector;
+    using ControlPoint = std::pair<Vector, double>;
 
 private:    // variables
     Index m_degree_u;
@@ -34,13 +35,98 @@ private:    // variables
     std::vector<double> m_weights;
 
 public:     // constructor
-    NurbsSurfaceGeometry(const Index degree_u, const Index degree_v,
-        const Index nb_poles_u, const Index nb_poles_v, const bool is_rational)
-        : m_degree_u(degree_u), m_degree_v(degree_v), m_nb_poles_u(nb_poles_u),
-        m_nb_poles_v(nb_poles_v), m_knots_u(nb_poles_u + degree_u - 1),
-        m_knots_v(nb_poles_v + degree_v - 1), m_poles(nb_poles_u * nb_poles_v),
-        m_weights(is_rational ? nb_poles_u * nb_poles_v : 0)
+    NurbsSurfaceGeometry(
+        const Index degree_u,
+        const Index degree_v,
+        const Index nb_poles_u,
+        const Index nb_poles_v,
+        const bool is_rational)
+    : m_degree_u(degree_u)
+    , m_degree_v(degree_v)
+    , m_nb_poles_u(nb_poles_u)
+    , m_nb_poles_v(nb_poles_v)
+    , m_knots_u(nb_poles_u + degree_u - 1)
+    , m_knots_v(nb_poles_v + degree_v - 1)
+    , m_poles(nb_poles_u * nb_poles_v)
+    , m_weights(is_rational ? nb_poles_u * nb_poles_v : 0)
     {
+        static_assert(TDimension > 0);
+    }
+
+    NurbsSurfaceGeometry(
+        const Index degree_u,
+        const Index degree_v,
+        const std::vector<double>& knots_u,
+        const std::vector<double>& knots_v,
+        const std::vector<Vector>& poles)
+    : m_degree_u(degree_u)
+    , m_degree_v(degree_v)
+    , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
+    , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
+    , m_knots_u(knots_u)
+    , m_knots_v(knots_v)
+    , m_poles(poles)
+    , m_weights(0)
+    {
+        static_assert(TDimension > 0);
+
+        if (m_nb_poles_u * m_nb_poles_v != length(poles)) {
+            throw std::runtime_error("Number of knots and poles do not match");
+        }
+    }
+
+    NurbsSurfaceGeometry(
+        const Index degree_u,
+        const Index degree_v,
+        const std::vector<double>& knots_u,
+        const std::vector<double>& knots_v,
+        const std::vector<Vector>& poles,
+        const std::vector<double>& weights)
+    : m_degree_u(degree_u)
+    , m_degree_v(degree_v)
+    , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
+    , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
+    , m_knots_u(knots_u)
+    , m_knots_v(knots_v)
+    , m_poles(poles)
+    , m_weights(weights)
+    {
+        static_assert(TDimension > 0);
+
+        if (m_nb_poles_u * m_nb_poles_v != length(poles)) {
+            throw std::runtime_error("Number of knots and poles do not match");
+        }
+
+        if (length(poles) != length(weights)) {
+            throw std::runtime_error("Number of poles and weights do not match");
+        }
+    }
+
+    NurbsSurfaceGeometry(
+        const Index degree_u,
+        const Index degree_v,
+        const std::vector<double>& knots_u,
+        const std::vector<double>& knots_v,
+        const std::vector<ControlPoint>& control_points)
+    : m_degree_u(degree_u)
+    , m_degree_v(degree_v)
+    , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
+    , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
+    , m_knots_u(knots_u)
+    , m_knots_v(knots_v)
+    , m_poles(length(control_points))
+    , m_weights(length(control_points))
+    {
+        static_assert(TDimension > 0);
+
+        if (m_nb_poles_u * m_nb_poles_v != length(control_points)) {
+            throw std::runtime_error("Number of knots and control points do not match");
+        }
+
+        for (Index i = 0; i < length(control_points); i++) {
+            m_poles[i] = std::get<0>(control_points[i]);
+            m_weights[i] = std::get<1>(control_points[i]);
+        }
     }
 
 public:     // static methods
@@ -547,9 +633,15 @@ public:     // python
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
-            .def(py::init<const Index, const Index, const Index, const Index,
-                const bool>(), "degree_u"_a, "degree_v"_a, "nb_poles_u"_a,
-                "nb_poles_v"_a, "is_rational"_a=false)
+            .def(py::init<const Index, const Index, const Index, const Index, const bool>(), "degree_u"_a, "degree_v"_a,
+                "nb_poles_u"_a, "nb_poles_v"_a, "is_rational"_a=false)
+            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>,
+                const std::vector<Vector>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a, "poles"_a)
+            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>,
+                const std::vector<Vector>, const std::vector<double>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a,
+                "poles"_a, "weights"_a)
+            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>,
+                const std::vector<ControlPoint>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a, "control_points"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
             .def_property_readonly("knots_u", &Type::knots_u)

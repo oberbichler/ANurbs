@@ -40,6 +40,9 @@ namespace linear_algebra {
     using Ref = Eigen::Ref<T>;
 }
 
+const double Infinity = std::numeric_limits<double>::infinity();
+const double QuietNaN = std::numeric_limits<double>::quiet_NaN();
+
 template <typename T>
 using Pointer = std::shared_ptr<T>;
 

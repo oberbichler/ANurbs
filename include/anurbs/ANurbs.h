@@ -14,6 +14,7 @@
 #include "Algorithm/NurbsSurfaceShapeFunction.h"
 #include "Algorithm/PointOnCurveProjection.h"
 #include "Algorithm/PointOnSurfaceProjection.h"
+#include "Algorithm/PolylineMapper.h"
 #include "Algorithm/PolygonIntegrationPoints.h"
 #include "Algorithm/PolygonTessellation.h"
 #include "Algorithm/RTree.h"
