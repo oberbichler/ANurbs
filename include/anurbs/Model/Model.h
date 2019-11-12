@@ -11,6 +11,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -272,6 +273,13 @@ public:     // methods
         JsonWriter<Model>::save_file(*this, path);
     }
 
+    std::string to_string()
+    {
+        std::stringstream string_stream;
+        JsonWriter<Model>::save_stream(*this, string_stream);
+        return string_stream.str();
+    }
+
     void add_array(const std::string& content)
     {
         JsonReader<Model>::load_array(*this, content);
@@ -299,6 +307,7 @@ public:     // python
             // methods
             .def("load", &Type::load, "path"_a)
             .def("save", &Type::save, "path"_a)
+            .def("to_string", &Type::to_string)
             .def("add_array", &Type::add_array, "content"_a)
             .def("add_object", &Type::add_object, "content"_a)
             .def("nb_entries", &Type::nb_entries)
