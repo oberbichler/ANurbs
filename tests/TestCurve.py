@@ -23,7 +23,7 @@ class TestCurve(unittest.TestCase):
         curve_geometry.set_knot( 9, 131.892570399495 )
         curve_geometry.set_knot(10, 131.892570399495 )
 
-        curve_geometry.set_pole(0, [  0, -25, - 5])
+        curve_geometry.set_pole(0, [  0, 0, 0])
         curve_geometry.set_pole(1, [-15, -15,   0])
         curve_geometry.set_pole(2, [  5, - 5, - 3])
         curve_geometry.set_pole(3, [ 15, -15,   3])
