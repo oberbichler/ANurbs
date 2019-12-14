@@ -1,15 +1,18 @@
-name: Python package
+name: CI
 
 on: [push]
 
 jobs:
   build:
+    name: build-${{ matrix.os }}-${{ matrix.python-version }}
+    
     runs-on: ${{ matrix.os }}
+
     strategy:
       max-parallel: 4
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-        python-version: [3.6, 3.7]
+        python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v1
