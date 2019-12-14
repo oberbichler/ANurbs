@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: build-${{ matrix.os }}-${{ matrix.python-version }}
+    name: build (${{ matrix.os }}, ${{ matrix.python-version }})
     
     runs-on: ${{ matrix.os }}
 
