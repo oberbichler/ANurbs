@@ -66,8 +66,10 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
         pip wheel . -w wheelhouse/
-        for whl in wheelhouse/anurbs-*-manylinux2010_x86_64.whl; do
+        for whl in wheelhouse/anurbs-*.whl; do
           auditwheel repair "$whl" --plat $PLAT -w wheelhouse/
+        done
+        for whl in wheelhouse/anurbs-*.whl; do
           twine upload "$whl"
         done
   
