@@ -73,5 +73,6 @@ setup(
     author_email='thomas.oberbichler@gmail.com',
     ext_modules=[CMakeExtension('anurbs')],
     cmdclass=dict(build_ext=CMakeBuild),
+    install_requires=['msvc-runtime ; platform_system=="Windows"'],
     zip_safe=False,
 )
