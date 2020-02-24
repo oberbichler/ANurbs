@@ -121,9 +121,9 @@
     "type": "brep",
     "curve_geometries_2d": ["Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.NurbsCurveGeometry2D<0>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.NurbsCurveGeometry2D<1>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.NurbsCurveGeometry2D<2>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.NurbsCurveGeometry2D<3>"],
     "surface_geometries_3d": ["Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.NurbsSurfaceGeometry3D<0>"],
-    "Faces": ["Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepFace<0>"],
+    "faces": ["Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepFace<0>"],
     "loops": ["Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepLoop<0>"],
     "trims": ["Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepTrim<0>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepTrim<1>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepTrim<2>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepTrim<3>"],
-    "Edges": ["Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepEdge<0>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepEdge<1>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepEdge<2>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepEdge<3>"]
+    "edges": ["Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepEdge<0>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepEdge<1>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepEdge<2>","Rhino<efa2b8a6-327d-4f82-8df5-3d3857ece6f7>.BrepEdge<3>"]
   }
 ]
