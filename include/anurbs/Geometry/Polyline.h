@@ -62,7 +62,7 @@ public:     // serialization
 
         // load Points
         {
-            const auto points = data.at("Points");
+            const auto points = data.at("points");
 
             result->m_points.resize(points.size());
 
@@ -76,7 +76,7 @@ public:     // serialization
 
     static void save(const Model& model, const Polyline& data, Json& target)
     {
-        target["Points"] = ToJson(data.m_points);
+        target["points"] = ToJson(data.m_points);
     }
 
 public:     // python

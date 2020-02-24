@@ -74,25 +74,25 @@ Unique<BrepTrim> BrepTrim::load(Model& model, const Json& data)
 
     // Read Loop
     {
-        const std::string key = data.at("Loop");
+        const std::string key = data.at("loop");
         result->m_loop = model.get_lazy<BrepLoop>(key);
     }
 
     // Read Edge
-    if (data.find("Edge") != data.end()) {
-        const std::string key = data.at("Edge");
+    if (data.find("edge") != data.end()) {
+        const std::string key = data.at("edge");
         result->m_edge = model.get_lazy<BrepEdge>(key);
     }
 
     // Read Geometry
     {
-        const std::string key = data.at("Geometry");
+        const std::string key = data.at("geometry");
         result->m_curve_geometry = model.get_lazy<NurbsCurveGeometry<2>>(key);
     }
 
     // Read Domain
-    if (data.find("Domain") != data.end()) {
-        result->m_domain = data.at("Domain");
+    if (data.find("domain") != data.end()) {
+        result->m_domain = data.at("domain");
     } else {
         result->m_domain = result->m_curve_geometry->domain();
     }
@@ -102,12 +102,12 @@ Unique<BrepTrim> BrepTrim::load(Model& model, const Json& data)
 
 void BrepTrim::save(const Model& model, const BrepTrim& data, Json& target)
 {
-    target["Loop"] = ToJson(data.m_loop);
+    target["loop"] = ToJson(data.m_loop);
     if (!data.m_edge.is_empty()) {
-        target["Edge"] = ToJson(data.m_edge);
+        target["edge"] = ToJson(data.m_edge);
     }
-    target["Geometry"] = ToJson(data.m_curve_geometry);
-    target["Domain"] = ToJson(data.m_domain);
+    target["geometry"] = ToJson(data.m_curve_geometry);
+    target["domain"] = ToJson(data.m_domain);
 }
 
 } // namespace anurbs

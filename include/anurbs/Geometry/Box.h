@@ -54,8 +54,8 @@ public:     // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto min = source.at("Min");
-        const auto max = source.at("Max");
+        const auto min = source.at("min");
+        const auto max = source.at("max");
 
         auto result = new_<Type>(min, max);
 
@@ -64,8 +64,8 @@ public:     // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["Min"] = data.min();
-        target["Max"] = data.max();
+        target["min"] = data.min();
+        target["max"] = data.max();
     }
 
 public:     // python

@@ -7,12 +7,12 @@ class TestModel(unittest.TestCase):
 
         model.add_array(r"""[
             {
-                "Key": "TestData",
-                "Type": "NurbsCurveGeometry2D",
-                "Degree": 1,
-                "NbPoles": 2,
-                "Knots": [0, 1],
-                "Poles": [[1, 2], [3, 4]]
+                "key": "TestData",
+                "type": "NurbsCurveGeometry2D",
+                "degree": 1,
+                "nb_poles": 2,
+                "knots": [0, 1],
+                "poles": [[1, 2], [3, 4]]
             }
         ]""")
 
@@ -29,12 +29,12 @@ class TestModel(unittest.TestCase):
         actual = model.to_string()
         expected = r"""[
                       {
-                        "Key": "TestData",
-                        "Type": "NurbsCurveGeometry2D",
-                        "Degree": 1,
-                        "Knots": [0.0,1.0],
-                        "NbPoles": 2,
-                        "Poles": [[1.0,2.0],[3.0,4.0]]
+                        "key": "TestData",
+                        "type": "NurbsCurveGeometry2D",
+                        "degree": 1,
+                        "knots": [0.0,1.0],
+                        "nb_poles": 2,
+                        "poles": [[1.0,2.0],[3.0,4.0]]
                       }
                     ]"""
 

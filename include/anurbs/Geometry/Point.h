@@ -66,18 +66,18 @@ public:     // serialization
     {
         auto data = new_<Type>();
 
-        data->m_location = source.at("Location");
-        data->m_text = source.at("Text");
+        data->m_location = source.at("location");
+        data->m_text = source.at("text");
 
         return data;
     }
 
     static void save(const Model& model, const Point& data, Json& target)
     {
-        target["Location"] = ToJson(data.m_location);
+        target["location"] = ToJson(data.m_location);
 
         if (!data.m_text.empty()) {
-            target["Text"] = ToJson(data.m_text);
+            target["text"] = ToJson(data.m_text);
         }
     }
 

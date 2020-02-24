@@ -62,8 +62,7 @@ public:     // python
         using Type = SurfaceBase<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = "SurfaceBase" + std::to_string(TDimension) +
-            "D";
+        const std::string name = "SurfaceBase" + std::to_string(TDimension) + "D";
 
         auto py_class = py::class_<Type, Holder>(m, name.c_str())
             // read-only property

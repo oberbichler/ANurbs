@@ -27,9 +27,9 @@ struct JsonWriter
             Json data;
 
             if (!key.empty()) {
-                data["Key"] = key;
+                data["key"] = key;
             }
-            data["Type"] = type;
+            data["type"] = type;
 
             if (!TypeRegistry<TModel>::save(type, model, i, data)) {
                 continue;

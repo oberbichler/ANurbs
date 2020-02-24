@@ -82,12 +82,12 @@ class TestIntegrationPoints(unittest.TestCase):
 
         model.add_array(r"""[
             {
-                "Key": "TestData",
-                "Type": "NurbsCurveGeometry2D",
-                "Degree": 1,
-                "NbPoles": 2,
-                "Knots": [-1, 0, 1],
-                "Poles": [[-1, 0], [0, 0], [2, 0]]
+                "key": "TestData",
+                "type": "NurbsCurveGeometry2D",
+                "degree": 1,
+                "nb_poles": 2,
+                "knots": [-1, 0, 1],
+                "poles": [[-1, 0], [0, 0], [2, 0]]
             }
         ]""")
 
@@ -113,14 +113,14 @@ class TestIntegrationPoints(unittest.TestCase):
 
         model.add_array(r"""[
             {
-                "Type": "NurbsSurfaceGeometry3D",
-                "DegreeU": 2,
-                "DegreeV": 1,
-                "KnotsU": [0.0,0.0,5.0,10.0,10.0],
-                "KnotsV": [0.0,20.0],
-                "NbPolesU": 4,
-                "NbPolesV": 2,
-                "Poles": [[0.0,0.0,0.0],[0.0,10.0,0.0],[2.00900107273569,0.0,0.0],[4.0763840660860486,7.8742350860349752,0.0],[7.0668900221629363,0.0,0.0],[12.011764418152659,7.1771412301834934,0.0],[10.0,0.0,0.0],[15.0,10.0,0.0]]
+                "type": "NurbsSurfaceGeometry3D",
+                "degree_u": 2,
+                "degree_v": 1,
+                "knots_u": [0.0,0.0,5.0,10.0,10.0],
+                "knots_v": [0.0,20.0],
+                "nb_poles_u": 4,
+                "nb_poles_v": 2,
+                "poles": [[0.0,0.0,0.0],[0.0,10.0,0.0],[2.00900107273569,0.0,0.0],[4.0763840660860486,7.8742350860349752,0.0],[7.0668900221629363,0.0,0.0],[12.011764418152659,7.1771412301834934,0.0],[10.0,0.0,0.0],[15.0,10.0,0.0]]
             }
         ]""")
 

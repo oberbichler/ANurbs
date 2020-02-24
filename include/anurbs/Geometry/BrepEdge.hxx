@@ -58,7 +58,7 @@ Unique<BrepEdge> BrepEdge::load(Model& model, const Json& data)
 
     // Read trims
     {
-        const auto trims = data.at("Trims");
+        const auto trims = data.at("trims");
 
         result->m_trims.resize(trims.size());
 
@@ -73,7 +73,7 @@ Unique<BrepEdge> BrepEdge::load(Model& model, const Json& data)
 
 void BrepEdge::save(const Model& model, const BrepEdge& data, Json& target)
 {
-    target["Trims"] = ToJson(data.m_trims);
+    target["trims"] = ToJson(data.m_trims);
 }
 
 } // namespace anurbs

@@ -59,13 +59,13 @@ Unique<BrepLoop> BrepLoop::load(Model& model, const Json& data)
 
     // Read Face
     {
-        const std::string key = data.at("Face");
+        const std::string key = data.at("face");
         result->m_face = model.get_lazy<BrepFace>(key);
     }
 
     // Read trims
     {
-        const auto trims = data.at("Trims");
+        const auto trims = data.at("trims");
 
         result->m_trims.resize(trims.size());
 
@@ -80,8 +80,8 @@ Unique<BrepLoop> BrepLoop::load(Model& model, const Json& data)
 
 void BrepLoop::save(const Model& model, const BrepLoop& data, Json& target)
 {
-    target["Face"] = ToJson(data.m_face);
-    target["Trims"] = ToJson(data.m_trims);
+    target["face"] = ToJson(data.m_face);
+    target["trims"] = ToJson(data.m_trims);
 }
 
 } // namespace anurbs

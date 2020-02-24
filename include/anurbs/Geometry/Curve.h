@@ -96,17 +96,17 @@ public:     // serialization
     static Unique<Type> load(Model& model, const Json& source)
     {
         const auto geometry = model.get_lazy<NurbsCurveGeometry<TDimension>>(
-            source.at("Geometry"));
+            source.at("geometry"));
 
-        const Interval domain = source.at("Domain");
+        const Interval domain = source.at("domain");
 
         return new_<Type>(geometry, domain);
     }
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["Geometry"] = data.curve_geometry().key();
-        target["Domain"] = ToJson(data.domain());
+        target["geometry"] = data.curve_geometry().key();
+        target["domain"] = ToJson(data.domain());
     }
 
 public:     // python
