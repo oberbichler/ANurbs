@@ -50,7 +50,7 @@ std::vector<Ref<BrepEdge>> BrepLoop::edges() const
 
 std::string BrepLoop::type_name()
 {
-    return "BrepLoop";
+    return "brep_loop";
 }
 
 Unique<BrepLoop> BrepLoop::load(Model& model, const Json& data)
@@ -82,6 +82,13 @@ void BrepLoop::save(const Model& model, const BrepLoop& data, Json& target)
 {
     target["face"] = ToJson(data.m_face);
     target["trims"] = ToJson(data.m_trims);
+}
+
+// python
+
+std::string BrepLoop::python_name()
+{
+    return "BrepLoop";
 }
 
 } // namespace anurbs

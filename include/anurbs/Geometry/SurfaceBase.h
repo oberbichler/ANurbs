@@ -54,6 +54,11 @@ public:     // methods
     virtual std::vector<Interval> spans_v() const = 0;
 
 public:     // python
+    static std::string python_name()
+    {
+        return "SurfaceBase" + std::to_string(TDimension) + "D";
+    }
+
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -62,7 +67,7 @@ public:     // python
         using Type = SurfaceBase<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = "SurfaceBase" + std::to_string(TDimension) + "D";
+        const std::string name = Type::python_name();
 
         auto py_class = py::class_<Type, Holder>(m, name.c_str())
             // read-only property

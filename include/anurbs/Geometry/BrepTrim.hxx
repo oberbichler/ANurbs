@@ -65,7 +65,7 @@ Ref<NurbsSurfaceGeometry<3>> BrepTrim::surface_geometry() const
 
 std::string BrepTrim::type_name()
 {
-    return "BrepTrim";
+    return "brep_trim";
 }
 
 Unique<BrepTrim> BrepTrim::load(Model& model, const Json& data)
@@ -108,6 +108,13 @@ void BrepTrim::save(const Model& model, const BrepTrim& data, Json& target)
     }
     target["geometry"] = ToJson(data.m_curve_geometry);
     target["domain"] = ToJson(data.m_domain);
+}
+
+// python
+
+std::string BrepTrim::python_name()
+{
+    return "BrepTrim";
 }
 
 } // namespace anurbs

@@ -106,6 +106,11 @@ public:     // methods
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "PolygonTessellation";
+    }
+
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -113,7 +118,7 @@ public:     // python
 
         using Type = PolygonTessellation;
 
-        std::string name = "PolygonTessellation";
+        const std::string name = Type::python_name();
 
         py::class_<Type>(m, name.c_str())
             .def(py::init<>())

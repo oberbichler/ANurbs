@@ -53,7 +53,7 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "Polyline" + std::to_string(TDimension) + "D";
+        return "polyline_" + std::to_string(TDimension) + "d";
     }
 
     static Unique<Polyline<TDimension>> load(Model& model, const Json& data)
@@ -80,6 +80,11 @@ public:     // serialization
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "Polyline" + std::to_string(TDimension) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -88,7 +93,7 @@ public:     // python
 
         using Holder = anurbs::Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Holder>(m, name.c_str())
             .def(py::init<Index>(), "nb_points"_a)

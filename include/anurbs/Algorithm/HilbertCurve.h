@@ -176,6 +176,11 @@ public:     // static methods
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "HilbertCurve" + std::to_string(TDimension) + "D";
+    }
+
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -184,7 +189,7 @@ public:     // python
         using Type = HilbertCurve<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = "HilbertCurve" + std::to_string(TDimension) + "D";
+        const std::string name = Type::python_name();
         
         py::class_<Type, Holder>(m, name.c_str())
             // private static methods

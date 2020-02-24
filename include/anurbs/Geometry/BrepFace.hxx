@@ -65,7 +65,7 @@ std::vector<Ref<BrepTrim>> BrepFace::trims() const
 
 std::string BrepFace::type_name()
 {
-    return "BrepFace";
+    return "brep_face";
 }
 
 Unique<BrepFace> BrepFace::load(Model& model, const Json& data)
@@ -104,6 +104,13 @@ void BrepFace::save(const Model& model, const BrepFace& data, Json& target)
     target["brep"] = ToJson(data.m_brep);
     target["loops"] = ToJson(data.m_loops);
     target["geometry"] = ToJson(data.m_geometry);
+}
+
+// python
+
+std::string BrepFace::python_name()
+{
+    return "BrepFace";
 }
 
 } // namespace anurbs

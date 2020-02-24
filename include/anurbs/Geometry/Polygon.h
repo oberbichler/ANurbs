@@ -73,6 +73,11 @@ public:     // methods
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "Polygon2D";
+    }
+
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -80,7 +85,9 @@ public:     // python
 
         using Type = Polygon;
 
-        pybind11::class_<Type>(m, "Polygon")
+        const std::string name = Type::python_name();
+
+        pybind11::class_<Type>(m, name.c_str())
             .def(py::init<>())
             .def("nb_loops", &Type::nb_loops)
             .def("nb_vertices_of_loop", &Type::nb_vertices_of_loop, "index"_a)

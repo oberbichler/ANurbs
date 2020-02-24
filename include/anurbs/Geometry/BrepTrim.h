@@ -56,6 +56,8 @@ public:     // serialization
     static void save(const Model& model, const BrepTrim& data, Json& target);
 
 public:     // python
+    static std::string python_name();
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel model)
     {
@@ -65,7 +67,7 @@ public:     // python
         using Type = BrepTrim;
         using Holder = Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Holder>(m, name.c_str())
             // read-only properties

@@ -122,7 +122,7 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "Surface" + std::to_string(dimension()) + "D";
+        return "surface_" + std::to_string(dimension()) + "d";
     }
 
     static Unique<Type> load(Model& model, const Json& source)
@@ -141,6 +141,11 @@ public:     // serialization
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "Surface" + std::to_string(dimension()) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -151,7 +156,7 @@ public:     // python
         using Base = SurfaceBase<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             .def(py::init<TRef>(), "geometry"_a)

@@ -33,6 +33,11 @@ public:     // methods
         const = 0;
 
 public:     // python
+    static std::string python_name()
+    {
+        return "CurveBase" + std::to_string(dimension()) + "D";
+    }
+
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -41,8 +46,7 @@ public:     // python
         using Type = CurveBase<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = "CurveBase" + std::to_string(dimension()) +
-            "D";
+        const std::string name = Type::python_name();
 
         py::class_<Type, Holder>(m, name.c_str())
             // read-only properties
