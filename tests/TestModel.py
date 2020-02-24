@@ -8,7 +8,7 @@ class TestModel(unittest.TestCase):
         model.add_array(r"""[
             {
                 "key": "TestData",
-                "type": "NurbsCurveGeometry2D",
+                "type": "nurbs_curve_geometry_2d",
                 "degree": 1,
                 "nb_poles": 2,
                 "knots": [0, 1],
@@ -30,7 +30,7 @@ class TestModel(unittest.TestCase):
         expected = r"""[
                       {
                         "key": "TestData",
-                        "type": "NurbsCurveGeometry2D",
+                        "type": "nurbs_curve_geometry_2d",
                         "degree": 1,
                         "knots": [0.0,1.0],
                         "nb_poles": 2,
