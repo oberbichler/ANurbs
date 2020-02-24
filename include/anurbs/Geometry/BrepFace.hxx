@@ -65,7 +65,7 @@ std::vector<Ref<BrepTrim>> BrepFace::trims() const
 
 std::string BrepFace::type_name()
 {
-    return "BrepFace";
+    return "brep_face";
 }
 
 Unique<BrepFace> BrepFace::load(Model& model, const Json& data)
@@ -74,13 +74,13 @@ Unique<BrepFace> BrepFace::load(Model& model, const Json& data)
 
     // Read Brep
     {
-        const std::string key = data.at("Brep");
+        const std::string key = data.at("brep");
         result->m_brep = model.get_lazy<anurbs::Brep>(key);
     }
 
     // Read loops
     {
-        const auto loops = data.at("Loops");
+        const auto loops = data.at("loops");
 
         result->m_loops.resize(loops.size());
 
@@ -92,7 +92,7 @@ Unique<BrepFace> BrepFace::load(Model& model, const Json& data)
 
     // Read Geometry
     {
-        const std::string key = data.at("Geometry");
+        const std::string key = data.at("geometry");
         result->m_geometry = model.get_lazy<NurbsSurfaceGeometry<3>>(key);
     }
 
@@ -101,9 +101,16 @@ Unique<BrepFace> BrepFace::load(Model& model, const Json& data)
 
 void BrepFace::save(const Model& model, const BrepFace& data, Json& target)
 {
-    target["Brep"] = ToJson(data.m_brep);
-    target["Loops"] = ToJson(data.m_loops);
-    target["Geometry"] = ToJson(data.m_geometry);
+    target["brep"] = ToJson(data.m_brep);
+    target["loops"] = ToJson(data.m_loops);
+    target["geometry"] = ToJson(data.m_geometry);
+}
+
+// python
+
+std::string BrepFace::python_name()
+{
+    return "BrepFace";
 }
 
 } // namespace anurbs

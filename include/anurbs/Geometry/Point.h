@@ -59,29 +59,34 @@ public:     // constructors
 public:     // serialization
     static std::string type_name()
     {
-        return "Point" + std::to_string(TDimension) + "D";
+        return "point_" + std::to_string(TDimension) + "d";
     }
 
     static Unique<Type> load(Model& model, const Json& source)
     {
         auto data = new_<Type>();
 
-        data->m_location = source.at("Location");
-        data->m_text = source.at("Text");
+        data->m_location = source.at("location");
+        data->m_text = source.at("text");
 
         return data;
     }
 
     static void save(const Model& model, const Point& data, Json& target)
     {
-        target["Location"] = ToJson(data.m_location);
+        target["location"] = ToJson(data.m_location);
 
         if (!data.m_text.empty()) {
-            target["Text"] = ToJson(data.m_text);
+            target["text"] = ToJson(data.m_text);
         }
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "Point" + std::to_string(TDimension) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -91,7 +96,7 @@ public:     // python
         using Type = Point<TDimension>;
         using Holder = anurbs::Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Holder>(m, name.c_str())
             // constructors

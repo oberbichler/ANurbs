@@ -137,13 +137,12 @@ public:     // methods
         return result;
     }
 
-public:     // serialization
-    static std::string type_name()
+public:     // python
+    static std::string python_name()
     {
         return "CurveOnSurface" + std::to_string(dimension()) + "D";
     }
 
-public:     // python
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -153,7 +152,7 @@ public:     // python
         using Base = CurveBase<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             .def(py::init<TCurveRef, TSurfaceRef,

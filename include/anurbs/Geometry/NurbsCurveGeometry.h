@@ -278,16 +278,16 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "NurbsCurveGeometry" + std::to_string(dimension()) + "D";
+        return "nurbs_curve_geometry_" + std::to_string(dimension()) + "d";
     }
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto poles = source.at("Poles");
-        const auto knots = source.at("Knots");
-        const auto weights = source.value("Weights", std::vector<double>());
+        const auto poles = source.at("poles");
+        const auto knots = source.at("knots");
+        const auto weights = source.value("weights", std::vector<double>());
         
-        const Index degree = source.at("Degree");
+        const Index degree = source.at("degree");
         const Index nb_poles = length(poles);
         const bool is_rational = !weights.empty();
 
@@ -312,17 +312,22 @@ public:     // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["Degree"] = data.degree();
-        target["Knots"] = data.knots();
-        target["NbPoles"] = data.nb_poles();
-        target["Poles"] = ToJson(data.poles());
+        target["degree"] = data.degree();
+        target["knots"] = data.knots();
+        target["nb_poles"] = data.nb_poles();
+        target["poles"] = ToJson(data.poles());
 
         if (data.is_rational()) {
-            target["Weights"] = data.weights();
+            target["weights"] = data.weights();
         }
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "NurbsCurveGeometry" + std::to_string(dimension()) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -333,7 +338,7 @@ public:     // python
         using Base = CurveBase<TDimension>; 
         using Holder = Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors

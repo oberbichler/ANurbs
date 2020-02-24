@@ -59,6 +59,8 @@ public:     // serialization
     static void save(const Model& model, const Brep& data, Json& target);
 
 public:     // python
+    static std::string python_name();
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -68,7 +70,9 @@ public:     // python
         using Type = Brep;
         using Holder = Pointer<Brep>;
 
-        py::class_<Type, Holder>(m, "Brep")
+        const std::string name = Type::python_name();
+
+        py::class_<Type, Holder>(m, name.c_str())
             .def("nb_faces", &Type::nb_faces)
             .def("face", &Type::face, "index"_a)
             .def("faces", &Type::faces)

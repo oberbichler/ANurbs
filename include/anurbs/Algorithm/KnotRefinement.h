@@ -339,6 +339,10 @@ public:     // static methods
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "KnotRefinement" + std::to_string(TDimension) + "D";
+    }
 
     static void register_python(pybind11::module& m)
     {
@@ -347,8 +351,7 @@ public:     // python
 
         using Type = KnotRefinement<TDimension>;
 
-        const std::string name = "KnotRefinement" + std::to_string(TDimension) +
-            "D";
+        const std::string name = Type::python_name();
 
         py::class_<Type>(m, name.c_str())
             .def_static("insert_knots", &Type::insert_knots, "geometry"_a,

@@ -49,13 +49,13 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "Box" + std::to_string(dimension()) + "D";
+        return "box_" + std::to_string(dimension()) + "d";
     }
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto min = source.at("Min");
-        const auto max = source.at("Max");
+        const auto min = source.at("min");
+        const auto max = source.at("max");
 
         auto result = new_<Type>(min, max);
 
@@ -64,11 +64,16 @@ public:     // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["Min"] = data.min();
-        target["Max"] = data.max();
+        target["min"] = data.min();
+        target["max"] = data.max();
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "Box" + std::to_string(dimension()) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -77,7 +82,7 @@ public:     // python
 
         using Holder = Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Holder>(m, name.c_str())
             // constructors

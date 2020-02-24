@@ -56,7 +56,7 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "BrepFaceField" + std::to_string(dimension()) + "D";
+        return "brep_face_field" + std::to_string(dimension()) + "d";
     }
 
     static Unique<BrepFaceField> load(Model& model, const Json& data)
@@ -65,13 +65,13 @@ public:     // serialization
 
         // Read Face
         {
-            const std::string key = data.at("Face");
+            const std::string key = data.at("face");
             result->m_face = model.get_lazy<BrepFace>(key);
         }
 
         // Read Values
         {
-            const auto values = data.at("Values");
+            const auto values = data.at("values");
 
             result->m_values.resize(values.size());
 
@@ -85,11 +85,16 @@ public:     // serialization
 
     void save(const Model& model, Json& data) const
     {
-        data["Face"] = ToJson(m_face);
-        data["Values"] = ToJson(m_values);
+        data["face"] = ToJson(m_face);
+        data["values"] = ToJson(m_values);
     }
     
 public:     // python
+    static std::string python_name()
+    {
+        return "BrepFaceField" + std::to_string(dimension()) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel model)
     {
@@ -99,7 +104,7 @@ public:     // python
         using Type = BrepFaceField<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Holder>(m, name.c_str())
             // constructors

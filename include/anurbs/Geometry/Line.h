@@ -81,26 +81,31 @@ public:
 public:     // serialization
     static std::string type_name()
     {
-        return "Line" + std::to_string(TDimension) + "D";
+        return "line_" + std::to_string(TDimension) + "d";
     }
 
     static Unique<Line> load(Model& model, const Json& data)
     {
         auto result = new_<Line>();
 
-        result->m_a = data.at("A");
-        result->m_b = data.at("B");
+        result->m_a = data.at("a");
+        result->m_b = data.at("b");
 
         return result;
     }
 
     static void save(const Model& model, const Line& data, Json& target)
     {
-        target["A"] = ToJson(data.m_a);
-        target["B"] = ToJson(data.m_b);
+        target["a"] = ToJson(data.m_a);
+        target["b"] = ToJson(data.m_b);
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "Line" + std::to_string(TDimension) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -110,7 +115,7 @@ public:     // python
         using Type = Line<TDimension>;
         using Holder = anurbs::Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Holder>(m, name.c_str())
             // constructors

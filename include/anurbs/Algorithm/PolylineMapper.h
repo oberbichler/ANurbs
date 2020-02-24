@@ -79,19 +79,18 @@ public:     // methods
         return {1.0 - closest_parameter, closest_index, closest_parameter, closest_index + 1};
     }
 
-public:     // serialization
-    static std::string type_name()
+public:     // python
+    static std::string python_name()
     {
         return "PolylineMapper" + std::to_string(dimension()) + "D";
     }
 
-public:     // python
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
 
-        std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type>(m, name.c_str())
             // constructors

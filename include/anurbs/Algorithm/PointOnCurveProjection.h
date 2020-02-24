@@ -198,6 +198,11 @@ private:    // static methods
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "PointOnCurveProjection" + std::to_string(TDimension) + "D";
+    }
+
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -206,8 +211,7 @@ public:     // python
         using Type = PointOnCurveProjection<TDimension>;
         using Handler = Pointer<Type>;
 
-        std::string name = "PointOnCurveProjection" + std::to_string(TDimension)
-            + "D";
+        const std::string name = Type::python_name();
 
         py::class_<Type, Handler>(m, name.c_str())
             .def(py::init<Pointer<CurveBaseD>, double>(), "curve"_a,

@@ -298,6 +298,11 @@ public:     // constructors
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "PointOnSurfaceProjection" + std::to_string(TDimension) + "D";
+    }
+
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -306,8 +311,7 @@ public:     // python
         using Type = PointOnSurfaceProjection<TDimension>;
         using Handler = Pointer<Type>;
 
-        std::string name = "PointOnSurfaceProjection" +
-            std::to_string(TDimension) + "D";
+        const std::string name = Type::python_name();
 
         py::class_<Type, Handler>(m, name.c_str())
             // constructors

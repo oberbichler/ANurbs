@@ -96,7 +96,7 @@ using ToJson = nlohmann::json;
 
 static std::string key_from_json(const Json& source)
 {
-    const auto it = source.find("Key");
+    const auto it = source.find("key");
 
     if (it == source.end()) {
         return std::string();
@@ -107,7 +107,7 @@ static std::string key_from_json(const Json& source)
 
 static std::string type_name_from_json(const Json& source)
 {
-    const auto it = source.find("Type");
+    const auto it = source.find("type");
 
     if (it == source.end()) {
         throw std::runtime_error("Type is missing");

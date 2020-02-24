@@ -90,26 +90,31 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "Curve" + std::to_string(dimension()) + "D";
+        return "curve_" + std::to_string(dimension()) + "d";
     }
 
     static Unique<Type> load(Model& model, const Json& source)
     {
         const auto geometry = model.get_lazy<NurbsCurveGeometry<TDimension>>(
-            source.at("Geometry"));
+            source.at("geometry"));
 
-        const Interval domain = source.at("Domain");
+        const Interval domain = source.at("domain");
 
         return new_<Type>(geometry, domain);
     }
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["Geometry"] = data.curve_geometry().key();
-        target["Domain"] = ToJson(data.domain());
+        target["geometry"] = data.curve_geometry().key();
+        target["domain"] = ToJson(data.domain());
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "Curve" + std::to_string(dimension()) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -120,7 +125,7 @@ public:     // python
         using Holder = Pointer<Type>;
         using Base = CurveBase<TDimension>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             .def(py::init<TRef, Interval>(), "geometry"_a, "domain"_a)

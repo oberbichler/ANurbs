@@ -563,20 +563,20 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "NurbsSurfaceGeometry" + std::to_string(dimension()) + "D";
+        return "nurbs_surface_geometry_" + std::to_string(dimension()) + "d";
     }
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto poles = source.at("Poles");
-        const auto knots_u = source.at("KnotsU");
-        const auto knots_v = source.at("KnotsV");
-        const auto weights = source.value("Weights", std::vector<double>());
+        const auto poles = source.at("poles");
+        const auto knots_u = source.at("knots_u");
+        const auto knots_v = source.at("knots_v");
+        const auto weights = source.value("weights", std::vector<double>());
         
-        const Index degree_u = source.at("DegreeU");
-        const Index degree_v = source.at("DegreeV");
-        const Index nb_poles_u = source.at("NbPolesU");
-        const Index nb_poles_v = source.at("NbPolesV");
+        const Index degree_u = source.at("degree_u");
+        const Index degree_v = source.at("degree_v");
+        const Index nb_poles_u = source.at("nb_poles_u");
+        const Index nb_poles_v = source.at("nb_poles_v");
         const bool is_rational = !weights.empty();
 
         auto result = new_<Type>(degree_u, degree_v, nb_poles_u, nb_poles_v,
@@ -605,20 +605,25 @@ public:     // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["DegreeU"] = data.degree_u();
-        target["DegreeV"] = data.degree_v();
-        target["NbPolesU"] = data.nb_poles_u();
-        target["NbPolesV"] = data.nb_poles_v();
-        target["KnotsU"] = data.knots_u();
-        target["KnotsV"] = data.knots_v();
-        target["Poles"] = ToJson(data.poles());
+        target["degree_u"] = data.degree_u();
+        target["degree_v"] = data.degree_v();
+        target["nb_poles_u"] = data.nb_poles_u();
+        target["nb_poles_v"] = data.nb_poles_v();
+        target["knots_u"] = data.knots_u();
+        target["knots_v"] = data.knots_v();
+        target["poles"] = ToJson(data.poles());
 
         if (data.is_rational()) {
-            target["Weights"] = ToJson(data.weights());
+            target["weights"] = ToJson(data.weights());
         }
     }
 
 public:     // python
+    static std::string python_name()
+    {
+        return "NurbsSurfaceGeometry" + std::to_string(dimension()) + "D";
+    }
+
     template <typename TModel>
     static void register_python(pybind11::module& m, TModel& model)
     {
@@ -629,7 +634,7 @@ public:     // python
         using Base = SurfaceBase<TDimension>;
         using Holder = Pointer<Type>;
 
-        const std::string name = Type::type_name();
+        const std::string name = Type::python_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
@@ -654,8 +659,8 @@ public:     // python
             .def_property_readonly("poles", &Type::poles)
             .def_property_readonly("weights", &Type::weights)
             // methods
-            // .def("Poles", &Type::poles)
-            // .def("Weights", &Type::weights)
+            // .def("poles", &Type::poles)
+            // .def("weights", &Type::weights)
             .def("clone", &Type::clone)
             .def("knot_u", &Type::knot_u, "index"_a)
             .def("knot_v", &Type::knot_v, "index"_a)
