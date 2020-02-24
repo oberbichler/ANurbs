@@ -659,8 +659,8 @@ public:     // python
             .def_property_readonly("poles", &Type::poles)
             .def_property_readonly("weights", &Type::weights)
             // methods
-            // .def("Poles", &Type::poles)
-            // .def("Weights", &Type::weights)
+            // .def("poles", &Type::poles)
+            // .def("weights", &Type::weights)
             .def("clone", &Type::clone)
             .def("knot_u", &Type::knot_u, "index"_a)
             .def("knot_v", &Type::knot_v, "index"_a)
