@@ -8,7 +8,7 @@ class TestPointOnSurfaceProjection(unittest.TestCase):
         model = an.Model()
         model.load(f'{os.path.dirname(__file__)}/data/point_on_surface_projection.ibra')
 
-        surface = model.of_type('NurbsSurfaceGeometry3D')[0].data
+        surface = model.of_type('nurbs_surface_geometry_3d')[0].data
 
         projection = an.PointOnSurfaceProjection3D(surface)
 
