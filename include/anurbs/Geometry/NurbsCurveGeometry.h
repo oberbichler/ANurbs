@@ -17,9 +17,8 @@
 namespace anurbs {
 
 template <Index TDimension>
-struct NurbsCurveGeometry : public CurveBase<TDimension>
-{
-public:     // types
+struct NurbsCurveGeometry : public CurveBase<TDimension> {
+public: // types
     using Type = NurbsCurveGeometry<TDimension>;
     using Vector = typename CurveBase<TDimension>::Vector;
     using ControlPoint = std::pair<Vector, double>;
@@ -27,21 +26,21 @@ public:     // types
     using Poles = Eigen::Matrix<double, Eigen::Dynamic, TDimension>;
     using Weights = Eigen::VectorXd;
 
-private:    // variables
+private: // variables
     const Index m_degree;
     Knots m_knots;
     Poles m_poles;
     Weights m_weights;
 
-public:     // constructors
+public: // constructors
     NurbsCurveGeometry(
         const Index degree,
         Index nb_poles,
         bool is_rational)
-    : m_degree(degree)
-    , m_poles(nb_poles, TDimension)
-    , m_weights(is_rational ? nb_poles : 0)
-    , m_knots(Nurbs::nb_knots(degree, nb_poles))
+        : m_degree(degree)
+        , m_poles(nb_poles, TDimension)
+        , m_weights(is_rational ? nb_poles : 0)
+        , m_knots(Nurbs::nb_knots(degree, nb_poles))
     {
         static_assert(TDimension > 0);
     }
@@ -50,10 +49,10 @@ public:     // constructors
         const Index degree,
         const Knots& knots,
         const Poles& poles)
-    : m_degree(degree)
-    , m_knots(knots)
-    , m_poles(poles)
-    , m_weights(0)
+        : m_degree(degree)
+        , m_knots(knots)
+        , m_poles(poles)
+        , m_weights(0)
     {
         static_assert(TDimension > 0);
 
@@ -67,10 +66,10 @@ public:     // constructors
         const Knots& knots,
         const Poles& poles,
         const Weights& weights)
-    : m_degree(degree)
-    , m_knots(knots)
-    , m_poles(poles)
-    , m_weights(weights)
+        : m_degree(degree)
+        , m_knots(knots)
+        , m_poles(poles)
+        , m_weights(weights)
     {
         static_assert(TDimension > 0);
 
@@ -87,10 +86,10 @@ public:     // constructors
         const Index degree,
         const Knots& knots,
         const std::vector<ControlPoint>& control_points)
-    : m_degree(degree)
-    , m_knots(knots)
-    , m_poles(length(control_points), TDimension)
-    , m_weights(length(control_points))
+        : m_degree(degree)
+        , m_knots(knots)
+        , m_poles(length(control_points), TDimension)
+        , m_weights(length(control_points))
     {
         static_assert(TDimension > 0);
 
@@ -104,17 +103,16 @@ public:     // constructors
         }
     }
 
-public:     // static methods
+public: // static methods
     using CurveBase<TDimension>::dimension;
 
-public:     // methods
+public: // methods
     Index degree() const override
     {
         return m_degree;
     }
-    
-    std::vector<Vector> derivatives_at(const double t, const Index order)
-        const override
+
+    std::vector<Vector> derivatives_at(const double t, const Index order) const override
     {
         NurbsCurveShapeFunction shape_function;
 
@@ -234,30 +232,28 @@ public:     // methods
     {
         m_poles = poles;
     }
-    
+
     void set_knot(Index i, double value)
     {
         m_knots[i] = value;
     }
-    
+
     void set_pole(Index i, Vector value)
     {
         m_poles.row(i) = value;
     }
-    
+
     void set_weight(Index i, double value)
     {
         m_weights(i) = value;
     }
 
-    std::pair<std::vector<Index>, linear_algebra::MatrixXd> shape_functions_at(const double t,
-        const Index order) const
+    std::pair<std::vector<Index>, linear_algebra::MatrixXd> shape_functions_at(const double t, const Index order) const
     {
         NurbsCurveShapeFunction shape_function(degree(), order);
 
         if (is_rational()) {
-            shape_function.compute(knots(), [&](Index i) {
-                return weight(i); }, t);
+            shape_function.compute(knots(), [&](Index i) { return weight(i); }, t);
         } else {
             shape_function.compute(knots(), t);
         }
@@ -292,18 +288,28 @@ public:     // methods
 
         return result;
     }
-    
+
+    double& weight(Index i)
+    {
+        return m_weights(i);
+    }
+
     double weight(Index i) const
     {
         return m_weights(i);
     }
-    
-    Eigen::Ref<const Eigen::VectorXd> weights() const
+
+    Eigen::Ref<Weights> weights()
     {
         return m_weights;
     }
 
-public:     // serialization
+    Eigen::Ref<const Weights> weights() const
+    {
+        return m_weights;
+    }
+
+public: // serialization
     static std::string type_name()
     {
         return "nurbs_curve_geometry_" + std::to_string(dimension()) + "d";
@@ -314,7 +320,7 @@ public:     // serialization
         const auto poles = source.at("poles");
         const auto knots = source.at("knots");
         const auto weights = source.value("weights", std::vector<double>());
-        
+
         const Index degree = source.at("degree");
         const Index nb_poles = length(poles);
         const bool is_rational = !weights.empty();
@@ -350,7 +356,7 @@ public:     // serialization
         }
     }
 
-public:     // python
+public: // python
     static std::string python_name()
     {
         return "NurbsCurveGeometry" + std::to_string(dimension()) + "D";
@@ -363,39 +369,33 @@ public:     // python
         namespace py = pybind11;
 
         using Type = NurbsCurveGeometry<TDimension>;
-        using Base = CurveBase<TDimension>; 
+        using Base = CurveBase<TDimension>;
         using Holder = Pointer<Type>;
 
         const std::string name = Type::python_name();
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
-            .def(py::init<const Index, const Index, const bool>(), "degree"_a,
-                "nb_poles"_a, "is_rational"_a)
-            .def(py::init<const Index, const Eigen::VectorXd,
-                const Poles>(), "degree"_a, "knots"_a, "poles"_a)
-            .def(py::init<const Index, const Eigen::VectorXd,
-                const Poles, const Eigen::VectorXd>(),
-                "degree"_a, "knots"_a, "poles"_a, "weights"_a)
-            .def(py::init<const Index, const Eigen::VectorXd,
-                const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
+            .def(py::init<const Index, const Index, const bool>(), "degree"_a, "nb_poles"_a, "is_rational"_a)
+            .def(py::init<const Index, const Eigen::VectorXd, const Poles>(), "degree"_a, "knots"_a, "poles"_a)
+            .def(py::init<const Index, const Eigen::VectorXd, const Poles, const Eigen::VectorXd>(), "degree"_a, "knots"_a, "poles"_a, "weights"_a)
+            .def(py::init<const Index, const Eigen::VectorXd, const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
             .def_property_readonly("knots", py::overload_cast<>(&Type::knots))
             .def_property_readonly("nb_knots", &Type::nb_knots)
             .def_property_readonly("nb_poles", &Type::nb_poles)
             .def_property_readonly("poles", py::overload_cast<>(&Type::poles))
-            .def_property_readonly("weights", &Type::weights)
+            .def_property_readonly("weights", py::overload_cast<>(&Type::weights))
             // methods
-            .def("knot", py::overload_cast<Index>(&Type::knot, py::const_), "index"_a)
-            .def("set_knot", &Type::set_knot, "index"_a, "value"_a)
-            .def("set_pole", &Type::set_pole, "index"_a, "value"_a)
-            .def("set_weight", &Type::set_weight, "index"_a, "value"_a)
-            .def("shape_functions_at", &Type::shape_functions_at, "t"_a,
-                "order"_a)
-            .def("weight", &Type::weight, "index"_a)
+            // .def("knot", py::overload_cast<Index>(&Type::knot, py::const_), "index"_a)
+            // .def("set_knot", &Type::set_knot, "index"_a, "value"_a)
+            // .def("set_pole", &Type::set_pole, "index"_a, "value"_a)
+            // .def("set_weight", &Type::set_weight, "index"_a, "value"_a)
+            .def("shape_functions_at", &Type::shape_functions_at, "t"_a, "order"_a)
+            // .def("weight", py::overload_cast<Index>(&Type::weight, py::const_), "index"_a)
             // .def("clone", &Type::clone)
-        ;
+            ;
 
         Model::register_python_data_type<Type>(m, model);
     }
