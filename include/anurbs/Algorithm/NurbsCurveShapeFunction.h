@@ -247,15 +247,16 @@ public:     // methods
         }
     }
 
-    void compute(const std::vector<double>& knots, const double t)
+    template <typename TKnots>
+    void compute(const TKnots& knots, const double t)
     {
         const Index span = Nurbs::upper_span(degree(), knots, t);
 
         compute_at_span(knots, span, t);
     }
 
-    template <typename TWeights>
-    void compute(const std::vector<double>& knots, const TWeights& weights,
+    template <typename TKnots, typename TWeights>
+    void compute(const TKnots& knots, const TWeights& weights,
         const double t)
     {
         const Index span = Nurbs::upper_span(degree(), knots, t);

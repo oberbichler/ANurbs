@@ -205,9 +205,10 @@ public:     // methods
         return first_nonzero_pole_v() + degree_v();
     }
 
+    template <typename TKnots>
     void compute_at_span(
-        const std::vector<double>& knots_u,
-        const std::vector<double>& knots_v,
+        const TKnots& knots_u,
+        const TKnots& knots_v,
         const Index span_u,
         const Index span_v,
         const double u,
@@ -240,8 +241,9 @@ public:     // methods
         }
     }
 
-    void compute(const std::vector<double>& knots_u,
-        const std::vector<double>& knots_v, const double u, const double v)
+    template <typename TKnots>
+    void compute(const TKnots& knots_u,
+        const TKnots& knots_v, const double u, const double v)
     {
         const Index span_u = Nurbs::lower_span(degree_u(), knots_u, u);
         const Index span_v = Nurbs::lower_span(degree_v(), knots_v, v);
@@ -249,9 +251,9 @@ public:     // methods
         compute_at_span(knots_u, knots_v, span_u, span_v, u, v);
     }
 
-    template <typename TWeights>
-    void compute_at_span(const std::vector<double>& knots_u,
-        const std::vector<double>& knots_v, const Index span_u, const Index span_v,
+    template <typename TKnots, typename TWeights>
+    void compute_at_span(const TKnots& knots_u,
+        const TKnots& knots_v, const Index span_u, const Index span_v,
         const TWeights& weights, const double u, const double v)
     {
         using Math::binom;
@@ -323,9 +325,9 @@ public:     // methods
         }
     }
 
-    template <typename TWeights>
-    void compute(const std::vector<double>& knots_u,
-        const std::vector<double>& knots_v, const TWeights& weights,
+    template <typename TKnots, typename TWeights>
+    void compute(const TKnots& knots_u,
+        const TKnots& knots_v, const TWeights& weights,
         const double u, const double v)
     {
         const Index span_u = Nurbs::lower_span(degree_u(), knots_u, u);
@@ -334,9 +336,10 @@ public:     // methods
         compute_at_span(knots_u, knots_v, span_u, span_v, weights, u, v);
     }
 
+    template <typename TKnots>
     static std::pair<std::vector<std::pair<Index, Index>>, linear_algebra::MatrixXd> get(
         const Index degree_u, const Index degree_v, const Index order,
-        const std::vector<double>& knots_u, const std::vector<double>& knots_v,
+        const TKnots& knots_u, const TKnots& knots_v,
         const double u, const double v)
     {
         NurbsSurfaceShapeFunction shape_function(degree_u, degree_v, order);
@@ -351,15 +354,15 @@ public:     // methods
         return {nonzero_pole_indices, values};
     }
 
-    template <typename TWeights>
+    template <typename TKnots, typename TWeights>
     static std::pair<std::vector<std::pair<Index, Index>>, linear_algebra::MatrixXd> get(
         const Index degree_u, const Index degree_v, const Index order,
-        const std::vector<double>& knots_u, const std::vector<double>& knots_v,
+        const TKnots& knots_u, const TKnots& knots_v,
         const TWeights& weights, const double u, const double v)
     {
         NurbsSurfaceShapeFunction shape_function(degree_u, degree_v, order);
 
-        shape_function.compute<TWeights>(knots_u, knots_v, weights, u, v);
+        shape_function.compute<TKnots, TWeights>(knots_u, knots_v, weights, u, v);
         
         const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
         
@@ -378,12 +381,12 @@ public:     // python
         using Type = NurbsSurfaceShapeFunction;
         
         m.def("shape_functions", [](const Index degree_u, const Index degree_v,
-            const Index order, const std::vector<double>& knots_u,
-            const std::vector<double>& knots_v, const double u, const double v)
+            const Index order, const Eigen::VectorXd& knots_u,
+            const Eigen::VectorXd& knots_v, const double u, const double v)
             { return Type::get(degree_u, degree_v, order, knots_u, knots_v,
             u, v); }, "degree_u"_a, "degree_v"_a, "order"_a, "knots_u"_a,
             "knots_v"_a, "u"_a, "v"_a);
-        m.def("shape_functions", &Type::get<linear_algebra::MatrixXd>, "degree_u"_a,
+        m.def("shape_functions", &Type::get<Eigen::VectorXd, linear_algebra::MatrixXd>, "degree_u"_a,
             "degree_v"_a, "order"_a, "knots_u"_a, "knots_v"_a, "weights"_a,
             "u"_a, "v"_a);
     }
