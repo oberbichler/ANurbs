@@ -1,6 +1,7 @@
 import unittest
 import anurbs as an
-from numpy.testing import assert_array_almost_equal, assert_almost_equal
+from numpy.testing import assert_array_almost_equal
+
 
 class TestCurve(unittest.TestCase):
     @staticmethod

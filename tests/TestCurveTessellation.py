@@ -2,6 +2,7 @@ import unittest
 import anurbs as an
 from numpy.testing import assert_array_almost_equal
 
+
 class TestCurveTessellation(unittest.TestCase):
     def test_tessellation_2d(self):
         curve = an.NurbsCurveGeometry2D(
@@ -10,16 +11,13 @@ class TestCurveTessellation(unittest.TestCase):
             is_rational=False,
         )
 
-        curve.set_knot(0, 0.0)
-        curve.set_knot(1, 0.0)
-        curve.set_knot(2, 1.0)
-        curve.set_knot(3, 2.0)
-        curve.set_knot(4, 2.0)
-
-        curve.set_pole(0, [0.0,  0.0])
-        curve.set_pole(1, [1.0,  1.0])
-        curve.set_pole(2, [2.0, -1.0])
-        curve.set_pole(3, [3.0, -1.0])
+        curve.knots[:] = [0, 0, 1, 2, 2]
+        curve.poles[:] = [
+            [0.0,  0.0],
+            [1.0,  1.0],
+            [2.0, -1.0],
+            [3.0, -1.0],
+        ]
 
         ts, points = an.tessellate(curve, tolerance=1e-2)
 
@@ -27,15 +25,15 @@ class TestCurveTessellation(unittest.TestCase):
 
         assert_array_almost_equal(
             points,
-            [[0.0000000,  0.000000],
-             [0.2421875,  0.218750],
-             [0.4687500,  0.375000],
-             [0.6796875,  0.468750],
-             [0.8750000,  0.500000],
-             [1.0546875,  0.468750],
-             [1.2187500,  0.375000],
-             [1.3671875,  0.218750],
-             [1.5000000,  0.000000],
+            [[0.0000000, 0.000000],
+             [0.2421875, 0.218750],
+             [0.4687500, 0.375000],
+             [0.6796875, 0.468750],
+             [0.8750000, 0.500000],
+             [1.0546875, 0.468750],
+             [1.2187500, 0.375000],
+             [1.3671875, 0.218750],
+             [1.5000000, 0.000000],
              [1.6328125, -0.234375],
              [1.7812500, -0.437500],
              [1.9453125, -0.609375],
@@ -53,16 +51,13 @@ class TestCurveTessellation(unittest.TestCase):
             is_rational=False,
         )
 
-        curve.set_knot(0, 0.0)
-        curve.set_knot(1, 0.0)
-        curve.set_knot(2, 1.0)
-        curve.set_knot(3, 2.0)
-        curve.set_knot(4, 2.0)
-
-        curve.set_pole(0, [0.0,  0.0, -1.0])
-        curve.set_pole(1, [1.0,  1.0,  1.0])
-        curve.set_pole(2, [2.0, -1.0,  0.0])
-        curve.set_pole(3, [3.0, -1.0,  0.0])
+        curve.knots[:] = [0, 0, 1, 2, 2]
+        curve.poles[:] = [
+            [0.0,  0.0, -1.0],
+            [1.0,  1.0,  1.0],
+            [2.0, -1.0,  0.0],
+            [3.0, -1.0,  0.0],
+        ]
 
         ts, points = an.tessellate(curve, tolerance=1e-2)
 
