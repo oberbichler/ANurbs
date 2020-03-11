@@ -14,6 +14,30 @@
 
 namespace nlohmann {
     template <>
+    struct adl_serializer<Eigen::Ref<const Eigen::VectorXd>>
+    {
+        template <typename TJson>
+        static void to_json(TJson& json, const Eigen::Ref<const Eigen::VectorXd>& vector)
+        {
+            for (int i = 0; i < vector.size(); i++) {
+                json.push_back(vector[i]);
+            }
+        }
+
+        template <typename TJson>
+        static void from_json(const TJson& json, Eigen::Ref<const Eigen::VectorXd>& vector)
+        {
+            assert(json.size() == vector.size());
+
+            for (int i = 0; i < vector.size(); i++) {
+                json.at(i).get_to(vector[i]);
+            }
+        }
+    };
+}
+
+namespace nlohmann {
+    template <>
     struct adl_serializer<anurbs::linear_algebra::Vector<2>>
     {
         template <typename TJson>
