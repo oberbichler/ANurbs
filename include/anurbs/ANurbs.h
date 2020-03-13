@@ -38,6 +38,7 @@
 #include "Geometry/Polyline.h"
 #include "Geometry/Surface.h"
 #include "Geometry/SurfaceBase.h"
+#include "Geometry/Triangle.h"
 
 #include "Geometry/Brep.hxx"
 #include "Geometry/BrepEdge.hxx"
