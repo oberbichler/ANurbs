@@ -65,7 +65,7 @@ std::vector<Ref<BrepTrim>> BrepFace::trims() const
 
 std::string BrepFace::type_name()
 {
-    return "brep_face";
+    return "BrepFace";
 }
 
 Unique<BrepFace> BrepFace::load(Model& model, const Json& data)

@@ -49,7 +49,7 @@ std::vector<Ref<BrepLoop>> BrepEdge::loops() const
 
 std::string BrepEdge::type_name()
 {
-    return "brep_edge";
+    return "BrepEdge";
 }
 
 Unique<BrepEdge> BrepEdge::load(Model& model, const Json& data)

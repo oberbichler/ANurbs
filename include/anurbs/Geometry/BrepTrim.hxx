@@ -65,7 +65,7 @@ Ref<NurbsSurfaceGeometry<3>> BrepTrim::surface_geometry() const
 
 std::string BrepTrim::type_name()
 {
-    return "brep_trim";
+    return "BrepTrim";
 }
 
 Unique<BrepTrim> BrepTrim::load(Model& model, const Json& data)
