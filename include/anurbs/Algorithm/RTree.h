@@ -26,12 +26,12 @@ private:    // types
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
     using Type = RTree<TDimension>;
 
-    struct WithinBox
+    struct PickByBox
     {
         Vector m_box_min;
         Vector m_box_max;
 
-        WithinBox(const Vector box_a, const Vector box_b) noexcept
+        PickByBox(const Vector box_a, const Vector box_b) noexcept
         {
             for (Index i = 0; i < TDimension; i++) {
                 if (box_a[i] < box_b[i]) {
@@ -58,12 +58,12 @@ private:    // types
         }
     };
 
-    struct HitByRay
+    struct PickByRay
     {
         Vector m_origin;
         Vector m_direction;
 
-        HitByRay(const Vector origin, const Vector direction) noexcept
+        PickByRay(const Vector origin, const Vector direction) noexcept
         : m_origin(origin), m_direction(direction)
         {
         }
@@ -419,15 +419,23 @@ public:     // methods
         return results;
     }
 
-    std::vector<Index> within_box(const Vector box_a, const Vector box_b, Callback callback=nullptr)
-{
-        WithinBox check(box_a, box_b);
+    std::vector<Index> by_point(const Vector location, const double tolerance, Callback callback=nullptr)
+    {
+        Vector box_a = location - tolerance * Vector::Ones();
+        Vector box_b = location + tolerance * Vector::Ones();
+        PickByBox check(box_a, box_b);
         return search(check, callback);
     }
 
-    std::vector<Index> hit_by_ray(const Vector origin, const Vector direction, Callback callback)
+    std::vector<Index> by_box(const Vector box_a, const Vector box_b, Callback callback=nullptr)
     {
-        HitByRay check(origin, direction);
+        PickByBox check(box_a, box_b);
+        return search(check, callback);
+    }
+
+    std::vector<Index> by_ray(const Vector origin, const Vector direction, Callback callback)
+    {
+        PickByRay check(origin, direction);
         return search(check, callback);
     }
 
@@ -459,8 +467,9 @@ public:     // python
             // methods
             .def("add", &Type::add, "box_a"_a, "box_b"_a)
             .def("finish", &Type::finish)
-            .def("within_box", &Type::within_box, "box_a"_a, "box_b"_a, "callback"_a=py::none())
-            .def("hit_by_ray", &Type::hit_by_ray, "origin"_a, "direction"_a, "callback"_a=py::none())
+            .def("by_point", &Type::by_point, "location"_a, "tolerance"_a, "callback"_a=py::none())
+            .def("by_box", &Type::by_box, "box_a"_a, "box_b"_a, "callback"_a=py::none())
+            .def("by_ray", &Type::by_ray, "origin"_a, "direction"_a, "callback"_a=py::none())
         ;
     }
 };
