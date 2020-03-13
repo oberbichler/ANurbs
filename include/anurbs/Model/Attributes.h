@@ -87,35 +87,34 @@ public:     // serialization
     template <typename TModel, typename TSource>
     void load(TModel& model, const TSource& source)
     {
-        m_tags = source.value("Tags", std::set<std::string>());
-        m_userStrings = source.value("UserStrings",
-            std::map<std::string, std::string>());
-        m_layer = source.value("Layer", "");
-        m_color = source.value("Color", "");
-        m_arrowhead = source.value("Arrowhead", "");
+        m_tags = source.value("tags", std::set<std::string>());
+        m_userStrings = source.value("user_strings", std::map<std::string, std::string>());
+        m_layer = source.value("layer", "");
+        m_color = source.value("color", "");
+        m_arrowhead = source.value("arrowhead", "");
     }
 
     template <typename TModel, typename TTarget>
     void save(const TModel& model, TTarget& target) const
     {
         if (m_tags.size() != 0) {
-            target["Tags"] = m_tags;
+            target["tags"] = m_tags;
         }
 
         if (m_userStrings.size() != 0) {
-            target["UserStrings"] = m_userStrings;
+            target["user_strings"] = m_userStrings;
         }
 
         if (!m_layer.empty()) {
-            target["Layer"] = m_layer;
+            target["layer"] = m_layer;
         }
         
         if (!m_color.empty()) {
-            target["Color"] = m_color;
+            target["color"] = m_color;
         }
         
         if (!m_arrowhead.empty()) {
-            target["Arrowhead"] = m_arrowhead;
+            target["arrowhead"] = m_arrowhead;
         }
     }
 
