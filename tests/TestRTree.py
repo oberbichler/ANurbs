@@ -133,18 +133,18 @@ class TestRTree(unittest.TestCase):
         assert_equal(index._boxes_max[-1], [96, 95])
 
     @staticmethod
-    def test_within_box_2d():
+    def test_by_box_2d():
         index = TestRTree.create_tree_2d()
 
-        ids = index.within_box(box_a=[40, 40], box_b=[60, 60])
+        ids = index.by_box(box_a=[40, 40], box_b=[60, 60])
 
         assert_array_equal(np.sort(ids), [6, 29, 31, 75])
 
     @staticmethod
-    def test_hit_by_ray_2d():
+    def test_by_ray_2d():
         index = TestRTree.create_tree_2d()
 
-        ids = index.hit_by_ray(origin=[14, 32], direction=[76, 53])
+        ids = index.by_ray(origin=[14, 32], direction=[76, 53])
 
         assert_array_equal(np.sort(ids), [23, 31, 68, 80, 81, 99])
 
@@ -277,18 +277,18 @@ class TestRTree(unittest.TestCase):
         assert_equal(index._boxes_max[-1], [ 55,  28,  79])
 
     @staticmethod
-    def test_within_box_3d():
+    def test_by_box_3d():
         index = TestRTree.create_tree_3d()
 
-        ids = index.within_box(box_a=[-24, -52, -11], box_b=[24, -12,  37])
+        ids = index.by_box(box_a=[-24, -52, -11], box_b=[24, -12,  37])
 
         assert_array_equal(np.sort(ids), [0, 14, 17, 21, 33, 38, 39, 41, 45, 52, 55, 58, 65, 83, 90, 94])
 
     @staticmethod
-    def test_hit_by_ray_3d():
+    def test_by_ray_3d():
         index = TestRTree.create_tree_3d()
 
-        ids = index.hit_by_ray(origin=[33, -26, -22], direction=[-82, -13, 60])
+        ids = index.by_ray(origin=[33, -26, -22], direction=[-82, -13, 60])
 
         assert_array_equal(np.sort(ids), [38, 63, 81])
 
