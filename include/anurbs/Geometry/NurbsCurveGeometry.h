@@ -275,6 +275,19 @@ public:     // methods
         return m_weights;
     }
 
+    double greville_point(Index index) const
+    {
+        double u = 0.0;
+
+        for (Index i = 0; i < degree(); i++) {
+            u += knot(index + i);
+        }
+
+        u /= degree();
+
+        return u;
+    }
+
 public:     // serialization
     static std::string type_name()
     {
@@ -366,6 +379,7 @@ public:     // python
             .def("shape_functions_at", &Type::shape_functions_at, "t"_a,
                 "order"_a)
             .def("weight", &Type::weight, "index"_a)
+            .def("greville_point", &Type::greville_point, "index"_a)
             // .def("clone", &Type::clone)
         ;
 
