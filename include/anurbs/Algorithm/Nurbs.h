@@ -10,21 +10,55 @@ class Nurbs
 {
 public:     // static methods
     template <typename TKnots>
-    static Index upper_span(const Index degree, const TKnots& knots,
-        const double& t)
+    static Index upper_bound(TKnots values, Index first, Index last, double value)
     {
-        auto span = std::upper_bound(std::begin(knots) + degree, std::end(knots)
-            - degree, t) - std::begin(knots) - 1;
-        return static_cast<Index>(span);
+        auto count = last - first;
+        Index i, step;
+    
+        while (count > 0) {
+            i = first; 
+            step = count / 2; 
+            i += step;
+            if (!(value < values[i])) {
+                first = ++i;
+                count -= step + 1;
+            } else {
+                count = step;
+            }
+        }
+        return first;
     }
 
     template <typename TKnots>
-    static Index lower_span(const Index degree, const TKnots& knots,
-        const double& t)
+    static Index lower_bound(TKnots values, Index first, Index last, double value)
     {
-        auto span = std::lower_bound(std::begin(knots) + degree, std::end(knots)
-            - degree, t) - std::begin(knots) - 1;
-        return static_cast<Index>(span);
+        auto count = last - first;
+        Index i, step;
+    
+        while (count > 0) {
+            i = first; 
+            step = count / 2; 
+            i += step;
+            if (values[i] < value) {
+                first = ++i; 
+                count -= step + 1; 
+            } else {
+                count = step;
+            }
+        }
+        return first;
+    }
+
+    template <typename TKnots>
+    static Index upper_span(const Index degree, const TKnots& knots, const double& t)
+    {
+        return upper_bound(knots, degree, length(knots) - degree, t) - 1;
+    }
+
+    template <typename TKnots>
+    static Index lower_span(const Index degree, const TKnots& knots, const double& t)
+    {
+        return lower_bound(knots, degree, length(knots) - degree, t) - 1;
     }
 
     static Index degree(const Index nb_knots, const Index nb_poles)

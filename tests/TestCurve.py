@@ -11,26 +11,20 @@ class TestCurve(unittest.TestCase):
             is_rational=False,
         )
 
-        curve_geometry.set_knot( 0,   0              )
-        curve_geometry.set_knot( 1,   0              )
-        curve_geometry.set_knot( 2,   0              )
-        curve_geometry.set_knot( 3,   0              )
-        curve_geometry.set_knot( 4,  32.9731425998736)
-        curve_geometry.set_knot( 5,  65.9462851997473)
-        curve_geometry.set_knot( 6,  98.9194277996209)
-        curve_geometry.set_knot( 7, 131.892570399495 )
-        curve_geometry.set_knot( 8, 131.892570399495 )
-        curve_geometry.set_knot( 9, 131.892570399495 )
-        curve_geometry.set_knot(10, 131.892570399495 )
+        curve_geometry.knots[:4] = 0
+        curve_geometry.knots[4] = 32.9731425998736
+        curve_geometry.knots[5] = 65.9462851997473
+        curve_geometry.knots[6] = 98.9194277996209
+        curve_geometry.knots[7:] = 131.892570399495
 
-        curve_geometry.set_pole(0, [  0, -25, - 5])
-        curve_geometry.set_pole(1, [-15, -15,   0])
-        curve_geometry.set_pole(2, [  5, - 5, - 3])
-        curve_geometry.set_pole(3, [ 15, -15,   3])
-        curve_geometry.set_pole(4, [ 25,   0,   6])
-        curve_geometry.set_pole(5, [ 15,  15,   6])
-        curve_geometry.set_pole(6, [- 5, - 5, - 3])
-        curve_geometry.set_pole(7, [-25,  15,   4])
+        curve_geometry.poles[0] = [  0, -25, - 5]
+        curve_geometry.poles[1] = [-15, -15,   0]
+        curve_geometry.poles[2] = [  5, - 5, - 3]
+        curve_geometry.poles[3] = [ 15, -15,   3]
+        curve_geometry.poles[4] = [ 25,   0,   6]
+        curve_geometry.poles[5] = [ 15,  15,   6]
+        curve_geometry.poles[6] = [- 5, - 5, - 3]
+        curve_geometry.poles[7] = [-25,  15,   4]
 
         model = an.Model()
         curve_geometry_ptr = model.add(curve_geometry)

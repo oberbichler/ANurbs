@@ -10,14 +10,13 @@ class TestNurbsCurveGeometry(unittest.TestCase):
             is_rational=False,
         )
 
-        curve.set_knot(0, 7)
-        curve.set_knot(1, 7)
-        curve.set_knot(2, 9)
-        curve.set_knot(3, 9)
+        curve.knots[:] = [7, 7, 9, 9]
 
-        curve.set_pole(0, [3, 2])
-        curve.set_pole(1, [1, 4])
-        curve.set_pole(2, [2, 5])
+        curve.poles[:] = [
+            [3, 2],
+            [1, 4],
+            [2, 5],
+        ]
 
         surface = an.NurbsSurfaceGeometry3D(
             degree_u=2,

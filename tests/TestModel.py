@@ -39,7 +39,7 @@ class TestModel(unittest.TestCase):
                     ]"""
 
         for actual_line, expected_line in zip(actual.split('\n'), expected.split('\n')):
-            self.assertAlmostEqual(actual_line.strip(), expected_line.strip())
+            self.assertEqual(actual_line.strip(), expected_line.strip())
 
 if __name__ == '__main__':
     unittest.main()
