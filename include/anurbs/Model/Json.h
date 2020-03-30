@@ -82,6 +82,68 @@ namespace nlohmann {
     };
 }
 
+namespace nlohmann {
+    template <>
+    struct adl_serializer<Eigen::Ref<const Eigen::Matrix<double, Eigen::Dynamic, 2>>>
+    {
+        template <typename TJson>
+        static void to_json(TJson& json, const Eigen::Ref<const Eigen::Matrix<double, Eigen::Dynamic, 2>>& points)
+        {
+            for (int i = 0; i < points.rows(); i++) {
+                std::array<double, 2> array;
+                for (int j = 0; j < 2; j++) {
+                    array[j] = points(i, j);
+                }
+                json.push_back(array);
+            }
+        }
+
+        template <typename TJson>
+        static void from_json(const TJson& json, Eigen::Ref<Eigen::Matrix<double, Eigen::Dynamic, 2>>& points)
+        {
+            assert(json.size() == points.rows());
+
+            for (int i = 0; i < points.rows(); i++) {
+                std::array<double, 2> array;
+                json.at(i).get_to(array);
+                for (int j = 0; j < 2; j++) {
+                    points(i, j) = array[j];
+                }
+            }
+        }
+    };
+
+    template <>
+    struct adl_serializer<Eigen::Ref<const Eigen::Matrix<double, Eigen::Dynamic, 3>>> {
+        template <typename TJson>
+        static void
+        to_json(TJson& json, const Eigen::Ref<const Eigen::Matrix<double, Eigen::Dynamic, 3>>& points)
+        {
+            for (int i = 0; i < points.rows(); i++) {
+                std::array<double, 3> array;
+                for (int j = 0; j < 3; j++) {
+                    array[j] = points(i, j);
+                }
+                json.push_back(array);
+            }
+        }
+
+        template <typename TJson>
+        static void from_json(const TJson& json, Eigen::Ref<Eigen::Matrix<double, Eigen::Dynamic, 3>>& points)
+        {
+            assert(json.size() == points.rows());
+
+            for (int i = 0; i < points.rows(); i++) {
+                std::array<double, 3> array;
+                json.at(i).get_to(array);
+                for (int j = 0; j < 3; j++) {
+                    points(i, j) = array[j];
+                }
+            }
+        }
+    };
+}
+
 namespace anurbs {
 
 template <typename TData>

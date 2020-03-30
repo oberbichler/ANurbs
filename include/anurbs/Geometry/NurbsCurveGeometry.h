@@ -356,7 +356,7 @@ public:     // serialization
         target["degree"] = data.degree();
         target["knots"] = data.knots();
         target["nb_poles"] = data.nb_poles();
-        // target["poles"] = ToJson(data.poles()); //FIXME:
+        target["poles"] = ToJson(data.poles());
 
         if (data.is_rational()) {
             target["weights"] = data.weights();
