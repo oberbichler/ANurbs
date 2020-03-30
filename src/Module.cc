@@ -196,5 +196,9 @@ PYBIND11_MODULE(anurbs, m) {
         Surface<3, Ref<NurbsSurfaceGeometry<3>>>::register_python(m, model);
     }
 
+    { // Triangle
+        Triangle<3>::register_python(m);
+    }
+
     m.def("test", [](Pointer<Line<3>> line) {return line;});
 }

@@ -81,7 +81,7 @@ public:
 public:     // serialization
     static std::string type_name()
     {
-        return "line_" + std::to_string(TDimension) + "d";
+        return "Line" + std::to_string(TDimension) + "D";
     }
 
     static Unique<Line> load(Model& model, const Json& data)

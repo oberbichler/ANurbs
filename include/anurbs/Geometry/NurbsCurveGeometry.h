@@ -303,10 +303,23 @@ public:     // methods
         return m_weights;
     }
 
+    double greville_point(Index index) const
+    {
+        double u = 0.0;
+
+        for (Index i = 0; i < degree(); i++) {
+            u += knot(index + i);
+        }
+
+        u /= degree();
+
+        return u;
+    }
+
 public:     // serialization
     static std::string type_name()
     {
-        return "nurbs_curve_geometry_" + std::to_string(dimension()) + "d";
+        return "NurbsCurveGeometry" + std::to_string(dimension()) + "D";
     }
 
     static Unique<Type> load(Model& model, const Json& source)
@@ -343,7 +356,7 @@ public:     // serialization
         target["degree"] = data.degree();
         target["knots"] = data.knots();
         target["nb_poles"] = data.nb_poles();
-        // target["poles"] = ToJson(data.poles()); //FIXME:
+        target["poles"] = ToJson(data.poles());
 
         if (data.is_rational()) {
             target["weights"] = data.weights();
@@ -394,6 +407,7 @@ public:     // python
             .def("shape_functions_at", &Type::shape_functions_at, "t"_a,
                 "order"_a)
             .def("weight", &Type::weight, "index"_a)
+            .def("greville_point", &Type::greville_point, "index"_a)
             // .def("clone", &Type::clone)
         ;
 

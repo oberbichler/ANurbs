@@ -198,6 +198,26 @@ public:     // methods
         return m_weights.size() != 0;
     }
 
+    std::pair<double, double> greville_point(Index index_u, Index index_v) const
+    {
+        double u = 0.0;
+        double v = 0.0;
+
+        for (Index i = 0; i < degree_u(); i++) {
+            u += knot_u(index_u + i);
+        }
+
+        u /= degree_u();
+
+        for (Index i = 0; i < degree_v(); i++) {
+            v += knot_v(index_u + i);
+        }
+
+        v /= degree_v();
+
+        return {u, v};
+    }
+
     Pointer<Type> clone()
     {
         Pointer<Type> clone = new_<Type>(
@@ -563,7 +583,7 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "nurbs_surface_geometry_" + std::to_string(dimension()) + "d";
+        return "NurbsSurfaceGeometry" + std::to_string(dimension()) + "D";
     }
 
     static Unique<Type> load(Model& model, const Json& source)
@@ -686,6 +706,7 @@ public:     // python
                 "index"_a)
             .def("weight", (double (Type::*)(const Index, const Index) const)
                 &Type::weight, "index_u"_a, "index_v"_a)
+            .def("greville_point", &Type::greville_point, "index_u"_a, "index_v"_a)
         ;
 
         m.def("add", [](Model& model, Holder data) { model.add<Type>(data); } );

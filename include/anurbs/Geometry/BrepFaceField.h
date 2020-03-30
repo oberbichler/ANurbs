@@ -56,7 +56,7 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "brep_face_field" + std::to_string(dimension()) + "d";
+        return "BrepFaceField" + std::to_string(dimension()) + "D";
     }
 
     static Unique<BrepFaceField> load(Model& model, const Json& data)

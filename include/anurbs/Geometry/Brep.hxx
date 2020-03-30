@@ -75,7 +75,7 @@ std::vector<Ref<BrepEdge>> Brep::edges()
 
 std::string Brep::type_name()
 {
-    return "brep";
+    return "Brep";
 }
 
 Unique<Brep> Brep::load(Model& model, const Json& data)

@@ -53,7 +53,7 @@ public:     // methods
             box_b[i] -= tolerance;
         }
 
-        const auto indices = m_rtree.within_box(box_a, box_b);
+        const auto indices = m_rtree.by_box(box_a, box_b);
 
         double closest_distance = Infinity;
         double closest_parameter;

@@ -59,7 +59,7 @@ public:     // constructors
 public:     // serialization
     static std::string type_name()
     {
-        return "point_" + std::to_string(TDimension) + "d";
+        return "Point" + std::to_string(TDimension) + "D";
     }
 
     static Unique<Type> load(Model& model, const Json& source)

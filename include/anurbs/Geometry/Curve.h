@@ -90,7 +90,7 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "curve_" + std::to_string(dimension()) + "d";
+        return "Curve" + std::to_string(dimension()) + "D";
     }
 
     static Unique<Type> load(Model& model, const Json& source)

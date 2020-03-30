@@ -53,7 +53,7 @@ public:     // methods
 public:     // serialization
     static std::string type_name()
     {
-        return "polyline_" + std::to_string(TDimension) + "d";
+        return "Polyline" + std::to_string(TDimension) + "D";
     }
 
     static Unique<Polyline<TDimension>> load(Model& model, const Json& data)

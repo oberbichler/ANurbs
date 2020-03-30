@@ -83,7 +83,7 @@ class TestIntegrationPoints(unittest.TestCase):
         model.add_array(r"""[
             {
                 "key": "TestData",
-                "type": "nurbs_curve_geometry_2d",
+                "type": "NurbsCurveGeometry2D",
                 "degree": 1,
                 "nb_poles": 2,
                 "knots": [-1, 0, 1],
@@ -113,7 +113,7 @@ class TestIntegrationPoints(unittest.TestCase):
 
         model.add_array(r"""[
             {
-                "type": "nurbs_surface_geometry_3d",
+                "type": "NurbsSurfaceGeometry3D",
                 "degree_u": 2,
                 "degree_v": 1,
                 "knots_u": [0.0,0.0,5.0,10.0,10.0],

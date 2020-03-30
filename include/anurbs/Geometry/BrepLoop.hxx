@@ -50,7 +50,7 @@ std::vector<Ref<BrepEdge>> BrepLoop::edges() const
 
 std::string BrepLoop::type_name()
 {
-    return "brep_loop";
+    return "BrepLoop";
 }
 
 Unique<BrepLoop> BrepLoop::load(Model& model, const Json& data)
