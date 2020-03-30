@@ -114,6 +114,13 @@ def test_bspline_derivarives_at(bspline_3d):
     ])
 
 
+def test_bspline_greville_point(bspline_3d):
+    assert_almost_equal(
+        bspline_3d.greville_point(index=2),
+        24.7298569499,
+    )
+
+
 @pytest.fixture
 def nurbs_3d():
     geometry = an.NurbsCurveGeometry3D(

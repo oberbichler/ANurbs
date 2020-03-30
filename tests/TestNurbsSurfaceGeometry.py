@@ -120,6 +120,11 @@ def test_bspline_list_constructor():
     )
 
 
+def test_bspline_greville_point(bspline_3d):
+    uv = bspline_3d.greville_point(index_u=1, index_v=1)
+    assert_almost_equal(uv, [3.75, 10])
+
+
 @pytest.fixture
 def nurbs_3d():
     surface = an.NurbsSurfaceGeometry3D(
