@@ -217,5 +217,10 @@ class TestNurbsSurfaceGeometry(unittest.TestCase):
             [0.1022371052, -0.2687554542, 0.9577672369],
         )
 
+        assert_almost_equal(
+            surface.greville_point(index_u=1, index_v=1),
+            [3.75, 10],
+        )
+
 if __name__ == '__main__':
     unittest.main()
