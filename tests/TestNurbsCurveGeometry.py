@@ -209,6 +209,13 @@ class TestNurbsCurveGeometry(unittest.TestCase):
              [-3.8613e-6,-0.0000221079,-9.4272e-6]]
         )
 
+        # greville_point
+
+        assert_array_almost_equal(
+            geometry.greville_point(index=2),
+            24.7298569499,
+        )
+
     def test_nurbs_3d_by_lists(self):
         geometry = an.NurbsCurveGeometry3D(
             degree=4,
