@@ -209,7 +209,7 @@ public: // methods
         u /= degree_u();
 
         for (Index i = 0; i < degree_v(); i++) {
-            v += knot_v(index_u + i);
+            v += knot_v(index_v + i);
         }
 
         v /= degree_v();
