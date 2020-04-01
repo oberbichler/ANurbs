@@ -17,14 +17,13 @@
 namespace anurbs {
 
 template <Index TDimension>
-class NurbsSurfaceGeometry : public SurfaceBase<TDimension>
-{
-public:     // types
+class NurbsSurfaceGeometry : public SurfaceBase<TDimension> {
+public: // types
     using Type = NurbsSurfaceGeometry<TDimension>;
     using Vector = typename SurfaceBase<TDimension>::Vector;
     using ControlPoint = std::pair<Vector, double>;
 
-private:    // variables
+private: // variables
     Index m_degree_u;
     Index m_degree_v;
     Index m_nb_poles_u;
@@ -34,21 +33,21 @@ private:    // variables
     std::vector<Vector> m_poles;
     std::vector<double> m_weights;
 
-public:     // constructor
+public: // constructor
     NurbsSurfaceGeometry(
         const Index degree_u,
         const Index degree_v,
         const Index nb_poles_u,
         const Index nb_poles_v,
         const bool is_rational)
-    : m_degree_u(degree_u)
-    , m_degree_v(degree_v)
-    , m_nb_poles_u(nb_poles_u)
-    , m_nb_poles_v(nb_poles_v)
-    , m_knots_u(nb_poles_u + degree_u - 1)
-    , m_knots_v(nb_poles_v + degree_v - 1)
-    , m_poles(nb_poles_u * nb_poles_v)
-    , m_weights(is_rational ? nb_poles_u * nb_poles_v : 0)
+        : m_degree_u(degree_u)
+        , m_degree_v(degree_v)
+        , m_nb_poles_u(nb_poles_u)
+        , m_nb_poles_v(nb_poles_v)
+        , m_knots_u(nb_poles_u + degree_u - 1)
+        , m_knots_v(nb_poles_v + degree_v - 1)
+        , m_poles(nb_poles_u * nb_poles_v)
+        , m_weights(is_rational ? nb_poles_u * nb_poles_v : 0)
     {
         static_assert(TDimension > 0);
     }
@@ -59,14 +58,14 @@ public:     // constructor
         const std::vector<double>& knots_u,
         const std::vector<double>& knots_v,
         const std::vector<Vector>& poles)
-    : m_degree_u(degree_u)
-    , m_degree_v(degree_v)
-    , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
-    , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
-    , m_knots_u(knots_u)
-    , m_knots_v(knots_v)
-    , m_poles(poles)
-    , m_weights(0)
+        : m_degree_u(degree_u)
+        , m_degree_v(degree_v)
+        , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
+        , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
+        , m_knots_u(knots_u)
+        , m_knots_v(knots_v)
+        , m_poles(poles)
+        , m_weights(0)
     {
         static_assert(TDimension > 0);
 
@@ -82,14 +81,14 @@ public:     // constructor
         const std::vector<double>& knots_v,
         const std::vector<Vector>& poles,
         const std::vector<double>& weights)
-    : m_degree_u(degree_u)
-    , m_degree_v(degree_v)
-    , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
-    , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
-    , m_knots_u(knots_u)
-    , m_knots_v(knots_v)
-    , m_poles(poles)
-    , m_weights(weights)
+        : m_degree_u(degree_u)
+        , m_degree_v(degree_v)
+        , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
+        , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
+        , m_knots_u(knots_u)
+        , m_knots_v(knots_v)
+        , m_poles(poles)
+        , m_weights(weights)
     {
         static_assert(TDimension > 0);
 
@@ -108,14 +107,14 @@ public:     // constructor
         const std::vector<double>& knots_u,
         const std::vector<double>& knots_v,
         const std::vector<ControlPoint>& control_points)
-    : m_degree_u(degree_u)
-    , m_degree_v(degree_v)
-    , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
-    , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
-    , m_knots_u(knots_u)
-    , m_knots_v(knots_v)
-    , m_poles(length(control_points))
-    , m_weights(length(control_points))
+        : m_degree_u(degree_u)
+        , m_degree_v(degree_v)
+        , m_nb_poles_u(Nurbs::nb_poles(degree_u, length(knots_u)))
+        , m_nb_poles_v(Nurbs::nb_poles(degree_v, length(knots_v)))
+        , m_knots_u(knots_u)
+        , m_knots_v(knots_v)
+        , m_poles(length(control_points))
+        , m_weights(length(control_points))
     {
         static_assert(TDimension > 0);
 
@@ -129,10 +128,10 @@ public:     // constructor
         }
     }
 
-public:     // static methods
+public: // static methods
     using SurfaceBase<TDimension>::dimension;
 
-public:     // methods
+public: // methods
     Index to_single_index(const Index index_u, const Index index_v) const
     {
         return index_u * nb_poles_v() + index_v;
@@ -210,7 +209,7 @@ public:     // methods
         u /= degree_u();
 
         for (Index i = 0; i < degree_v(); i++) {
-            v += knot_v(index_u + i);
+            v += knot_v(index_v + i);
         }
 
         v /= degree_v();
@@ -403,8 +402,8 @@ public:     // methods
         NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), 0);
 
         if (is_rational()) {
-            shape.compute(knots_u(), knots_v(), [&](Index i, Index j) {
-            return weight(i, j); }, u, v);
+            shape.compute(
+                knots_u(), knots_v(), [&](Index i, Index j) { return weight(i, j); }, u, v);
         } else {
             shape.compute(knots_u(), knots_v(), u, v);
         }
@@ -440,8 +439,8 @@ public:     // methods
         NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), order);
 
         if (is_rational()) {
-            shape.compute(knots_u(), knots_v(), [&](Index i, Index j) {
-                return weight(i, j); }, u, v);
+            shape.compute(
+                knots_u(), knots_v(), [&](Index i, Index j) { return weight(i, j); }, u, v);
         } else {
             shape.compute(knots_u(), knots_v(), u, v);
         }
@@ -458,8 +457,7 @@ public:     // methods
                     const Index pole_u = shape.first_nonzero_pole_u() + i;
                     const Index pole_v = shape.first_nonzero_pole_v() + j;
 
-                    const TValue value =
-                        values(pole_u, pole_v) * shape(k, i, j);
+                    const TValue value = values(pole_u, pole_v) * shape(k, i, j);
 
                     if (i == 0 && j == 0) {
                         result[k] = value;
@@ -494,9 +492,11 @@ public:     // methods
         NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), order);
 
         if (is_rational()) {
-            shape.compute(knots_u(), knots_v(), [&](Index i, Index j) -> double {
-                return weight(i, j);
-            }, u, v);
+            shape.compute(
+                knots_u(), knots_v(), [&](Index i, Index j) -> double {
+                    return weight(i, j);
+                },
+                u, v);
         } else {
             shape.compute(knots_u(), knots_v(), u, v);
         }
@@ -580,7 +580,7 @@ public:     // methods
         }
     }
 
-public:     // serialization
+public: // serialization
     static std::string type_name()
     {
         return "NurbsSurfaceGeometry" + std::to_string(dimension()) + "D";
@@ -592,7 +592,7 @@ public:     // serialization
         const auto knots_u = source.at("knots_u");
         const auto knots_v = source.at("knots_v");
         const auto weights = source.value("weights", std::vector<double>());
-        
+
         const Index degree_u = source.at("degree_u");
         const Index degree_v = source.at("degree_v");
         const Index nb_poles_u = source.at("nb_poles_u");
@@ -638,7 +638,7 @@ public:     // serialization
         }
     }
 
-public:     // python
+public: // python
     static std::string python_name()
     {
         return "NurbsSurfaceGeometry" + std::to_string(dimension()) + "D";
@@ -658,15 +658,10 @@ public:     // python
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
-            .def(py::init<const Index, const Index, const Index, const Index, const bool>(), "degree_u"_a, "degree_v"_a,
-                "nb_poles_u"_a, "nb_poles_v"_a, "is_rational"_a=false)
-            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>,
-                const std::vector<Vector>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a, "poles"_a)
-            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>,
-                const std::vector<Vector>, const std::vector<double>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a,
-                "poles"_a, "weights"_a)
-            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>,
-                const std::vector<ControlPoint>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a, "control_points"_a)
+            .def(py::init<const Index, const Index, const Index, const Index, const bool>(), "degree_u"_a, "degree_v"_a, "nb_poles_u"_a, "nb_poles_v"_a, "is_rational"_a = false)
+            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>, const std::vector<Vector>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a, "poles"_a)
+            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>, const std::vector<Vector>, const std::vector<double>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a, "poles"_a, "weights"_a)
+            .def(py::init<const Index, const Index, const std::vector<double>, const std::vector<double>, const std::vector<ControlPoint>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a, "control_points"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
             .def_property_readonly("knots_u", &Type::knots_u)
@@ -684,32 +679,20 @@ public:     // python
             .def("clone", &Type::clone)
             .def("knot_u", &Type::knot_u, "index"_a)
             .def("knot_v", &Type::knot_v, "index"_a)
-            .def("pole", (Vector (Type::*)(const Index) const) &Type::pole,
-                "index"_a)
-            .def("pole", (Vector (Type::*)(const Index, const Index) const)
-                &Type::pole, "index_u"_a, "index_v"_a)
+            .def("pole", (Vector(Type::*)(const Index) const) & Type::pole, "index"_a)
+            .def("pole", (Vector(Type::*)(const Index, const Index) const) & Type::pole, "index_u"_a, "index_v"_a)
             .def("set_knot_u", &Type::set_knot_u, "index"_a, "value"_a)
             .def("set_knot_v", &Type::set_knot_v, "index"_a, "value"_a)
-            .def("set_pole", (void (Type::*)(const Index, const Vector&))
-                &Type::set_pole, "index"_a, "value"_a)
-            .def("set_pole", (void (Type::*)(const Index, const Index,
-                const Vector&)) &Type::set_pole, "index_u"_a, "index_v"_a,
-                "value"_a)
-            .def("set_weight", (void (Type::*)(const Index, const double))
-                &Type::set_weight, "index"_a, "value"_a)
-            .def("set_weight", (void (Type::*)(const Index, const Index,
-                const double)) &Type::set_weight, "index_u"_a, "index_v"_a,
-                "value"_a)
-            .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a,
-                "order"_a)
-            .def("weight", (double (Type::*)(const Index) const) &Type::weight,
-                "index"_a)
-            .def("weight", (double (Type::*)(const Index, const Index) const)
-                &Type::weight, "index_u"_a, "index_v"_a)
-            .def("greville_point", &Type::greville_point, "index_u"_a, "index_v"_a)
-        ;
+            .def("set_pole", (void (Type::*)(const Index, const Vector&)) & Type::set_pole, "index"_a, "value"_a)
+            .def("set_pole", (void (Type::*)(const Index, const Index, const Vector&)) & Type::set_pole, "index_u"_a, "index_v"_a, "value"_a)
+            .def("set_weight", (void (Type::*)(const Index, const double)) & Type::set_weight, "index"_a, "value"_a)
+            .def("set_weight", (void (Type::*)(const Index, const Index, const double)) & Type::set_weight, "index_u"_a, "index_v"_a, "value"_a)
+            .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a, "order"_a)
+            .def("weight", (double (Type::*)(const Index) const) & Type::weight, "index"_a)
+            .def("weight", (double (Type::*)(const Index, const Index) const) & Type::weight, "index_u"_a, "index_v"_a)
+            .def("greville_point", &Type::greville_point, "index_u"_a, "index_v"_a);
 
-        m.def("add", [](Model& model, Holder data) { model.add<Type>(data); } );
+        m.def("add", [](Model& model, Holder data) { model.add<Type>(data); });
 
         Model::register_python_data_type<Type>(m, model);
     }
