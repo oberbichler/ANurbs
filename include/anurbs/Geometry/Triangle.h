@@ -28,9 +28,9 @@ public:     // static methods
         Vector n = u.cross(v);
         Vector w = point - a;
 
-        double r = u.cross(w).dot(n) / n.dot(n);
+        double t = u.cross(w).dot(n) / n.dot(n);
         double s = w.cross(v).dot(n) / n.dot(n);
-        double t = 1.0 - r - s;
+        double r = 1.0 - r - s;
 
         Vector closest_point = t * a + s * b + r * c;
 
