@@ -26,11 +26,11 @@ private:    // variables
     std::unordered_map<std::string, std::pair<size_t, size_t>> m_key_map;
 
 public:     // static methods
-    static Unique<Model> from_file(const std::string& path)
+    static Pointer<Model> from_file(const std::string& path)
     {
         auto model = new_<Model>();
 
-        JsonReader<Model>::load_file(*model, path);
+        model->load(path);
 
         return model;
     }
@@ -310,7 +310,6 @@ public:     // python
             .def("to_string", &Type::to_string)
             .def("add_array", &Type::add_array, "content"_a)
             .def("add_object", &Type::add_object, "content"_a)
-            .def("nb_entries", &Type::nb_entries)
             .def("get_type", (std::string (Type::*)(const size_t) const)
                 &Type::get_type, "index"_a)
             .def("get_type", (std::string (Type::*)(const std::string&) const)
@@ -323,6 +322,8 @@ public:     // python
                 &Type::remove, "index"_a)
             .def("remove", (void (Type::*)(const std::string&))
                 &Type::remove, "key"_a)
+            // read-only properties
+            .def_property_readonly("nb_entries", &Type::nb_entries)
         ;
     }
 
