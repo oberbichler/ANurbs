@@ -589,14 +589,14 @@ public: // methods
     {
         const auto old_domain_u = this->domain_u();
 
-        for (auto& knot : m_knots_u) {
-            knot = domain_u.parameter_at_normalized(old_domain_u.normalized_at(knot));
+        for (Index i = 0; i < nb_knots_u(); i++) {
+            knot_u(i) = domain_u.parameter_at_normalized(old_domain_u.normalized_at(knot_u(i)));
         }
 
         const auto old_domain_v = this->domain_v();
 
-        for (auto& knot : m_knots_v) {
-            knot = domain_u.parameter_at_normalized(old_domain_v.normalized_at(knot));
+        for (Index i = 0; i < nb_knots_v(); i++) {
+            knot_v(i) = domain_v.parameter_at_normalized(old_domain_v.normalized_at(knot_v(i)));
         }
     }
 
