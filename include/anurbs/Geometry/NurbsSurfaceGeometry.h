@@ -414,6 +414,34 @@ public: // methods
         m_weights = value;
     }
 
+    //
+
+    std::pair<Index, Index> span_at(const double u, const double v) const
+    {
+        const auto span_u = Nurbs::upper_span(degree_u(), knots_u(), u);
+        const auto span_v = Nurbs::upper_span(degree_v(), knots_v(), v);
+
+        return {span_u, span_v};
+    }
+
+    std::vector<Index> nonzero_pole_indices_at_span(const Index span_u, const Index span_v) const
+    {
+        std::vector<Index> indices((degree_u() + 1) * (degree_v() + 1));
+
+        const Index first_nonzero_pole_index_u = span_u - degree_u() + 1;
+        const Index first_nonzero_pole_index_v = span_v - degree_v() + 1;
+
+        auto it = indices.begin();
+
+        for (Index i = 0; i < degree_u() + 1; i++) {
+            for (Index j = 0; j < degree_v() + 1; j++) {
+                *(it++) = to_single_index(first_nonzero_pole_index_u + i, first_nonzero_pole_index_v + j);
+            }
+        }
+
+        return indices;
+    }
+
     template <typename TValue, typename TValues>
     TValue evaluate_at(TValues values, const double u, const double v) const
     {
@@ -691,7 +719,9 @@ public: // python
             .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a, "order"_a)
             .def("weight", (double (Type::*)(const Index) const) & Type::weight, "index"_a)
             .def("weight", (double (Type::*)(const Index, const Index) const) & Type::weight, "index_u"_a, "index_v"_a)
-            .def("greville_point", &Type::greville_point, "index_u"_a, "index_v"_a);
+            .def("greville_point", &Type::greville_point, "index_u"_a, "index_v"_a)
+            .def("nonzero_pole_indices_at_span", &Type::nonzero_pole_indices_at_span, "span_u"_a, "span_v"_a)
+            .def("span_at", &Type::span_at, "u"_a, "v"_a);
 
         m.def("add", [](Model& model, Holder data) { model.add<Type>(data); });
 

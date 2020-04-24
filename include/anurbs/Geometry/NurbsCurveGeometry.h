@@ -291,8 +291,7 @@ public:     // methods
         return point;
     }
 
-    std::pair<std::vector<Index>, linear_algebra::MatrixXd> shape_functions_at(const double t,
-        const Index order) const
+    std::pair<std::vector<Index>, Eigen::MatrixXd> shape_functions_at(const double t, const Index order) const
     {
         NurbsCurveShapeFunction shape_function(degree(), order);
 
@@ -329,6 +328,24 @@ public:     // methods
             const double t1 = knot(first_span + i + 1);
 
             result[i] = Interval(t0, t1);
+        }
+
+        return result;
+    }
+
+    Index span_at(const double t) const
+    {
+        return Nurbs::upper_span(degree(), knots(), t);
+    }
+
+    std::vector<Index> nonzero_pole_indices_at_span(const Index span) const
+    {
+        std::vector<Index> result(degree() + 1);
+
+        const Index first_nonzero_pole_index = span - degree() + 1;
+
+        for (Index i = 0; i < length(result); i++) {
+            result[i] = first_nonzero_pole_index + i;
         }
 
         return result;
@@ -408,9 +425,9 @@ public:     // python
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
             .def(py::init<const Index, const Index, const bool>(), "degree"_a, "nb_poles"_a, "is_rational"_a)
-            .def(py::init<const Index, const Eigen::VectorXd, const Poles>(), "degree"_a, "knots"_a, "poles"_a)
-            .def(py::init<const Index, const Eigen::VectorXd, const Poles, const Eigen::VectorXd>(), "degree"_a, "knots"_a, "poles"_a, "weights"_a)
-            .def(py::init<const Index, const Eigen::VectorXd, const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
+            .def(py::init<const Index, const Knots, const Poles>(), "degree"_a, "knots"_a, "poles"_a)
+            .def(py::init<const Index, const Knots, const Poles, const Weights>(), "degree"_a, "knots"_a, "poles"_a, "weights"_a)
+            .def(py::init<const Index, const Knots, const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
             .def_property_readonly("nb_knots", &Type::nb_knots)
@@ -420,8 +437,10 @@ public:     // python
             .def_property("poles", py::overload_cast<>(&Type::poles), &Type::set_poles)
             .def_property("weights", py::overload_cast<>(&Type::weights), &Type::set_weights)
             // methods
-            .def("shape_functions_at", &Type::shape_functions_at, "t"_a, "order"_a)
             .def("greville_point", &Type::greville_point, "index"_a)
+            .def("nonzero_pole_indices_at_span", &Type::nonzero_pole_indices_at_span, "span"_a)
+            .def("shape_functions_at", &Type::shape_functions_at, "t"_a, "order"_a)
+            .def("span_at", &Type::span_at, "t"_a)
             // .def("clone", &Type::clone)
         ;
 
