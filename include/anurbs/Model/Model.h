@@ -323,6 +323,8 @@ public:     // python
                 &Type::remove, "index"_a)
             .def("remove", (void (Type::*)(const std::string&))
                 &Type::remove, "key"_a)
+            // read-only properties
+            .def_property_readonly("nb_entries", &Type::nb_entries)
         ;
     }
 
