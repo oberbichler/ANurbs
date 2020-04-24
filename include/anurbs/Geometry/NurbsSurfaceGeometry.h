@@ -7,6 +7,8 @@
 #include "../Algorithm/Nurbs.h"
 #include "../Algorithm/NurbsSurfaceShapeFunction.h"
 
+#include "../Model/DataReader.h"
+#include "../Model/DataWriter.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -134,9 +136,14 @@ public: // static methods
     using SurfaceBase<TDimension>::dimension;
 
 public: // methods
+    Index to_single_index(const Index rows, const Index cols, const Index row, const Index col) const
+    {
+        return row * cols + col;
+    }
+
     Index to_single_index(const Index index_u, const Index index_v) const
     {
-        return index_u * nb_poles_v() + index_v;
+        return to_single_index(nb_poles_u(), nb_poles_v(), index_u, index_v);
     }
 
     std::pair<Index, Index> to_double_index(const Index index) const
@@ -610,36 +617,22 @@ public: // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto poles = source.at("poles");
-        const auto knots_u = source.at("knots_u");
-        const auto knots_v = source.at("knots_v");
-        const auto weights = source.value("weights", std::vector<double>());
+        const DataReader reader(source);
 
-        const Index degree_u = source.at("degree_u");
-        const Index degree_v = source.at("degree_v");
-        const Index nb_poles_u = source.at("nb_poles_u");
-        const Index nb_poles_v = source.at("nb_poles_v");
-        const bool is_rational = !weights.empty();
+        const auto degree_u = reader.read<Index>("degree_u");
+        const auto degree_v = reader.read<Index>("degree_v");
+        const auto nb_poles_u = reader.read<Index>("nb_poles_u");
+        const auto nb_poles_v = reader.read<Index>("nb_poles_v");
+        const auto is_rational = reader.has("weights");
 
-        auto result = new_<Type>(degree_u, degree_v, nb_poles_u, nb_poles_v,
-            is_rational);
+        auto result = new_<Type>(degree_u, degree_v, nb_poles_u, nb_poles_v, is_rational);
 
-        for (Index i = 0; i < length(knots_u); i++) {
-            result->set_knot_u(i, knots_u[i]);
-        }
-
-        for (Index i = 0; i < length(knots_v); i++) {
-            result->set_knot_v(i, knots_v[i]);
-        }
-
-        for (Index i = 0; i < length(poles); i++) {
-            result->set_pole(i, poles[i]);
-        }
+        reader.fill_vector("knots_u", result->knots_u());
+        reader.fill_vector("knots_v", result->knots_v());
+        reader.fill_matrix("poles", result->poles());
 
         if (is_rational) {
-            for (Index i = 0; i < length(weights); i++) {
-                result->set_weight(i, weights[i]);
-            }
+            reader.fill_vector("weights", result->weights());
         }
 
         return result;
@@ -647,16 +640,18 @@ public: // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["degree_u"] = data.degree_u();
-        target["degree_v"] = data.degree_v();
-        target["nb_poles_u"] = data.nb_poles_u();
-        target["nb_poles_v"] = data.nb_poles_v();
-        target["knots_u"] = data.knots_u();
-        target["knots_v"] = data.knots_v();
-        target["poles"] = ToJson(data.poles());
+        DataWriter writer(target);
+
+        writer.write("degree_u", data.degree_u());
+        writer.write("degree_v", data.degree_v());
+        writer.write("nb_poles_u", data.nb_poles_u());
+        writer.write("nb_poles_v", data.nb_poles_v());
+        writer.write_vector("knots_u", data.knots_u());
+        writer.write_vector("knots_v", data.knots_v());
+        writer.write_matrix("poles", data.poles());
 
         if (data.is_rational()) {
-            target["weights"] = ToJson(data.weights());
+            writer.write_vector("weights", data.weights());
         }
     }
 
