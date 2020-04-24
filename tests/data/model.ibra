@@ -1,0 +1,10 @@
+[
+  {
+    "key": "TestData",
+    "type": "NurbsCurveGeometry2D",
+    "degree": 1,
+    "nb_poles": 2,
+    "knots": [0, 1],
+    "poles": [[1, 2], [3, 4]]
+  }
+]
