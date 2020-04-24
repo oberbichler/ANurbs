@@ -6,6 +6,14 @@
 #include "TypeRegistry.h"
 #include "Model.h"
 
+#if __has_include(<filesystem>)
+#include <filesystem>
+namespace fs = std::filesystem;
+#else
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#endif
+
 #include <fstream>
 #include <stdexcept>
 
@@ -32,8 +40,7 @@ public:
     template <typename TSource>
     static void load_array(TModel& model, TSource& source)
     {
-        Json::parser_callback_t cb = [&](int depth, Json::parse_event_t event,
-            Json& parsed) {
+        Json::parser_callback_t cb = [&](int depth, Json::parse_event_t event, Json& parsed) {
             if (depth == 1 && event == Json::parse_event_t::object_end) {
                 load(model, parsed);
 
@@ -55,6 +62,10 @@ public:
 
     static void load_file(TModel& model, const std::string& path)
     {
+        if (!fs::exists(path)) {
+            throw std::runtime_error("File not found");
+        }
+
         std::fstream file;
 
         file.open(path, std::fstream::in);
