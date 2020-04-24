@@ -44,21 +44,21 @@ public:     // static methods
             nb_poles_refined, true); // FIXME: check is_rational
 
         for (Index i = 0; i < a + 1 - degree + 1; i++) {
-            refined->set_pole(i, geometry.pole(i) * geometry.weight(i));
-            refined->set_weight(i, geometry.weight(i));
+            refined->pole(i) = geometry.pole(i) * geometry.weight(i);
+            refined->weight(i) = geometry.weight(i);
         }
 
         for (Index i = b + 2 - 1; i < nb_poles; i++) {
-            refined->set_pole(nb_knots_to_insert + i, geometry.pole(i) * geometry.weight(i));
-            refined->set_weight(nb_knots_to_insert + i, geometry.weight(i));
+            refined->pole(nb_knots_to_insert + i) = geometry.pole(i) * geometry.weight(i);
+            refined->weight(nb_knots_to_insert + i) = geometry.weight(i);
         }
 
         for (Index i = 0; i < a + 1; i++) {
-            refined->set_knot(i, geometry.knot(i));
+            refined->knot(i) = geometry.knot(i);
         }
 
         for (Index i = b + degree + 1; i < nb_poles + degree - 2; i++) {
-            refined->set_knot(i + nb_knots_to_insert, geometry.knot(i));
+            refined->knot(i + nb_knots_to_insert) = geometry.knot(i);
         }
 
         const Index n = nb_poles - 1;
@@ -73,40 +73,40 @@ public:     // static methods
             while (knots[j] <= geometry.knot(-1 + i) && i > a + 1) {
                 const auto pole = geometry.pole(i - degree - 1);
                 const auto weight = geometry.weight(i - degree - 1);
-                refined->set_pole(k - degree - 1, pole * weight);
-                refined->set_weight(k - degree - 1, weight);
+                refined->pole(k - degree - 1) = pole * weight;
+                refined->weight(k - degree - 1) = weight;
 
-                refined->set_knot(-1+k, geometry.knot(-1 + i));
+                refined->knot(-1+k) = geometry.knot(-1 + i);
 
                 k -= 1;
                 i -= 1;
             }
 
-            refined->set_pole(k - degree - 1, refined->pole(k - degree));
-            refined->set_weight(k - degree - 1, refined->weight(k - degree));
+            refined->pole(k - degree - 1) = refined->pole(k - degree);
+            refined->weight(k - degree - 1) = refined->weight(k - degree);
 
             for (Index l = 1; l < degree + 1; l++) {
                 const Index index = k - degree + l;
                 auto alpha = refined->knot(-1+k + l) - knots[j];
 
                 if (std::abs(alpha) < 1e-7) {
-                    refined->set_pole(index - 1, refined->pole(index));
-                    refined->set_weight(index - 1, refined->weight(index));
+                    refined->pole(index - 1) = refined->pole(index);
+                    refined->weight(index - 1) = refined->weight(index);
                 } else {
                     alpha = alpha / (refined->knot(k + l - 1) - geometry.knot(i + l - degree - 1));
-                    refined->set_pole(index - 1, refined->pole(index - 1) * alpha + refined->pole(index) * (1 - alpha));
-                    refined->set_weight(index - 1, refined->weight(index - 1) * alpha + refined->weight(index) * (1 - alpha));
+                    refined->pole(index - 1) = refined->pole(index - 1) * alpha + refined->pole(index) * (1 - alpha);
+                    refined->weight(index - 1) = refined->weight(index - 1) * alpha + refined->weight(index) * (1 - alpha);
                 }
             }
 
-            refined->set_knot(-1 + k, knots[j]);
+            refined->knot(-1 + k) = knots[j];
 
             k -= 1;
             j -= 1;
         }
 
         for (Index i = 0; i < refined->nb_poles(); i++) {
-            refined->set_pole(i, refined->pole(i) / refined->weight(i));
+            refined->pole(i) = refined->pole(i) / refined->weight(i);
         }
 
         return refined;

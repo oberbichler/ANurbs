@@ -155,9 +155,11 @@ public:     // methods
         return m_weights.size() != 0;
     }
 
-    double& knot(Index i)
+    // knots
+
+    Index nb_knots() const
     {
-        return m_knots[i];
+        return static_cast<Index>(m_knots.size());
     }
 
     double knot(Index i) const
@@ -165,9 +167,9 @@ public:     // methods
         return m_knots[i];
     }
 
-    Eigen::Ref<Eigen::VectorXd> knots()
+    double& knot(Index i)
     {
-        return m_knots;
+        return m_knots[i];
     }
 
     Eigen::Ref<const Eigen::VectorXd> knots() const
@@ -175,15 +177,92 @@ public:     // methods
         return m_knots;
     }
 
-    Index nb_knots() const
+    Eigen::Ref<Eigen::VectorXd> knots()
     {
-        return static_cast<Index>(m_knots.size());
+        return m_knots;
     }
+
+    void set_knots(Eigen::Ref<const Eigen::VectorXd> values)
+    {
+        if (length(values) != nb_knots()) {
+            throw std::runtime_error("Invalid size");
+        }
+
+        m_knots = values;
+    }
+
+    // poles
 
     Index nb_poles() const
     {
         return static_cast<Index>(m_poles.rows());
     }
+
+    Vector pole(Index i) const
+    {
+        return m_poles.row(i);
+    }
+
+    Eigen::Ref<Vector> pole(Index i)
+    {
+        return m_poles.row(i);
+    }
+
+    Eigen::Ref<const Poles> poles() const
+    {
+        return m_poles;
+    }
+
+    Eigen::Ref<Poles> poles()
+    {
+        return m_poles;
+    }
+
+    void set_poles(Eigen::Ref<const Poles> poles)
+    {
+        if (poles.rows() != nb_poles() && poles.cols() != dimension()) {
+            throw std::runtime_error("Invalid size");
+        }
+
+        m_poles = poles;
+    }
+
+    // weights
+
+    double weight(Index i) const
+    {
+        return m_weights(i);
+    }
+    
+    double& weight(Index i)
+    {
+        return m_weights(i);
+    }
+
+    Eigen::Ref<const Eigen::VectorXd> weights() const
+    {
+        return m_weights;
+    }
+
+    Eigen::Ref<Eigen::VectorXd> weights()
+    {
+        return m_weights;
+    }
+
+    void set_weights(Eigen::Ref<const Eigen::VectorXd> value)
+    {
+        if (!is_rational()) {
+            throw std::runtime_error("Geometry is not rational");
+        }
+
+        if (length(value) != nb_poles()) {
+            throw std::runtime_error("Invalid size");
+        }
+
+        m_weights = value;
+    }
+
+    //
 
     Vector point_at(const double t) const override
     {
@@ -210,46 +289,6 @@ public:     // methods
         }
 
         return point;
-    }
-
-    Eigen::Ref<Vector> pole(Index i)
-    {
-        return m_poles.row(i);
-    }
-
-    Eigen::Ref<const Vector> pole(Index i) const
-    {
-        return m_poles.row(i);
-    }
-
-    Eigen::Ref<Poles> poles()
-    {
-        return m_poles;
-    }
-
-    Eigen::Ref<const Poles> poles() const
-    {
-        return m_poles;
-    }
-
-    void set_poles(Eigen::Ref<const Poles> poles)
-    {
-        m_poles = poles;
-    }
-    
-    void set_knot(Index i, double value)
-    {
-        m_knots[i] = value;
-    }
-    
-    void set_pole(Index i, Vector value)
-    {
-        m_poles.row(i) = value;
-    }
-    
-    void set_weight(Index i, double value)
-    {
-        m_weights(i) = value;
     }
 
     std::pair<std::vector<Index>, linear_algebra::MatrixXd> shape_functions_at(const double t,
@@ -293,21 +332,6 @@ public:     // methods
         }
 
         return result;
-    }
-    
-    double weight(Index i) const
-    {
-        return m_weights(i);
-    }
-
-    Eigen::Ref<Eigen::VectorXd> weights()
-    {
-        return m_weights;
-    }
-
-    Eigen::Ref<const Eigen::VectorXd> weights() const
-    {
-        return m_weights;
     }
 
     double greville_point(Index index) const
@@ -383,30 +407,20 @@ public:     // python
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
-            .def(py::init<const Index, const Index, const bool>(), "degree"_a,
-                "nb_poles"_a, "is_rational"_a)
-            .def(py::init<const Index, const Eigen::VectorXd,
-                const Poles>(), "degree"_a, "knots"_a, "poles"_a)
-            .def(py::init<const Index, const Eigen::VectorXd,
-                const Poles, const Eigen::VectorXd>(),
-                "degree"_a, "knots"_a, "poles"_a, "weights"_a)
-            .def(py::init<const Index, const Eigen::VectorXd,
-                const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
+            .def(py::init<const Index, const Index, const bool>(), "degree"_a, "nb_poles"_a, "is_rational"_a)
+            .def(py::init<const Index, const Eigen::VectorXd, const Poles>(), "degree"_a, "knots"_a, "poles"_a)
+            .def(py::init<const Index, const Eigen::VectorXd, const Poles, const Eigen::VectorXd>(), "degree"_a, "knots"_a, "poles"_a, "weights"_a)
+            .def(py::init<const Index, const Eigen::VectorXd, const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
-            .def_property_readonly("knots", py::overload_cast<>(&Type::knots))
             .def_property_readonly("nb_knots", &Type::nb_knots)
             .def_property_readonly("nb_poles", &Type::nb_poles)
-            .def_property_readonly("poles", py::overload_cast<>(&Type::poles))
-            .def_property_readonly("weights", py::overload_cast<>(&Type::weights))
+            // properties
+            .def_property("knots", py::overload_cast<>(&Type::knots), &Type::set_knots)
+            .def_property("poles", py::overload_cast<>(&Type::poles), &Type::set_poles)
+            .def_property("weights", py::overload_cast<>(&Type::weights), &Type::set_weights)
             // methods
-            .def("knot", py::overload_cast<Index>(&Type::knot, py::const_), "index"_a)
-            .def("set_knot", &Type::set_knot, "index"_a, "value"_a)
-            .def("set_pole", &Type::set_pole, "index"_a, "value"_a)
-            .def("set_weight", &Type::set_weight, "index"_a, "value"_a)
-            .def("shape_functions_at", &Type::shape_functions_at, "t"_a,
-                "order"_a)
-            .def("weight", &Type::weight, "index"_a)
+            .def("shape_functions_at", &Type::shape_functions_at, "t"_a, "order"_a)
             .def("greville_point", &Type::greville_point, "index"_a)
             // .def("clone", &Type::clone)
         ;
