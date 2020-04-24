@@ -9,6 +9,15 @@ if __name__ == '__main__':
 
 
 @pytest.fixture
+def empty_bspline():
+    return an.NurbsCurveGeometry3D(
+        degree=2,
+        nb_poles=4,
+        is_rational=False,
+    )
+
+
+@pytest.fixture
 def bspline_3d():
     geometry = an.NurbsCurveGeometry3D(
         degree=4,
@@ -16,28 +25,35 @@ def bspline_3d():
         is_rational=False,
     )
 
-    geometry.set_knot(0, 0)
-    geometry.set_knot(1, 0)
-    geometry.set_knot(2, 0)
-    geometry.set_knot(3, 0)
-    geometry.set_knot(4, 32.9731425998736)
-    geometry.set_knot(5, 65.9462851997473)
-    geometry.set_knot(6, 98.9194277996209)
-    geometry.set_knot(7, 131.892570399495)
-    geometry.set_knot(8, 131.892570399495)
-    geometry.set_knot(9, 131.892570399495)
-    geometry.set_knot(10, 131.892570399495)
+    geometry.knots[0] = 0
+    geometry.knots[1] = 0
+    geometry.knots[2] = 0
+    geometry.knots[3] = 0
+    geometry.knots[4] = 32.9731425998736
+    geometry.knots[5] = 65.9462851997473
+    geometry.knots[6] = 98.9194277996209
+    geometry.knots[7] = 131.892570399495
+    geometry.knots[8] = 131.892570399495
+    geometry.knots[9] = 131.892570399495
+    geometry.knots[10] = 131.892570399495
 
-    geometry.set_pole(0, [0, -25, -5])
-    geometry.set_pole(1, [-15, -15, 0])
-    geometry.set_pole(2, [5, -5, -3])
-    geometry.set_pole(3, [15, -15, 3])
-    geometry.set_pole(4, [25, 0, 6])
-    geometry.set_pole(5, [15, 15, 6])
-    geometry.set_pole(6, [-5, - 5, -3])
-    geometry.set_pole(7, [-25, 15, 4])
+    geometry.poles[0] = [0, -25, -5]
+    geometry.poles[1] = [-15, -15, 0]
+    geometry.poles[2] = [5, -5, -3]
+    geometry.poles[3] = [15, -15, 3]
+    geometry.poles[4] = [25, 0, 6]
+    geometry.poles[5] = [15, 15, 6]
+    geometry.poles[6] = [-5, - 5, -3]
+    geometry.poles[7] = [-25, 15, 4]
 
     return geometry
+
+
+def test_knots_throws_invalid_size(empty_bspline):
+    with pytest.raises(RuntimeError) as ex:
+        empty_bspline.knots = [1, 2]
+
+    assert_equal('Invalid size', str(ex.value))
 
 
 def test_bspline_dimension(bspline_3d):
@@ -129,35 +145,30 @@ def nurbs_3d():
         is_rational=True,
     )
 
-    geometry.set_knot(0, 0)
-    geometry.set_knot(1, 0)
-    geometry.set_knot(2, 0)
-    geometry.set_knot(3, 0)
-    geometry.set_knot(4, 32.9731425998736)
-    geometry.set_knot(5, 65.9462851997473)
-    geometry.set_knot(6, 98.9194277996209)
-    geometry.set_knot(7, 131.892570399495)
-    geometry.set_knot(8, 131.892570399495)
-    geometry.set_knot(9, 131.892570399495)
-    geometry.set_knot(10, 131.892570399495)
+    geometry.knots[0] = 0
+    geometry.knots[1] = 0
+    geometry.knots[2] = 0
+    geometry.knots[3] = 0
+    geometry.knots[4] = 32.9731425998736
+    geometry.knots[5] = 65.9462851997473
+    geometry.knots[6] = 98.9194277996209
+    geometry.knots[7] = 131.892570399495
+    geometry.knots[8] = 131.892570399495
+    geometry.knots[9] = 131.892570399495
+    geometry.knots[10] = 131.892570399495
 
-    geometry.set_pole(0, [0, -25, -5])
-    geometry.set_pole(1, [-15, -15, 0])
-    geometry.set_pole(2, [5, -5, -3])
-    geometry.set_pole(3, [15, -15, 3])
-    geometry.set_pole(4, [25, 0, 6])
-    geometry.set_pole(5, [15, 15, 6])
-    geometry.set_pole(6, [-5, -5, -3])
-    geometry.set_pole(7, [-25, 15, 4])
+    geometry.poles = [
+        [0, -25, -5],
+        [-15, -15, 0],
+        [5, -5, -3],
+        [15, -15, 3],
+        [25, 0, 6],
+        [15, 15, 6],
+        [-5, -5, -3],
+        [-25, 15, 4],
+    ]
 
-    geometry.set_weight(0, 1.0)
-    geometry.set_weight(1, 3.0)
-    geometry.set_weight(2, 1.0)
-    geometry.set_weight(3, 2.5)
-    geometry.set_weight(4, 1.0)
-    geometry.set_weight(5, 0.5)
-    geometry.set_weight(6, 1.0)
-    geometry.set_weight(7, 2.0)
+    geometry.weights = [1, 3, 1, 2.5, 1, 0.5, 1, 2]
 
     return geometry
 

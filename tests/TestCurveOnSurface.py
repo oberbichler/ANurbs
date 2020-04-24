@@ -26,25 +26,20 @@ class TestNurbsCurveGeometry(unittest.TestCase):
             is_rational=False,
         )
 
-        surface.set_knot_u(0, 1)
-        surface.set_knot_u(1, 1)
-        surface.set_knot_u(2, 3)
-        surface.set_knot_u(3, 3)
+        surface.knots_u = [1, 1, 3, 3]
+        surface.knots_v = [2, 2, 6, 6]
 
-        surface.set_knot_v(0, 2)
-        surface.set_knot_v(1, 2)
-        surface.set_knot_v(2, 6)
-        surface.set_knot_v(3, 6)
-
-        surface.set_pole(0, 0, [ 0,  0,  3])
-        surface.set_pole(0, 1, [ 0,  5,  0])
-        surface.set_pole(0, 2, [ 0, 10,  2])
-        surface.set_pole(1, 0, [ 5,  0,  5])
-        surface.set_pole(1, 1, [ 5,  5,  0])
-        surface.set_pole(1, 2, [ 5, 10,  3])
-        surface.set_pole(2, 0, [10,  0,  1])
-        surface.set_pole(2, 1, [10,  5, -1])
-        surface.set_pole(2, 2, [10, 10,  0])
+        surface.poles = [
+            [ 0,  0,  3],
+            [ 0,  5,  0],
+            [ 0, 10,  2],
+            [ 5,  0,  5],
+            [ 5,  5,  0],
+            [ 5, 10,  3],
+            [10,  0,  1],
+            [10,  5, -1],
+            [10, 10,  0],
+        ]
 
         curve_on_surface = an.CurveOnSurface3D(curve, surface, curve.domain)
 

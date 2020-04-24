@@ -17,28 +17,23 @@ def bspline_3d():
         is_rational=False,
     )
 
-    surface.set_knot_u(0,  0.0)
-    surface.set_knot_u(1,  0.0)
-    surface.set_knot_u(2,  7.5)
-    surface.set_knot_u(3, 15.0)
-    surface.set_knot_u(4, 15.0)
+    surface.knots_u = [0, 0, 7.5, 15, 15]
+    surface.knots_v = [0, 10, 20]
 
-    surface.set_knot_v(0,  0.0)
-    surface.set_knot_v(1, 10.0)
-    surface.set_knot_v(2, 20.0)
-
-    surface.set_pole(0, 0, [-10.0, -5.0, -1.0])
-    surface.set_pole(0, 1, [-12.0, 3.0, 3.0])
-    surface.set_pole(0, 2, [-9.0, 11.0, -0.0701928417])
-    surface.set_pole(3, [-5.0, -3.0, 1.0])
-    surface.set_pole(1, 1, [-6.0, 4.0, -2.0])
-    surface.set_pole(1, 2, [-5.0, 7.0, 0.9298071583])
-    surface.set_pole(2, 0, [0.0, -4.0, -1.0])
-    surface.set_pole(2, 1, [1.0, 6.0, 5.0])
-    surface.set_pole(2, 2, [0.0, 13.0, -0.2350184214])
-    surface.set_pole(3, 0, [4.0, -2.0, 0.0])
-    surface.set_pole(3, 1, [5.0, 4.0, -1.0])
-    surface.set_pole(3, 2, [5.0, 11.0, 0.7649815786])
+    surface.poles = [
+        [-10.0, -5.0, -1.0],
+        [-12.0, 3.0, 3.0],
+        [-9.0, 11.0, -0.0701928417],
+        [-5.0, -3.0, 1.0],
+        [-6.0, 4.0, -2.0],
+        [-5.0, 7.0, 0.9298071583],
+        [0.0, -4.0, -1.0],
+        [1.0, 6.0, 5.0],
+        [0.0, 13.0, -0.2350184214],
+        [4.0, -2.0, 0.0],
+        [5.0, 4.0, -1.0],
+        [5.0, 11.0, 0.7649815786],
+    ]
 
     return surface
 
@@ -135,41 +130,25 @@ def nurbs_3d():
         is_rational=True,
     )
 
-    surface.set_knot_u(0,  0.0)
-    surface.set_knot_u(1,  0.0)
-    surface.set_knot_u(2,  7.5)
-    surface.set_knot_u(3, 15.0)
-    surface.set_knot_u(4, 15.0)
+    surface.knots_u = [0, 0, 7.5, 15, 15]
+    surface.knots_v = [0, 10, 20]
 
-    surface.set_knot_v(0,  0.0)
-    surface.set_knot_v(1, 10.0)
-    surface.set_knot_v(2, 20.0)
+    surface.poles = [
+        [-10.0, -5.0, -1.0],
+        [-12.0, 3.0, 3.0],
+        [- 9.0, 11.0, -0.0701928417],
+        [- 5.0, -3.0, 1.0],
+        [- 6.0, 4.0, -2.0],
+        [- 5.0, 7.0, 0.9298071583],
+        [0.0, -4.0, -1.0],
+        [1.0, 6.0, 5.0],
+        [0.0, 13.0, -0.2350184214],
+        [4.0, -2.0, 0.0],
+        [5.0, 4.0, -1.0],
+        [5.0, 11.0, 0.7649815786],
+    ]
 
-    surface.set_pole(0, 0, [-10.0, -5.0, -1.0])
-    surface.set_pole(0, 1, [-12.0, 3.0, 3.0])
-    surface.set_pole(0, 2, [- 9.0, 11.0, -0.0701928417])
-    surface.set_pole(3, [- 5.0, -3.0, 1.0])
-    surface.set_pole(1, 1, [- 6.0, 4.0, -2.0])
-    surface.set_pole(1, 2, [- 5.0, 7.0, 0.9298071583])
-    surface.set_pole(2, 0, [0.0, -4.0, -1.0])
-    surface.set_pole(2, 1, [1.0, 6.0, 5.0])
-    surface.set_pole(2, 2, [0.0, 13.0, -0.2350184214])
-    surface.set_pole(3, 0, [4.0, -2.0, 0.0])
-    surface.set_pole(3, 1, [5.0, 4.0, -1.0])
-    surface.set_pole(3, 2, [5.0, 11.0, 0.7649815786])
-
-    surface.set_weight(0, 0, 1.0)
-    surface.set_weight(0, 1, 1.0)
-    surface.set_weight(0, 2, 1.0)
-    surface.set_weight(1, 0, 1.0)
-    surface.set_weight(1, 1, 2.5)
-    surface.set_weight(1, 2, 1.0)
-    surface.set_weight(2, 0, 1.0)
-    surface.set_weight(7,    1.0)
-    surface.set_weight(2, 2, 1.0)
-    surface.set_weight(3, 0, 1.0)
-    surface.set_weight(3, 1, 1.0)
-    surface.set_weight(3, 2, 1.0)
+    surface.weights = [1, 1, 1, 1, 2.5, 1, 1, 1, 1, 1, 1, 1]
 
     return surface
 
