@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Filesystem REQUIRED)
+find_package(Filesystem REQUIRED COMPONENTS Experimental)
 
 include_directories(
     "${PROJECT_SOURCE_DIR}/include"
