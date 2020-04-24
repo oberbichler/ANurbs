@@ -113,8 +113,7 @@ public:     // static methods
     }
 
     static Pointer<SurfaceGeometry>
-    insert_knots_u(const SurfaceGeometry& geometry,
-        std::vector<double> knotsU)
+    insert_knots_u(const SurfaceGeometry& geometry, std::vector<double> knotsU)
     {
         std::sort(knotsU.begin(), knotsU.end());
 
@@ -129,10 +128,8 @@ public:     // static methods
         const Index nb_knots_u = geometry.nb_knots_u();
         const Index nb_knots_v = geometry.nb_knots_v();
 
-        const Index a = Nurbs::upper_span(degree_u, geometry.knots_u(),
-            knotsU.front());
-        const Index b = Nurbs::upper_span(degree_u, geometry.knots_u(),
-            knotsU.back());
+        const Index a = Nurbs::upper_span(degree_u, geometry.knots_u(), knotsU.front());
+        const Index b = Nurbs::upper_span(degree_u, geometry.knots_u(), knotsU.back());
 
         const Index nb_poles_refined = nb_poles_u + nb_knots_to_insert;
         const Index nb_knots_refined = geometry.nb_knots_u() + 2 + nb_knots_to_insert;
@@ -142,28 +139,28 @@ public:     // static methods
 
         for (Index i = 0; i < a + 1 - degree_u + 1; i++) {
             for (Index m = 0; m < geometry.nb_poles_v(); m++) {
-                refined->set_pole(i, m, geometry.pole(i, m) * geometry.weight(i, m));
-                refined->set_weight(i, m, geometry.weight(i, m));
+                refined->pole(i, m) = geometry.pole(i, m) * geometry.weight(i, m);
+                refined->weight(i, m) = geometry.weight(i, m);
             }
         }
 
         for (Index i = b + 2 - 1; i < nb_poles_u; i++) {
             for (Index m = 0; m < geometry.nb_poles_v(); m++) {
-                refined->set_pole(nb_knots_to_insert + i, m, geometry.pole(i, m) * geometry.weight(i, m));
-                refined->set_weight(nb_knots_to_insert + i, m, geometry.weight(i, m));
+                refined->pole(nb_knots_to_insert + i, m) = geometry.pole(i, m) * geometry.weight(i, m);
+                refined->weight(nb_knots_to_insert + i, m) = geometry.weight(i, m);
             }
         }
 
         for (Index i = 0; i < a + 1; i++) {
-            refined->set_knot_u(i, geometry.knot_u(i));
+            refined->knot_u(i) = geometry.knot_u(i);
         }
 
         for (Index i = b + 2 + degree_u - 1; i < geometry.nb_knots_u(); i++) {
-            refined->set_knot_u(i + nb_knots_to_insert, geometry.knot_u(i));
+            refined->knot_u(i + nb_knots_to_insert) = geometry.knot_u(i);
         }
 
         for (Index i = 0; i < geometry.nb_knots_v(); i++) {
-            refined->set_knot_v(i, geometry.knot_v(i));
+            refined->knot_v(i) = geometry.knot_v(i);
         }
 
         const Index n = nb_poles_u - 1;
@@ -179,19 +176,19 @@ public:     // static methods
                 for (Index m = 0; m < geometry.nb_poles_v(); m++) {
                     const auto pole = geometry.pole(i - degree_u - 1, m);
                     const auto weight = geometry.weight(i - degree_u - 1, m);
-                    refined->set_pole(k - degree_u-1, m, pole * weight);
-                    refined->set_weight(k - degree_u-1, m, weight);
+                    refined->pole(k - degree_u-1, m) = pole * weight;
+                    refined->weight(k - degree_u-1, m) = weight;
                 }
 
-                refined->set_knot_u(-1+k, geometry.knot_u(-1 + i));
+                refined->knot_u(-1+k) = geometry.knot_u(-1 + i);
 
                 k -= 1;
                 i -= 1;
             }
 
             for (Index m = 0; m < geometry.nb_poles_v(); m++) {
-                refined->set_pole(k - degree_u-1, m, refined->pole(k - degree_u, m));
-                refined->set_weight(k - degree_u-1, m, refined->weight(k - degree_u, m));
+                refined->pole(k - degree_u-1, m) = refined->pole(k - degree_u, m);
+                refined->weight(k - degree_u-1, m) = refined->weight(k - degree_u, m);
             }
 
             for (Index l = 1; l < degree_u + 1; l++) {
@@ -200,26 +197,26 @@ public:     // static methods
 
                 if (std::abs(alpha) < 1e-7) {
                     for (Index m = 0; m < geometry.nb_poles_v(); m++) {
-                        refined->set_pole(index - 1, m, refined->pole(index, m));
-                        refined->set_weight(index - 1, m, refined->weight(index, m));
+                        refined->pole(index - 1, m) = refined->pole(index, m);
+                        refined->weight(index - 1, m) = refined->weight(index, m);
                     }
                 } else {
                     alpha = alpha / (refined->knot_u(k + l - 1) - geometry.knot_u(i + l - degree_u - 1));
                     for (Index m = 0; m < geometry.nb_poles_v(); m++) {
-                        refined->set_pole(index - 1, m, refined->pole(index - 1, m) * alpha + refined->pole(index, m) * (1 - alpha));
-                        refined->set_weight(index - 1, m, refined->weight(index - 1, m) * alpha + refined->weight(index, m) * (1 - alpha));
+                        refined->pole(index - 1, m) = refined->pole(index - 1, m) * alpha + refined->pole(index, m) * (1 - alpha);
+                        refined->weight(index - 1, m) = refined->weight(index - 1, m) * alpha + refined->weight(index, m) * (1 - alpha);
                     }
                 }
             }
 
-            refined->set_knot_u(-1 + k, knotsU[j]);
+            refined->knot_u(-1 + k) = knotsU[j];
 
             k -= 1;
             j -= 1;
         }
 
         for (Index i = 0; i < refined->nb_poles(); i++) {
-            refined->set_pole(i, refined->pole(i) / refined->weight(i));
+            refined->pole(i) = refined->pole(i) / refined->weight(i);
         }
 
         return refined;
@@ -255,28 +252,28 @@ public:     // static methods
 
         for (Index i = 0; i < a + 1 - degree_v + 1; i++) {
             for (Index m = 0; m < geometry.nb_poles_u(); m++) {
-                refined->set_pole(m, i, geometry.pole(m, i) * geometry.weight(m, i));
-                refined->set_weight(m, i, geometry.weight(m, i));
+                refined->pole(m, i) = geometry.pole(m, i) * geometry.weight(m, i);
+                refined->weight(m, i) = geometry.weight(m, i);
             }
         }
 
         for (Index i = b + 2 - 1; i < nb_poles_v; i++) {
             for (Index m = 0; m < geometry.nb_poles_u(); m++) {
-                refined->set_pole(m, nb_knots_to_insert + i, geometry.pole(m, i) * geometry.weight(m, i));
-                refined->set_weight(m, nb_knots_to_insert + i, geometry.weight(m, i));
+                refined->pole(m, nb_knots_to_insert + i) = geometry.pole(m, i) * geometry.weight(m, i);
+                refined->weight(m, nb_knots_to_insert + i) = geometry.weight(m, i);
             }
         }
 
         for (Index i = 0; i < a + 1; i++) {
-            refined->set_knot_v(i, geometry.knot_v(i));
+            refined->knot_v(i) = geometry.knot_v(i);
         }
 
         for (Index i = b + 2 + degree_v - 1; i < geometry.nb_knots_v(); i++) {
-            refined->set_knot_v(i + nb_knots_to_insert, geometry.knot_v(i));
+            refined->knot_v(i + nb_knots_to_insert) = geometry.knot_v(i);
         }
 
         for (Index i = 0; i < geometry.nb_knots_u(); i++) {
-            refined->set_knot_u(i, geometry.knot_u(i));
+            refined->knot_u(i) = geometry.knot_u(i);
         }
 
         const Index n = nb_poles_v - 1;
@@ -292,19 +289,19 @@ public:     // static methods
                 for (Index m = 0; m < geometry.nb_poles_u(); m++) {
                     const auto pole = geometry.pole(m, i - degree_v - 1);
                     const auto weight = geometry.weight(m, i - degree_v - 1);
-                    refined->set_pole(m, k - degree_v-1, pole * weight);
-                    refined->set_weight(m, k - degree_v-1, weight);
+                    refined->pole(m, k - degree_v - 1) = pole * weight;
+                    refined->weight(m, k - degree_v - 1) = weight;
                 }
 
-                refined->set_knot_v(-1+k, geometry.knot_v(-1 + i));
+                refined->knot_v(-1 + k) = geometry.knot_v(-1 + i);
 
                 k -= 1;
                 i -= 1;
             }
 
             for (Index m = 0; m < geometry.nb_poles_u(); m++) {
-                refined->set_pole(m, k - degree_v-1, refined->pole(m, k - degree_v));
-                refined->set_weight(m, k - degree_v-1, refined->weight(m, k - degree_v));
+                refined->pole(m, k - degree_v-1) = refined->pole(m, k - degree_v);
+                refined->weight(m, k - degree_v-1) = refined->weight(m, k - degree_v);
             }
 
             for (Index l = 1; l < degree_v + 1; l++) {
@@ -313,26 +310,26 @@ public:     // static methods
 
                 if (std::abs(alpha) < 1e-7) {
                     for (Index m = 0; m < geometry.nb_poles_u(); m++) {
-                        refined->set_pole(m, index - 1, refined->pole(m, index));
-                        refined->set_weight(m, index - 1, refined->weight(m, index));
+                        refined->pole(m, index - 1) = refined->pole(m, index);
+                        refined->weight(m, index - 1) = refined->weight(m, index);
                     }
                 } else {
                     alpha = alpha / (refined->knot_v(k + l - 1) - geometry.knot_v(i + l - degree_v - 1));
                     for (Index m = 0; m < geometry.nb_poles_u(); m++) {
-                        refined->set_pole(m, index - 1, refined->pole(m, index - 1) * alpha + refined->pole(m, index) * (1 - alpha));
-                        refined->set_weight(m, index - 1, refined->weight(m, index - 1) * alpha + refined->weight(m, index) * (1 - alpha));
+                        refined->pole(m, index - 1) = refined->pole(m, index - 1) * alpha + refined->pole(m, index) * (1 - alpha);
+                        refined->weight(m, index - 1) = refined->weight(m, index - 1) * alpha + refined->weight(m, index) * (1 - alpha);
                     }
                 }
             }
 
-            refined->set_knot_v(-1 + k, knotsV[j]);
+            refined->knot_v(-1 + k) = knotsV[j];
 
             k -= 1;
             j -= 1;
         }
 
         for (Index i = 0; i < refined->nb_poles(); i++) {
-            refined->set_pole(i, refined->pole(i) / refined->weight(i));
+            refined->pole(i) = refined->pole(i) / refined->weight(i);
         }
 
         return refined;

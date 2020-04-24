@@ -165,12 +165,6 @@ public: // methods
         return pole(index);
     }
 
-    void set_pole(const Index index_u, const Index index_v, const Vector& value)
-    {
-        const Index index = to_single_index(index_u, index_v);
-        m_poles.row(index) = value;
-    }
-
     double weight(const Index index_u, const Index index_v) const
     {
         if (is_rational()) {
@@ -187,17 +181,7 @@ public: // methods
             const Index index = to_single_index(index_u, index_v);
             return m_weights[index];
         } else {
-            throw std::runtime_error("");
-        }
-    }
-
-    void set_weight(const Index index_u, const Index index_v, const double value)
-    {
-        if (is_rational()) {
-            const Index index = to_single_index(index_u, index_v);
-            m_weights[index] = value;
-        } else {
-            throw std::invalid_argument("Geometry is not rational");
+            throw std::runtime_error("Surface is not rational");
         }
     }
 
@@ -233,20 +217,20 @@ public: // methods
             this->nb_poles_v(), this->is_rational());
 
         for (Index i = 0; i < this->nb_knots_u(); i++) {
-            clone->set_knot_u(i, this->knot_u(i));
+            clone->knot_u(i) = this->knot_u(i);
         }
 
         for (Index i = 0; i < this->nb_knots_v(); i++) {
-            clone->set_knot_v(i, this->knot_v(i));
+            clone->knot_v(i) = this->knot_v(i);
         }
 
         for (Index i = 0; i < this->nb_poles(); i++) {
-            clone->set_pole(i, this->pole(i));
+            clone->pole(i) = this->pole(i);
         }
 
         if (this->is_rational()) {
             for (Index i = 0; i < this->nb_poles(); i++) {
-                clone->set_weight(i, this->weight(i));
+                clone->weight(i) = this->weight(i);
             }
         }
 
@@ -315,9 +299,14 @@ public: // methods
         return m_knots_u[index];
     }
 
-    void set_knot_u(const Index index, const double value)
+    double& knot_u(const Index index)
     {
-        m_knots_u[index] = value;
+        return m_knots_u[index];
+    }
+
+    Eigen::Ref<const Eigen::VectorXd> knots_u() const
+    {
+        return m_knots_u;
     }
 
     Eigen::Ref<Eigen::VectorXd> knots_u()
@@ -325,9 +314,9 @@ public: // methods
         return m_knots_u;
     }
 
-    Eigen::Ref<const Eigen::VectorXd> knots_u() const
+    void set_knots_u(Eigen::Ref<const Eigen::VectorXd> value)
     {
-        return m_knots_u;
+        m_knots_u = value;
     }
 
     Index nb_knots_v() const
@@ -340,9 +329,14 @@ public: // methods
         return m_knots_v[index];
     }
 
-    void set_knot_v(const Index index, const double value)
+    double& knot_v(const Index index)
     {
-        m_knots_v[index] = value;
+        return m_knots_v[index];
+    }
+
+    Eigen::Ref<const Eigen::VectorXd> knots_v() const
+    {
+        return m_knots_v;
     }
 
     Eigen::Ref<Eigen::VectorXd> knots_v()
@@ -350,9 +344,9 @@ public: // methods
         return m_knots_v;
     }
 
-    Eigen::Ref<const Eigen::VectorXd> knots_v() const
+    void set_knots_v(Eigen::Ref<const Eigen::VectorXd> value)
     {
-        return m_knots_v;
+        m_knots_v = value;
     }
 
     Index nb_poles_u() const
@@ -380,9 +374,9 @@ public: // methods
         return m_poles.row(index);
     }
 
-    void set_pole(const Index index, const Vector& value)
+    Eigen::Ref<const Poles> poles() const
     {
-        m_poles.row(index) = value;
+        return m_poles;
     }
 
     Eigen::Ref<Poles> poles()
@@ -390,9 +384,9 @@ public: // methods
         return m_poles;
     }
 
-    Eigen::Ref<const Poles> poles() const
+    void set_poles(Eigen::Ref<const Poles> value)
     {
-        return m_poles;
+        m_poles = value;
     }
 
     double weight(const Index index) const
@@ -405,12 +399,9 @@ public: // methods
         return m_weights[index];
     }
 
-    void set_weight(const Index index, const double value)
+    Eigen::Ref<const Weights> weights() const
     {
-        const Index index_u = index / nb_poles_v();
-        const Index index_v = index % nb_poles_v();
-
-        set_weight(index_u, index_v, value);
+        return m_weights;
     }
 
     Eigen::Ref<Weights> weights()
@@ -418,9 +409,9 @@ public: // methods
         return m_weights;
     }
 
-    Eigen::Ref<const Weights> weights() const
+    void set_weights(Eigen::Ref<const Weights> value)
     {
-        return m_weights;
+        m_weights = value;
     }
 
     template <typename TValue, typename TValues>
@@ -681,27 +672,22 @@ public: // python
             .def(py::init<const Index, const Index, const Eigen::VectorXd, const Eigen::VectorXd, const std::vector<ControlPoint>>(), "degree_u"_a, "degree_v"_a, "knots_u"_a, "knots_v"_a, "control_points"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
-            .def_property_readonly("knots_u", py::overload_cast<>(&Type::knots_u))
-            .def_property_readonly("knots_v", py::overload_cast<>(&Type::knots_v))
             .def_property_readonly("nb_knots_u", &Type::nb_knots_u)
             .def_property_readonly("nb_knots_v", &Type::nb_knots_v)
             .def_property_readonly("nb_poles", &Type::nb_poles)
             .def_property_readonly("nb_poles_u", &Type::nb_poles_u)
             .def_property_readonly("nb_poles_v", &Type::nb_poles_v)
-            .def_property_readonly("poles", py::overload_cast<>(&Type::poles))
-            .def_property_readonly("weights", py::overload_cast<>(&Type::weights))
+            // properties
+            .def_property("knots_u", py::overload_cast<>(&Type::knots_u), &Type::set_knots_u)
+            .def_property("knots_v", py::overload_cast<>(&Type::knots_v), &Type::set_knots_v)
+            .def_property("poles", py::overload_cast<>(&Type::poles), &Type::set_poles)
+            .def_property("weights", py::overload_cast<>(&Type::weights), &Type::set_weights)
             // methods
             .def("clone", &Type::clone)
-            .def("knot_u", &Type::knot_u, "index"_a)
-            .def("knot_v", &Type::knot_v, "index"_a)
+            .def("knot_u", py::overload_cast<Index>(&Type::knot_u), "index"_a)
+            .def("knot_v", py::overload_cast<Index>(&Type::knot_v), "index"_a)
             .def("pole", (Vector(Type::*)(const Index) const) & Type::pole, "index"_a)
             .def("pole", (Vector(Type::*)(const Index, const Index) const) & Type::pole, "index_u"_a, "index_v"_a)
-            .def("set_knot_u", &Type::set_knot_u, "index"_a, "value"_a)
-            .def("set_knot_v", &Type::set_knot_v, "index"_a, "value"_a)
-            .def("set_pole", (void (Type::*)(const Index, const Vector&)) & Type::set_pole, "index"_a, "value"_a)
-            .def("set_pole", (void (Type::*)(const Index, const Index, const Vector&)) & Type::set_pole, "index_u"_a, "index_v"_a, "value"_a)
-            .def("set_weight", (void (Type::*)(const Index, const double)) & Type::set_weight, "index"_a, "value"_a)
-            .def("set_weight", (void (Type::*)(const Index, const Index, const double)) & Type::set_weight, "index_u"_a, "index_v"_a, "value"_a)
             .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a, "order"_a)
             .def("weight", (double (Type::*)(const Index) const) & Type::weight, "index"_a)
             .def("weight", (double (Type::*)(const Index, const Index) const) & Type::weight, "index_u"_a, "index_v"_a)
