@@ -407,9 +407,9 @@ public:     // python
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
             .def(py::init<const Index, const Index, const bool>(), "degree"_a, "nb_poles"_a, "is_rational"_a)
-            .def(py::init<const Index, const Eigen::VectorXd, const Poles>(), "degree"_a, "knots"_a, "poles"_a)
-            .def(py::init<const Index, const Eigen::VectorXd, const Poles, const Eigen::VectorXd>(), "degree"_a, "knots"_a, "poles"_a, "weights"_a)
-            .def(py::init<const Index, const Eigen::VectorXd, const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
+            .def(py::init<const Index, const Knots, const Poles>(), "degree"_a, "knots"_a, "poles"_a)
+            .def(py::init<const Index, const Knots, const Poles, const Weights>(), "degree"_a, "knots"_a, "poles"_a, "weights"_a)
+            .def(py::init<const Index, const Knots, const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
             // read-only properties
             .def_property_readonly("is_rational", &Type::is_rational)
             .def_property_readonly("nb_knots", &Type::nb_knots)
