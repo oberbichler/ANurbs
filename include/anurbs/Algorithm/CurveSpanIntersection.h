@@ -29,7 +29,7 @@ private:    // types
             return point[m_index];
         }
 
-        void initialize(const Index axis, const std::vector<double>& knots,
+        void initialize(const Index axis, const Eigen::VectorXd& knots,
             double tolerance)
         {
             m_index = axis;
@@ -38,7 +38,8 @@ private:    // types
 
             m_values.push_back(-Infinity);
 
-            for (const double knot : knots) {
+            for (Index i = 0; i < length(knots); i++) {
+                const auto knot = knots(i);
                 if (std::abs(m_values.back() - knot) > tolerance) {
                     m_values.push_back(knot);
                 }
@@ -136,7 +137,7 @@ private:    // static methods
 
 public:     // static methods
     static std::vector<double> compute(const CurveBase<2>& curve,
-        const std::vector<double>& knots_u, const std::vector<double>& knots_v,
+        const Eigen::VectorXd& knots_u, const Eigen::VectorXd& knots_v,
         const double tolerance, const bool include_curve_knots)
     {
         std::vector<double> intersection_parameters;
