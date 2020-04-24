@@ -333,6 +333,24 @@ public:     // methods
         return result;
     }
 
+    Index span_at(const double t) const
+    {
+        return Nurbs::upper_span(degree(), knots(), t);
+    }
+
+    std::vector<Index> nonzero_pole_indices_at_span(const Index span) const
+    {
+        std::vector<Index> result(degree() + 1);
+
+        const Index first_nonzero_pole_index = span - degree() + 1;
+
+        for (Index i = 0; i < length(result); i++) {
+            result[i] = first_nonzero_pole_index + i;
+        }
+
+        return result;
+    }
+
     double greville_point(Index index) const
     {
         double u = 0.0;
@@ -419,8 +437,10 @@ public:     // python
             .def_property("poles", py::overload_cast<>(&Type::poles), &Type::set_poles)
             .def_property("weights", py::overload_cast<>(&Type::weights), &Type::set_weights)
             // methods
-            .def("shape_functions_at", &Type::shape_functions_at, "t"_a, "order"_a)
             .def("greville_point", &Type::greville_point, "index"_a)
+            .def("nonzero_pole_indices_at_span", &Type::nonzero_pole_indices_at_span, "span"_a)
+            .def("shape_functions_at", &Type::shape_functions_at, "t"_a, "order"_a)
+            .def("span_at", &Type::span_at, "t"_a)
             // .def("clone", &Type::clone)
         ;
 
