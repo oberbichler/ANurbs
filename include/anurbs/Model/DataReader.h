@@ -40,7 +40,7 @@ public: // methods
             return default_value;
         }
 
-        return it->second;
+        return it;
     }
 
     template <typename T>
