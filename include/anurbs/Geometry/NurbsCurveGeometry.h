@@ -291,8 +291,7 @@ public:     // methods
         return point;
     }
 
-    std::pair<std::vector<Index>, linear_algebra::MatrixXd> shape_functions_at(const double t,
-        const Index order) const
+    std::pair<std::vector<Index>, Eigen::MatrixXd> shape_functions_at(const double t, const Index order) const
     {
         NurbsCurveShapeFunction shape_function(degree(), order);
 
