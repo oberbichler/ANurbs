@@ -7,6 +7,8 @@
 #include "../Algorithm/Nurbs.h"
 #include "../Algorithm/NurbsCurveShapeFunction.h"
 
+#include "../Model/DataReader.h"
+#include "../Model/DataWriter.h"
 #include "../Model/Json.h"
 #include "../Model/Model.h"
 #include "../Model/Ref.h"
@@ -297,7 +299,12 @@ public:     // methods
     {
         return m_weights(i);
     }
-    
+
+    Eigen::Ref<Eigen::VectorXd> weights()
+    {
+        return m_weights;
+    }
+
     Eigen::Ref<const Eigen::VectorXd> weights() const
     {
         return m_weights;
@@ -324,28 +331,19 @@ public:     // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto poles = source.at("poles");
-        const auto knots = source.at("knots");
-        const auto weights = source.value("weights", std::vector<double>());
-        
-        const Index degree = source.at("degree");
-        const Index nb_poles = length(poles);
-        const bool is_rational = !weights.empty();
+        const DataReader reader(source);
+
+        const auto degree = reader.read<Index>("degree");
+        const auto nb_poles = reader.count("poles");
+        const auto is_rational = reader.has("weigths");
 
         auto result = new_<Type>(degree, nb_poles, is_rational);
 
-        for (Index i = 0; i < length(knots); i++) {
-            result->set_knot(i, knots[i]);
-        }
-
-        for (Index i = 0; i < nb_poles; i++) {
-            result->set_pole(i, poles[i]);
-        }
+        reader.fill_vector("knots", result->knots());
+        reader.fill_matrix("poles", result->poles());
 
         if (is_rational) {
-            for (Index i = 0; i < length(weights); i++) {
-                result->set_weight(i, weights[i]);
-            }
+            reader.fill_vector("weights", result->weights());
         }
 
         return result;
@@ -353,13 +351,15 @@ public:     // serialization
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["degree"] = data.degree();
-        target["knots"] = data.knots();
-        target["nb_poles"] = data.nb_poles();
-        target["poles"] = ToJson(data.poles());
+        DataWriter writer(target);
+
+        writer.write("degree", data.degree());
+        writer.write("nb_poles", data.nb_poles());
+        writer.write_vector("knots", data.knots());
+        writer.write_matrix("poles", data.poles());
 
         if (data.is_rational()) {
-            target["weights"] = data.weights();
+            writer.write_vector("weights", data.weights());
         }
     }
 
@@ -398,7 +398,7 @@ public:     // python
             .def_property_readonly("nb_knots", &Type::nb_knots)
             .def_property_readonly("nb_poles", &Type::nb_poles)
             .def_property_readonly("poles", py::overload_cast<>(&Type::poles))
-            .def_property_readonly("weights", &Type::weights)
+            .def_property_readonly("weights", py::overload_cast<>(&Type::weights))
             // methods
             .def("knot", py::overload_cast<Index>(&Type::knot, py::const_), "index"_a)
             .def("set_knot", &Type::set_knot, "index"_a, "value"_a)
