@@ -6,6 +6,7 @@
 #include "TypeRegistry.h"
 #include "Model.h"
 
+#include <filesystem>
 #include <fstream>
 #include <stdexcept>
 
@@ -55,6 +56,10 @@ public:
 
     static void load_file(TModel& model, const std::string& path)
     {
+        if (!std::filesystem::exists(path)) {
+            throw std::runtime_error("File not found");
+        }
+
         std::fstream file;
 
         file.open(path, std::fstream::in);
