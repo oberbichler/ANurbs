@@ -40,8 +40,7 @@ public:
     template <typename TSource>
     static void load_array(TModel& model, TSource& source)
     {
-        Json::parser_callback_t cb = [&](int depth, Json::parse_event_t event,
-            Json& parsed) {
+        Json::parser_callback_t cb = [&](int depth, Json::parse_event_t event, Json& parsed) {
             if (depth == 1 && event == Json::parse_event_t::object_end) {
                 load(model, parsed);
 
