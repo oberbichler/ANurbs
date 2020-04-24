@@ -33,6 +33,21 @@ def curve():
     return an.NurbsCurveGeometry2D(degree=1, knots=[0, 1], poles=[[1, 2], [3, 4]])
 
 
+def test_init_empty():
+    model = an.Model()
+
+    assert_equal(model.nb_entries, 0)
+
+
+def test_init_from_file():
+    model = an.Model.from_file(path('data/model.ibra'))
+
+    key, data = model.get(0)
+
+    assert_equal(key, 'TestData')
+    assert_equal(type(data), an.NurbsCurveGeometry2D)
+
+
 def test_load():
     model = an.Model()
 
