@@ -6,7 +6,14 @@
 #include "TypeRegistry.h"
 #include "Model.h"
 
+#if __has_include(<filesystem>)
 #include <filesystem>
+namespace fs = std::filesystem;
+#else
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#endif
+
 #include <fstream>
 #include <stdexcept>
 
@@ -56,7 +63,7 @@ public:
 
     static void load_file(TModel& model, const std::string& path)
     {
-        if (!std::filesystem::exists(path)) {
+        if (!fs::exists(path)) {
             throw std::runtime_error("File not found");
         }
 
