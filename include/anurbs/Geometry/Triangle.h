@@ -30,7 +30,7 @@ public:     // static methods
 
         double t = u.cross(w).dot(n) / n.dot(n);
         double s = w.cross(v).dot(n) / n.dot(n);
-        double r = 1.0 - r - s;
+        double r = 1.0 - t - s;
 
         Vector closest_point = t * a + s * b + r * c;
 
