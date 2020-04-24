@@ -28,13 +28,13 @@ public:     // static methods
         Vector n = u.cross(v);
         Vector w = point - a;
 
-        double t = u.cross(w).dot(n) / n.dot(n);
+        double r = u.cross(w).dot(n) / n.dot(n);
         double s = w.cross(v).dot(n) / n.dot(n);
-        double r = 1.0 - t - s;
+        double t = 1.0 - r - s;
 
         Vector closest_point = t * a + s * b + r * c;
 
-        return {closest_point, Vector3(r, s, t)};
+        return {closest_point, Vector3(t, s, r)};
     }
 
 public:     // python

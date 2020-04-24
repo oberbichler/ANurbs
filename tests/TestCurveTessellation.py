@@ -10,16 +10,14 @@ class TestCurveTessellation(unittest.TestCase):
             is_rational=False,
         )
 
-        curve.set_knot(0, 0.0)
-        curve.set_knot(1, 0.0)
-        curve.set_knot(2, 1.0)
-        curve.set_knot(3, 2.0)
-        curve.set_knot(4, 2.0)
+        curve.knots = [0, 0, 1, 2, 2]
 
-        curve.set_pole(0, [0.0,  0.0])
-        curve.set_pole(1, [1.0,  1.0])
-        curve.set_pole(2, [2.0, -1.0])
-        curve.set_pole(3, [3.0, -1.0])
+        curve.poles = [
+            [0.0,  0.0],
+            [1.0,  1.0],
+            [2.0, -1.0],
+            [3.0, -1.0],
+        ]
 
         ts, points = an.tessellate(curve, tolerance=1e-2)
 
@@ -53,16 +51,14 @@ class TestCurveTessellation(unittest.TestCase):
             is_rational=False,
         )
 
-        curve.set_knot(0, 0.0)
-        curve.set_knot(1, 0.0)
-        curve.set_knot(2, 1.0)
-        curve.set_knot(3, 2.0)
-        curve.set_knot(4, 2.0)
+        curve.knots = [0, 0, 1, 2, 2]
 
-        curve.set_pole(0, [0.0,  0.0, -1.0])
-        curve.set_pole(1, [1.0,  1.0,  1.0])
-        curve.set_pole(2, [2.0, -1.0,  0.0])
-        curve.set_pole(3, [3.0, -1.0,  0.0])
+        curve.poles = [
+            [0.0,  0.0, -1.0],
+            [1.0,  1.0,  1.0],
+            [2.0, -1.0,  0.0],
+            [3.0, -1.0,  0.0],
+        ]
 
         ts, points = an.tessellate(curve, tolerance=1e-2)
 

@@ -13,28 +13,23 @@ class TestNurbsSurfaceGeometry(unittest.TestCase):
             is_rational=False,
         )
 
-        surface_geometry.set_knot_u(0,  0.0)
-        surface_geometry.set_knot_u(1,  0.0)
-        surface_geometry.set_knot_u(2,  7.5)
-        surface_geometry.set_knot_u(3, 15.0)
-        surface_geometry.set_knot_u(4, 15.0)
+        surface_geometry.knots_u = [0, 0, 7.5, 15, 15]
+        surface_geometry.knots_v = [0, 10, 20]
 
-        surface_geometry.set_knot_v(0,  0.0)
-        surface_geometry.set_knot_v(1, 10.0)
-        surface_geometry.set_knot_v(2, 20.0)
-
-        surface_geometry.set_pole(0, 0, [-10.0, - 5.0, -1.0         ])
-        surface_geometry.set_pole(0, 1, [-12.0,   3.0,  3.0         ])
-        surface_geometry.set_pole(0, 2, [- 9.0,  11.0, -0.0701928417])
-        surface_geometry.set_pole(3,    [- 5.0, - 3.0,  1.0         ])
-        surface_geometry.set_pole(1, 1, [- 6.0,   4.0, -2.0         ])
-        surface_geometry.set_pole(1, 2, [- 5.0,   7.0,  0.9298071583])
-        surface_geometry.set_pole(2, 0, [  0.0, - 4.0, -1.0         ])
-        surface_geometry.set_pole(2, 1, [  1.0,   6.0,  5.0         ])
-        surface_geometry.set_pole(2, 2, [  0.0,  13.0, -0.2350184214])
-        surface_geometry.set_pole(3, 0, [  4.0, - 2.0,  0.0         ])
-        surface_geometry.set_pole(3, 1, [  5.0,   4.0, -1.0         ])
-        surface_geometry.set_pole(3, 2, [  5.0,  11.0,  0.7649815786])
+        surface_geometry.poles = [
+            [-10.0, - 5.0, -1.0         ],
+            [-12.0,   3.0,  3.0         ],
+            [- 9.0,  11.0, -0.0701928417],
+            [- 5.0, - 3.0,  1.0         ],
+            [- 6.0,   4.0, -2.0         ],
+            [- 5.0,   7.0,  0.9298071583],
+            [  0.0, - 4.0, -1.0         ],
+            [  1.0,   6.0,  5.0         ],
+            [  0.0,  13.0, -0.2350184214],
+            [  4.0, - 2.0,  0.0         ],
+            [  5.0,   4.0, -1.0         ],
+            [  5.0,  11.0,  0.7649815786],
+        ]
 
         model = an.Model()
         surface_geometry_ptr = model.add(surface_geometry)

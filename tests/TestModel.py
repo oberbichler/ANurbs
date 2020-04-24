@@ -90,8 +90,8 @@ def test_to_string(curve):
                     "key": "TestData",
                     "type": "NurbsCurveGeometry2D",
                     "degree": 1,
-                    "knots": [0.0,1.0],
                     "nb_poles": 2,
+                    "knots": [0.0,1.0],
                     "poles": [[1.0,2.0],[3.0,4.0]]
                     }
                 ]"""

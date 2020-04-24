@@ -2,6 +2,9 @@
 
 #include "../Define.h"
 
+#include "../Model/DataReader.h"
+#include "../Model/DataWriter.h"
+
 namespace anurbs {
 
 template <Index TDimension>
@@ -41,7 +44,17 @@ public:     // methods
         return m_min;
     }
 
+    Eigen::Ref<Vector> min()
+    {
+        return m_min;
+    }
+
     Vector max() const
+    {
+        return m_max;
+    }
+
+    Eigen::Ref<Vector> max()
     {
         return m_max;
     }
@@ -54,18 +67,22 @@ public:     // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
-        const auto min = source.at("min");
-        const auto max = source.at("max");
+        const DataReader reader(source);
 
-        auto result = new_<Type>(min, max);
+        Vector min, max;
 
-        return result;
+        reader.fill_vector("min", min);
+        reader.fill_vector("max", max);
+
+        return new_<Type>(min, max);
     }
 
     static void save(const Model& model, const Type& data, Json& target)
     {
-        target["min"] = data.min();
-        target["max"] = data.max();
+        DataWriter writer(target);
+
+        writer.write_vector("min", data.min());
+        writer.write_vector("max", data.max());
     }
 
 public:     // python
@@ -88,8 +105,8 @@ public:     // python
             // constructors
             .def(py::init<Vector, Vector>(), "a"_a, "b"_a)
             // read-only properties
-            .def_property_readonly("min", &Type::min)
-            .def_property_readonly("max", &Type::max)
+            .def_property_readonly("min", py::overload_cast<>(&Type::min))
+            .def_property_readonly("max", py::overload_cast<>(&Type::max))
         ;
 
         Model::register_python_data_type<Type>(m, model);
