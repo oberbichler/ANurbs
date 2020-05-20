@@ -234,7 +234,7 @@ public:     // methods
                     for (Index b = 0; b < nb_nonzero_poles_v(); b++) {
                         const Index index = shape_index(i, j);
 
-                        value(index, a, b) = m_shape_u(i, a) * m_shape_v(j, b);
+                        value(index, a, b) = m_shape_u.value(i, a) * m_shape_v.value(j, b);
                     }
                 }
             }

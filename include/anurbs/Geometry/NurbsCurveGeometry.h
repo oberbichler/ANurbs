@@ -135,9 +135,9 @@ public:     // methods
                 Index index = shape_function.first_nonzero_pole() + i;
 
                 if (i == 0) {
-                    derivatives[order] = pole(index) * shape_function(order, i);
+                    derivatives[order] = pole(index) * shape_function.value(order, i);
                 } else {
-                    derivatives[order] += pole(index) * shape_function(order, i);
+                    derivatives[order] += pole(index) * shape_function.value(order, i);
                 }
             }
         }
@@ -282,9 +282,9 @@ public:     // methods
             const Index index = shape_function.first_nonzero_pole() + i;
 
             if (i == 0) {
-                point = pole(index) * shape_function(0, i);
+                point = pole(index) * shape_function.value(0, i);
             } else {
-                point += pole(index) * shape_function(0, i);
+                point += pole(index) * shape_function.value(0, i);
             }
         }
 
@@ -305,7 +305,7 @@ public:     // methods
 
         for (Index i = 0; i < shape_function.nb_shapes(); i++) {
             for (Index j = 0; j < shape_function.nb_nonzero_poles(); j++) {
-                values(i, j) = shape_function(i, j);
+                values(i, j) = shape_function.value(i, j);
             }
         }
 

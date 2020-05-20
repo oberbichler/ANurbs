@@ -77,11 +77,6 @@ public:     // methods
         return order() + 1;
     }
 
-    double operator()(const Index order, const Index pole) const
-    {
-        return value(order, pole);
-    }
-
     double& value(const Index order, const Index pole)
     {
         return m_values(order, pole);
