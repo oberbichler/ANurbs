@@ -115,8 +115,7 @@ public:     // methods
         return m_degree;
     }
     
-    std::vector<Vector> derivatives_at(const double t, const Index order)
-        const override
+    std::vector<Vector> derivatives_at(const double t, const Index order) const override
     {
         NurbsCurveShapeFunction shape_function;
 
