@@ -408,7 +408,7 @@ public:     // python
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
-            .def(py::init<const Index, const Index, const bool>(), "degree"_a, "nb_poles"_a, "is_rational"_a)
+            .def(py::init<const Index, const Index, const bool>(), "degree"_a, "nb_poles"_a, "is_rational"_a=false)
             .def(py::init<const Index, const Knots, const Poles>(), "degree"_a, "knots"_a, "poles"_a)
             .def(py::init<const Index, const Knots, const Poles, const Weights>(), "degree"_a, "knots"_a, "poles"_a, "weights"_a)
             .def(py::init<const Index, const Knots, const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)
