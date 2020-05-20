@@ -11,15 +11,13 @@
 
 namespace anurbs {
 
-class CurveSpanIntersection
-{
-public:     // types
+class CurveSpanIntersection {
+public: // types
     using Vector = Eigen::Matrix<double, 1, 2>;
     using ParameterPoint = std::pair<double, Vector>;
 
-private:    // types
-    struct Axis
-    {
+private: // types
+    struct Axis {
         Index m_index;
         std::vector<double> m_values;
         double m_tolerance;
@@ -29,8 +27,7 @@ private:    // types
             return point[m_index];
         }
 
-        void initialize(const Index axis, const Eigen::VectorXd& knots,
-            double tolerance)
+        void initialize(const Index axis, const Eigen::VectorXd& knots, double tolerance)
         {
             m_index = axis;
 
@@ -50,21 +47,20 @@ private:    // types
             m_tolerance = tolerance;
         }
 
-        void intersect(const CurveBase<2>& curve, const ParameterPoint& a,
-            const ParameterPoint& b, std::vector<double>& parameters)
+        void intersect(const CurveBase<2>& curve, const ParameterPoint& a, const ParameterPoint& b, std::vector<double>& parameters)
         {
             double t_a = std::get<0>(a);
             double value_a = value(std::get<1>(a));
 
             double t_b = std::get<0>(b);
             double value_b = value(std::get<1>(b));
-            
+
             // make sure that value_a <= value_b
             if (value_a > value_b) {
                 std::swap(value_a, value_b);
                 std::swap(t_a, t_b);
             }
-            
+
             // index of the first intersect value
             size_t index_a;
             {
@@ -76,15 +72,14 @@ private:    // types
             // index of the first non intersect value
             size_t index_b;
             {
-                auto it = std::upper_bound(std::begin(m_values),
-                    std::end(m_values), value_b + m_tolerance);
+                auto it = std::upper_bound(std::begin(m_values), std::end(m_values), value_b + m_tolerance);
                 index_b = std::distance(std::begin(m_values), it);
             }
 
             // find intersections
             for (size_t i = index_a; i < index_b; i++) {
                 double target = m_values[i];
-            
+
                 double t = t_a;
 
                 double delta = value_a - value_b;
@@ -97,7 +92,7 @@ private:    // types
                     auto c = curve.derivatives_at(t, 1);
 
                     double f = value(c[0]) - target;
-                    
+
                     if (std::abs(f) < m_tolerance) {
                         break;
                     }
@@ -120,10 +115,9 @@ private:    // types
         }
     };
 
-private:    // static methods
+private: // static methods
     template <typename TContainer>
-    static void unique_sorted(TContainer& container,
-        const double& tolerance = 1e-7)
+    static void unique_sorted(TContainer& container, const double& tolerance = 1e-7)
     {
         std::sort(std::begin(container), std::end(container));
 
@@ -135,10 +129,13 @@ private:    // static methods
         container.resize(nb_unique);
     }
 
-public:     // static methods
-    static std::vector<double> compute(const CurveBase<2>& curve,
-        const Eigen::VectorXd& knots_u, const Eigen::VectorXd& knots_v,
-        const double tolerance, const bool include_curve_knots)
+public: // static methods
+    static std::vector<double> compute(
+        const CurveBase<2>& curve,
+        const Eigen::VectorXd& knots_u,
+        const Eigen::VectorXd& knots_v,
+        const double tolerance,
+        const bool include_curve_knots)
     {
         std::vector<double> intersection_parameters;
 
@@ -181,7 +178,7 @@ public:     // static methods
         return intersection_parameters;
     }
 
-public:     // python
+public: // python
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -189,8 +186,7 @@ public:     // python
 
         using Type = CurveSpanIntersection;
 
-        m.def("curve_span_intersection", &Type::compute, "curve"_a, "knots_u"_a,
-            "knots_v"_a, "tolerance"_a, "include_curve_knots"_a);
+        m.def("curve_span_intersection", &Type::compute, "curve"_a, "knots_u"_a, "knots_v"_a, "tolerance"_a, "include_curve_knots"_a);
     }
 };
 
