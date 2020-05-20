@@ -123,7 +123,7 @@ public:     // methods
         shape_function.resize(m_degree, order);
 
         if (m_weights.size() > 0) {
-            shape_function.compute(m_knots, [&](Index i) { return weight(i); }, t);
+            shape_function.compute(m_knots, m_weights, t);
         } else {
             shape_function.compute(m_knots, t);
         }
@@ -271,7 +271,7 @@ public:     // methods
         shape_function.resize(m_degree, 0);
 
         if (m_weights.size() > 0) {
-            shape_function.compute(m_knots, [&](Index i) { return weight(i); }, t);
+            shape_function.compute(m_knots, m_weights, t);
         } else {
             shape_function.compute(m_knots, t);
         }
@@ -296,14 +296,12 @@ public:     // methods
         NurbsCurveShapeFunction shape_function(degree(), order);
 
         if (is_rational()) {
-            shape_function.compute(knots(), [&](Index i) {
-                return weight(i); }, t);
+            shape_function.compute(m_knots, m_weights, t);
         } else {
-            shape_function.compute(knots(), t);
+            shape_function.compute(m_knots, t);
         }
 
-        linear_algebra::MatrixXd values(shape_function.nb_shapes(),
-            shape_function.nb_nonzero_poles());
+        Eigen::MatrixXd values(shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
 
         for (Index i = 0; i < shape_function.nb_shapes(); i++) {
             for (Index j = 0; j < shape_function.nb_nonzero_poles(); j++) {
