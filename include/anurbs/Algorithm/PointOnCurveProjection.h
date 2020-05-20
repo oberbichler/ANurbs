@@ -3,6 +3,7 @@
 #include "../Define.h"
 
 #include "CurveTessellation.h"
+#include "PolylineMapper.h"
 
 #include "../Geometry/CurveBase.h"
 #include "../Geometry/NurbsCurveGeometry.h"
@@ -74,36 +75,47 @@ public: // methods
         return m_point;
     }
 
-    void compute(const Vector& sample)
+    void compute(const Vector& sample, const double max_distance = 0)
     {
         const auto domain = Curve()->domain();
 
         // closest point to polyline
 
-        double closestParameter;
-        Vector closestPoint;
+        double closest_parameter = 0;
+        Vector closest_point;
 
         double closest_sq_distance = Infinity;
 
         const auto& [ts, points] = m_tessellation;
 
-        for (Index i = 1; i < length(ts); i++) {
-            const auto t0 = ts[i - 1];
-            const auto point0 = points[i - 1];
-            const auto t1 = ts[i];
-            const auto point1 = points[i];
+        if (max_distance <= 0) {
+            for (Index i = 1; i < length(ts); i++) {
+                const auto t0 = ts[i - 1];
+                const auto point0 = points[i - 1];
+                const auto t1 = ts[i];
+                const auto point1 = points[i];
 
-            const auto [t, point] = project_to_line(sample, point0, point1, t0, t1);
+                const auto [t, point] = project_to_line(sample, point0, point1, t0, t1);
 
-            const Vector v = point - sample;
+                const Vector v = point - sample;
 
-            const double sq_distance = squared_norm(v);
+                const double sq_distance = squared_norm(v);
 
-            if (sq_distance < closest_sq_distance) {
-                closest_sq_distance = sq_distance;
-                closestParameter = t;
-                closestPoint = point;
+                if (sq_distance < closest_sq_distance) {
+                    closest_sq_distance = sq_distance;
+                    closest_parameter = t;
+                    closest_point = point;
+                }
             }
+        } else {
+            PolylineMapper<TDimension> mapper(points);
+
+            const auto [wa, idx_a, wb, idx_b] = mapper.map(sample, max_distance);
+
+            std::cout << idx_a << std::endl;
+
+            closest_parameter = wa * ts[idx_a] + wb * ts[idx_b];
+            closest_point = wa * points[idx_a] + wb * points[idx_b];
         }
 
         // newton-raphson
@@ -113,7 +125,7 @@ public: // methods
         const double eps2 = tolerance() * 5;
 
         for (Index i = 0; i < max_iter; i++) {
-            auto f = Curve()->derivatives_at(closestParameter, 2);
+            auto f = Curve()->derivatives_at(closest_parameter, 2);
 
             Vector dif = f[0] - sample;
 
@@ -132,18 +144,18 @@ public: // methods
 
             double delta = dot(f[1], dif) / (dot(f[2], dif) + squared_norm(f[1]));
 
-            double nextParameter = closestParameter - delta;
+            double nextParameter = closest_parameter - delta;
 
             // FIXME: out-of-domain check
 
-            // FIXME: 3. condition: (nextParameter - closestParameter) * f[1].norm();
+            // FIXME: 3. condition: (nextParameter - closest_parameter) * f[1].norm();
 
-            closestParameter = domain.clamp(nextParameter);
+            closest_parameter = domain.clamp(nextParameter);
         }
 
-        closestPoint = Curve()->point_at(closestParameter);
+        closest_point = Curve()->point_at(closest_parameter);
 
-        closest_sq_distance = squared_norm(Vector(sample - closestPoint));
+        closest_sq_distance = squared_norm(Vector(sample - closest_point));
 
         Vector point_at_t0 = Curve()->point_at(domain.t0());
 
@@ -161,13 +173,12 @@ public: // methods
             return;
         }
 
-        m_parameter = closestParameter;
-        m_point = closestPoint;
+        m_parameter = closest_parameter;
+        m_point = closest_point;
     }
 
 private: // static methods
-    static ParameterPoint project_to_line(const Vector& point, const Vector& a,
-        const Vector& b, const double& t0, const double& t1)
+    static ParameterPoint project_to_line(const Vector& point, const Vector& a, const Vector& b, const double& t0, const double& t1)
     {
         const Vector dif = b - a;
         const double l = squared_norm(dif);
@@ -190,9 +201,9 @@ private: // static methods
         }
 
         const double t = t0 + (t1 - t0) * do2ptr;
-        const Vector closestPoint = o + dif * do2ptr;
+        const Vector closest_point = o + dif * do2ptr;
 
-        return {t, closestPoint};
+        return {t, closest_point};
     }
 
 public: // python
@@ -212,11 +223,10 @@ public: // python
         const std::string name = Type::python_name();
 
         py::class_<Type, Handler>(m, name.c_str())
-            .def(py::init<Pointer<CurveBaseD>, double>(), "curve"_a,
-                "tolerance"_a)
-            .def("compute", &Type::compute, "point"_a)
-            .def("parameter", &Type::parameter)
-            .def("point", &Type::point);
+            .def(py::init<Pointer<CurveBaseD>, double>(), "curve"_a, "tolerance"_a)
+            .def("compute", &Type::compute, "point"_a, "max_distance"_a=0)
+            .def_property_readonly("parameter", &Type::parameter)
+            .def_property_readonly("point", &Type::point);
     }
 };
 
