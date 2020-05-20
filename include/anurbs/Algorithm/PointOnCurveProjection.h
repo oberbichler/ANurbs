@@ -17,7 +17,7 @@ class PointOnCurveProjection
 {
 public:     // types
     using CurveBaseD = CurveBase<TDimension>;
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
     using ParameterPoint = std::pair<double, Vector>;
 
 private:    // variables

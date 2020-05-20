@@ -22,7 +22,7 @@ class RTree
 
 private:    // types
     using Callback = std::function<bool(Index)>;
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
     using Type = RTree<TDimension>;
 

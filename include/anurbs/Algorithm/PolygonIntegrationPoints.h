@@ -18,7 +18,7 @@ class PolygonIntegrationPoints
 public:     // static methods
     static IntegrationPointList<2> get(const Index degree, const Polygon& polygon)
     {
-        using Vector2d = linear_algebra::Vector<2>;
+        using Vector2d = Eigen::Matrix<double, 1, 2>;
 
         IntegrationPointList<2> integration_points;
         PolygonTessellation tessellation;

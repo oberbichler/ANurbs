@@ -14,7 +14,7 @@ namespace anurbs {
 class CurveSpanIntersection
 {
 public:     // types
-    using Vector = linear_algebra::Vector<2>;
+    using Vector = Eigen::Matrix<double, 1, 2>;
     using ParameterPoint = std::pair<double, Vector>;
 
 private:    // types

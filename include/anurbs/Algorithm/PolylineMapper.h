@@ -15,7 +15,7 @@ class PolylineMapper
 {
 private:    // types
     using Type = PolylineMapper<TDimension>;
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
 
 private:    // variables
     std::vector<Vector> m_points;

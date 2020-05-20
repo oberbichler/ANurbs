@@ -12,7 +12,7 @@ namespace anurbs {
 class BrepEdgeIntegrationPoints
 {
 public:     // types
-    using Vector = linear_algebra::Vector<3>;
+    using Vector = Eigen::Matrix<double, 1, 3>;
 
 public:     // static methods
     static std::pair<IntegrationPointList<1>, IntegrationPointList<1>> get(

@@ -12,7 +12,7 @@ template <Index TDimension>
 class PointOnSurfaceProjection
 {
 public:     // types
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
     using SurfaceBaseD = SurfaceBase<TDimension>;
     using ProjectionResult = std::tuple<bool, double, double, Vector>;
 
@@ -227,7 +227,7 @@ public:     // constructors
 
     ProjectionResult newton(const Vector point, const double u, const double v)
     {
-        using Vector2d = linear_algebra::Vector<2>;
+        using Vector2d = Eigen::Matrix<double, 1, 2>;
 
         Vector2d x(u, v);
 

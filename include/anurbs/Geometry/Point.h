@@ -15,7 +15,7 @@ class Point
 {
 public:     // types
     using Type = Point<TDimension>;
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
 
 private:    // variables
     Vector m_location;

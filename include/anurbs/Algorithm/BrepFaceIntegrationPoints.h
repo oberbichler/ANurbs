@@ -13,7 +13,7 @@ namespace anurbs {
 class BrepFaceIntegrationPoints
 {
 public:     // types
-    using Vector = linear_algebra::Vector<3>;
+    using Vector = Eigen::Matrix<double, 1, 3>;
 
 public:     // static methods
     static IntegrationPointList<2> get(const BrepFace& face, const double tolerance)

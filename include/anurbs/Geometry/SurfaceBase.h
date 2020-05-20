@@ -12,7 +12,7 @@ template <Index TDimension>
 class SurfaceBase
 {
 public:     // types
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
 
 public:     // constructors
     virtual ~SurfaceBase() { }

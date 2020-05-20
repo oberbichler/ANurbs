@@ -16,7 +16,7 @@ template <Index TDimension>
 class BrepFaceField
 {
 public:     // types
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
 
 private:    // variables
     Ref<BrepFace> m_face;
