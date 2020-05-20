@@ -10,9 +10,9 @@ class TestNurbsCurveGeometry(unittest.TestCase):
             is_rational=False,
         )
 
-        curve.knots[:] = [7, 7, 9, 9]
+        curve.knots = [7, 7, 9, 9]
 
-        curve.poles[:] = [
+        curve.poles = [
             [3, 2],
             [1, 4],
             [2, 5],

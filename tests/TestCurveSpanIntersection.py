@@ -10,18 +10,15 @@ class TestCurveSpanIntersection(unittest.TestCase):
             is_rational=False,
         )
 
-        curve_geometry.knots[0] = 1.0
-        curve_geometry.knots[1] = 1.0
-        curve_geometry.knots[2] = 4.3333333333
-        curve_geometry.knots[3] = 7.6666666667
-        curve_geometry.knots[4] = 11.0
-        curve_geometry.knots[5] = 11.0
+        curve_geometry.knots = [1.0, 1.0, 4.3333333333, 7.6666666667, 11.0, 11.0]
 
-        curve_geometry.poles[0] = [5.0,  5.0]
-        curve_geometry.poles[1] = [8.0,  7.0]
-        curve_geometry.poles[2] = [6.0,  8.0]
-        curve_geometry.poles[3] = [8.0, 10.0]
-        curve_geometry.poles[4] = [9.0,  8.0]
+        curve_geometry.poles = [
+            [5.0,  5.0],
+            [8.0,  7.0],
+            [6.0,  8.0],
+            [8.0, 10.0],
+            [9.0,  8.0],
+        ]
 
         intersections = an.curve_span_intersection(curve_geometry,
             knots_u=[5, 5, 6, 7, 8, 9, 10, 10],
@@ -43,18 +40,15 @@ class TestCurveSpanIntersection(unittest.TestCase):
             is_rational=False,
         )
 
-        curve_geometry.knots[0] = 2
-        curve_geometry.knots[1] = 2
-        curve_geometry.knots[2] = 3
-        curve_geometry.knots[3] = 3
-        curve_geometry.knots[4] = 4
-        curve_geometry.knots[5] = 4
+        curve_geometry.knots = [2, 2, 3, 3, 4, 4]
 
-        curve_geometry.poles[0] = [ 8.0,  6.0]
-        curve_geometry.poles[1] = [ 6.0,  7.0]
-        curve_geometry.poles[2] = [ 8.0,  8.0]
-        curve_geometry.poles[3] = [10.0,  9.0]
-        curve_geometry.poles[4] = [ 8.0, 10.0]
+        curve_geometry.poles = [
+            [ 8.0,  6.0],
+            [ 6.0,  7.0],
+            [ 8.0,  8.0],
+            [10.0,  9.0],
+            [ 8.0, 10.0],
+        ]
 
         intersections = an.curve_span_intersection(curve_geometry,
             knots_u=[5, 5, 6, 7, 8, 9, 10, 10],
@@ -75,16 +69,14 @@ class TestCurveSpanIntersection(unittest.TestCase):
             is_rational=False,
         )
 
-        curve_geometry.knots[0] = 1
-        curve_geometry.knots[1] = 1
-        curve_geometry.knots[2] = 2
-        curve_geometry.knots[3] = 3
-        curve_geometry.knots[4] = 3
+        curve_geometry.knots = [1, 1, 2, 3, 3]
 
-        curve_geometry.poles[0] = [9.0, 6.0]
-        curve_geometry.poles[1] = [9.0, 7.0]
-        curve_geometry.poles[2] = [6.0, 7.0]
-        curve_geometry.poles[3] = [6.0, 8.0]
+        curve_geometry.poles = [
+            [9.0, 6.0],
+            [9.0, 7.0],
+            [6.0, 7.0],
+            [6.0, 8.0],
+        ]
 
         intersections = an.curve_span_intersection(curve_geometry,
             knots_u=[5, 5, 6, 7, 8, 9, 10, 10],
@@ -105,16 +97,14 @@ class TestCurveSpanIntersection(unittest.TestCase):
             is_rational=False,
         )
 
-        curve_geometry.knots[0] = 1
-        curve_geometry.knots[1] = 1
-        curve_geometry.knots[2] = 2
-        curve_geometry.knots[3] = 3
-        curve_geometry.knots[4] = 3
+        curve_geometry.knots = [1, 1, 2, 3, 3]
 
-        curve_geometry.poles[0] = [9.0, 6.0]
-        curve_geometry.poles[1] = [9.0, 7.0]
-        curve_geometry.poles[2] = [6.0, 7.0]
-        curve_geometry.poles[3] = [6.0, 8.0]
+        curve_geometry.poles = [
+            [9.0, 6.0],
+            [9.0, 7.0],
+            [6.0, 7.0],
+            [6.0, 8.0],
+        ]
 
         intersections = an.curve_span_intersection(curve_geometry,
             knots_u=[5, 5, 6, 7, 8, 9, 10, 10],

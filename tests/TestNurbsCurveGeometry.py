@@ -25,26 +25,18 @@ def bspline_3d():
         is_rational=False,
     )
 
-    geometry.knots[0] = 0
-    geometry.knots[1] = 0
-    geometry.knots[2] = 0
-    geometry.knots[3] = 0
-    geometry.knots[4] = 32.9731425998736
-    geometry.knots[5] = 65.9462851997473
-    geometry.knots[6] = 98.9194277996209
-    geometry.knots[7] = 131.892570399495
-    geometry.knots[8] = 131.892570399495
-    geometry.knots[9] = 131.892570399495
-    geometry.knots[10] = 131.892570399495
+    geometry.knots = [0, 0, 0, 0, 32.9731425998736, 65.9462851997473, 98.9194277996209, 131.892570399495, 131.892570399495, 131.892570399495, 131.892570399495]
 
-    geometry.poles[0] = [0, -25, -5]
-    geometry.poles[1] = [-15, -15, 0]
-    geometry.poles[2] = [5, -5, -3]
-    geometry.poles[3] = [15, -15, 3]
-    geometry.poles[4] = [25, 0, 6]
-    geometry.poles[5] = [15, 15, 6]
-    geometry.poles[6] = [-5, - 5, -3]
-    geometry.poles[7] = [-25, 15, 4]
+    geometry.poles = [
+        [0, -25, -5],
+        [-15, -15, 0],
+        [5, -5, -3],
+        [15, -15, 3],
+        [25, 0, 6],
+        [15, 15, 6],
+        [-5, - 5, -3],
+        [-25, 15, 4],
+    ]
 
     return geometry
 
@@ -145,17 +137,7 @@ def nurbs_3d():
         is_rational=True,
     )
 
-    geometry.knots[0] = 0
-    geometry.knots[1] = 0
-    geometry.knots[2] = 0
-    geometry.knots[3] = 0
-    geometry.knots[4] = 32.9731425998736
-    geometry.knots[5] = 65.9462851997473
-    geometry.knots[6] = 98.9194277996209
-    geometry.knots[7] = 131.892570399495
-    geometry.knots[8] = 131.892570399495
-    geometry.knots[9] = 131.892570399495
-    geometry.knots[10] = 131.892570399495
+    geometry.knots = [0, 0, 0, 0, 32.9731425998736, 65.9462851997473, 98.9194277996209, 131.892570399495, 131.892570399495, 131.892570399495, 131.892570399495]
 
     geometry.poles = [
         [0, -25, -5],
