@@ -37,7 +37,7 @@ public: // constructors
         , m_tolerance(tolerance)
     {
         // new_ polyline
-        m_tessellation = CurveTessellation<TDimension>::compute(*Curve(), tessellation_flatness());
+        m_tessellation = CurveTessellation<TDimension>::compute(*Curve(), m_tessellation_tolerance);
         mapper = new_<PolylineMapper<TDimension>>(m_tessellation.second);
     }
 
@@ -47,14 +47,9 @@ public: // methods
         return m_curve;
     }
 
-    double tessellation_flatness() const
+    double tessellation_tolerance() const
     {
         return m_tessellation_tolerance;
-    }
-
-    void set_tessellation_flatness(const double value)
-    {
-        m_tessellation_tolerance = value;
     }
 
     double tolerance() const
