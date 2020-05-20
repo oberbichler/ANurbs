@@ -39,7 +39,7 @@ public:     // constructor
             m_rtree.add(box_a, box_b);
         }
 
-        m_rtree.finish();
+        m_rtree.finish(false);
     }
 
 public:     // methods

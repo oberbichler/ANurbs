@@ -27,6 +27,7 @@ private: // variables
     double m_tolerance;
     double m_parameter;
     Vector m_point;
+    Unique<PolylineMapper<TDimension>> mapper;
 
 public: // constructors
     PointOnCurveProjection(Pointer<CurveBaseD> curve, const double& tolerance)
@@ -37,6 +38,7 @@ public: // constructors
     {
         // new_ polyline
         m_tessellation = CurveTessellation<TDimension>::compute(*Curve(), tessellation_flatness());
+        mapper = new_<PolylineMapper<TDimension>>(m_tessellation.second);
     }
 
 public: // methods
@@ -108,11 +110,7 @@ public: // methods
                 }
             }
         } else {
-            PolylineMapper<TDimension> mapper(points);
-
-            const auto [wa, idx_a, wb, idx_b] = mapper.map(sample, max_distance);
-
-            std::cout << idx_a << std::endl;
+            const auto [wa, idx_a, wb, idx_b] = mapper->map(sample, max_distance);
 
             closest_parameter = wa * ts[idx_a] + wb * ts[idx_b];
             closest_point = wa * points[idx_a] + wb * points[idx_b];

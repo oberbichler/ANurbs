@@ -332,7 +332,7 @@ def test_projection(curve):
     assert_almost_equal(projection.parameter, 14.1342363212)
 
 
-def test_projection_2(curve):
+def test_projection_with_max_distance(curve):
     projection = an.PointOnCurveProjection3D(curve, 1e-8)
 
     projection.compute([-5.04769521, -20.83092374, -3.18189858], max_distance=1e-2)
