@@ -56,8 +56,8 @@ public:     // methods
         const auto indices = m_rtree.by_box(box_a, box_b);
 
         double closest_distance = Infinity;
-        double closest_parameter;
-        Index closest_index;
+        double closest_parameter = 0;
+        Index closest_index = 0;
 
         for (const Index i : indices) {
             Vector line_a = m_points[i];
