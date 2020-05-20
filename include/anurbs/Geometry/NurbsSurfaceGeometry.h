@@ -447,13 +447,13 @@ public: // methods
     {
         // compute shape functions
 
-        NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), 0);
+        NurbsSurfaceShapeFunction shape_function(degree_u(), degree_v(), 0);
 
         if (is_rational()) {
             Eigen::Map<const Eigen::MatrixXd> weights(m_weights.data(), nb_poles_u(), nb_poles_v());
-            shape.compute(knots_u(), knots_v(), weights, u, v);
+            shape_function.compute(knots_u(), knots_v(), weights, u, v);
         } else {
-            shape.compute(knots_u(), knots_v(), u, v);
+            shape_function.compute(knots_u(), knots_v(), u, v);
         }
 
         // compute value
@@ -462,10 +462,10 @@ public: // methods
 
         for (Index i = 0; i <= degree_u(); i++) {
             for (Index j = 0; j <= degree_v(); j++) {
-                Index pole_u = shape.first_nonzero_pole_u() + i;
-                Index pole_v = shape.first_nonzero_pole_v() + j;
+                Index pole_u = shape_function.first_nonzero_pole_u() + i;
+                Index pole_v = shape_function.first_nonzero_pole_v() + j;
 
-                TValue value = values(pole_u, pole_v) * shape(0, i, j);
+                TValue value = values(pole_u, pole_v) * shape_function.value(0, i, j);
 
                 if (i == 0 && j == 0) {
                     result = value;
@@ -479,33 +479,32 @@ public: // methods
     }
 
     template <typename TValue, typename TValues>
-    std::vector<TValue> evaluate_at(TValues values, const double u,
-        const double v, const Index order) const
+    std::vector<TValue> evaluate_at(TValues values, const double u, const double v, const Index order) const
     {
         // compute shape functions
 
-        NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), order);
+        NurbsSurfaceShapeFunction shape_function(degree_u(), degree_v(), order);
 
         if (is_rational()) {
             Eigen::Map<const Eigen::MatrixXd> weights(m_weights.data(), nb_poles_u(), nb_poles_v());
-            shape.compute(knots_u(), knots_v(), weights, u, v);
+            shape_function.compute(knots_u(), knots_v(), weights, u, v);
         } else {
-            shape.compute(knots_u(), knots_v(), u, v);
+            shape_function.compute(knots_u(), knots_v(), u, v);
         }
 
         // compute derivatives
 
-        const Index nb_shapes = shape.nb_shapes(order);
+        const Index nb_shapes = shape_function.nb_shapes(order);
 
         std::vector<TValue> result(nb_shapes);
 
         for (Index k = 0; k < nb_shapes; k++) {
             for (Index i = 0; i <= degree_u(); i++) {
                 for (Index j = 0; j <= degree_v(); j++) {
-                    const Index pole_u = shape.first_nonzero_pole_u() + i;
-                    const Index pole_v = shape.first_nonzero_pole_v() + j;
+                    const Index pole_u = shape_function.first_nonzero_pole_u() + i;
+                    const Index pole_v = shape_function.first_nonzero_pole_v() + j;
 
-                    const TValue value = values(pole_u, pole_v) * shape(k, i, j);
+                    const TValue value = values(pole_u, pole_v) * shape_function.value(k, i, j);
 
                     if (i == 0 && j == 0) {
                         result[k] = value;
@@ -534,42 +533,33 @@ public: // methods
         return evaluate_at<Vector>(poles, u, v, order);
     }
 
-    std::pair<std::vector<Index>, std::vector<Eigen::VectorXd>>
+    std::pair<std::vector<Index>, Eigen::MatrixXd>
     shape_functions_at(const double u, const double v, const Index order) const
     {
-        NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), order);
+        NurbsSurfaceShapeFunction shape_function(degree_u(), degree_v(), order);
 
         if (is_rational()) {
             Eigen::Map<const Eigen::MatrixXd> weights(m_weights.data(), nb_poles_u(), nb_poles_v());
-            shape.compute(knots_u(), knots_v(), weights, u, v);
+            shape_function.compute(knots_u(), knots_v(), weights, u, v);
         } else {
-            shape.compute(knots_u(), knots_v(), u, v);
+            shape_function.compute(knots_u(), knots_v(), u, v);
         }
 
-        std::vector<Eigen::VectorXd> shapeFunctions(shape.nb_shapes());
-
-        for (Index i = 0; i < shape.nb_shapes(); i++) {
-            shapeFunctions[i] = Eigen::VectorXd(shape.nb_nonzero_poles());
-
-            for (Index j = 0; j < shape.nb_nonzero_poles(); j++) {
-                shapeFunctions[i][j] = shape(i, j);
-            }
-        }
-
-        std::vector<Index> indices(shape.nb_nonzero_poles());
+        std::vector<Index> indices(shape_function.nb_nonzero_poles());
         auto it = indices.begin();
 
-        for (Index i = 0; i < shape.nb_nonzero_poles_u(); i++) {
-            for (Index j = 0; j < shape.nb_nonzero_poles_v(); j++) {
-                Index poleIndex = Math::single_index(nb_poles_u(), nb_poles_v(),
-                    shape.first_nonzero_pole_u() + i,
-                    shape.first_nonzero_pole_v() + j);
+        for (Index i = 0; i < shape_function.nb_nonzero_poles_u(); i++) {
+            for (Index j = 0; j < shape_function.nb_nonzero_poles_v(); j++) {
+                const Index pole_u = shape_function.first_nonzero_pole_u() + i;
+                const Index pole_v = shape_function.first_nonzero_pole_v() + j;
+
+                Index poleIndex = Math::single_index(nb_poles_u(), nb_poles_v(), pole_u, pole_v);
 
                 *(it++) = poleIndex;
             }
         }
 
-        return {indices, shapeFunctions};
+        return {indices, shape_function.values()};
     }
 
     std::vector<Interval> spans_u() const override

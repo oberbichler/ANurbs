@@ -56,25 +56,12 @@ private:    // methods
         return index;
     }
 
-    double& value(const Index derivative, const Index pole)
-    {
-        return m_values(derivative, pole);
-    }
-
-    double& value(const Index derivative, const Index poleU, const Index poleV)
-    {
-        const Index pole = Math::single_index(nb_nonzero_poles_u(), nb_nonzero_poles_v(), poleU, poleV);
-
-        return m_values(derivative, pole);
-    }
-
 public:     // constructors
     NurbsSurfaceShapeFunction()
     {
     }
 
-    NurbsSurfaceShapeFunction(const Index degree_u, const Index degree_v,
-        const Index order)
+    NurbsSurfaceShapeFunction(const Index degree_u, const Index degree_v, const Index order)
     {
         resize(degree_u, degree_v, order);
     }
@@ -146,11 +133,9 @@ public:     // methods
         return indices;
     }
 
-    double value(const Index derivative, const Index poleU, const Index poleV) const
+    Eigen::Ref<const Eigen::MatrixXd> values() const
     {
-        const Index pole = Math::single_index(nb_nonzero_poles_u(), nb_nonzero_poles_v(), poleU, poleV);
-
-        return m_values(derivative, pole);
+        return m_values;
     }
 
     double value(const Index derivative, const Index pole) const
@@ -158,19 +143,23 @@ public:     // methods
         return m_values(derivative, pole);
     }
 
-    double operator()(
-        const Index derivative,
-        const Index pole) const
+    double& value(const Index derivative, const Index pole)
     {
-        return value(derivative, pole);
+        return m_values(derivative, pole);
     }
 
-    double operator()(
-        const Index derivative,
-        const Index poleU,
-        const Index poleV) const
+    double value(const Index derivative, const Index poleU, const Index poleV) const
     {
-        return value(derivative, poleU, poleV);
+        const Index pole = Math::single_index(nb_nonzero_poles_u(), nb_nonzero_poles_v(), poleU, poleV);
+
+        return m_values(derivative, pole);
+    }
+
+    double& value(const Index derivative, const Index poleU, const Index poleV)
+    {
+        const Index pole = Math::single_index(nb_nonzero_poles_u(), nb_nonzero_poles_v(), poleU, poleV);
+
+        return m_values(derivative, pole);
     }
 
     Index first_nonzero_pole_u() const
