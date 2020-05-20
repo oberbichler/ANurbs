@@ -131,14 +131,12 @@ public:     // methods
         std::vector<Vector> derivatives(shape_function.nb_shapes());
 
         for (Index order = 0; order < shape_function.nb_shapes(); order++) {
+            derivatives[order] = Vector::Zero();
+
             for (Index i = 0; i < shape_function.nb_nonzero_poles(); i++) {
                 Index index = shape_function.first_nonzero_pole() + i;
 
-                if (i == 0) {
-                    derivatives[order] = pole(index) * shape_function.value(order, i);
-                } else {
-                    derivatives[order] += pole(index) * shape_function.value(order, i);
-                }
+                derivatives[order] += pole(index) * shape_function.value(order, i);
             }
         }
 
@@ -276,16 +274,12 @@ public:     // methods
             shape_function.compute(m_knots, t);
         }
 
-        Vector point;
+        Vector point = Vector::Zero();
 
         for (Index i = 0; i < shape_function.nb_nonzero_poles(); i++) {
             const Index index = shape_function.first_nonzero_pole() + i;
 
-            if (i == 0) {
-                point = pole(index) * shape_function.value(0, i);
-            } else {
-                point += pole(index) * shape_function.value(0, i);
-            }
+            point += pole(index) * shape_function.value(0, i);
         }
 
         return point;
@@ -301,15 +295,7 @@ public:     // methods
             shape_function.compute(m_knots, t);
         }
 
-        Eigen::MatrixXd values(shape_function.nb_shapes(), shape_function.nb_nonzero_poles());
-
-        for (Index i = 0; i < shape_function.nb_shapes(); i++) {
-            for (Index j = 0; j < shape_function.nb_nonzero_poles(); j++) {
-                values(i, j) = shape_function.value(i, j);
-            }
-        }
-
-        return {shape_function.nonzero_pole_indices(), values};
+        return {shape_function.nonzero_pole_indices(), shape_function.values()};
     }
 
     std::vector<Interval> spans() const override
