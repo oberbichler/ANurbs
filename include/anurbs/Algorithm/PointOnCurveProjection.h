@@ -13,14 +13,13 @@
 namespace anurbs {
 
 template <Index TDimension>
-class PointOnCurveProjection
-{
-public:     // types
+class PointOnCurveProjection {
+public: // types
     using CurveBaseD = CurveBase<TDimension>;
     using Vector = Eigen::Matrix<double, 1, TDimension>;
     using ParameterPoint = std::pair<double, Vector>;
 
-private:    // variables
+private: // variables
     std::pair<std::vector<double>, std::vector<Vector>> m_tessellation;
     Pointer<CurveBaseD> m_curve;
     double m_tessellation_flatness;
@@ -28,17 +27,18 @@ private:    // variables
     double m_parameter;
     Vector m_point;
 
-public:     // constructors
+public: // constructors
     PointOnCurveProjection(Pointer<CurveBaseD> curve, const double& tolerance)
-        : m_tessellation(), m_curve(curve), m_tessellation_flatness(1e-3),
-        m_tolerance(tolerance)
+        : m_tessellation()
+        , m_curve(curve)
+        , m_tessellation_flatness(1e-3)
+        , m_tolerance(tolerance)
     {
         // new_ polyline
-        m_tessellation = CurveTessellation<TDimension>::compute(*Curve(),
-            tessellation_flatness());
+        m_tessellation = CurveTessellation<TDimension>::compute(*Curve(), tessellation_flatness());
     }
 
-public:     // methods
+public: // methods
     Pointer<CurveBaseD> Curve() const
     {
         return m_curve;
@@ -68,7 +68,7 @@ public:     // methods
     {
         return m_parameter;
     }
-    
+
     Vector point() const
     {
         return m_point;
@@ -83,7 +83,7 @@ public:     // methods
         double closestParameter;
         Vector closestPoint;
 
-        double closest_sqr_distance = Infinity;
+        double closest_sq_distance = Infinity;
 
         const auto& [ts, points] = m_tessellation;
 
@@ -93,15 +93,14 @@ public:     // methods
             const auto t1 = ts[i];
             const auto point1 = points[i];
 
-            const auto [t, point] =
-                project_to_line(sample, point0, point1, t0, t1);
+            const auto [t, point] = project_to_line(sample, point0, point1, t0, t1);
 
             const Vector v = point - sample;
 
-            const double sqr_distance = squared_norm(v);
+            const double sq_distance = squared_norm(v);
 
-            if (sqr_distance < closest_sqr_distance) {
-                closest_sqr_distance = sqr_distance;
+            if (sq_distance < closest_sq_distance) {
+                closest_sq_distance = sq_distance;
                 closestParameter = t;
                 closestPoint = point;
             }
@@ -131,8 +130,7 @@ public:     // methods
                 break;
             }
 
-            double delta = dot(f[1], dif) / (dot(f[2], dif)
-                + squared_norm(f[1]));
+            double delta = dot(f[1], dif) / (dot(f[2], dif) + squared_norm(f[1]));
 
             double nextParameter = closestParameter - delta;
 
@@ -144,12 +142,12 @@ public:     // methods
         }
 
         closestPoint = Curve()->point_at(closestParameter);
-        
-        closest_sqr_distance = squared_norm(Vector(sample - closestPoint));
+
+        closest_sq_distance = squared_norm(Vector(sample - closestPoint));
 
         Vector point_at_t0 = Curve()->point_at(domain.t0());
 
-        if (squared_norm(Vector(sample - point_at_t0)) < closest_sqr_distance) {
+        if (squared_norm(Vector(sample - point_at_t0)) < closest_sq_distance) {
             m_parameter = domain.t0();
             m_point = point_at_t0;
             return;
@@ -157,7 +155,7 @@ public:     // methods
 
         Vector point_at_t1 = Curve()->point_at(domain.t1());
 
-        if (squared_norm(Vector(sample - point_at_t1)) < closest_sqr_distance) {
+        if (squared_norm(Vector(sample - point_at_t1)) < closest_sq_distance) {
             m_parameter = domain.t1();
             m_point = point_at_t1;
             return;
@@ -167,7 +165,7 @@ public:     // methods
         m_point = closestPoint;
     }
 
-private:    // static methods
+private: // static methods
     static ParameterPoint project_to_line(const Vector& point, const Vector& a,
         const Vector& b, const double& t0, const double& t1)
     {
@@ -186,7 +184,7 @@ private:    // static methods
         if (do2ptr < 0) {
             return {t0, a};
         }
-        
+
         if (do2ptr > 1) {
             return {t1, b};
         }
@@ -197,7 +195,7 @@ private:    // static methods
         return {t, closestPoint};
     }
 
-public:     // python
+public: // python
     static std::string python_name()
     {
         return "PointOnCurveProjection" + std::to_string(TDimension) + "D";
@@ -218,8 +216,7 @@ public:     // python
                 "tolerance"_a)
             .def("compute", &Type::compute, "point"_a)
             .def("parameter", &Type::parameter)
-            .def("point", &Type::point)
-        ;
+            .def("point", &Type::point);
     }
 };
 
