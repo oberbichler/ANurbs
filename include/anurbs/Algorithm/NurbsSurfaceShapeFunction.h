@@ -10,9 +10,8 @@
 
 namespace anurbs {
 
-class NurbsSurfaceShapeFunction
-{
-private:    // variables
+class NurbsSurfaceShapeFunction {
+private: // variables
     Index m_order;
     NurbsCurveShapeFunction m_shape_u;
     NurbsCurveShapeFunction m_shape_v;
@@ -21,7 +20,7 @@ private:    // variables
     Index m_first_nonzero_pole_u;
     Index m_first_nonzero_pole_v;
 
-public:     // static methods
+public: // static methods
     static constexpr inline Index nb_shapes(const Index order) noexcept
     {
         return (1 + order) * (2 + order) / 2;
@@ -29,11 +28,10 @@ public:     // static methods
 
     static constexpr inline Index shape_index(const Index derivative_u, const Index derivative_v) noexcept
     {
-        return derivative_v + (derivative_u + derivative_v) * (1 + derivative_u +
-            derivative_v) / 2;
+        return derivative_v + (derivative_u + derivative_v) * (1 + derivative_u + derivative_v) / 2;
     }
 
-private:    // methods
+private: // methods
     double& weighted_sum(const Index index)
     {
         return m_weighted_sums(index);
@@ -56,7 +54,7 @@ private:    // methods
         return index;
     }
 
-public:     // constructors
+public: // constructors
     NurbsSurfaceShapeFunction()
     {
     }
@@ -66,7 +64,7 @@ public:     // constructors
         resize(degree_u, degree_v, order);
     }
 
-public:     // methods
+public: // methods
     void resize(const Index degree_u, const Index degree_v, const Index order)
     {
         const Index nb_shapes = this->nb_shapes(order);
@@ -284,8 +282,7 @@ public:     // methods
                     for (Index j = 1; j <= l; j++) {
                         const Index index = shape_index(k - i, l - j);
 
-                        const double b = a * binom(l, j) *
-                            weighted_sum(i, j);
+                        const double b = a * binom(l, j) * weighted_sum(i, j);
 
                         for (Index p = 0; p < nb_nonzero_poles(); p++) {
                             value(shape, p) -= b * value(index, p);
@@ -324,20 +321,20 @@ public:     // methods
         NurbsSurfaceShapeFunction shape_function(degree_u, degree_v, order);
 
         shape_function.compute(knots_u, knots_v, weights, u, v);
-        
+
         const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
-        
+
         return {nonzero_pole_indices, shape_function.m_values};
     }
 
-public:     // python
+public: // python
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
 
         using Type = NurbsSurfaceShapeFunction;
-        
+
         m.def("shape_functions", &Type::get, "degree_u"_a, "degree_v"_a, "order"_a, "knots_u"_a, "knots_v"_a, "u"_a, "v"_a);
         m.def("shape_functions", &Type::get_weighted, "degree_u"_a, "degree_v"_a, "order"_a, "knots_u"_a, "knots_v"_a, "weights"_a, "u"_a, "v"_a);
     }

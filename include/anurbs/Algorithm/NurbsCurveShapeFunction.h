@@ -2,16 +2,15 @@
 
 #include "../Define.h"
 
-#include "Nurbs.h"
 #include "Math.h"
+#include "Nurbs.h"
 
 #include <vector>
 
 namespace anurbs {
 
-class NurbsCurveShapeFunction
-{
-private:    // variables
+class NurbsCurveShapeFunction {
+private: // variables
     Index m_degree;
     Index m_order;
     Eigen::MatrixXd m_values;
@@ -22,7 +21,7 @@ private:    // variables
     Eigen::VectorXd m_b;
     Index m_first_nonzero_pole;
 
-private:    // methods
+private: // methods
     double& ndu(const Index i, const Index j)
     {
         return m_ndu(i, j);
@@ -33,7 +32,7 @@ private:    // methods
         m_values.setZero();
     }
 
-public:     // constructors
+public: // constructors
     NurbsCurveShapeFunction()
     {
     }
@@ -43,7 +42,7 @@ public:     // constructors
         resize(degree, order);
     }
 
-public:     // methods
+public: // methods
     void resize(const Index degree, const Index order)
     {
         m_values.resize((order + 1), (degree + 1));
@@ -256,13 +255,13 @@ public:     // methods
         NurbsCurveShapeFunction shape_function(degree, order);
 
         shape_function.compute(knots, weights, t);
-        
+
         const auto nonzero_pole_indices = shape_function.nonzero_pole_indices();
-        
+
         return {nonzero_pole_indices, shape_function.m_values};
     }
 
-public:     // python
+public: // python
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
