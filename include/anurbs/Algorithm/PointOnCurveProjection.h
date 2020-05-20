@@ -23,17 +23,17 @@ public: // types
 private: // variables
     std::pair<std::vector<double>, std::vector<Vector>> m_tessellation;
     Pointer<CurveBaseD> m_curve;
-    double m_tessellation_flatness;
+    double m_tessellation_tolerance;
     double m_tolerance;
     double m_parameter;
     Vector m_point;
     Unique<PolylineMapper<TDimension>> mapper;
 
 public: // constructors
-    PointOnCurveProjection(Pointer<CurveBaseD> curve, const double& tolerance)
+    PointOnCurveProjection(Pointer<CurveBaseD> curve, const double tolerance, const double tessellation_tolerance)
         : m_tessellation()
         , m_curve(curve)
-        , m_tessellation_flatness(1e-3)
+        , m_tessellation_tolerance(tessellation_tolerance)
         , m_tolerance(tolerance)
     {
         // new_ polyline
@@ -49,12 +49,12 @@ public: // methods
 
     double tessellation_flatness() const
     {
-        return m_tessellation_flatness;
+        return m_tessellation_tolerance;
     }
 
     void set_tessellation_flatness(const double value)
     {
-        m_tessellation_flatness = value;
+        m_tessellation_tolerance = value;
     }
 
     double tolerance() const
@@ -221,8 +221,8 @@ public: // python
         const std::string name = Type::python_name();
 
         py::class_<Type, Handler>(m, name.c_str())
-            .def(py::init<Pointer<CurveBaseD>, double>(), "curve"_a, "tolerance"_a)
-            .def("compute", &Type::compute, "point"_a, "max_distance"_a=0)
+            .def(py::init<Pointer<CurveBaseD>, double, double>(), "curve"_a, "tolerance"_a, "tessellation_tolerance"_a = 1e-3)
+            .def("compute", &Type::compute, "point"_a, "max_distance"_a = 0)
             .def_property_readonly("parameter", &Type::parameter)
             .def_property_readonly("point", &Type::point);
     }
