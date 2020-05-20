@@ -1,7 +1,6 @@
 import anurbs as an
-import numpy as np
 import pytest
-from numpy.testing import assert_almost_equal, assert_equal
+from numpy.testing import assert_almost_equal
 
 if __name__ == '__main__':
     import sys
