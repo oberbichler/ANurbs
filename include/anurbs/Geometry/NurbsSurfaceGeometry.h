@@ -450,8 +450,8 @@ public: // methods
         NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), 0);
 
         if (is_rational()) {
-            shape.compute(
-                knots_u(), knots_v(), [&](Index i, Index j) { return weight(i, j); }, u, v);
+            Eigen::Map<const Eigen::MatrixXd> weights(m_weights.data(), nb_poles_u(), nb_poles_v());
+            shape.compute(knots_u(), knots_v(), weights, u, v);
         } else {
             shape.compute(knots_u(), knots_v(), u, v);
         }
@@ -487,8 +487,8 @@ public: // methods
         NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), order);
 
         if (is_rational()) {
-            shape.compute(
-                knots_u(), knots_v(), [&](Index i, Index j) { return weight(i, j); }, u, v);
+            Eigen::Map<const Eigen::MatrixXd> weights(m_weights.data(), nb_poles_u(), nb_poles_v());
+            shape.compute(knots_u(), knots_v(), weights, u, v);
         } else {
             shape.compute(knots_u(), knots_v(), u, v);
         }
@@ -540,11 +540,8 @@ public: // methods
         NurbsSurfaceShapeFunction shape(degree_u(), degree_v(), order);
 
         if (is_rational()) {
-            shape.compute(
-                knots_u(), knots_v(), [&](Index i, Index j) -> double {
-                    return weight(i, j);
-                },
-                u, v);
+            Eigen::Map<const Eigen::MatrixXd> weights(m_weights.data(), nb_poles_u(), nb_poles_v());
+            shape.compute(knots_u(), knots_v(), weights, u, v);
         } else {
             shape.compute(knots_u(), knots_v(), u, v);
         }
