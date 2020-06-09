@@ -107,6 +107,7 @@ public:     // static methods
                     continue;
                 }
 
+                const auto [span_u, span_v] = surface_geometry.span_at(clipper.span_u(i).t0(), clipper.span_v(j).t0());
                 IntegrationPointList<2> span_integration_points;
 
                 if (clipper.span_trim_type(i, j) == TrimTypes::Full) {
@@ -135,7 +136,7 @@ public:     // static methods
                     }
                 }
 
-                integration_points.push_back({i, j, span_integration_points});
+                integration_points.push_back({span_u, span_v, span_integration_points});
             }
         }
 
