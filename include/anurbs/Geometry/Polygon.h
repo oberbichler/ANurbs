@@ -11,7 +11,7 @@ namespace anurbs {
 struct Polygon
 {
 public:     // types
-    using Vector = linear_algebra::Vector<2>;
+    using Vector = Eigen::Matrix<double, 1, 2>;
     using Path = std::vector<Vector>;
 
 public:     // variables

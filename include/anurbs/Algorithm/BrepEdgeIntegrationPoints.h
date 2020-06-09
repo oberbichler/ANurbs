@@ -9,19 +9,17 @@
 
 namespace anurbs {
 
-class BrepEdgeIntegrationPoints
-{
-public:     // types
-    using Vector = linear_algebra::Vector<3>;
+class BrepEdgeIntegrationPoints {
+public: // types
+    using Vector = Eigen::Matrix<double, 1, 3>;
 
-public:     // static methods
-    static std::pair<IntegrationPointList<1>, IntegrationPointList<1>> get(
-        const BrepEdge& edge, const double tolerance)
+public: // static methods
+    static std::pair<IntegrationPointList<1>, IntegrationPointList<1>> get(const BrepEdge& edge, const double tolerance)
     {
         IntegrationPointList<1> integration_points_a;
         IntegrationPointList<1> integration_points_b;
 
-        const double projection_tolerance = tolerance * 10;
+        const double projection_tolerance = tolerance;
 
         // FIXME: check nb_trims == 2
 
@@ -31,11 +29,11 @@ public:     // static methods
         const auto curve_3d_a = trim_a.curve_3d();
         const auto curve_3d_b = trim_b.curve_3d();
 
-        PointOnCurveProjection<3> projection_a(curve_3d_a, projection_tolerance);
-        PointOnCurveProjection<3> projection_b(curve_3d_b, projection_tolerance);
+        PointOnCurveProjection<3> projection_a(curve_3d_a, projection_tolerance, tolerance);
+        PointOnCurveProjection<3> projection_b(curve_3d_b, projection_tolerance, tolerance);
 
         std::vector<double> spans_on_curve_b;
-        
+
         for (const auto span_b : curve_3d_b->spans()) {
             spans_on_curve_b.emplace_back(span_b.t0());
         }
@@ -63,11 +61,11 @@ public:     // static methods
         const auto& surface_3d_b = face_b->surface_geometry().data();
 
         const auto degree = std::max({surface_3d_a->degree_u(),
-            surface_3d_a->degree_v(), surface_3d_b->degree_u(),
-            surface_3d_b->degree_v()}) + 1;
-        
-        const auto nb_integration_points = (length(spans_on_curve_b) - 1) *
-            (degree + 1);
+                                surface_3d_a->degree_v(), surface_3d_b->degree_u(),
+                                surface_3d_b->degree_v()})
+            + 1;
+
+        const auto nb_integration_points = (length(spans_on_curve_b) - 1) * (degree + 1);
 
         integration_points_a.reserve(nb_integration_points);
         integration_points_b.reserve(nb_integration_points);
@@ -91,7 +89,7 @@ public:     // static methods
                 const auto weight = weight_b * norm(tangent);
 
                 integration_points_b.emplace_back(t_b, weight);
-                
+
                 projection_a.compute(ders[0]);
 
                 const auto t_a = projection_a.parameter();
@@ -103,16 +101,16 @@ public:     // static methods
         return {integration_points_a, integration_points_b};
     }
 
-public:     // python
+public: // python
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
-        
+
         using Type = BrepEdgeIntegrationPoints;
 
-        m.def("integration_points", [](const BrepEdge& edge, double tolerance) {
-            return Type::get(edge, tolerance); }, "edge"_a, "tolerance"_a);
+        m.def(
+            "integration_points", [](const BrepEdge& edge, double tolerance) { return Type::get(edge, tolerance); }, "edge"_a, "tolerance"_a);
     }
 };
 

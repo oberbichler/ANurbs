@@ -22,7 +22,7 @@ class RTree
 
 private:    // types
     using Callback = std::function<bool(Index)>;
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
     using Type = RTree<TDimension>;
 
@@ -279,7 +279,7 @@ public:     // methods
         }
     }
 
-    void finish()
+    void finish(const bool hilbert_sort)
     {
         if (m_position != m_nb_items) {
             throw std::runtime_error("More items then expected");
@@ -287,6 +287,7 @@ public:     // methods
 
         const Vector size = m_max - m_min;
 
+        if (hilbert_sort) {
         std::vector<size_t> hilbert_values(m_nb_items);
 
         for (Index i = 0; i < m_nb_items; i++) {
@@ -303,6 +304,7 @@ public:     // methods
         }
 
         sort(hilbert_values, 0, m_nb_items - 1);
+        }
 
         Index pos = 0;
 
@@ -466,7 +468,7 @@ public:     // python
             .def_property_readonly("node_size", &Type::node_size)
             // methods
             .def("add", &Type::add, "box_a"_a, "box_b"_a)
-            .def("finish", &Type::finish)
+            .def("finish", &Type::finish, "hilbert_sort"_a=true)
             .def("by_point", &Type::by_point, "location"_a, "tolerance"_a, "callback"_a=py::none())
             .def("by_box", &Type::by_box, "box_a"_a, "box_b"_a, "callback"_a=py::none())
             .def("by_ray", &Type::by_ray, "origin"_a, "direction"_a, "callback"_a=py::none())

@@ -115,15 +115,14 @@ public:     // methods
         return m_degree;
     }
     
-    std::vector<Vector> derivatives_at(const double t, const Index order)
-        const override
+    std::vector<Vector> derivatives_at(const double t, const Index order) const override
     {
         NurbsCurveShapeFunction shape_function;
 
         shape_function.resize(m_degree, order);
 
         if (m_weights.size() > 0) {
-            shape_function.compute(m_knots, [&](Index i) { return weight(i); }, t);
+            shape_function.compute(m_knots, m_weights, t);
         } else {
             shape_function.compute(m_knots, t);
         }
@@ -131,14 +130,12 @@ public:     // methods
         std::vector<Vector> derivatives(shape_function.nb_shapes());
 
         for (Index order = 0; order < shape_function.nb_shapes(); order++) {
+            derivatives[order] = Vector::Zero();
+
             for (Index i = 0; i < shape_function.nb_nonzero_poles(); i++) {
                 Index index = shape_function.first_nonzero_pole() + i;
 
-                if (i == 0) {
-                    derivatives[order] = pole(index) * shape_function(order, i);
-                } else {
-                    derivatives[order] += pole(index) * shape_function(order, i);
-                }
+                derivatives[order] += pole(index) * shape_function.value(order, i);
             }
         }
 
@@ -271,21 +268,17 @@ public:     // methods
         shape_function.resize(m_degree, 0);
 
         if (m_weights.size() > 0) {
-            shape_function.compute(m_knots, [&](Index i) { return weight(i); }, t);
+            shape_function.compute(m_knots, m_weights, t);
         } else {
             shape_function.compute(m_knots, t);
         }
 
-        Vector point;
+        Vector point = Vector::Zero();
 
         for (Index i = 0; i < shape_function.nb_nonzero_poles(); i++) {
             const Index index = shape_function.first_nonzero_pole() + i;
 
-            if (i == 0) {
-                point = pole(index) * shape_function(0, i);
-            } else {
-                point += pole(index) * shape_function(0, i);
-            }
+            point += pole(index) * shape_function.value(0, i);
         }
 
         return point;
@@ -296,22 +289,12 @@ public:     // methods
         NurbsCurveShapeFunction shape_function(degree(), order);
 
         if (is_rational()) {
-            shape_function.compute(knots(), [&](Index i) {
-                return weight(i); }, t);
+            shape_function.compute(m_knots, m_weights, t);
         } else {
-            shape_function.compute(knots(), t);
+            shape_function.compute(m_knots, t);
         }
 
-        linear_algebra::MatrixXd values(shape_function.nb_shapes(),
-            shape_function.nb_nonzero_poles());
-
-        for (Index i = 0; i < shape_function.nb_shapes(); i++) {
-            for (Index j = 0; j < shape_function.nb_nonzero_poles(); j++) {
-                values(i, j) = shape_function(i, j);
-            }
-        }
-
-        return {shape_function.nonzero_pole_indices(), values};
+        return {shape_function.nonzero_pole_indices(), shape_function.values()};
     }
 
     std::vector<Interval> spans() const override
@@ -424,7 +407,7 @@ public:     // python
 
         py::class_<Type, Base, Holder>(m, name.c_str())
             // constructors
-            .def(py::init<const Index, const Index, const bool>(), "degree"_a, "nb_poles"_a, "is_rational"_a)
+            .def(py::init<const Index, const Index, const bool>(), "degree"_a, "nb_poles"_a, "is_rational"_a=false)
             .def(py::init<const Index, const Knots, const Poles>(), "degree"_a, "knots"_a, "poles"_a)
             .def(py::init<const Index, const Knots, const Poles, const Weights>(), "degree"_a, "knots"_a, "poles"_a, "weights"_a)
             .def(py::init<const Index, const Knots, const std::vector<ControlPoint>>(), "degree"_a, "knots"_a, "control_points"_a)

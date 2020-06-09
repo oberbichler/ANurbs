@@ -14,7 +14,7 @@ class HilbertCurve
     //
 
 private:    // types
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
     using VectorU = Eigen::Matrix<size_t, 1, TDimension>;
 
 private:    // methods

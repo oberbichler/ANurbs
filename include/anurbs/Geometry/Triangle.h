@@ -12,8 +12,8 @@ template<Index TDimension>
 struct Triangle
 {
 public:     // types
-    using Vector = linear_algebra::Vector<TDimension>;
-    using Vector3 = linear_algebra::Vector<3>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
+    using Vector3 = Eigen::Matrix<double, 1, 3>;
 
 public:     // static methods
     static constexpr Index dimension()

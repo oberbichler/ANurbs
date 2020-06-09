@@ -7,14 +7,13 @@
 namespace anurbs {
 
 template <Index TDimension>
-class CurveTessellation
-{
-public:     // types
+class CurveTessellation {
+public: // types
     using CurveBaseD = CurveBase<TDimension>;
-    using Vector = linear_algebra::Vector<TDimension>;
+    using Vector = Eigen::Matrix<double, 1, TDimension>;
     using ParameterPoint = std::pair<double, Vector>;
 
-private:    // static methods
+private: // static methods
     static double distance_to_line(const Vector& point,
         const Vector& line_a, const Vector& line_b)
     {
@@ -24,7 +23,7 @@ private:    // static methods
         return norm(cross(v, u)) / norm(u);
     }
 
-public:     // static methods
+public: // static methods
     static std::pair<std::vector<double>, std::vector<Vector>> compute(const CurveBaseD& curve, const double tolerance)
     {
         const Interval domain = curve.domain();
@@ -50,10 +49,9 @@ public:     // static methods
         sample_points.emplace_back(1.0, curve.point_at(domain.parameter_at_normalized(1.0)));
 
         std::sort(std::begin(sample_points), std::end(sample_points),
-            [](auto const &lhs, auto const &rhs) {
+            [](auto const& lhs, auto const& rhs) {
                 return std::get<0>(lhs) > std::get<0>(rhs);
-            }
-        );
+            });
 
         // compute polyline
 
@@ -77,8 +75,7 @@ public:     // static methods
 
                 for (Index i = 1; i <= n; i++) {
                     const double t = Interval::parameter_at_normalized(t_a, t_b, i / double(n + 1));
-                    const Vector point = curve.point_at(
-                        domain.parameter_at_normalized(t));
+                    const Vector point = curve.point_at(domain.parameter_at_normalized(t));
 
                     const double distance = distance_to_line(point, point_a, point_b);
 
@@ -107,15 +104,15 @@ public:     // static methods
         return {parameters, locations};
     }
 
-public:     // python
+public: // python
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
         namespace py = pybind11;
 
         using Type = CurveTessellation<TDimension>;
-        
-        m.def("tessellate", &Type::compute, "curve"_a, "tolerance"_a=1e-4);
+
+        m.def("tessellate", &Type::compute, "curve"_a, "tolerance"_a = 1e-4);
     }
 };
 
