@@ -8,7 +8,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
-ANURBS_VERSION = '0.10.1'
+ANURBS_VERSION = 'dev'
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
