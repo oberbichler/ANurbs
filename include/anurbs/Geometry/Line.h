@@ -11,8 +11,7 @@
 namespace anurbs {
 
 template <Index TDimension>
-class Line
-{
+class Line {
 public:
     using Vector = Eigen::Matrix<double, 1, TDimension>;
 
@@ -26,8 +25,10 @@ public:
     Line()
     {
     }
-    
-    Line(const Vector& a, const Vector& b) : m_a(a), m_b(b)
+
+    Line(const Vector& a, const Vector& b)
+        : m_a(a)
+        , m_b(b)
     {
     }
 
@@ -51,8 +52,7 @@ public:
         m_b = value;
     }
 
-    static std::pair<double, Vector> closest_point(const Vector& point, const Vector& line_a, const Vector& line_b,
-        bool is_infinite=false)
+    static std::pair<double, Vector> closest_point(const Vector& point, const Vector& line_a, const Vector& line_b, bool is_infinite = false)
     {
         const Vector v = line_b - line_a;
         const double l = v.squaredNorm();
@@ -68,7 +68,7 @@ public:
         if (!is_infinite && t < 0) {
             return {0.0, line_a};
         }
-        
+
         if (!is_infinite && t > 1) {
             return {1.0, line_b};
         }
@@ -78,7 +78,7 @@ public:
         return {t, closest_point};
     }
 
-public:     // serialization
+public: // serialization
     static std::string type_name()
     {
         return "Line" + std::to_string(TDimension) + "D";
@@ -100,7 +100,7 @@ public:     // serialization
         target["b"] = ToJson(data.m_b);
     }
 
-public:     // python
+public: // python
     static std::string python_name()
     {
         return "Line" + std::to_string(TDimension) + "D";
@@ -121,11 +121,10 @@ public:     // python
             // constructors
             .def(py::init<const Vector&, const Vector&>(), "a"_a, "b"_a)
             // static methods
-            .def_static("closest_point", &Type::closest_point, "point"_a, "line_a"_a, "line_b"_a, "is_infinite"_a=false)
+            .def_static("closest_point", &Type::closest_point, "point"_a, "line_a"_a, "line_b"_a, "is_infinite"_a = false)
             // properties
             .def_property("a", &Type::a, &Type::set_a)
-            .def_property("b", &Type::b, &Type::set_b)
-        ;
+            .def_property("b", &Type::b, &Type::set_b);
 
         Model::register_python_data_type<Type>(m, model);
     }
