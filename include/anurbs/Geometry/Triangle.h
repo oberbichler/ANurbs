@@ -25,10 +25,10 @@ public:     // static methods
 
     static std::pair<Vector, Vector3> projection(Vector point, Vector a, Vector b, Vector c)
     {
-        Vector u = b - a;
-        Vector v = c - a;
-        Vector n = u.cross(v);
-        Vector w = point - a;
+        const Vector u = b - a;
+        const Vector v = c - a;
+        const Vector n = u.cross(v);
+        const Vector w = point - a;
 
         double r = u.cross(w).dot(n) / n.dot(n);
         double s = w.cross(v).dot(n) / n.dot(n);
