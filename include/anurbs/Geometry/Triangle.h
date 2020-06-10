@@ -2,6 +2,8 @@
 
 #include "../Define.h"
 
+#include "Line.h"
+
 #include "../Model/Attributes.h"
 
 #include <vector>
@@ -33,6 +35,23 @@ public:     // static methods
         double t = 1.0 - r - s;
 
         Vector closest_point = t * a + s * b + r * c;
+
+        if (t < 0) {
+            const auto [u, line_closest_point] = Line<TDimension>::closest_point(closest_point, b, c);
+            s = 1.0 - u;
+            r = u;
+            closest_point = line_closest_point;
+        } else if (s < 0) {
+            const auto [u, line_closest_point] = Line<TDimension>::closest_point(closest_point, a, c);
+            t = 1.0 - u;
+            r = u;
+            closest_point = line_closest_point;
+        } else if (r < 0) {
+            const auto [u, line_closest_point] = Line<TDimension>::closest_point(closest_point, a, b);
+            t = 1.0 - u;
+            s = u;
+            closest_point = line_closest_point;
+        }
 
         return {closest_point, Vector3(t, s, r)};
     }
