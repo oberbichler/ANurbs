@@ -68,7 +68,7 @@ public:     // serialization
 
         auto data = new_<Type>();
 
-        data->m_location = source.at("location");
+        reader.fill_vector("location", data->m_location);
 
         if (reader.has("text")) {
             data->m_text = reader.read<std::string>("text");
