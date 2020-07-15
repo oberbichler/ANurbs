@@ -31,55 +31,55 @@ def test_projection(curve):
     projection = an.PointOnCurveProjection3D(curve, 1e-8)
 
     projection.compute([-25.1331415843, -38.9256022819, -3.2989320128])
-    assert_almost_equal(projection.parameter, 3.3983282912)
+    assert_almost_equal(projection.parameter, 3.39832829120118)
 
     projection.compute([35.6464813397, 27.3703996918, -41.1153099924])
-    assert_almost_equal(projection.parameter, 13.3339477287)
+    assert_almost_equal(projection.parameter, 13.3339477286703)
 
     projection.compute([-40.3995502695, 45.1689836547, -1.7412051334])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([36.117074539, 44.5183648237, 47.2049699152])
-    assert_almost_equal(projection.parameter, 13.0827431544)
+    assert_almost_equal(projection.parameter, 13.0827431544026)
 
     projection.compute([36.8315563476, -48.7314244261, 46.3990433125])
-    assert_almost_equal(projection.parameter, 9.4334414008)
+    assert_almost_equal(projection.parameter, 9.4334414007513)
 
     projection.compute([-39.7935307537, 1.0082708909, -48.4975476742])
-    assert_almost_equal(projection.parameter, 16.7432603141)
+    assert_almost_equal(projection.parameter, 16.7432603141062)
 
     projection.compute([39.2152096095, -39.0656723124, -28.995046196])
     assert_almost_equal(projection.parameter, 3)
 
     projection.compute([-11.5997738492, 6.2506795657, 41.5889377667])
-    assert_almost_equal(projection.parameter, 16.7208217289)
+    assert_almost_equal(projection.parameter, 16.7208217289241)
 
     projection.compute([-49.8732305131, -40.7106279818, 48.4922331285])
-    assert_almost_equal(projection.parameter, 3.8219161918)
+    assert_almost_equal(projection.parameter, 3.82191619179725)
 
     projection.compute([-0.5889005263, 15.2143434459, -2.7129801701])
-    assert_almost_equal(projection.parameter, 15.4833842886)
+    assert_almost_equal(projection.parameter, 15.4833842886148)
 
     projection.compute([48.969280533, 1.8857173398, -5.5880641358])
-    assert_almost_equal(projection.parameter, 11.4650237679)
+    assert_almost_equal(projection.parameter, 11.4650237679298)
 
     projection.compute([-8.4467404794, 45.5121414715, -45.3669887015])
-    assert_almost_equal(projection.parameter, 16.9062391608)
+    assert_almost_equal(projection.parameter, 16.9062391608171)
 
     projection.compute([30.4369597139, -1.7965056709, 48.9445074922])
-    assert_almost_equal(projection.parameter, 11.6561943636)
+    assert_almost_equal(projection.parameter, 11.656194363566)
 
     projection.compute([-44.3057219006, 33.0192715316, 47.8292196048])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([-5.7458762805, -43.1324416274, 40.1634508698])
-    assert_almost_equal(projection.parameter, 3.248644251)
+    assert_almost_equal(projection.parameter, 3.24864425102874)
 
     projection.compute([-40.9041742286, 3.1722395463, 4.5642140576])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([-31.6555538129, -49.6355080975, -48.3113358721])
-    assert_almost_equal(projection.parameter, 3.0165966193)
+    assert_almost_equal(projection.parameter, 3.01659661932984)
 
     projection.compute([-7.825023475, 48.957493342, 43.3268881837])
     assert_almost_equal(projection.parameter, 17)
@@ -88,19 +88,19 @@ def test_projection(curve):
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([22.8517943401, -29.0174949817, 12.8639449658])
-    assert_almost_equal(projection.parameter, 8.9331640387)
+    assert_almost_equal(projection.parameter, 8.9331640386934)
 
     projection.compute([27.4416171375, 22.6609359834, 15.6104371723])
-    assert_almost_equal(projection.parameter, 13.0698217031)
+    assert_almost_equal(projection.parameter, 13.0698217030927)
 
     projection.compute([-30.2095402406, -18.2692825646, 24.9043642426])
-    assert_almost_equal(projection.parameter, 4.0479717921)
+    assert_almost_equal(projection.parameter, 4.04797179207173)
 
     projection.compute([48.586275195, 41.7056994008, -14.2714379655])
-    assert_almost_equal(projection.parameter, 13.0251600483)
+    assert_almost_equal(projection.parameter, 13.0251600482992)
 
     projection.compute([18.275234135, -3.5222361579, -22.7704009846])
-    assert_almost_equal(projection.parameter, 7.3009323651)
+    assert_almost_equal(projection.parameter, 7.30093236511636)
 
     projection.compute([6.3712748496, -41.5209055373, -17.2412156906])
     assert_almost_equal(projection.parameter, 3)
@@ -112,37 +112,37 @@ def test_projection(curve):
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([-10.3139075266, 7.8029314325, -49.8249060008])
-    assert_almost_equal(projection.parameter, 16.1366226545)
+    assert_almost_equal(projection.parameter, 16.1366226544753)
 
     projection.compute([42.6518123563, -7.5629428763, -48.0427275868])
-    assert_almost_equal(projection.parameter, 9.5900401609)
+    assert_almost_equal(projection.parameter, 9.59004016090874)
 
     projection.compute([-45.737014057, -28.2994790833, -30.3337322922])
-    assert_almost_equal(projection.parameter, 3.6872676663)
+    assert_almost_equal(projection.parameter, 3.68726766634552)
 
     projection.compute([1.2162083533, -9.9415968917, 14.8779786028])
-    assert_almost_equal(projection.parameter, 5.8379685342)
+    assert_almost_equal(projection.parameter, 5.83796853424094)
 
     projection.compute([29.9975908268, 19.9978367751, -14.8495243233])
-    assert_almost_equal(projection.parameter, 13.1388148975)
+    assert_almost_equal(projection.parameter, 13.1388148975356)
 
     projection.compute([-16.2058498553, -12.1394114393, -24.9289664323])
-    assert_almost_equal(projection.parameter, 3.9213943448)
+    assert_almost_equal(projection.parameter, 3.92139434484101)
 
     projection.compute([3.4080482802, -48.8883231296, -43.8845983678])
     assert_almost_equal(projection.parameter, 3)
 
     projection.compute([46.1560620908, -41.6277617643, 8.0593691012])
-    assert_almost_equal(projection.parameter, 9.3884196883)
+    assert_almost_equal(projection.parameter, 9.38841968826203)
 
     projection.compute([20.6848680837, 44.7835938049, -28.666853336])
-    assert_almost_equal(projection.parameter, 13.9169158965)
+    assert_almost_equal(projection.parameter, 13.9169158964716)
 
     projection.compute([-48.5924598754, 31.7137622655, -23.0120238722])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([42.6690408926, 21.1015188466, 39.1260346347])
-    assert_almost_equal(projection.parameter, 12.5371008351)
+    assert_almost_equal(projection.parameter, 12.5371008351429)
 
     projection.compute([-9.4118899942, 43.2968541949, -20.261988449])
     assert_almost_equal(projection.parameter, 17)
@@ -154,103 +154,103 @@ def test_projection(curve):
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([-47.2028514823, -47.8318335478, 15.5816407248])
-    assert_almost_equal(projection.parameter, 3.6148767131)
+    assert_almost_equal(projection.parameter, 3.61487671307568)
 
     projection.compute([16.8426310023, 22.1283477601, 43.479231416])
-    assert_almost_equal(projection.parameter, 13.2391795456)
+    assert_almost_equal(projection.parameter, 13.2391795455986)
 
     projection.compute([-46.7923978329, -1.5107623076, 43.8335186307])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([46.2800507882, -1.1699410394, 23.3208604033])
-    assert_almost_equal(projection.parameter, 11.4617729153)
+    assert_almost_equal(projection.parameter, 11.4617729152605)
 
     projection.compute([-25.1075640671, 16.0016334923, -20.8414799398])
-    assert_almost_equal(projection.parameter, 16.8481879785)
+    assert_almost_equal(projection.parameter, 16.8481879784866)
 
     projection.compute([-41.8020922652, 49.4673997161, 22.9006189261])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([-23.2073077342, -44.9300117301, 22.010030305])
-    assert_almost_equal(projection.parameter, 3.429348821)
+    assert_almost_equal(projection.parameter, 3.42934882095823)
 
     projection.compute([37.8241089582, -17.2122999407, -26.5997939168])
-    assert_almost_equal(projection.parameter, 9.2337126983)
+    assert_almost_equal(projection.parameter, 9.23371269834461)
 
     projection.compute([2.5119125622, 24.8735006316, -33.4853518212])
-    assert_almost_equal(projection.parameter, 15.4768984221)
+    assert_almost_equal(projection.parameter, 15.4768984220725)
 
     projection.compute([42.3360173555, -22.3200439812, 37.2103834])
-    assert_almost_equal(projection.parameter, 10.3336146389)
+    assert_almost_equal(projection.parameter, 10.3336146388751)
 
     projection.compute([24.6305152656, 47.4646406236, 24.1349146581])
-    assert_almost_equal(projection.parameter, 13.4305844796)
+    assert_almost_equal(projection.parameter, 13.4305844795599)
 
     projection.compute([10.5149867295, -15.3445231101, 39.6555222057])
-    assert_almost_equal(projection.parameter, 9.6202379101)
+    assert_almost_equal(projection.parameter, 9.6202379101399)
 
     projection.compute([-0.6580345103, 17.6498819923, 21.9638905823])
-    assert_almost_equal(projection.parameter, 14.6181118337)
+    assert_almost_equal(projection.parameter, 14.6181118336781)
 
     projection.compute([21.9565900378, 4.854384649, -46.3083175459])
-    assert_almost_equal(projection.parameter, 6.9412270659)
+    assert_almost_equal(projection.parameter, 6.94122706590022)
 
     projection.compute([47.2674666426, 49.1388321385, 13.4482732338])
-    assert_almost_equal(projection.parameter, 13.0568860076)
+    assert_almost_equal(projection.parameter, 13.0568860076052)
 
     projection.compute([-25.7504245153, 24.6689192833, -43.3493452116])
-    assert_almost_equal(projection.parameter, 16.8806165748)
+    assert_almost_equal(projection.parameter, 16.8806165747731)
 
     projection.compute([-30.1640459244, 6.0843163431, 26.2018722371])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([29.3484592714, 46.1486992408, -8.1712008725])
-    assert_almost_equal(projection.parameter, 13.495386228)
+    assert_almost_equal(projection.parameter, 13.4953862279618)
 
     projection.compute([48.3516445841, 45.3574198277, -48.7276976457])
-    assert_almost_equal(projection.parameter, 13.2416276365)
+    assert_almost_equal(projection.parameter, 13.2416276364779)
 
     projection.compute([-45.9047522377, -19.3977520193, 2.7042823158])
-    assert_almost_equal(projection.parameter, 3.947078163)
+    assert_almost_equal(projection.parameter, 3.94707816295092)
 
     projection.compute([-48.2935732223, 3.1715559089, -21.2307443243])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([19.803537554, 1.7730305678, 2.7095494572])
-    assert_almost_equal(projection.parameter, 11.9476022633)
+    assert_almost_equal(projection.parameter, 11.947602263324)
 
     projection.compute([12.4297294125, -49.8548706993, 4.3646752156])
     assert_almost_equal(projection.parameter, 3)
 
     projection.compute([-23.3992451212, -33.0813171263, -24.6736706582])
-    assert_almost_equal(projection.parameter, 3.3112300201)
+    assert_almost_equal(projection.parameter, 3.31123002005976)
 
     projection.compute([-18.7366216764, 11.0967950249, 8.6394815979])
-    assert_almost_equal(projection.parameter, 16.7971490178)
+    assert_almost_equal(projection.parameter, 16.797149017792)
 
     projection.compute([-26.0479715076, -28.0749771642, 46.442157075])
-    assert_almost_equal(projection.parameter, 3.9431939675)
+    assert_almost_equal(projection.parameter, 3.94319396750643)
 
     projection.compute([4.5678507325, -22.0657207407, -2.8295629904])
     assert_almost_equal(projection.parameter, 3)
 
     projection.compute([47.0529675004, -49.7124435844, 26.3974328415])
-    assert_almost_equal(projection.parameter, 9.4338494463)
+    assert_almost_equal(projection.parameter, 9.43384944631851)
 
     projection.compute([-26.2698389014, -14.3729289828, -44.3610589459])
-    assert_almost_equal(projection.parameter, 3.7178330567)
+    assert_almost_equal(projection.parameter, 3.71783305672742)
 
     projection.compute([20.170082464, 3.6481735081, 24.0622370383])
-    assert_almost_equal(projection.parameter, 12.3083751719)
+    assert_almost_equal(projection.parameter, 12.308375171854)
 
     projection.compute([-34.3673068957, -16.577460741, -17.3887349513])
-    assert_almost_equal(projection.parameter, 3.9002353736)
+    assert_almost_equal(projection.parameter, 3.90023537356724)
 
     projection.compute([48.5242923249, 23.3141597702, -0.400653505])
-    assert_almost_equal(projection.parameter, 12.5578436829)
+    assert_almost_equal(projection.parameter, 12.5578436828865)
 
     projection.compute([46.056583941, -22.4939376919, -6.313336434])
-    assert_almost_equal(projection.parameter, 9.8354127278)
+    assert_almost_equal(projection.parameter, 9.83541272781669)
 
     projection.compute([-16.0577103338, 28.7644069077, 44.1796470406])
     assert_almost_equal(projection.parameter, 17)
@@ -265,16 +265,16 @@ def test_projection(curve):
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([-45.7704795039, -29.7681998367, 17.3147712682])
-    assert_almost_equal(projection.parameter, 3.8500988476)
+    assert_almost_equal(projection.parameter, 3.85009884758553)
 
     projection.compute([-3.9792966815, -33.0479217614, 17.9478132482])
-    assert_almost_equal(projection.parameter, 3.2136732553)
+    assert_almost_equal(projection.parameter, 3.21367325526119)
 
     projection.compute([13.1598295938, 48.6314966803, -46.5716411344])
-    assert_almost_equal(projection.parameter, 14.4196487184)
+    assert_almost_equal(projection.parameter, 14.4196487184172)
 
     projection.compute([-20.2005061182, -4.6676250895, -2.054497065])
-    assert_almost_equal(projection.parameter, 16.4492271092)
+    assert_almost_equal(projection.parameter, 16.4492271092085)
 
     projection.compute([34.9103078642, -42.3299725132, -10.2239740362])
     assert_almost_equal(projection.parameter, 3)
@@ -286,49 +286,49 @@ def test_projection(curve):
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([41.6287406309, 13.4751787239, -27.3240220627])
-    assert_almost_equal(projection.parameter, 12.3286650542)
+    assert_almost_equal(projection.parameter, 12.328665054228)
 
     projection.compute([-28.3444108806, -48.405116982, 49.6433370279])
-    assert_almost_equal(projection.parameter, 3.5989999055)
+    assert_almost_equal(projection.parameter, 3.59899990547848)
 
     projection.compute([10.5399498532, -40.6306048812, 29.2711783104])
     assert_almost_equal(projection.parameter, 3)
 
     projection.compute([44.1834146595, -21.1933777068, 13.3290060625])
-    assert_almost_equal(projection.parameter, 10.1362505804)
+    assert_almost_equal(projection.parameter, 10.1362505804196)
 
     projection.compute([21.063313806, -25.9638172462, -35.295762953])
     assert_almost_equal(projection.parameter, 3)
 
     projection.compute([-41.1744665313, -49.737137556, -16.550619419])
-    assert_almost_equal(projection.parameter, 3.3804623931)
+    assert_almost_equal(projection.parameter, 3.38046239308991)
 
     projection.compute([9.8580917157, 16.7146294223, -20.1967504202])
-    assert_almost_equal(projection.parameter, 14.7825668458)
+    assert_almost_equal(projection.parameter, 14.7825668458449)
 
     projection.compute([25.3265625217, -13.2317370098, -7.9272767799])
-    assert_almost_equal(projection.parameter, 9.1345423503)
+    assert_almost_equal(projection.parameter, 9.13454235028398)
 
     projection.compute([34.0210880078, -45.3797400908, -47.5821475487])
     assert_almost_equal(projection.parameter, 3)
 
     projection.compute([-44.0322639393, -31.9711322347, -10.1224126109])
-    assert_almost_equal(projection.parameter, 3.7075048514)
+    assert_almost_equal(projection.parameter, 3.70750485144238)
 
     projection.compute([-5.9085791725, -21.4804987756, 32.4249613483])
-    assert_almost_equal(projection.parameter, 4.1234285025)
+    assert_almost_equal(projection.parameter, 4.12342850254901)
 
     projection.compute([7.0652345927, 38.8497738581, 43.4287495881])
-    assert_almost_equal(projection.parameter, 13.6988253951)
+    assert_almost_equal(projection.parameter, 13.6988253950848)
 
     projection.compute([-29.6910216006, 41.4709048306, 32.7122103342])
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([-17.4587137846, -23.6425445292, 4.9992781389])
-    assert_almost_equal(projection.parameter, 3.7460748971)
+    assert_almost_equal(projection.parameter, 3.74607489714158)
 
     projection.compute([10.8703085039, 39.8229706054, -12.0107919266])
-    assert_almost_equal(projection.parameter, 14.1342363212)
+    assert_almost_equal(projection.parameter, 14.1342363211832)
 
 
 def test_projection_with_max_distance(curve):
@@ -359,7 +359,7 @@ def test_projection_with_max_distance(curve):
     assert_almost_equal(projection.parameter, 16.7208217289)
 
     projection.compute([-7.1948812, -17.2105118, -2.05508015], max_distance=1e-2)
-    assert_almost_equal(projection.parameter, 3.8219161918)
+    assert_almost_equal(projection.parameter, 3.821916191364058)
 
     projection.compute([0.35869499, 3.38954639, 0.86797347], max_distance=1e-2)
     assert_almost_equal(projection.parameter, 15.4833842886)
@@ -446,7 +446,7 @@ def test_projection_with_max_distance(curve):
     assert_almost_equal(projection.parameter, 17)
 
     projection.compute([18.98708479, 4.01624784, 5.35988316], max_distance=1e-2)
-    assert_almost_equal(projection.parameter, 12.5371008351)
+    assert_almost_equal(projection.parameter, 12.537100869611708)
 
     projection.compute([-25, 15, 4], max_distance=1e-2)
     assert_almost_equal(projection.parameter, 17)
