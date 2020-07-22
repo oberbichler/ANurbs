@@ -64,10 +64,15 @@ public:     // serialization
 
     static Unique<Type> load(Model& model, const Json& source)
     {
+        const DataReader reader(source);
+
         auto data = new_<Type>();
 
-        data->m_location = source.at("location");
-        data->m_text = source.at("text");
+        reader.fill_vector("location", data->m_location);
+
+        if (reader.has("text")) {
+            data->m_text = reader.read<std::string>("text");
+        }
 
         return data;
     }

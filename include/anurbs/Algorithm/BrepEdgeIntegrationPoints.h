@@ -14,12 +14,10 @@ public: // types
     using Vector = Eigen::Matrix<double, 1, 3>;
 
 public: // static methods
-    static std::pair<IntegrationPointList<1>, IntegrationPointList<1>> get(const BrepEdge& edge, const double tolerance)
+    static std::pair<IntegrationPointList<1>, IntegrationPointList<1>> get(const BrepEdge& edge, const double tolerance, const double tessellation_tolerance)
     {
         IntegrationPointList<1> integration_points_a;
         IntegrationPointList<1> integration_points_b;
-
-        const double projection_tolerance = tolerance;
 
         // FIXME: check nb_trims == 2
 
@@ -29,8 +27,8 @@ public: // static methods
         const auto curve_3d_a = trim_a.curve_3d();
         const auto curve_3d_b = trim_b.curve_3d();
 
-        PointOnCurveProjection<3> projection_a(curve_3d_a, projection_tolerance, tolerance);
-        PointOnCurveProjection<3> projection_b(curve_3d_b, projection_tolerance, tolerance);
+        PointOnCurveProjection<3> projection_a(curve_3d_a, tolerance, tessellation_tolerance);
+        PointOnCurveProjection<3> projection_b(curve_3d_b, tolerance, tessellation_tolerance);
 
         std::vector<double> spans_on_curve_b;
 
@@ -110,7 +108,7 @@ public: // python
         using Type = BrepEdgeIntegrationPoints;
 
         m.def(
-            "integration_points", [](const BrepEdge& edge, double tolerance) { return Type::get(edge, tolerance); }, "edge"_a, "tolerance"_a);
+            "integration_points", [](const BrepEdge& edge, double tolerance, double tessellation_tolerance) { return Type::get(edge, tolerance, tessellation_tolerance); }, "edge"_a, "tolerance"_a, "tessellation_tolerance"_a=1e-3);
     }
 };
 
