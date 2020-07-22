@@ -17,10 +17,11 @@ private: // types
     using Vector = Eigen::Matrix<double, 1, TDimension>;
     using Faces = Eigen::Matrix<Index, Eigen::Dynamic, 3>;
     using Vertices = Eigen::Matrix<double, Eigen::Dynamic, TDimension>;
+    using Parameter = Eigen::Matrix<double, 1, 3>;
 
 private: // variables
-    Eigen::Matrix<Index, Eigen::Dynamic, 3> m_faces;
-    Eigen::Matrix<double, Eigen::Dynamic, TDimension> m_vertices;
+    Faces m_faces;
+    Vertices m_vertices;
     RTree<TDimension> m_rtree;
 
 public: // static methods
@@ -30,12 +31,12 @@ public: // static methods
     }
 
 public: // constructor
-    MeshMapper(Eigen::Ref<const Faces>& faces, Eigen::Ref<const Vertices>& vertices)
-        : m_faces(faces)
-        , m_vertices(vertices)
-        , m_rtree(length(faces))
+    MeshMapper(Eigen::Ref<const Vertices>& vertices, Eigen::Ref<const Faces>& faces)
+        : m_vertices(vertices)
+        , m_faces(faces)
+        , m_rtree(faces.rows())
     {
-        for (Index i = 0; i < length(faces); i++) {
+        for (Index i = 0; i < faces.rows(); i++) {
             Eigen::Array<double, 3, TDimension> triangle;
 
             triangle.row(0) = vertices.row(faces(i, 0));
@@ -48,45 +49,68 @@ public: // constructor
             m_rtree.add(box_a, box_b);
         }
 
-        m_rtree.finish(false);
+        m_rtree.finish(true);
+    }
+    
+private: // methods
+    bool map_line(const Vector point, const Vector a, const Vector b, double& closest_sq_distance, Vector& closest_point, Parameter& closest_parameter)
+    {
+        const auto [c_parameter, c_point] = Line<3>::closest_point(point, a, b);
+
+        const double c_sq_distance = (c_point - point).squaredNorm();
+
+        if (c_sq_distance < closest_sq_distance) {
+            closest_sq_distance = c_sq_distance;
+            closest_point = c_point;
+            closest_parameter << c_parameter, 1 - c_parameter, 0;
+        
+            return true;
+        }
+
+        return false;
     }
 
 public: // methods
-    std::tuple<Index, Eigen::Matrix<double, 1, 3>> map(const Vector point, const double max_distance)
+    std::tuple<bool, Vector, std::pair<Index, Parameter>, double> map(const Vector point, const double max_distance)
     {
-        Vector box_a = point;
-        Vector box_b = point;
+        const auto indices = m_rtree.by_point(point, max_distance);
 
-        for (Index i = 0; i < TDimension; i++) {
-            box_a[i] += max_distance;
-            box_b[i] -= max_distance;
-        }
-
-        const auto indices = m_rtree.by_box(box_a, box_b);
-
-        double closest_distance = Infinity;
-        Eigen::Matrix<double, 1, 3> closest_parameter = Eigen::Matrix<double, 1, 3>::Zero();
+        double closest_sq_distance = Infinity;
+        Vector closest_point;
         Index closest_index = -1;
+        Parameter closest_parameter = Parameter::Zero();
 
-        for (const Index i : indices) {
-            Vector a = m_vertices.row(m_faces(i, 0));
-            Vector b = m_vertices.row(m_faces(i, 1));
-            Vector c = m_vertices.row(m_faces(i, 2));
+        for (const Index index : indices) {
+            const Vector a = m_vertices.row(m_faces(index, 0));
+            const Vector b = m_vertices.row(m_faces(index, 1));
+            const Vector c = m_vertices.row(m_faces(index, 2));
 
-            const auto [rst, cp] = Triangle<TDimension>::closest_point(point, a, b, c);
+            const auto [c_parameter, c_point] = Triangle<TDimension>::closest_point(point, a, b, c);
 
-            const double distance = (point - cp).norm();
+            bool changed = false;
 
-            if (distance > closest_distance || distance > max_distance) {
-                continue;
+            if ((c_parameter.array() < 0).any() || (c_parameter.array() > 1).any()) {
+                changed |= map_line(point, a, b, closest_sq_distance, closest_point, closest_parameter);
+                changed |= map_line(point, b, c, closest_sq_distance, closest_point, closest_parameter);
+                changed |= map_line(point, c, a, closest_sq_distance, closest_point, closest_parameter);
+            } else {
+                const double c_sq_distance = (c_point - point).squaredNorm();
+
+                if (c_sq_distance < closest_sq_distance) {
+                    closest_sq_distance = c_sq_distance;
+                    closest_point = c_point;
+                    closest_parameter << c_parameter;
+
+                    changed = true;
+                }
             }
 
-            closest_distance = distance;
-            closest_parameter = rst;
-            closest_index = i;
+            if (changed) {
+                closest_index = index;
+            }
         }
 
-        return {closest_index, closest_parameter};
+        return {(closest_index > -1), closest_point, {closest_index, closest_parameter}, std::sqrt(closest_sq_distance)};
     }
 
 public: // python
@@ -104,7 +128,7 @@ public: // python
 
         py::class_<Type>(m, name.c_str())
             // constructors
-            .def(py::init<Eigen::Ref<const Faces>&, Eigen::Ref<const Vertices>&>(), "faces"_a, "vertices"_a)
+            .def(py::init<Eigen::Ref<const Vertices>&, Eigen::Ref<const Faces>&>(), "vertices"_a, "faces"_a)
             // methods
             .def("map", &Type::map, "point"_a, "max_distance"_a);
     }
