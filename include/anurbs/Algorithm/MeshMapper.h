@@ -3,6 +3,7 @@
 #include "../Define.h"
 
 #include "../Geometry/Line.h"
+#include "../Geometry/Triangle.h"
 #include "RTree.h"
 
 #include <tuple>
