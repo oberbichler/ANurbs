@@ -9,6 +9,7 @@
 #include "Algorithm/HilbertCurve.h"
 #include "Algorithm/IntegrationPoints.h"
 #include "Algorithm/KnotRefinement.h"
+#include "Algorithm/MeshMapper.h"
 #include "Algorithm/Nurbs.h"
 #include "Algorithm/NurbsCurveShapeFunction.h"
 #include "Algorithm/NurbsSurfaceShapeFunction.h"

@@ -51,8 +51,7 @@ public:
         m_b = value;
     }
 
-    static std::pair<double, Vector> closest_point(const Vector& point, const Vector& line_a, const Vector& line_b,
-        bool is_infinite=false)
+    static std::pair<double, Vector> closest_point(const Vector& point, const Vector& line_a, const Vector& line_b, bool is_infinite=false)
     {
         const Vector v = line_b - line_a;
         const double l = v.squaredNorm();

@@ -47,6 +47,11 @@ public:     // methods
         m_t1 = value;
     }
 
+    double mid() const
+    {
+        return 0.5 * (m_t0 + m_t1);
+    }
+
     double min() const
     {
         return std::min(m_t0, m_t1);

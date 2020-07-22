@@ -13,7 +13,7 @@ struct Triangle
 {
 public:     // types
     using Vector = Eigen::Matrix<double, 1, TDimension>;
-    using Vector3 = Eigen::Matrix<double, 1, 3>;
+    using Parameter = Eigen::Matrix<double, 1, 3>;
 
 public:     // static methods
     static constexpr Index dimension()
@@ -21,7 +21,7 @@ public:     // static methods
         return TDimension;
     }
 
-    static std::pair<Vector, Vector3> projection(Vector point, Vector a, Vector b, Vector c)
+    static std::pair<Vector, Parameter> projection(Vector point, Vector a, Vector b, Vector c)
     {
         Vector u = b - a;
         Vector v = c - a;
@@ -34,7 +34,23 @@ public:     // static methods
 
         Vector closest_point = t * a + s * b + r * c;
 
-        return {closest_point, Vector3(t, s, r)};
+        return {closest_point, Parameter(t, s, r)};
+    }
+
+    static std::pair<Parameter, Vector> closest_point(Vector point, Vector a, Vector b, Vector c)
+    {
+        Vector u = b - a;
+        Vector v = c - a;
+        Vector n = u.cross(v);
+        Vector w = point - a;
+
+        double r = u.cross(w).dot(n) / n.dot(n);
+        double s = w.cross(v).dot(n) / n.dot(n);
+        double t = 1.0 - r - s;
+
+        Vector closest_point = t * a + s * b + r * c;
+
+        return {Parameter(t, s, r), closest_point};
     }
 
 public:     // python

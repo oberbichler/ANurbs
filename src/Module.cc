@@ -167,6 +167,10 @@ PYBIND11_MODULE(anurbs, m) {
         Line<3>::register_python(m, model);
     }
 
+    { // MeshMapper
+        MeshMapper<3>::register_python(m);
+    }
+
     { // NurbsCurveGeometry
         NurbsCurveGeometry<2>::register_python(m, model);
         NurbsCurveGeometry<3>::register_python(m, model);

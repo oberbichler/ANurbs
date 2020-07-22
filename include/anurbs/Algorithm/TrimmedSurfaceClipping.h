@@ -16,19 +16,17 @@
 
 namespace anurbs {
 
-enum TrimTypes
-{
+enum TrimTypes {
     Empty,
     Full,
     trimmed
 };
 
-class TrimmedSurfaceClipping
-{
-public:     // types
+class TrimmedSurfaceClipping {
+public: // types
     using Vector = Eigen::Matrix<double, 1, 2>;
 
-private:    // variables
+private: // variables
     ClipperLib::Paths m_paths;
     std::vector<TrimTypes> m_span_trim_type;
     std::vector<std::vector<Polygon>> m_span_polygons;
@@ -62,14 +60,11 @@ private:    // variables
         return point;
     }
 
-private:    // static methods
+private: // static methods
     static inline bool is_rect(ClipperLib::Path rect, ClipperLib::Path contour,
         std::size_t a, std::size_t b, std::size_t c, std::size_t d)
     {
-        if (contour[a] == rect[0] &&
-            contour[b] == rect[1] &&
-            contour[c] == rect[2] &&
-            contour[d] == rect[3]) {
+        if (contour[a] == rect[0] && contour[b] == rect[1] && contour[c] == rect[2] && contour[d] == rect[3]) {
             return true;
         } else {
             return false;
@@ -78,18 +73,10 @@ private:    // static methods
 
     static inline bool is_rect(ClipperLib::Path a, ClipperLib::Path b)
     {
-        return is_rect(a, b, 0, 1, 2, 3) ||
-               is_rect(a, b, 1, 2, 3, 0) ||
-               is_rect(a, b, 2, 3, 0, 1) ||
-               is_rect(a, b, 3, 0, 1, 2) ||
-               is_rect(a, b, 3, 2, 1, 0) ||
-               is_rect(a, b, 0, 3, 2, 1) ||
-               is_rect(a, b, 1, 0, 3, 2) ||
-               is_rect(a, b, 2, 1, 0, 3);
+        return is_rect(a, b, 0, 1, 2, 3) || is_rect(a, b, 1, 2, 3, 0) || is_rect(a, b, 2, 3, 0, 1) || is_rect(a, b, 3, 0, 1, 2) || is_rect(a, b, 3, 2, 1, 0) || is_rect(a, b, 0, 3, 2, 1) || is_rect(a, b, 1, 0, 3, 2) || is_rect(a, b, 2, 1, 0, 3);
     }
 
-    void compute_span(const Index index_u, const Index index_v,
-        const Interval span_u, const Interval span_v)
+    void compute_span(const Index index_u, const Index index_v, const Interval span_u, const Interval span_v)
     {
         ClipperLib::Paths clip(1);
         ClipperLib::PolyTree polytree;
@@ -160,14 +147,16 @@ private:    // static methods
         span_polygons(index_u, index_v) = regions;
     }
 
-public:     // constructors
+public: // constructors
     TrimmedSurfaceClipping(const double tolerance, const double unit)
-        : m_tolerance(tolerance), m_scale(unit), m_span_polygons(0),
-        m_span_trim_type(0)
+        : m_tolerance(tolerance)
+        , m_scale(unit)
+        , m_span_polygons(0)
+        , m_span_trim_type(0)
     {
     }
 
-public:     // methods
+public: // methods
     void clear()
     {
         m_paths.clear();
@@ -263,7 +252,7 @@ public:     // methods
         return span_polygons(index_u, index_v);
     }
 
-public:     // python
+public: // python
     static void register_python(pybind11::module& m)
     {
         using namespace pybind11::literals;
@@ -273,8 +262,7 @@ public:     // python
             .value("Empty", TrimTypes::Empty)
             .value("Full", TrimTypes::Full)
             .value("trimmed", TrimTypes::trimmed)
-            .export_values()
-        ;
+            .export_values();
 
         using Type = TrimmedSurfaceClipping;
 
@@ -284,9 +272,7 @@ public:     // python
             .def("begin_loop", &Type::begin_loop)
             .def("end_loop", &Type::end_loop)
             .def("add_curve", &Type::add_curve, "curve"_a)
-            .def("compute", (void (Type::*)(
-                const std::vector<anurbs::Interval>&,
-                const std::vector<anurbs::Interval>&)) &Type::compute,
+            .def("compute", (void (Type::*)(const std::vector<anurbs::Interval>&, const std::vector<anurbs::Interval>&)) & Type::compute,
                 "knotsU"_a, "knotsV"_a)
             .def("nb_spans_u", &Type::nb_spans_u)
             .def("nb_spans_v", &Type::nb_spans_v)
@@ -294,7 +280,7 @@ public:     // python
             .def("span_v", &Type::span_v, "index"_a)
             // .def("span_trim_type", &Type::span_trim_type, "index_u"_a, "index_v"_a)
             // .def("span_polygons", &Type::span_polygons, "index_u"_a, "index_v"_a)
-        ;
+            ;
     }
 };
 

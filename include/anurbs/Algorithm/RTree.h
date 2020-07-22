@@ -281,8 +281,11 @@ public:     // methods
 
     void finish(const bool hilbert_sort)
     {
-        if (m_position != m_nb_items) {
+        if (m_position > m_nb_items) {
             throw std::runtime_error("More items then expected");
+        }
+        if (m_position < m_nb_items) {
+            throw std::runtime_error("Less items then expected");
         }
 
         const Vector size = m_max - m_min;
