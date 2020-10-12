@@ -733,6 +733,7 @@ public: // python
             .def("pole", (Vector(Type::*)(const Index) const) & Type::pole, "index"_a)
             .def("pole", (Vector(Type::*)(const Index, const Index) const) & Type::pole, "index_u"_a, "index_v"_a)
             .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a, "order"_a)
+            .def("shape_functions_at_span", &Type::shape_functions_at_span, "u"_a, "v"_a, "span_u"_a, "span_v"_a, "order"_a)
             .def("weight", (double (Type::*)(const Index) const) & Type::weight, "index"_a)
             .def("weight", (double (Type::*)(const Index, const Index) const) & Type::weight, "index_u"_a, "index_v"_a)
             .def("greville_point", &Type::greville_point, "index_u"_a, "index_v"_a)
