@@ -1,10 +1,18 @@
 import anurbs as an
 import pytest
+import os
 from numpy.testing import assert_almost_equal, assert_equal
 
 if __name__ == '__main__':
     import sys
     pytest.main(sys.argv)
+
+
+@pytest.fixture
+def dome():
+    model = an.Model()
+    model.load(f'{os.path.dirname(__file__)}/data/dome.ibra')
+    return model.of_type('NurbsSurfaceGeometry3D')[0][1]
 
 
 @pytest.fixture
@@ -210,3 +218,17 @@ def test_nurbs_normal_at(nurbs_3d):
 def test_nurbs_greville_point(nurbs_3d):
     uv = nurbs_3d.greville_point(index_u=1, index_v=1)
     assert_almost_equal(uv, [3.75, 10])
+
+
+def test_compute_at_span(dome):
+    nonzero_indices_0, shape_functions_0 = dome.shape_functions_at_span(u=31.4159265358979, v=6.50645142284287, span_u=5, span_v=4, order=1)
+    nonzero_indices_1, shape_functions_1 = dome.shape_functions_at_span(u=31.4159265358979, v=6.50645142284287, span_u=7, span_v=4, order=1)
+
+    assert_almost_equal(shape_functions_0[0] @ dome.poles[nonzero_indices_0], [6, 0, 10])
+    assert_almost_equal(shape_functions_1[0] @ dome.poles[nonzero_indices_1], [6, 0, 10])
+
+    assert_almost_equal(shape_functions_0[1] @ dome.poles[nonzero_indices_0], [0, -0.72025305, 0.18006326])
+    assert_almost_equal(shape_functions_0[2] @ dome.poles[nonzero_indices_0], [0.83958849, 0, -1.0494856])
+
+    assert_almost_equal(shape_functions_1[1] @ dome.poles[nonzero_indices_1], [0, -0.72025305, -0.18006326])
+    assert_almost_equal(shape_functions_1[2] @ dome.poles[nonzero_indices_1], [0.83958849, 0, -1.0494856])
