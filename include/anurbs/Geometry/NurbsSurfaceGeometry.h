@@ -562,6 +562,35 @@ public: // methods
         return {indices, shape_function.values()};
     }
 
+    std::pair<std::vector<Index>, Eigen::MatrixXd>
+    shape_functions_at_span(const double u, const double v, const Index span_u, const Index span_v, const Index order) const
+    {
+        NurbsSurfaceShapeFunction shape_function(degree_u(), degree_v(), order);
+
+        if (is_rational()) {
+            Eigen::Map<const Eigen::MatrixXd> weights(m_weights.data(), nb_poles_u(), nb_poles_v());
+            shape_function.compute_at_span(knots_u(), knots_v(), span_u, span_v, weights, u, v);
+        } else {
+            shape_function.compute_at_span(knots_u(), knots_v(), span_u, span_v, u, v);
+        }
+
+        std::vector<Index> indices(shape_function.nb_nonzero_poles());
+        auto it = indices.begin();
+
+        for (Index i = 0; i < shape_function.nb_nonzero_poles_u(); i++) {
+            for (Index j = 0; j < shape_function.nb_nonzero_poles_v(); j++) {
+                const Index pole_u = shape_function.first_nonzero_pole_u() + i;
+                const Index pole_v = shape_function.first_nonzero_pole_v() + j;
+
+                Index poleIndex = Math::single_index(nb_poles_u(), nb_poles_v(), pole_u, pole_v);
+
+                *(it++) = poleIndex;
+            }
+        }
+
+        return {indices, shape_function.values()};
+    }
+
     std::vector<Interval> spans_u() const override
     {
         Index first_span = degree_u() - 1;
@@ -704,6 +733,7 @@ public: // python
             .def("pole", (Vector(Type::*)(const Index) const) & Type::pole, "index"_a)
             .def("pole", (Vector(Type::*)(const Index, const Index) const) & Type::pole, "index_u"_a, "index_v"_a)
             .def("shape_functions_at", &Type::shape_functions_at, "u"_a, "v"_a, "order"_a)
+            .def("shape_functions_at_span", &Type::shape_functions_at_span, "u"_a, "v"_a, "span_u"_a, "span_v"_a, "order"_a)
             .def("weight", (double (Type::*)(const Index) const) & Type::weight, "index"_a)
             .def("weight", (double (Type::*)(const Index, const Index) const) & Type::weight, "index_u"_a, "index_v"_a)
             .def("greville_point", &Type::greville_point, "index_u"_a, "index_v"_a)
