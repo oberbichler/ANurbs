@@ -359,7 +359,7 @@ public:     // serialization
 
         const auto degree = reader.read<Index>("degree");
         const auto nb_poles = reader.count("poles");
-        const auto is_rational = reader.has("weigths");
+        const auto is_rational = reader.has("weights");
 
         auto result = new_<Type>(degree, nb_poles, is_rational);
 
