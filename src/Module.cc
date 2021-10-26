@@ -13,6 +13,17 @@ PYBIND11_MODULE(anurbs, m) {
     m.attr("__status__") = "Development";
 
     using namespace anurbs;
+    
+    anurbs::NurbsCurveGeometry<2> curve(1, 2, true);
+
+    curve.knot(0) = 0;
+    curve.knot(1) = 1;
+
+    curve.pole(0) << -1, 0;
+    curve.pole(1) <<  1, 0;
+    
+    curve.weight(0) << 1;
+    curve.weight(1) << 1;
 
 
     // --- Model
