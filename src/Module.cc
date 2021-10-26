@@ -22,9 +22,11 @@ PYBIND11_MODULE(anurbs, m) {
     curve.pole(0) << -1, 0;
     curve.pole(1) <<  1, 0;
     
-    curve.weight(0) << 1;
-    curve.weight(1) << 1;
-
+    curve.weight(0) = 1;
+    curve.weight(1) = 1;
+    
+    std::vector<double> knots { 0.5 };
+    auto refined = KnotRefinement<2>::insert_knots(curve, knots);
 
     // --- Model
 
