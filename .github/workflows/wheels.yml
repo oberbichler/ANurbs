@@ -1,0 +1,92 @@
+name: Wheels
+
+on:
+  workflow_dispatch:
+  push:
+  release:
+    types:
+      - published
+
+env:
+  ANURBS_VERSION: ${{ github.event.release.tag_name }}
+
+
+jobs:
+  build_sdist:
+    name: Build SDist
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Patch version
+      run: |
+        import os
+        with open('setup.py', 'r') as f:
+            content = f.read()
+        version = os.getenv('ANURBS_VERSION', 'v0.0.0')[1:]
+        print(version)
+        content = content.replace('0.0.0', version)
+        with open('setup.py', 'w') as f:
+            f.write(content)
+      shell: python
+      
+    - name: Build SDist
+      run: pipx run build --sdist
+
+    - name: Check metadata
+      run: pipx run twine check dist/*
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: dist/*.tar.gz
+
+
+  build_wheels:
+    name: Wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Patch version
+      run: |
+        import os
+        with open('setup.py', 'r') as f:
+            content = f.read()
+        version = os.getenv('ANURBS_VERSION', 'v0.0.0')[1:]
+        print(version)
+        content = content.replace('0.0.0', version)
+        with open('setup.py', 'w') as f:
+            f.write(content)
+      shell: python
+
+    - uses: pypa/cibuildwheel@v2.0.1
+
+    - name: Upload wheels
+      uses: actions/upload-artifact@v2
+      with:
+        path: wheelhouse/*.whl
+
+
+  upload_all:
+    name: Upload if release
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    steps:
+    - uses: actions/setup-python@v2
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: artifact
+        path: dist
+
+    - uses: pypa/gh-action-pypi-publish@v1.4.2
+      with:
+        user: ${{ secrets.PYPI_USERNAME }}
+        password: ${{ secrets.PYPI_PASSWORD }}
