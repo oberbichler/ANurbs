@@ -17,9 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        submodules: true
 
+    - name: Patch version
+      run: |
+        import os
+        with open('setup.py', 'r') as f:
+            content = f.read()
+        version = os.getenv('ANURBS_VERSION', 'v0.0.0')[1:]
+        print(version)
+        content = content.replace('0.0.0', version)
+        with open('setup.py', 'w') as f:
+            f.write(content)
+      shell: python
+      
     - name: Build SDist
       run: pipx run build --sdist
 
@@ -41,8 +51,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        submodules: true
+
+    - name: Patch version
+      run: |
+        import os
+        with open('setup.py', 'r') as f:
+            content = f.read()
+        version = os.getenv('ANURBS_VERSION', 'v0.0.0')[1:]
+        print(version)
+        content = content.replace('0.0.0', version)
+        with open('setup.py', 'w') as f:
+            f.write(content)
+      shell: python
 
     - uses: pypa/cibuildwheel@v2.0.1
 
