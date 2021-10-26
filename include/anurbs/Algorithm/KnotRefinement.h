@@ -65,7 +65,7 @@ public:     // static methods
         const Index m = n + degree + 1;
         const Index r = nb_knots_to_insert - 1;
 
-        Index i = b + degree + 2;
+        Index i = b + degree + 1;
         Index k = b + degree + r + 2;
         Index j = r;
 
