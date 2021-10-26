@@ -31,4 +31,4 @@ python_functions = "test_*"
 build = "cp3*-*"
 skip = ["cp35-*", "*-win32", "*-manylinux_i686", "*-arm64", "*-universal2"]
 test-requires = "numpy>=1.19.5 pytest>6"
-test-command = "pytest {project}"
+test-command = "pytest {project}/tests"
