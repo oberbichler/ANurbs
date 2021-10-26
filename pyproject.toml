@@ -23,6 +23,9 @@ build-backend = "setuptools.build_meta"
 minversion = "6.0"
 addopts = "-ra -q"
 testpaths = ["tests"]
+python_files = "Test*.py"
+python_classes = "Test*"
+python_functions = "test_*"
 
 [tool.cibuildwheel]
 build = "cp3*-*"
